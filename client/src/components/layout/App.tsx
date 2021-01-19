@@ -1,10 +1,11 @@
 import React from 'react';
-import Logo from '../../assets/logo.svg';
-import { Layout, Menu, Breadcrumb, PageHeader, Card } from 'antd';
-import { UserOutlined } from '@ant-design/icons';
+import {Layout, Menu, Breadcrumb, PageHeader, Card} from 'antd';
+import {Route, Switch, Link} from "react-router-dom";
 
-const { Content, Footer, Sider } = Layout;
-const { SubMenu } = Menu;
+import {Routes} from "../../router/Routes";
+import Logo from '../../assets/logo.svg';
+
+const {Content, Footer, Sider} = Layout;
 
 export class App extends React.Component {
   state = {
@@ -13,51 +14,48 @@ export class App extends React.Component {
 
   onCollapse = (collapsed: boolean) => {
     console.log(collapsed);
-    this.setState({ collapsed });
+    this.setState({collapsed});
   };
 
   render() {
-    const { collapsed } = this.state;
+    const {collapsed} = this.state;
     return (
-      <Layout style={{ minHeight: '100vh' }}>
+      <Layout style={{minHeight: '100vh'}}>
         <Sider collapsible collapsed={collapsed} onCollapse={this.onCollapse}>
           <img
             src={Logo}
             alt="Company Logo"
             draggable="false"
-            style={{ height: '64px', width: '100%', margin: '16px 0' }} />
-          <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
-            <Menu.Item key="1" icon={<UserOutlined />}>
-              Menu 1
-            </Menu.Item>
-            <Menu.Item key="2" icon={<UserOutlined />}>
-              Menu 2
-            </Menu.Item>
-            <SubMenu key="sub1" icon={<UserOutlined />} title="Sub Menu">
-              <Menu.Item key="3">Sub 1</Menu.Item>
-              <Menu.Item key="4">Sub 2</Menu.Item>
-              <Menu.Item key="5">Sub 3</Menu.Item>
-            </SubMenu>
+            style={{height: '64px', width: '100%', margin: '16px 0'}} />
+          {/*<Menu theme="dark" selectedKeys={[window.location.pathname]} mode="inline">*/}
+          <Menu theme="dark" defaultSelectedKeys={[Routes[0].path]} mode="inline">
+            {Routes.map((route) => (
+              // <Menu.Item key={route.path} icon={route.icon}>
+              <Menu.Item key={route.path}>
+                <span>{route.title}</span>
+                <Link to={route.path} />
+              </Menu.Item>
+            ))}
           </Menu>
         </Sider>
         <Layout className="site-layout">
-          <Content style={{ margin: '0 16px' }}>
-            <PageHeader
-              className="site-page-header"
-              title="Page Title"
-              subTitle="Sub Title"
-              style={{ padding: '16px 0' }} />
-            <Breadcrumb style={{ margin: '4px 0 16px 0' }}>
-              <Breadcrumb.Item>Breadcrumb</Breadcrumb.Item>
-              <Breadcrumb.Item>Current</Breadcrumb.Item>
-            </Breadcrumb>
+          <PageHeader
+            className="site-page-header"
+            title="Page Title"
+            subTitle="Sub Title"
+            style={{ margin: '8px 16px'}} />
+          <Content style={{margin: '0 40px'}}>
             <Card>
               <div className="site-layout-background">
-                Page content
+                <Switch>
+                  {Routes.map((route, index) => (
+                    <Route key={index} path={route.path} exact={route.exact} component={route.page} />
+                  ))}
+                </Switch>
               </div>
             </Card>
           </Content>
-          <Footer style={{ textAlign: 'center' }}>Copyright ©2021 Created by Some Students</Footer>
+          <Footer style={{textAlign: 'center'}}>Copyright ©2021 Created by Some Students</Footer>
         </Layout>
       </Layout>
     );
