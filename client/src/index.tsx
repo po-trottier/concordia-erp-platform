@@ -1,18 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import logo from './assets/logo.svg';
 import * as pwa from './serviceWorkerRegistration';
 import './styles/index.css';
 
-function App() {
-  return (
-    <div className="App">
-      <p>React App</p>
-      <img src={logo} alt="Logo" />
-    </div>
-  );
-}
+import { App } from './components/layout/App';
 
 ReactDOM.render(
   <React.StrictMode>
