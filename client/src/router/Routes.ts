@@ -1,21 +1,29 @@
-import {UserOutlined} from '@ant-design/icons';
+import * as React from 'react'
 
 import {Dashboard} from "../pages/Dashboard";
 import {Users} from "../pages/Users";
 
-export const Routes = [
+interface Route {
+  path: string,
+  exact: boolean,
+  title: string,
+  icon: any,
+  page: React.ComponentType<any>
+}
+
+export const Routes : Route[] = [
   {
-    path: '/',
+    path: '/dashboard',
     exact: true,
-    icon: {UserOutlined},
     title: 'Dashboard',
+    icon: 'FundOutlined',
     page: Dashboard
   },
   {
     path: '/users',
     exact: true,
-    icon: {UserOutlined},
     title: 'Users',
+    icon: 'UserOutlined',
     page: Users
   }
 ];

@@ -1,9 +1,19 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
-import { App } from '../components/layout/App';
+import { BrowserRouter as Router } from 'react-router-dom'
+import { Provider } from 'react-redux';
+import { render } from '@testing-library/react';
 
-test('renders dummy text', () => {
-  render(<App />);
-  const linkElement = screen.getByText(/Page content/i);
-  expect(linkElement).toBeInTheDocument();
+import { App } from '../components/App'
+import { Store } from '../app/Store';
+
+test('renders properly', () => {
+  const { getByText } = render(
+    <Provider store={Store}>
+      <Router>
+        <App />
+      </Router>
+    </Provider>
+  );
+
+  expect(getByText(/Copyright/i)).toBeInTheDocument();
 });
