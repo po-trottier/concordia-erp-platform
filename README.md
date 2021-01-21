@@ -30,5 +30,6 @@
 1) To see information specific to the client or server visit the README.md file located in the matching directory.
 1) Make sure Docker and Docker Compose are both installed on the system.
 1) Open a terminal/command prompt window in the project's root directory.
+1) Run the following command to build the stack `docker-compose build`.
 1) Run the following command to start the stack `docker-compose up`.<br>*(The `-d` flag can be added if the stack's console output is not important to you)*
 1) Visit `http://localhost:80` to view the web interface of the ERP System.
