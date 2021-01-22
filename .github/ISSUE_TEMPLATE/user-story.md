@@ -1,6 +1,6 @@
 ---
 name: User Story
-about: This template is used to create new user stories.
+about: Create a user story for this project
 title: As a ?, I want to ?, so that ?
 labels: user story
 assignees: ''
