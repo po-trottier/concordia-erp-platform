@@ -1,9 +1,8 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
-import navigationSlice from '../features/navigation/navigationSlice';
 
 export const Store = configureStore({
   reducer: {
-    navigation: navigationSlice,
+    // TODO Add features here
   },
 });
 

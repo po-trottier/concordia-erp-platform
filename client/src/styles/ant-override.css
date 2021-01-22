@@ -1,7 +1,45 @@
 .ant-menu-item {
   margin-top: 0 !important;
-  margin-bottom: 0px !important;
+  margin-bottom: 0 !important;
   padding-top: 4px !important;
   padding-bottom: 4px !important;
   height: auto !important;
+}
+
+.ant-layout-sider-zero-width-trigger-left {
+  top: 23px;
+}
+
+@media only screen and (max-width: 768px) {
+  .ant-page-header {
+    padding: 16px;
+    margin: 8px 0 !important;
+  }
+
+  .ant-page-header-heading {
+    justify-content: center;
+  }
+
+  .ant-page-header-heading-title {
+    display: none;
+  }
+
+  .ant-page-header-heading-sub-title {
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 32px;
+    color: rgba(0, 0, 0, 0.85);
+    margin: 0;
+  }
+
+  .ant-card-body {
+    padding: 16px;
+  }
+
+  .ant-layout-sider {
+    position: absolute;
+    z-index: 10000;
+    bottom: 0;
+    top: 0;
+  }
 }

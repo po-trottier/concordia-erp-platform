@@ -1,5 +1,6 @@
 @import '~antd/dist/antd.css';
 @import './ant-override.css';
+@import './layout.css';
 
 body {
   margin: 0;
