@@ -1,7 +1,7 @@
 # SOEN390 Project - Team 4
 
 **Team Members:**
-- Camil Bouzidi *(?)* 
+- Camil Bouzidi *(40099611)* 
 - Radley Carpio *(40074888)*  
 - Bicher Chammaa *(40096200)*
 - Nimmit Jaggi *(40032159)*
