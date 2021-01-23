@@ -6,16 +6,19 @@
   height: auto !important;
 }
 
+.ant-dropdown-menu {
+  padding: 0 !important;
+}
+
+.ant-dropdown-menu-item {
+  padding: 8px 16px;
+}
+
 .ant-layout-sider-zero-width-trigger-left {
   top: 23px;
 }
 
 @media only screen and (max-width: 768px) {
-  .ant-page-header {
-    padding: 16px;
-    margin: 8px 0 !important;
-  }
-
   .ant-page-header-heading {
     justify-content: center;
   }
