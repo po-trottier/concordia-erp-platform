@@ -1,20 +1,22 @@
 import * as React from 'react'
 
-import {Dashboard} from "../pages/Dashboard";
-import {Users} from "../pages/Users";
-import {Products} from '../pages/Products'
-import {Parts} from '../pages/Parts'
-import {Materials} from '../pages/Materials'
-import {Customers} from '../pages/Customers'
-import {Finances} from '../pages/Finances'
-import {Logs} from '../pages/Logs'
+import { Dashboard } from '../pages/Dashboard'
+import { Users } from '../pages/Users'
+import { Products } from '../pages/Products'
+import { Parts } from '../pages/Parts'
+import { Materials } from '../pages/Materials'
+import { Customers } from '../pages/Customers'
+import { Finances } from '../pages/Finances'
+import { Logs } from '../pages/Logs'
+import { RouteGuard } from './RouteGuards'
 
 interface Route {
   path: string,
   exact: boolean,
   title: string,
   icon: string,
-  page: React.ComponentType<any>
+  page: React.ComponentType<any>,
+  auth: RouteGuard[]
 }
 
 export const Routes : Route[] = [
@@ -23,55 +25,81 @@ export const Routes : Route[] = [
     exact: false,
     title: 'Dashboard',
     icon: 'home',
-    page: Dashboard
+    page: Dashboard,
+    auth: [RouteGuard.ANY]
   },
   {
     path: '/users',
     exact: false,
     title: 'Users',
     icon: 'user',
-    page: Users
+    page: Users,
+    auth: [RouteGuard.SYSTEM_ADMINISTRATOR]
   },
   {
     path: '/products',
     exact: false,
     title: 'Products',
     icon: 'car',
-    page: Products
+    page: Products,
+    auth: [
+      RouteGuard.SYSTEM_ADMINISTRATOR,
+      RouteGuard.INVENTORY_MANAGER,
+      RouteGuard.SALESPERSON
+    ]
   },
   {
     path: '/parts',
     exact: false,
     title: 'Parts',
     icon: 'setting',
-    page: Parts
+    page: Parts,
+    auth: [
+      RouteGuard.SYSTEM_ADMINISTRATOR,
+      RouteGuard.INVENTORY_MANAGER,
+      RouteGuard.SALESPERSON
+    ]
   },
   {
     path: '/materials',
     exact: false,
     title: 'Materials',
     icon: 'codepen',
-    page: Materials
+    page: Materials,
+    auth: [
+      RouteGuard.SYSTEM_ADMINISTRATOR,
+      RouteGuard.INVENTORY_MANAGER,
+      RouteGuard.SALESPERSON
+    ]
   },
   {
     path: '/customers',
     exact: false,
     title: 'Customers',
     icon: 'team',
-    page: Customers
+    page: Customers,
+    auth: [
+      RouteGuard.SYSTEM_ADMINISTRATOR,
+      RouteGuard.SALESPERSON
+    ]
   },
   {
     path: '/finances',
     exact: false,
     title: 'Finances',
     icon: 'dollar',
-    page: Finances
+    page: Finances,
+    auth: [
+      RouteGuard.SYSTEM_ADMINISTRATOR,
+      RouteGuard.ACCOUNTANT
+    ]
   },
   {
     path: '/logs',
     exact: false,
     title: 'Logs & Audits',
     icon: 'bars',
-    page: Logs
+    page: Logs,
+    auth: [RouteGuard.ANY]
   }
 ];

@@ -25,5 +25,7 @@ export const AppHeader = () => {
         subTitle={notFound.title}
         style={{margin: '8px 16px'}} />
     </div>
+    // TODO: Add "Profile" icon top right for logged in user. On click,
+    // show a menu that gives the option to log out.
   );
 }

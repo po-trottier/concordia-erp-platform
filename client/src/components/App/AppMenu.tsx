@@ -8,7 +8,7 @@ import Logo from '../../assets/logo.svg';
 
 const {Sider} = Layout;
 
-export const NavMenu = () => {
+export const AppMenu = () => {
   const location = useLocation();
 
   return (
