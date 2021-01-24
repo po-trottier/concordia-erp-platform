@@ -1,7 +1,7 @@
 import React from 'react';
 import {useLocation} from "react-router-dom";
-import { PageHeader, Avatar, Dropdown, Menu } from 'antd'
-import {UserOutlined} from '@ant-design/icons'
+import {PageHeader, Avatar, Dropdown, Menu} from 'antd';
+import {UserOutlined} from '@ant-design/icons';
 
 import {Routes} from "../../router/Routes";
 
