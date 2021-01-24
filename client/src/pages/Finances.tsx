@@ -41,14 +41,14 @@ const columns = [
   return(
   <React.Fragment>
       <h1>Finances</h1>
-     <Menu onClick={this.handleClick} selectedKeys={[current]} mode="horizontal">
+     <Menu mode="horizontal">
         <Menu.Item key="summary" icon={<NotificationTwoTone/>}>
           <Table dataSource={dataSource} columns={columns} />;
         </Menu.Item>
-        <Menu.Item key="income" icon={<DollarCircleTwoTone twoToneColor="#eb2f96"/>}>
+        <Menu.Item key="income" icon={<DollarCircleTwoTone twoToneColor="#52c41a"/>}>
           Income
         </Menu.Item>
-        <Menu.Item key="expenses" icon={<DollarCircleTwoTone twoToneColor="#52c41a"/>}>
+        <Menu.Item key="expenses" icon={<DollarCircleTwoTone twoToneColor="#eb2f96"/>}>
           Expenses
         </Menu.Item>
      </Menu>
