@@ -38,12 +38,21 @@ const columns = [
   },
 ];
 
+  let state = {
+    current: "summary"
+  };
+
+  let updateState = (e : any) => {
+    console.log("click ", e);
+    state = { current: e.key };
+
+  };
   return(
   <React.Fragment>
-      <h1>Finances</h1>
-     <Menu mode="horizontal">
+     <h1>Finances</h1>
+     <Menu onClick={updateState} selectedKeys={[current]} mode="horizontal">
         <Menu.Item key="summary" icon={<NotificationTwoTone/>}>
-          <Table dataSource={dataSource} columns={columns} />;
+          Summary
         </Menu.Item>
         <Menu.Item key="income" icon={<DollarCircleTwoTone twoToneColor="#52c41a"/>}>
           Income
@@ -52,6 +61,7 @@ const columns = [
           Expenses
         </Menu.Item>
      </Menu>
+      <Table dataSource={dataSource} columns={columns} />;
   </React.Fragment>
   )
 }
