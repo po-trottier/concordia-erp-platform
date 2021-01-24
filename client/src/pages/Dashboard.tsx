@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
 import axios from '../app/Axios'
-
+import { Table } from 'antd'
 export const Dashboard = () => {
 
   const [status, setStatus] = useState(['Unknown']);
