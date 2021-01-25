@@ -2,11 +2,14 @@ import React from 'react';
 import {useLocation} from "react-router-dom";
 import {PageHeader, Avatar, Dropdown, Menu} from 'antd';
 import {UserOutlined} from '@ant-design/icons';
-
 import {Routes} from "../../router/Routes";
+import {useDispatch} from 'react-redux';
+import {logoutActionCreator} from '../../app/Store';
 
 export const AppHeader = () => {
   const location = useLocation();
+
+  const dispatch = useDispatch();
 
   // Used to determine the page title. If not page is found, we create a
   // dummy page with a "Page Not Found" title
@@ -21,6 +24,7 @@ export const AppHeader = () => {
   // TODO Replace this with a proper logout method
   const logOut = () => {
     console.log('Log out');
+    dispatch(logoutActionCreator())
   }
 
   const dropdown = (
