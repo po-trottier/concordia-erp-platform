@@ -18,9 +18,9 @@ export const AppMenu = () => {
       collapsedWidth="0">
       <img
         src={Logo}
-        alt="Company Logo"
+        alt="EPIC ERP Logo"
         draggable="false"
-        style={{height: '64px', width: '100%', margin: '16px 0'}} />
+        className="app-logo" />
       <Menu theme="dark" selectedKeys={[location.pathname]} mode="inline">
         {Routes.map((route) => (
           <Menu.Item key={route.path}>

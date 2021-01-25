@@ -35,7 +35,7 @@ export const AppHeader = () => {
     <div className="app-header">
       <PageHeader
         className="site-page-header"
-        title="ERP Ultimate"
+        title="EPIC Resource Planner"
         subTitle={notFound.title}
         style={{padding: '16px 0'}} />
         <Dropdown overlay={dropdown} trigger={['click']} placement="bottomCenter">
