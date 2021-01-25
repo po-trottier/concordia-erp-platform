@@ -22,13 +22,14 @@ jobs:
     runs-on: ubuntu-latest
     needs: Build
     steps:
+      - uses: actions/checkout@v2
       - name: Copy Docker Compose Config
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
-          source: "docker-compose.yml"
+          source: "./docker-compose.yml"
           target: "/srv/nestjs"
       - name: Deploy to Digital Ocean
         uses: appleboy/ssh-action@v0.1.4
