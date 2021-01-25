@@ -4,11 +4,10 @@ services:
     depends_on:
       - db
     restart: unless-stopped
-    build: .
-    image: nestjs:latest
+    image: docker.pkg.github.com/po-trottier/soen390-team04/epic-erp:latest
     container_name: nestjs
     ports:
-      - "80:1337"
+      - "1337:1337"
     environment:
       - PORT=1337
       - DB_URL=mongodb://db_mongo
