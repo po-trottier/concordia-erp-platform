@@ -46,13 +46,13 @@ jobs:
             cd /srv/nestjs
             
             # Login to the repository
-            docker login -u $USER -p $TOKEN 
-            
-            # Pull the new image
-            docker-compose pull
+            docker login docker.pkg.github.com -u $USER -p $TOKEN 
             
             # Stop running containers
             docker-compose down
+            
+            # Pull the new image
+            docker-compose pull
 
             # Run a new container from a new image
             docker-compose up -d
