@@ -56,3 +56,6 @@ jobs:
 
             # Run a new container from a new image
             docker-compose up -d
+            
+            # Prune the images
+            docker image prune
