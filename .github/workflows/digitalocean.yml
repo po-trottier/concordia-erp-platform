@@ -5,7 +5,7 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
+  Build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -18,9 +18,9 @@ jobs:
         repository: po-trottier/soen390-team04/epic-erp
         tag_with_ref: true
       
-  deploy:
+  Deploy:
     runs-on: ubuntu-latest
-    needs: build
+    needs: Build
     steps:
       - name: Copy Docker Compose Config
         uses: appleboy/scp-action@master
@@ -29,16 +29,23 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           source: "docker-compose.yml"
-          target: "/srv/nestjs/docker-compose.yml"
+          target: "/srv/nestjs"
       - name: Deploy to Digital Ocean
         uses: appleboy/ssh-action@v0.1.4
+        env:
+          USER: ${{ github.actor }}
+          TOKEN: ${{ secrets.TOKEN }}
         with:
           HOST: ${{ secrets.HOST }}
           USERNAME: ${{ secrets.USERNAME }}
           PASSWORD: ${{ secrets.PASSWORD }}
-          script: |
+          ENVS: USER,TOKEN
+          SCRIPT: |
             # Navigate to the server directory
             cd /srv/nestjs
+            
+            # Login to the repository
+            docker login -u $USER -p $TOKEN 
             
             # Pull the new image
             docker-compose pull
