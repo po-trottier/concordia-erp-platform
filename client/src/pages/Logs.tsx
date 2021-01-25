@@ -8,22 +8,25 @@ export const Logs = () => {
 
     const audit = 'audit';
     const logs = 'logs';
-    const [comp, setComp] = useState(<Audit/>);
-
-    let state = {
-        current: audit,
-    };
+    const [state, setState] = useState(
+        {
+            comp: <Audit/>,
+            current: audit
+        }
+    );
 
     let updateState = (e : any) => {
-        state = {
-            current: e.key,
-        };
-        switch (state.current){
-            case audit: setComp(<Audit/>);
-            break;
-            case logs: setComp(<LogList/>);
-            break;
+        let newComp = <Audit/>;
+        switch (e.key){
+            case audit: newComp = <Audit/>;
+                break;
+            case logs: newComp = <LogList/>;
+                break;
         }
+        setState({
+            comp: newComp,
+            current: e.key
+        })
     };
 
     return(
@@ -37,8 +40,7 @@ export const Logs = () => {
                     All Logs
                 </Menu.Item>
             </Menu>
-            {comp}
+            {state.comp}
         </div>
     )
 }
-// https://www.golangprograms.com/react-js-update-div-content-on-click.html
