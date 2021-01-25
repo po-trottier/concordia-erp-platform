@@ -1,0 +1,50 @@
+name: Digital Ocean Deployment
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build and Push Docker Image
+      uses: docker/build-push-action@v1
+      with:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+        registry: docker.pkg.github.com
+        repository: po-trottier/soen390-team04/epic-erp
+        tag_with_ref: true
+      
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Copy Docker Compose Config
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          source: "docker-compose.yml"
+          target: "/srv/nestjs/docker-compose.yml"
+      - name: Deploy to Digital Ocean
+        uses: appleboy/ssh-action@v0.1.4
+        with:
+          HOST: ${{ secrets.HOST }}
+          USERNAME: ${{ secrets.USERNAME }}
+          PASSWORD: ${{ secrets.PASSWORD }}
+          script: |
+            # Navigate to the server directory
+            cd /srv/nestjs
+            
+            # Pull the new image
+            docker-compose pull
+            
+            # Stop running containers
+            docker-compose down
+
+            # Run a new container from a new image
+            docker-compose up -d
