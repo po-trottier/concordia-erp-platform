@@ -1,5 +1,8 @@
 import React from "react";
 
+import {Summary} from './Summary'
+import {Income} from './Income'
+import {Expenses} from './Expenses'
 import { Table, Menu } from 'antd'
 import { NotificationTwoTone, DollarCircleTwoTone } from '@ant-design/icons';
 
@@ -50,7 +53,7 @@ const columns = [
   return(
   <React.Fragment>
      <h1>Finances</h1>
-     <Menu onClick={updateState} selectedKeys={[current]} mode="horizontal">
+     <Menu onClick={updateState} mode="horizontal">
         <Menu.Item key="summary" icon={<NotificationTwoTone/>}>
           Summary
         </Menu.Item>
@@ -62,6 +65,7 @@ const columns = [
         </Menu.Item>
      </Menu>
       <Table dataSource={dataSource} columns={columns} />;
+      <Summary/>
   </React.Fragment>
   )
 }
