@@ -1,12 +1,11 @@
 import React, {useState} from "react";
+import {Menu} from 'antd'
+import {NotificationTwoTone, DollarCircleTwoTone} from '@ant-design/icons';
 
 import {Summary} from '../components/Finance/Summary'
 import {Income} from '../components/Finance/Income'
 import {Expenses} from '../components/Finance/Expenses'
-import { Table, Menu } from 'antd'
-import { NotificationTwoTone, DollarCircleTwoTone } from '@ant-design/icons';
 
-const { SubMenu } = Menu;
 export const Finances = () => {
   const [tableState, setTableState] = useState("summary");
 
@@ -15,34 +14,29 @@ export const Finances = () => {
   };
 
   let renderTable = () => {
-    switch(tableState)
-    {
+    switch(tableState) {
       case "summary":
-        return <Summary/>
-        break;
+        return <Summary />
       case "income":
-        return <Income/>
-        break;
+        return <Income />
       case "expenses":
-        return <Expenses/>
-        break;
+        return <Expenses />
       default:
-        return <Summary/>
-        break;
+        return <Summary />
     }
   }
 
   return(
     <div>
       <h1>Finances</h1>
-      <Menu onClick={updateState} mode="horizontal">
-        <Menu.Item key="summary" icon={<NotificationTwoTone/>}>
+      <Menu onClick={updateState} mode="horizontal" style={{ marginBottom: '16px' }}>
+        <Menu.Item key="summary" icon={<NotificationTwoTone />}>
           Summary
         </Menu.Item>
-        <Menu.Item key="income" icon={<DollarCircleTwoTone twoToneColor="#52c41a"/>}>
+        <Menu.Item key="income" icon={<DollarCircleTwoTone twoToneColor="#52c41a" />}>
           Income
         </Menu.Item>
-        <Menu.Item key="expenses" icon={<DollarCircleTwoTone twoToneColor="#eb2f96"/>}>
+        <Menu.Item key="expenses" icon={<DollarCircleTwoTone twoToneColor="#eb2f96" />}>
           Expenses
         </Menu.Item>
       </Menu>
