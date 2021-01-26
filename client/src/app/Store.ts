@@ -15,7 +15,7 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    login: (state, {payload}: PayloadAction<{id: string, name: string, type: RouteGuard}>) => {
+    login: (state, {payload}: PayloadAction<{id: string, name: string}>) => {
       state.user.id = payload.id;
       state.user.name = payload.name;
       state.user.authType = RouteGuard.SYSTEM_ADMINISTRATOR;

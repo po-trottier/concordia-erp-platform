@@ -1,14 +1,16 @@
 import React from 'react';
-import {useLocation, Link} from "react-router-dom";
+import {useLocation, useHistory} from "react-router-dom";
 import {PageHeader, Avatar, Dropdown, Menu} from 'antd';
 import {UserOutlined} from '@ant-design/icons';
 import {Routes} from "../../router/Routes";
-import {RootState} from '../../app/Store'
+import {loginActionCreator, RootState} from '../../app/Store'
 import {useDispatch, useSelector} from 'react-redux';
 import {logoutActionCreator} from '../../app/Store';
 
 export const AppHeader = () => {
   const location = useLocation();
+
+  const history = useHistory();
 
   const user = useSelector((state : RootState) => state.user.user);
 
@@ -27,7 +29,13 @@ export const AppHeader = () => {
   // TODO Replace this with a proper logout method
   const logOut = () => {
     console.log('Log out');
-    dispatch(logoutActionCreator())
+    dispatch(logoutActionCreator());
+    history.push('/')
+  }
+
+  const login = () => {
+    dispatch(loginActionCreator({id: '111', name: 'Jane Doe'}));
+    history.push('/dashboard')
   }
 
   const dropdown = (
@@ -37,8 +45,8 @@ export const AppHeader = () => {
         <Menu.Item onClick={logOut}>
         Log Out
         </Menu.Item> :
-        <Menu.Item>
-         <Link to="./login">Login</Link>
+        <Menu.Item onClick={login}>
+         Login
         </Menu.Item>
       }
     </Menu>
