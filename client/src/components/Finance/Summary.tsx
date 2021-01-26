@@ -64,8 +64,23 @@ const data = [
 data.forEach(d => {
  (d as any).profit  = d.income - d.expenses;
 })
+  var config = {
+      data: data,
+      padding: 'auto',
+      xField: 'Date',
+      yField: 'profit',
+      xAxis: { tickCount: 5 },
+      slider: {
+        start: 0.1,
+        end: 0.5,
+      },
+    };
+
 
   return (
-    <Table columns={columns} dataSource={data} />
+    <div>
+      {/* <Line {...config}/> */}
+      <Table columns={columns} dataSource={data} />
+    </div>
   );
 }

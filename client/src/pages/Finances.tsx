@@ -33,7 +33,7 @@ export const Finances = () => {
   }
 
   return(
-    <React.Fragment>
+    <div>
       <h1>Finances</h1>
       <Menu onClick={updateState} mode="horizontal">
         <Menu.Item key="summary" icon={<NotificationTwoTone/>}>
@@ -47,6 +47,6 @@ export const Finances = () => {
         </Menu.Item>
       </Menu>
       {renderTable()}
-    </React.Fragment>
+    </div>
   )
 }
