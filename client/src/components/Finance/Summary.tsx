@@ -1,5 +1,6 @@
 import React from 'react';
 import {Table} from 'antd';
+import { Line } from '@ant-design/charts';
 
 export const Summary = () => {
 const columns = [
@@ -49,8 +50,8 @@ const data = [
   {
     key: '3',
     date : (new Date("2020-01-28")).toLocaleDateString(),
-    income : 81000,
-    expenses : 78000,
+    income : 78000,
+    expenses : 81000,
   },
   {
     key: '4',
