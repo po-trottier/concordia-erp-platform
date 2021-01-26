@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 
 import {Summary} from './Summary'
 import {Income} from './Income'
@@ -8,6 +8,7 @@ import { NotificationTwoTone, DollarCircleTwoTone } from '@ant-design/icons';
 
 const { SubMenu } = Menu;
 export const Finances = () => {
+  const [tableState, setTableState] = useState("summary");
 const dataSource = [
   {
     key: '1',
@@ -41,15 +42,32 @@ const columns = [
   },
 ];
 
-  let state = {
-    current: "summary"
-  };
-
   let updateState = (e : any) => {
-    console.log("click ", e);
-    state = { current: e.key };
-
+    setTableState(e.key)
   };
+
+  let renderTable = () => {
+    if(tableState == "summary")
+    {
+      console.log("summary")
+      return <Summary/>
+    }
+    else if(tableState == "income")
+    {
+      console.log("income")
+      return <Income/>
+    }
+    else if(tableState == "expenses")
+    {
+      console.log("expenses")
+      return <Expenses/>
+    }
+    else {
+      console.log("fuck")
+      return <Summary/>
+    }
+  }
+
   return(
   <React.Fragment>
      <h1>Finances</h1>
@@ -64,8 +82,7 @@ const columns = [
           Expenses
         </Menu.Item>
      </Menu>
-      <Table dataSource={dataSource} columns={columns} />;
-      <Summary/>
+    {renderTable()}
   </React.Fragment>
   )
 }
