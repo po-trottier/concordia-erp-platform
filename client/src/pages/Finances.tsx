@@ -1,8 +1,8 @@
 import React, {useState} from "react";
 
-import {Summary} from './Summary'
-import {Income} from './Income'
-import {Expenses} from './Expenses'
+import {Summary} from '../components/Summary'
+import {Income} from '../components/Income'
+import {Expenses} from '../components/Expenses'
 import { Table, Menu } from 'antd'
 import { NotificationTwoTone, DollarCircleTwoTone } from '@ant-design/icons';
 
