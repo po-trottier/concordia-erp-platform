@@ -90,7 +90,8 @@ export const Routes : Route[] = [
     icon: 'dollar',
     page: Finances,
     auth: [
-      RouteGuard.ANY
+      RouteGuard.SYSTEM_ADMINISTRATOR,
+      RouteGuard.ACCOUNTANT
     ]
   },
   {
