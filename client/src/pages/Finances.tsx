@@ -1,77 +1,41 @@
 import React, {useState} from "react";
 
-import {Summary} from '../components/Summary'
-import {Income} from '../components/Income'
-import {Expenses} from '../components/Expenses'
+import {Summary} from '../components/Finance/Summary'
+import {Income} from '../components/Finance/Income'
+import {Expenses} from '../components/Finance/Expenses'
 import { Table, Menu } from 'antd'
 import { NotificationTwoTone, DollarCircleTwoTone } from '@ant-design/icons';
 
 const { SubMenu } = Menu;
 export const Finances = () => {
   const [tableState, setTableState] = useState("summary");
-const dataSource = [
-  {
-    key: '1',
-    name: 'Mike',
-    age: 32,
-    address: '10 Downing Street',
-  },
-  {
-    key: '2',
-    name: 'John',
-    age: 42,
-    address: '10 Downing Street',
-  },
-];
-
-const columns = [
-  {
-    title: 'Name',
-    dataIndex: 'name',
-    key: 'name',
-  },
-  {
-    title: 'Age',
-    dataIndex: 'age',
-    key: 'age',
-  },
-  {
-    title: 'Address',
-    dataIndex: 'address',
-    key: 'address',
-  },
-];
 
   let updateState = (e : any) => {
     setTableState(e.key)
   };
 
   let renderTable = () => {
-    if(tableState == "summary")
+    switch(tableState)
     {
-      console.log("summary")
-      return <Summary/>
-    }
-    else if(tableState == "income")
-    {
-      console.log("income")
-      return <Income/>
-    }
-    else if(tableState == "expenses")
-    {
-      console.log("expenses")
-      return <Expenses/>
-    }
-    else {
-      console.log("fuck")
-      return <Summary/>
+      case "summary":
+        return <Summary/>
+        break;
+      case "income":
+        return <Income/>
+        break;
+      case "expenses":
+        return <Expenses/>
+        break;
+      default:
+        return <Summary/>
+        break;
     }
   }
 
   return(
-  <React.Fragment>
-     <h1>Finances</h1>
-     <Menu onClick={updateState} mode="horizontal">
+    <React.Fragment>
+      <h1>Finances</h1>
+      <Menu onClick={updateState} mode="horizontal">
         <Menu.Item key="summary" icon={<NotificationTwoTone/>}>
           Summary
         </Menu.Item>
@@ -81,8 +45,8 @@ const columns = [
         <Menu.Item key="expenses" icon={<DollarCircleTwoTone twoToneColor="#eb2f96"/>}>
           Expenses
         </Menu.Item>
-     </Menu>
-    {renderTable()}
-  </React.Fragment>
+      </Menu>
+      {renderTable()}
+    </React.Fragment>
   )
 }
