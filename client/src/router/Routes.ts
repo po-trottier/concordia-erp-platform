@@ -9,6 +9,7 @@ import { Customers } from '../pages/Customers'
 import { Finances } from '../pages/Finances'
 import { Logs } from '../pages/Logs'
 import { RouteGuard } from './RouteGuards'
+import { Login } from '../pages/Login'
 
 interface Route {
   path: string,
@@ -20,6 +21,14 @@ interface Route {
 }
 
 export const Routes : Route[] = [
+  {
+    path: '/login',
+    exact: false,
+    title: 'Login',
+    icon: '',
+    page: Login,
+    auth: [RouteGuard.ANY]
+  },
   {
     path: '/dashboard',
     exact: false,

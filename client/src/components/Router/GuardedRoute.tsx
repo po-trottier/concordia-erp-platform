@@ -1,5 +1,5 @@
 import React from 'react';
-import {Route, useHistory, Redirect} from 'react-router-dom';
+import {Route, useHistory} from 'react-router-dom';
 import {useSelector} from 'react-redux';
 import {RouteGuard} from '../../router/RouteGuards';
 import {NoPermissions} from '../../pages/NoPermissions';
@@ -8,10 +8,6 @@ import {RootState} from '../../app/Store'
 const hasPermissions = (auth : RouteGuard[], userAuthType: RouteGuard, isLoggedIn : boolean, path : string, history : any) : boolean => {
 
   let valid = false;
-
-  if (!isLoggedIn){
-    history.replace('/dashboard?redirect={path.substring(1)}');
-  }
 
   // TODO: Check if user is logged in.
   // Otherwise redirect to the login page.
