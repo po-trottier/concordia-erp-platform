@@ -16,6 +16,9 @@ export const AppHeader = () => {
 
   const dispatch = useDispatch();
 
+  //This code will be added to the login page when it will be created.
+  const desiredPath = location.search ? "/" + location.search.substring(10) : "/dashboard"; 
+
   // Used to determine the page title. If not page is found, we create a
   // dummy page with a "Page Not Found" title
   const notFound = Routes.find(r => r.path === location.pathname) ?? {
@@ -33,12 +36,14 @@ export const AppHeader = () => {
     history.push('/')
   }
 
+  //TODO To add this function when the login page is implemented 
   const login = () => {
-    dispatch(loginActionCreator({id: '111', name: 'Jane Doe'}));
-    history.push('/dashboard')
+    dispatch(loginActionCreator({id: '123', name: 'John Doe'}));
+    history.replace(desiredPath);
   }
 
   const dropdown = (
+    //TODO Remove Login option when login page is implemented
     <Menu>
       {
         user.isLoggedIn ?
