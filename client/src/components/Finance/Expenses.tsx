@@ -44,7 +44,7 @@ export const Expenses = () => {
     },
   ]);
 
-  const getData = () : accounts[] => {
+  const getData = () : financeEntry[] => {
     const data = [
       {
         key: '1',
