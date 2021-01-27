@@ -2,7 +2,7 @@ import React from 'react';
 import {Card, Table, Statistic} from 'antd'
 import {Line} from '@ant-design/charts';
 import {tableColumn} from '../../interfaces/TableColumn'
-import {dailySummary} from '../../interfaces/DailySummary'
+import {summaryEntry} from '../../interfaces/SummaryEntry'
 
 export const Summary = () => {
   const getColumns = () : tableColumn[] => ([
