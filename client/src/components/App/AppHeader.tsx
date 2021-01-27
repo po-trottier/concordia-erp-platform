@@ -1,7 +1,7 @@
 import React from 'react';
 import {useLocation} from "react-router-dom";
-import { PageHeader, Avatar, Dropdown, Menu } from 'antd'
-import {UserOutlined} from '@ant-design/icons'
+import {PageHeader, Avatar, Dropdown, Menu} from 'antd';
+import {UserOutlined} from '@ant-design/icons';
 
 import {Routes} from "../../router/Routes";
 
@@ -35,7 +35,7 @@ export const AppHeader = () => {
     <div className="app-header">
       <PageHeader
         className="site-page-header"
-        title="Epic Resource Planner"
+        title="EPIC Resource Planner"
         subTitle={notFound.title}
         style={{padding: '16px 0'}} />
         <Dropdown overlay={dropdown} trigger={['click']} placement="bottomCenter">

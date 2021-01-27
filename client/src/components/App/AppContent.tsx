@@ -4,7 +4,6 @@ import {Layout, Card} from 'antd';
 
 import {Routes} from "../../router/Routes";
 import {NotFound} from '../../pages/NotFound';
-import {NoPermissions} from '../../pages/NoPermissions'
 import GuardedRoute from '../Router/GuardedRoute'
 
 const {Content} = Layout;
@@ -28,7 +27,6 @@ export const AppContent = () => {
               <Redirect to="/dashboard" />
             </Route>
             {/* Redirect any invalid page to the 404 page */}
-            <Route path="/no-permissions" component={NoPermissions} />
             <Route component={NotFound} />
           </Switch>
         </div>
