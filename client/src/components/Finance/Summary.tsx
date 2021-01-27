@@ -65,13 +65,13 @@ export const Summary = () => {
       {
         key: '2',
         date : (new Date("2020-01-29")).toLocaleDateString(),
-        income : 85000,
+        income : 72500,
         expenses : 73000,
       },
       {
         key: '3',
         date : (new Date("2020-01-28")).toLocaleDateString(),
-        income : 78000,
+        income : 79500,
         expenses : 81000,
       },
       {
@@ -79,6 +79,60 @@ export const Summary = () => {
         date : (new Date("2020-01-27")).toLocaleDateString(),
         income : 82500,
         expenses : 71000,
+      },
+      {
+        key: '5',
+        date : (new Date("2020-01-26")).toLocaleDateString(),
+        income : 85200,
+        expenses : 79400,
+      },
+      {
+        key: '6',
+        date : (new Date("2020-01-25")).toLocaleDateString(),
+        income : 82100,
+        expenses : 71150,
+      },
+      {
+        key: '7',
+        date : (new Date("2020-01-24")).toLocaleDateString(),
+        income : 77500,
+        expenses : 71000,
+      },
+      {
+        key: '8',
+        date : (new Date("2020-01-23")).toLocaleDateString(),
+        income : 81500,
+        expenses : 75400,
+      },
+      {
+        key: '9',
+        date : (new Date("2020-01-22")).toLocaleDateString(),
+        income : 84500,
+        expenses : 73200,
+      },
+      {
+        key: '10',
+        date : (new Date("2020-01-21")).toLocaleDateString(),
+        income : 80500,
+        expenses : 73200,
+      },
+      {
+        key: '11',
+        date : (new Date("2020-01-20")).toLocaleDateString(),
+        income : 82700,
+        expenses : 71400,
+      },
+      {
+        key: '12',
+        date : (new Date("2020-01-19")).toLocaleDateString(),
+        income : 78800,
+        expenses : 68400,
+      },
+      {
+        key: '13',
+        date : (new Date("2020-01-18")).toLocaleDateString(),
+        income : 70500,
+        expenses : 67000,
       },
     ];
 
