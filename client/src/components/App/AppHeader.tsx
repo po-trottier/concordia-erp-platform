@@ -31,9 +31,8 @@ export const AppHeader = () => {
 
   // TODO Replace this with a proper logout method
   const logOut = () => {
-    console.log('Log out');
     dispatch(logoutActionCreator());
-    history.push('/')
+    history.push('/login')
   }
 
   //TODO To add this function when the login page is implemented 
