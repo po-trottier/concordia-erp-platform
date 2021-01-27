@@ -3,9 +3,9 @@ import {useLocation, useHistory} from "react-router-dom";
 import {PageHeader, Avatar, Dropdown, Menu} from 'antd';
 import {UserOutlined} from '@ant-design/icons';
 import {Routes} from "../../router/Routes";
-import {loginActionCreator, RootState} from '../../app/Store'
+import {RootState} from '../../store/Store'
 import {useDispatch, useSelector} from 'react-redux';
-import {logoutActionCreator} from '../../app/Store';
+import {loginActionCreator, logoutActionCreator} from '../../store/slices/UserSlice';
 
 export const AppHeader = () => {
   const location = useLocation();

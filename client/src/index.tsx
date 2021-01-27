@@ -2,9 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {BrowserRouter as Router} from "react-router-dom";
 import { Provider } from 'react-redux';
-
 import { App } from './components/App/App'
-import { Store } from './app/Store';
+import { Store, Persistor } from './store/Store';
+import {PersistGate} from 'redux-persist/integration/react'
 import * as pwa from './serviceWorker';
 import './styles/index.css';
 
@@ -12,7 +12,9 @@ ReactDOM.render(
   <React.StrictMode>
     <Provider store={Store}>
       <Router>
-        <App />
+        <PersistGate persistor={Persistor}>
+          <App />
+        </PersistGate>
       </Router>
     </Provider>
   </React.StrictMode>,

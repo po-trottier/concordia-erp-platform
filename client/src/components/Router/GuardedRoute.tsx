@@ -3,7 +3,7 @@ import {Redirect, Route} from 'react-router-dom';
 import {useSelector} from 'react-redux';
 import {RouteGuard} from '../../router/RouteGuards';
 import {NoPermissions} from '../../pages/NoPermissions';
-import {RootState} from '../../app/Store'
+import {RootState} from '../../store/Store'
 
 const hasPermissions = (auth : RouteGuard[], userAuthType: RouteGuard, isLoggedIn : boolean, path : string) : boolean => {
   

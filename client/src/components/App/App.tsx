@@ -1,6 +1,5 @@
 import React from 'react';
 import {Layout} from 'antd';
-
 import {AppMenu} from './AppMenu'
 import {AppContent} from './AppContent'
 import {AppHeader} from './AppHeader'
