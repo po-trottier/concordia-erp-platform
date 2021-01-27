@@ -1,7 +1,7 @@
 import React from 'react';
 import {Card, Table, Button} from 'antd';
 import {tableColumn} from '../../interfaces/TableColumn'
-import {accounts} from '../../interfaces/Accounts'
+import {financeEntry} from '../../interfaces/FinanceEntry'
 
 export const Expenses = () => {
 
