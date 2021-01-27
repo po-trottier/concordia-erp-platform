@@ -1,5 +1,5 @@
 import React from 'react';
-import {Card, Table} from 'antd'
+import {Card, Table, Statistic} from 'antd'
 import {Line} from '@ant-design/charts';
 
 // TODO: Put interfaces in their own file, maybe in a new "interfaces" directory
@@ -149,8 +149,13 @@ export const Summary = () => {
     yField: 'profit'
   };
 
+  let accountBalance : number = 242430;
+
   return (
     <div>
+      <Card style={{ margin: '24px 0' }}>
+        <Statistic title="Account Balance (CAD)" value={accountBalance} precision={2} />
+      </Card>
       <Card style={{ margin: '24px 0' }}>
         <Line {...config} />
       </Card>
