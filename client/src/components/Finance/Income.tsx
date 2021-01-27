@@ -1,30 +1,14 @@
 import React from 'react';
 import {Button, Card, Table} from 'antd';
+import {tableColumn} from '../../interfaces/TableColumn'
+import {accounts} from '../../interfaces/Accounts'
 
 export const Income = () => {
-interface dataColumn {
-  title: string,
-  dataIndex: string,
-  sorter?: {
-    compare: any,
-    multiple: number
-  }
-}
 
-interface dataPoint  {
-  key: string,
-  date: string,
-  dateDue: string,
-  billed: number,
-  paid: number,
-  buyer: string,
-  balance?: number
-}
-
-  const getColumns = () : dataColumn[] => ([
+  const getColumns = () : tableColumn[] => ([
     {
       title: 'Buyer',
-      dataIndex: 'buyer',
+      dataIndex: 'company_name',
     },
     {
       title: 'Date',
@@ -60,14 +44,14 @@ interface dataPoint  {
     },
   ]);
 
-  const getData = () : dataPoint[] => {
+  const getData = () : accounts[] => {
     const data = [
       {
         key: '1',
         date : (new Date("2021-01-22")).toLocaleDateString(),
         billed: 30500,
         paid: 10000,
-        buyer: 'Mark\'s Bike Store',
+        company_name: 'Mark\'s Bike Store',
         dateDue : (new Date("2021-02-22")).toLocaleDateString(),
       },
       {
@@ -75,7 +59,7 @@ interface dataPoint  {
         date : (new Date("2021-01-25")).toLocaleDateString(),
         billed: 4500,
         paid: 3000,
-        buyer: 'Sports Experts',
+        company_name: 'Sports Experts',
         dateDue : (new Date("2021-02-17")).toLocaleDateString(),
       },
       {
@@ -83,7 +67,7 @@ interface dataPoint  {
         date : (new Date("2021-01-28")).toLocaleDateString(),
         billed: 250500,
         paid: 102500,
-        buyer: 'Walmart',
+        company_name: 'Walmart',
         dateDue : (new Date("2021-03-03")).toLocaleDateString(),
       },
       {
@@ -91,7 +75,7 @@ interface dataPoint  {
         date : (new Date("2021-01-30")).toLocaleDateString(),
         billed: 25200,
         paid: 12500,
-        buyer: 'Giant Montreal',
+        company_name: 'Giant Montreal',
         dateDue : (new Date("2021-02-21")).toLocaleDateString(),
       },
       {
@@ -99,12 +83,12 @@ interface dataPoint  {
         date : (new Date("2021-01-21")).toLocaleDateString(),
         billed: 36200,
         paid: 14000,
-        buyer: 'Zellers',
+        company_name: 'Zellers',
         dateDue : (new Date("2021-03-04")).toLocaleDateString(),
       },
     ];
 
-    data.forEach((d : dataPoint) => {
+    data.forEach((d : accounts) => {
       d.balance  = d.billed - d.paid;
     });
 

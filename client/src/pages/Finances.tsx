@@ -10,7 +10,7 @@ export const Finances = () => {
   const [tableState, setTableState] = useState("summary");
 
   let updateState = (e : any) => {
-    setTableState(e.key)
+    setTableState(e.key);
   };
 
   let renderTable = () => {

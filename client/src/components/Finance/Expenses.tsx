@@ -1,30 +1,14 @@
 import React from 'react';
 import {Card, Table, Button} from 'antd';
+import {tableColumn} from '../../interfaces/TableColumn'
+import {accounts} from '../../interfaces/Accounts'
 
 export const Expenses = () => {
-interface dataColumn {
-  title: string,
-  dataIndex: string,
-  sorter?: {
-    compare: any,
-    multiple: number
-  }
-}
 
-interface dataPoint  {
-  key: string,
-  date: string,
-  dateDue: string,
-  billed: number,
-  paid: number,
-  vendor: string,
-  balance?: number
-}
-
-  const getColumns = () : dataColumn[] => ([
+  const getColumns = () : tableColumn[] => ([
     {
       title: 'Vendor',
-      dataIndex: 'vendor',
+      dataIndex: 'company_name',
     },
     {
       title: 'Date',
@@ -60,14 +44,14 @@ interface dataPoint  {
     },
   ]);
 
-  const getData = () : dataPoint[] => {
+  const getData = () : accounts[] => {
     const data = [
       {
         key: '1',
         date : (new Date("2021-01-20")).toLocaleDateString(),
         billed: 72000,
         paid: 66000,
-        vendor: 'Digikey',
+        company_name: 'Digikey',
         dateDue : (new Date("2021-02-27")).toLocaleDateString(),
       },
       {
@@ -75,7 +59,7 @@ interface dataPoint  {
         date : (new Date("2021-01-24")).toLocaleDateString(),
         billed: 30000,
         paid: 0,
-        vendor: 'The Bike Shop',
+        company_name: 'The Bike Shop',
         dateDue : (new Date("2021-02-22")).toLocaleDateString(),
       },
       {
@@ -83,7 +67,7 @@ interface dataPoint  {
         date : (new Date("2021-01-20")).toLocaleDateString(),
         billed: 92000,
         paid: 89000,
-        vendor: 'Canada Bicycle Parts',
+        company_name: 'Canada Bicycle Parts',
         dateDue : (new Date("2021-02-27")).toLocaleDateString(),
       },
       {
@@ -91,12 +75,12 @@ interface dataPoint  {
         date : (new Date("2021-01-29")).toLocaleDateString(),
         billed: 105000,
         paid: 42000,
-        vendor: 'Chain Reaction Cycles',
+        company_name: 'Chain Reaction Cycles',
         dateDue : (new Date("2021-03-03")).toLocaleDateString(),
       },
     ];
 
-    data.forEach((d : dataPoint) => {
+    data.forEach((d : accounts) => {
       d.balance  = d.billed - d.paid;
     });
 

@@ -1,29 +1,11 @@
 import React from 'react';
 import {Card, Table, Statistic} from 'antd'
 import {Line} from '@ant-design/charts';
-
-// TODO: Put interfaces in their own file, maybe in a new "interfaces" directory
-// in the src folder so they can be reused elsewhere if needed.
-
-interface dataColumn {
-  title: string,
-  dataIndex: string,
-  sorter?: {
-    compare: any,
-    multiple: number
-  }
-}
-
-interface dataPoint  {
-  key: string,
-  date: string,
-  income: number,
-  expenses: number,
-  profit?: number
-}
+import {tableColumn} from '../../interfaces/TableColumn'
+import {dailySummary} from '../../interfaces/DailySummary'
 
 export const Summary = () => {
-  const getColumns = () : dataColumn[] => ([
+  const getColumns = () : tableColumn[] => ([
     {
       title: 'Date',
       dataIndex: 'date',
@@ -54,7 +36,7 @@ export const Summary = () => {
     },
   ]);
 
-  const getData = () : dataPoint[] => {
+  const getData = () : dailySummary [] => {
     const data = [
       {
         key: '1',
@@ -136,7 +118,7 @@ export const Summary = () => {
       },
     ];
 
-    data.forEach((d : dataPoint) => {
+    data.forEach((d : dailySummary) => {
       d.profit  = d.income - d.expenses;
     });
 
@@ -149,7 +131,7 @@ export const Summary = () => {
     yField: 'profit'
   };
 
-  let accountBalance : number = 242430;
+  const accountBalance : number = 242430;
 
   return (
     <div>
