@@ -8,7 +8,7 @@ export const Expenses = () => {
   const getColumns = () : tableColumn[] => ([
     {
       title: 'Vendor',
-      dataIndex: 'company_name',
+      dataIndex: 'companyName',
     },
     {
       title: 'Date',
@@ -51,7 +51,7 @@ export const Expenses = () => {
         date : (new Date("2021-01-20")).toLocaleDateString(),
         billed: 72000,
         paid: 66000,
-        company_name: 'Digikey',
+        companyName: 'Digikey',
         dateDue : (new Date("2021-02-27")).toLocaleDateString(),
       },
       {
@@ -59,7 +59,7 @@ export const Expenses = () => {
         date : (new Date("2021-01-24")).toLocaleDateString(),
         billed: 30000,
         paid: 0,
-        company_name: 'The Bike Shop',
+        companyName: 'The Bike Shop',
         dateDue : (new Date("2021-02-22")).toLocaleDateString(),
       },
       {
@@ -67,7 +67,7 @@ export const Expenses = () => {
         date : (new Date("2021-01-20")).toLocaleDateString(),
         billed: 92000,
         paid: 89000,
-        company_name: 'Canada Bicycle Parts',
+        companyName: 'Canada Bicycle Parts',
         dateDue : (new Date("2021-02-27")).toLocaleDateString(),
       },
       {
@@ -75,12 +75,12 @@ export const Expenses = () => {
         date : (new Date("2021-01-29")).toLocaleDateString(),
         billed: 105000,
         paid: 42000,
-        company_name: 'Chain Reaction Cycles',
+        companyName: 'Chain Reaction Cycles',
         dateDue : (new Date("2021-03-03")).toLocaleDateString(),
       },
     ];
 
-    data.forEach((d : accounts) => {
+    data.forEach((d : financeEntry) => {
       d.balance  = d.billed - d.paid;
     });
 

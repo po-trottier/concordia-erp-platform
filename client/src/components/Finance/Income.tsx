@@ -8,7 +8,7 @@ export const Income = () => {
   const getColumns = () : tableColumn[] => ([
     {
       title: 'Buyer',
-      dataIndex: 'company_name',
+      dataIndex: 'companyName',
     },
     {
       title: 'Date',
@@ -51,7 +51,7 @@ export const Income = () => {
         date : (new Date("2021-01-22")).toLocaleDateString(),
         billed: 30500,
         paid: 10000,
-        company_name: 'Mark\'s Bike Store',
+        companyName: 'Mark\'s Bike Store',
         dateDue : (new Date("2021-02-22")).toLocaleDateString(),
       },
       {
@@ -59,7 +59,7 @@ export const Income = () => {
         date : (new Date("2021-01-25")).toLocaleDateString(),
         billed: 4500,
         paid: 3000,
-        company_name: 'Sports Experts',
+        companyName: 'Sports Experts',
         dateDue : (new Date("2021-02-17")).toLocaleDateString(),
       },
       {
@@ -67,7 +67,7 @@ export const Income = () => {
         date : (new Date("2021-01-28")).toLocaleDateString(),
         billed: 250500,
         paid: 102500,
-        company_name: 'Walmart',
+        companyName: 'Walmart',
         dateDue : (new Date("2021-03-03")).toLocaleDateString(),
       },
       {
@@ -75,7 +75,7 @@ export const Income = () => {
         date : (new Date("2021-01-30")).toLocaleDateString(),
         billed: 25200,
         paid: 12500,
-        company_name: 'Giant Montreal',
+        companyName: 'Giant Montreal',
         dateDue : (new Date("2021-02-21")).toLocaleDateString(),
       },
       {
@@ -83,12 +83,12 @@ export const Income = () => {
         date : (new Date("2021-01-21")).toLocaleDateString(),
         billed: 36200,
         paid: 14000,
-        company_name: 'Zellers',
+        companyName: 'Zellers',
         dateDue : (new Date("2021-03-04")).toLocaleDateString(),
       },
     ];
 
-    data.forEach((d : accounts) => {
+    data.forEach((d : financeEntry) => {
       d.balance  = d.billed - d.paid;
     });
 

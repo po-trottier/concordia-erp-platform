@@ -1,5 +1,4 @@
-import React from 'react';
-import {Card, Table, Statistic} from 'antd'
+import React from 'react'; import {Card, Table, Statistic} from 'antd'
 import {Line} from '@ant-design/charts';
 import {tableColumn} from '../../interfaces/TableColumn'
 import {summaryEntry} from '../../interfaces/SummaryEntry'
@@ -118,7 +117,7 @@ export const Summary = () => {
       },
     ];
 
-    data.forEach((d : dailySummary) => {
+    data.forEach((d : summaryEntry) => {
       d.profit  = d.income - d.expenses;
     });
 
