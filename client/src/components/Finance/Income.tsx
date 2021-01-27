@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Card, Table} from 'antd';
+import {Card, Table, Statistic} from 'antd'
 import {tableColumn} from '../../interfaces/TableColumn'
 import {financeEntry} from '../../interfaces/FinanceEntry'
 
@@ -95,9 +95,13 @@ export const Income = () => {
     return data;
   }
 
+  const accountReceivableBalance = 204900;
   return (
     <div>
       <h2>Accounts Receivable</h2>
+      <Card style={{ margin: '24px 0' }}>
+        <Statistic title="Accounts Receivable Balance (CAD)" value={accountReceivableBalance} precision={2} />
+      </Card>
       <Card>
         <Table
           columns={getColumns()}
