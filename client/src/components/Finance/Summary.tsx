@@ -36,7 +36,7 @@ export const Summary = () => {
     },
   ]);
 
-  const getData = () : dailySummary [] => {
+  const getData = () : summaryEntry[] => {
     const data = [
       {
         key: '1',
