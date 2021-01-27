@@ -4,6 +4,6 @@ export interface accounts  {
   dateDue: string,
   billed: number,
   paid: number,
-  company_name: string,
+  companyName: string,
   balance?: number
 }
