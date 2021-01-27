@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button} from 'antd';
+import {Card, Table, Button} from 'antd';
 
 export const Expenses = () => {
 interface dataColumn {
@@ -21,11 +21,18 @@ interface dataPoint  {
   balance?: number
 }
 
-export const Summary = () => {
   const getColumns = () : dataColumn[] => ([
+    {
+      title: 'Vendor',
+      dataIndex: 'vendor',
+    },
     {
       title: 'Date',
       dataIndex: 'date',
+    },
+    {
+      title: 'Due Date',
+      dataIndex: 'dateDue',
     },
     {
       title: 'Billed',
@@ -57,48 +64,48 @@ export const Summary = () => {
     const data = [
       {
         key: '1',
-        date : (new Date("2020-01-30")).toLocaleDateString(),
-        income: 70000,
-        expenses: 66000,
+        date : (new Date("2021-01-20")).toLocaleDateString(),
+        billed: 72000,
+        paid: 66000,
+        vendor: 'Digikey',
+        dateDue : (new Date("2021-02-27")).toLocaleDateString(),
       },
       {
         key: '2',
-        date : (new Date("2020-01-29")).toLocaleDateString(),
-        income : 72500,
-        expenses : 73000,
+        date : (new Date("2021-01-24")).toLocaleDateString(),
+        billed: 30000,
+        paid: 0,
+        vendor: 'The Bike Shop',
+        dateDue : (new Date("2021-02-22")).toLocaleDateString(),
       },
       {
         key: '3',
-        date : (new Date("2020-01-28")).toLocaleDateString(),
-        income : 79500,
-        expenses : 81000,
+        date : (new Date("2021-01-20")).toLocaleDateString(),
+        billed: 92000,
+        paid: 89000,
+        vendor: 'Canada Bicycle Parts',
+        dateDue : (new Date("2021-02-27")).toLocaleDateString(),
       },
       {
         key: '4',
-        date : (new Date("2020-01-27")).toLocaleDateString(),
-        income : 82500,
-        expenses : 71000,
+        date : (new Date("2021-01-29")).toLocaleDateString(),
+        billed: 105000,
+        paid: 42000,
+        vendor: 'Chain Reaction Cycles',
+        dateDue : (new Date("2021-03-03")).toLocaleDateString(),
       },
     ];
 
     data.forEach((d : dataPoint) => {
-      d.profit  = d.income - d.expenses;
+      d.balance  = d.billed - d.paid;
     });
 
     return data;
   }
 
-  const config = {
-    data: getData(),
-    xField: 'date',
-    yField: 'profit'
-  };
-
   return (
     <div>
-      <Card style={{ margin: '24px 0' }}>
-        <Line {...config} />
-      </Card>
+      <h2>Accounts Payable</h2>
       <Card>
         <Table
           columns={getColumns()}
