@@ -1,4 +1,4 @@
-export interface dailySummary  {
+export interface summaryEntry {
   key: string,
   date: string,
   income: number,
