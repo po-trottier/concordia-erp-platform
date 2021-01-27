@@ -1,4 +1,4 @@
-export interface accounts  {
+export interface financeEntry {
   key: string,
   date: string,
   dateDue: string,
