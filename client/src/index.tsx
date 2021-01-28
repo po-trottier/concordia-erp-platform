@@ -7,6 +7,7 @@ import {App} from './components/App/App'
 import {Store, Persistor} from './store/Store';
 import {PersistGate} from 'redux-persist/integration/react'
 import * as pwa from './serviceWorker';
+
 import './styles/index.css';
 
 ReactDOM.render(
