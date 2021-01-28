@@ -11,27 +11,20 @@ export const Logs = () => {
     const [state, setState] = useState(
         {
             comp: <Audit/>,
-            current: audit
         }
     );
 
     let updateState = (e : any) => {
-        let newComp = <Audit/>;
         switch (e.key){
-            case audit: newComp = <Audit/>;
+            case audit: setState({comp: <Audit/>})
                 break;
-            case logs: newComp = <LogList/>;
+            case logs: setState({comp: <LogList/>});
                 break;
         }
-        setState({
-            comp: newComp,
-            current: e.key
-        })
     };
 
     return(
         <div>
-            <h1>Audit & Logs</h1>
             <Menu onClick={updateState} defaultSelectedKeys={[audit]} mode="horizontal">
                 <Menu.Item key={audit} icon={<QuestionCircleFilled/>}>
                     Audit
@@ -40,6 +33,7 @@ export const Logs = () => {
                     All Logs
                 </Menu.Item>
             </Menu>
+            <div style = {{padding: '1%'}}/>
             {state.comp}
         </div>
     )
