@@ -35,24 +35,12 @@ export const AppHeader = () => {
     history.push('/login')
   }
 
-  //TODO To add this function when the login page is implemented 
-  const login = () => {
-    dispatch(loginActionCreator({id: '123', name: 'John Doe'}));
-    history.replace(desiredPath);
-  }
-
   const dropdown = (
     //TODO Remove Login option when login page is implemented
     <Menu>
-      {
-        user.isLoggedIn ?
-        <Menu.Item onClick={logOut}>
-        Log Out
-        </Menu.Item> :
-        <Menu.Item onClick={login}>
-         Login
-        </Menu.Item>
-      }
+      <Menu.Item onClick={logOut}>
+         Log Out
+      </Menu.Item> 
     </Menu>
   );
 
@@ -63,6 +51,7 @@ export const AppHeader = () => {
         title="EPIC Resource Planner"
         subTitle={notFound.title}
         style={{padding: '16px 0'}} />
+      {user.isLoggedIn && 
         <Dropdown overlay={dropdown} trigger={['click']} placement="bottomCenter">
           <Avatar
             className="ant-dropdown-link"
@@ -70,6 +59,7 @@ export const AppHeader = () => {
             size="large"
             icon={<UserOutlined />} />
         </Dropdown>
+      }
     </div>
   );
 }
