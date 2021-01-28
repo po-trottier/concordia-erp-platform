@@ -3,7 +3,9 @@ import {RootState} from '../store/Store';
 import {useHistory, useLocation} from "react-router-dom";
 import {useDispatch, useSelector} from 'react-redux';
 import {loginActionCreator} from '../store/slices/UserSlice';
-
+import { Button } from 'antd';
+import { Typography } from 'antd';
+const { Title } = Typography;
 
 export const Login = () => {
   const location = useLocation();
@@ -22,8 +24,8 @@ export const Login = () => {
 
     return(
         <div>
-          <h1>Login</h1>
-          <button onClick={login}>Login</button>
+          <Title>Log In</Title>
+          <Button type="primary" onClick={login}>Submit</Button>
         </div>
     );
 }
