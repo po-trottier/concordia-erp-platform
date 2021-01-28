@@ -1,31 +1,75 @@
-import React from 'react';
-import {RootState} from '../store/Store';
-import {useHistory, useLocation} from "react-router-dom";
-import {useDispatch, useSelector} from 'react-redux';
-import {loginActionCreator} from '../store/slices/UserSlice';
-import { Button } from 'antd';
-import { Typography } from 'antd';
+import React from "react";
+import { RootState } from "../store/Store";
+import { useHistory, useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { loginActionCreator } from "../store/slices/UserSlice";
+import { Button, Typography, Form, Input, Checkbox } from "antd";
 const { Title } = Typography;
+
+const layout = {
+  labelCol: { span: 8 },
+  wrapperCol: { span: 16 },
+};
+
+const tailLayout = {
+  wrapperCol: { offset: 8, span: 16 },
+};
 
 export const Login = () => {
   const location = useLocation();
   const history = useHistory();
-  const user = useSelector((state : RootState) => state.user.user);
+  const user = useSelector((state: RootState) => state.user.user);
   const dispatch = useDispatch();
 
-  //This code will be added to the login page when it will be created.
-  const desiredPath = location.search ? "/" + location.search.substring(10) : "/dashboard"; 
+  const desiredPath = location.search
+    ? "/" + location.search.substring(10)
+    : "/dashboard";
 
-  //TODO To add this function when the login page is implemented 
   const login = () => {
-    dispatch(loginActionCreator({id: '123', name: 'John Doe'}));
+    dispatch(loginActionCreator({ id: "123", name: "John Doe" }));
     history.replace(desiredPath);
-  }
+  };
 
-    return(
-        <div>
-          <Title>Log In</Title>
-          <Button type="primary" onClick={login}>Submit</Button>
-        </div>
-    );
-}
+  const loginFailed = (errorInfo: any) => {
+    console.log("Login Failed:", errorInfo);
+  };
+
+  return (
+    <div>
+      <Title>Log In</Title>
+      <Form
+        {...layout}
+        name="basic"
+        initialValues={{ remember: true }}
+        onFinish={login}
+        onFinishFailed={loginFailed}
+      >
+        <Form.Item
+          label="Username"
+          name="username"
+          rules={[{ required: true, message: "Please input your username!" }]}
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item
+          label="Password"
+          name="password"
+          rules={[{ required: true, message: "Please input your password!" }]}
+        >
+          <Input.Password />
+        </Form.Item>
+
+        <Form.Item {...tailLayout} name="remember" valuePropName="checked">
+          <Checkbox>Remember me</Checkbox>
+        </Form.Item>
+
+        <Form.Item {...tailLayout}>
+          <Button type="primary" htmlType="submit">
+            Submit
+          </Button>
+        </Form.Item>
+      </Form>
+    </div>
+  );
+};
