@@ -12,8 +12,8 @@ export const LoginForm = () => {
   const dispatch = useDispatch();
   const user = useSelector((state : RootState) => state.user.user);
   const [remember, setRemember] = useState(user.isRemembered);
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState(user.username);
+  const [password, setPassword] = useState(user.password);
 
   const handleUsername = (e : React.FormEvent<HTMLInputElement>) =>
     setUsername(e.currentTarget.value);
@@ -31,12 +31,11 @@ export const LoginForm = () => {
 
   const login = () => {
     try{
-
       if (remember)
-        dispatch(loginAction({ id: "69420", name: "John Connor", username: username, isRemembered: true}));
+        dispatch(loginAction({ id: "69420", name: "John Connor", username: username, password: password, isRemembered: true}));
 
       else
-        dispatch(loginAction({ id: "69420", name: "John Connor", username: "", isRemembered: false}));
+        dispatch(loginAction({ id: "69420", name: "John Connor", username: "", password: "", isRemembered: false}));
 
       history.replace(desiredPath);
     } catch(e){
@@ -53,7 +52,10 @@ export const LoginForm = () => {
     <Form
       name="basic"
       style={{ marginBottom: '-24px' }}
-      initialValues={{ username: user.username }}
+      initialValues={{
+        username: user.username,
+        password: user.password,
+      }}
       onFinish={login}
       onFinishFailed={loginFailed}>
       <Form.Item

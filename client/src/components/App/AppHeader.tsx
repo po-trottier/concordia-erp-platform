@@ -26,10 +26,10 @@ export const AppHeader = () => {
   const logOut = () => {
     try {
       if (user.isRemembered)
-        dispatch(logoutAction({username: user.username, isRemembered: true}));
+        dispatch(logoutAction({username: user.username, password: user.password, isRemembered: true}));
 
       else
-        dispatch(logoutAction({username: '', isRemembered: false}));
+        dispatch(logoutAction({username: '', password: '', isRemembered: false}));
 
       history.push('/login')
     } catch(e){
