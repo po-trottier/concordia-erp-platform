@@ -7,12 +7,12 @@ import { Button, Typography, Form, Input, Checkbox } from "antd";
 const { Title } = Typography;
 
 const layout = {
-  labelCol: { span: 8 },
-  wrapperCol: { span: 16 },
+  labelCol: { span: 0 },
+  wrapperCol: { span: 4 },
 };
 
 const tailLayout = {
-  wrapperCol: { offset: 8, span: 16 },
+  wrapperCol: { offset: 0, span: 4 },
 };
 
 export const Login = () => {
@@ -26,7 +26,7 @@ export const Login = () => {
     : "/dashboard";
 
   const login = () => {
-    dispatch(loginActionCreator({ id: "123", name: "John Doe" }));
+    dispatch(loginActionCreator({ id: "69420", name: "John Connor" }));
     history.replace(desiredPath);
   };
 
