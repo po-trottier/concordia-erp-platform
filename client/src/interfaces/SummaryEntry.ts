@@ -1,5 +1,4 @@
-export interface summaryEntry {
-  key: string,
+export interface SummaryEntry {
   date: string,
   income: number,
   expenses: number,

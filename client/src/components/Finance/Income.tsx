@@ -1,119 +1,83 @@
-import React from 'react';
-import {Card, Table, Statistic} from 'antd'
-import {tableColumn} from '../../interfaces/TableColumn'
-import {financeEntry} from '../../interfaces/FinanceEntry'
-import { Breakpoint } from 'antd/lib/_util/responsiveObserve';
+import React, { useEffect, useState } from 'react'
+import {Card, Statistic} from 'antd'
+
+import {FinanceEntry} from '../../interfaces/FinanceEntry'
+import {ResponsiveTable} from '../ResponsiveTable'
 
 export const Income = () => {
+  const [balance, setBalance] = useState(0);
 
-  const getColumns = () : tableColumn[] => ([
-    {
-      title: 'Buyer',
-      dataIndex: 'companyName',
-      responsive: ["sm"] as Breakpoint[]
-    },
-    {
-      title: 'Date',
-      dataIndex: 'date',
-      responsive: ["sm"] as Breakpoint[]
-    },
-    {
-      title: 'Due Date',
-      dataIndex: 'dateDue',
-      responsive: ["sm"] as Breakpoint[]
-    },
-    {
-      title: 'Billed',
-      dataIndex: 'billed',
-      sorter: {
-        compare: (a : any, b : any) => a.billed - b.billed,
-        multiple: 3,
-      },
-      responsive: ["sm"] as Breakpoint[]
-    },
-    {
-      title: 'Paid',
-      dataIndex: 'paid',
-      sorter: {
-        compare: (a : any, b : any) => a.paid - b.paid,
-        multiple: 2,
-      },
-      responsive: ["sm"] as Breakpoint[]
-    },
-    {
-      title: 'Balance',
-      dataIndex: 'balance',
-      sorter: {
-        compare: (a : any, b : any) => (a.billed - a.paid) - (b.billed - b.paid),
-        multiple: 1,
-      },
-      responsive: ["sm"] as Breakpoint[]
-    },
-  ]);
+  useEffect(() => {
+    let val = 0;
+    getRows().forEach((row : FinanceEntry) => {
+      if (row.balance) {
+        val += row.balance;
+      }
+    });
+    setBalance(val);
+  }, []);
 
-  const getData = () : financeEntry[] => {
-    const data = [
+  const getColumns = () => ({
+    buyer: 'Buyer',
+    date: 'Date Processed',
+    dateDue: 'Due Date',
+    billed: 'Billed',
+    paid: 'Paid',
+    balance: 'Balance'
+  });
+
+  const getRows = () : FinanceEntry[] => {
+    const rows = [
       {
-        key: '1',
         date : (new Date("2021-01-22")).toLocaleDateString(),
         billed: 30500,
         paid: 10000,
-        companyName: 'Mark\'s Bike Store',
+        buyer: 'Mark\'s Bike Store',
         dateDue : (new Date("2021-02-22")).toLocaleDateString(),
       },
       {
-        key: '2',
         date : (new Date("2021-01-25")).toLocaleDateString(),
         billed: 4500,
         paid: 3000,
-        companyName: 'Sports Experts',
+        buyer: 'Sports Experts',
         dateDue : (new Date("2021-02-17")).toLocaleDateString(),
       },
       {
-        key: '3',
         date : (new Date("2021-01-28")).toLocaleDateString(),
         billed: 250500,
         paid: 102500,
-        companyName: 'Walmart',
+        buyer: 'Walmart',
         dateDue : (new Date("2021-03-03")).toLocaleDateString(),
       },
       {
-        key: '4',
         date : (new Date("2021-01-30")).toLocaleDateString(),
         billed: 25200,
         paid: 12500,
-        companyName: 'Giant Montreal',
+        buyer: 'Giant Montreal',
         dateDue : (new Date("2021-02-21")).toLocaleDateString(),
       },
       {
-        key: '4',
         date : (new Date("2021-01-21")).toLocaleDateString(),
         billed: 36200,
         paid: 14000,
-        companyName: 'Zellers',
+        buyer: 'Zellers',
         dateDue : (new Date("2021-03-04")).toLocaleDateString(),
       },
     ];
-
-    data.forEach((d : financeEntry) => {
-      d.balance  = d.billed - d.paid;
+    rows.forEach((row : FinanceEntry) => {
+      row.balance  = row.billed - row.paid;
     });
-
-    return data;
+    return rows;
   }
 
-  const accountReceivableBalance = 204900;
   return (
     <div>
       <h2>Accounts Receivable</h2>
       <Card style={{ margin: '24px 0' }}>
-        <Statistic title="Accounts Receivable Balance (CAD)" value={accountReceivableBalance} precision={2} />
+        <Statistic title="Accounts Receivable Balance (CAD)" value={balance} precision={2} />
       </Card>
       <Card>
-        <Table
-          columns={getColumns()}
-          dataSource={getData()}
-          style={{ marginBottom: '-24px' }} />
+        <ResponsiveTable cols={getColumns()} rows={getRows()} />
       </Card>
     </div>
   );

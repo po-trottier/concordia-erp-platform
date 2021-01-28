@@ -1,10 +1,10 @@
 import React, {useState} from "react";
-import {Menu} from 'antd'
+import {Menu} from 'antd';
 import {NotificationTwoTone, DollarCircleTwoTone} from '@ant-design/icons';
 
-import {Summary} from '../components/Finance/Summary'
-import {Income} from '../components/Finance/Income'
-import {Expenses} from '../components/Finance/Expenses'
+import {Summary} from '../components/Finance/Summary';
+import {Income} from '../components/Finance/Income';
+import {Expenses} from '../components/Finance/Expenses';
 
 export const Finances = () => {
   const [tableState, setTableState] = useState("summary");
@@ -13,7 +13,7 @@ export const Finances = () => {
     setTableState(e.key);
   };
 
-  let renderTable = () => {
+  let renderSection = () => {
     switch(tableState) {
       case "summary":
         return <Summary />
@@ -29,7 +29,7 @@ export const Finances = () => {
   return(
     <div>
       <h1>Finances</h1>
-      <Menu onClick={updateState} mode="horizontal" style={{ marginBottom: '16px' }}>
+      <Menu onClick={updateState} defaultSelectedKeys={['summary']} mode="horizontal" style={{ marginBottom: '16px' }}>
         <Menu.Item key="summary" icon={<NotificationTwoTone />}>
           Summary
         </Menu.Item>
@@ -40,7 +40,7 @@ export const Finances = () => {
           Expenses
         </Menu.Item>
       </Menu>
-      {renderTable()}
+      {renderSection()}
     </div>
   )
 }

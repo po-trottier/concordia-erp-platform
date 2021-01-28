@@ -1,9 +1,8 @@
-export interface financeEntry {
-  key: string,
+export interface FinanceEntry {
   date: string,
   dateDue: string,
   billed: number,
   paid: number,
-  companyName: string,
+  buyer: string,
   balance?: number
 }

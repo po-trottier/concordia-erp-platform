@@ -16,6 +16,7 @@
     "@types/react-router-dom": "^5.1.7",
     "antd": "^4.10.3",
     "axios": "^0.21.1",
+    "node-sass": "^4.0.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-redux": "^7.2.2",
