@@ -19,7 +19,7 @@ export const Summary = () => {
   }, []);
 
   const getColumns = () => ({
-    date: 'Processing Date',
+    date: 'Summary Date',
     income: 'Income',
     expenses: 'Expenses',
     profit: 'Profit'
@@ -107,6 +107,7 @@ export const Summary = () => {
       <Card style={{ margin: '24px 0' }}>
         <Line data={getRows()} xField="date" yField="profit" />
       </Card>
+      <h2>Daily Financial Summary</h2>
       <Card>
         <ResponsiveTable rows={getRows()} cols={getColumns()} />
       </Card>
