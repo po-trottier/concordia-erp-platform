@@ -10,10 +10,8 @@ import {logoutAction} from '../../store/slices/UserSlice';
 export const AppHeader = () => {
   const location = useLocation();
   const history = useHistory();
-
-  const user = useSelector((state : RootState) => state.user.user);
-
   const dispatch = useDispatch();
+  const user = useSelector((state : RootState) => state.user.user);
 
   // Used to determine the page title. If not page is found, we create a
   // dummy page with a "Page Not Found" title
@@ -26,8 +24,17 @@ export const AppHeader = () => {
   };
 
   const logOut = () => {
-    dispatch(logoutAction());
-    history.push('/login')
+    try {
+      if (user.isRemembered)
+        dispatch(logoutAction({username: user.username, isRemembered: true}));
+
+      else
+        dispatch(logoutAction({username: '', isRemembered: false}));
+
+      history.push('/login')
+    } catch(e){
+      console.log(e)
+    }
   }
 
   const dropdown = (

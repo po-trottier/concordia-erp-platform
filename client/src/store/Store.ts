@@ -3,7 +3,8 @@ import {persistStore} from 'redux-persist'
 import reducer from './RootReducer'
 
 export const Store = configureStore({
-  reducer
+  reducer,
+  middleware: [],
 });
 export const Persistor = persistStore(Store);
 

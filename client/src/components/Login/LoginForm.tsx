@@ -1,7 +1,8 @@
-import React from "react";
+import React, {useState} from "react";
 import {Button, Form, Input, Checkbox} from "antd";
 import {useHistory, useLocation} from "react-router-dom";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from '../../store/Store'
 
 import {loginAction} from "../../store/slices/UserSlice";
 
@@ -9,14 +10,39 @@ export const LoginForm = () => {
   const location = useLocation();
   const history = useHistory();
   const dispatch = useDispatch();
+  const user = useSelector((state : RootState) => state.user.user);
+  const [remember, setRemember] = useState(user.isRemembered);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleUsername = (e : React.FormEvent<HTMLInputElement>) =>
+    setUsername(e.currentTarget.value);
+
+  const handlePassword = (e : React.FormEvent<HTMLInputElement>) =>
+    setPassword(e.currentTarget.value);
+
+
+  const handleChange = () =>
+    setRemember(!remember);
 
   const desiredPath = location.search
     ? "/" + new URLSearchParams(location.search).get('redirect')
     : "/dashboard";
 
   const login = () => {
-    dispatch(loginAction({ id: "69420", name: "John Connor" }));
-    history.replace(desiredPath);
+    try{
+
+      if (remember)
+        dispatch(loginAction({ id: "69420", name: "John Connor", username: username, isRemembered: true}));
+
+      else
+        dispatch(loginAction({ id: "69420", name: "John Connor", username: "", isRemembered: false}));
+
+      history.replace(desiredPath);
+    } catch(e){
+      console.log(password);
+      console.log(e);
+    }
   };
 
   const loginFailed = (errorInfo: any) => {
@@ -27,23 +53,23 @@ export const LoginForm = () => {
     <Form
       name="basic"
       style={{ marginBottom: '-24px' }}
-      initialValues={{ remember: true }}
+      initialValues={{ username: user.username }}
       onFinish={login}
       onFinishFailed={loginFailed}>
       <Form.Item
         label="Username"
         name="username"
         rules={[{ required: true, message: 'Please input your username!' }]}>
-        <Input />
+        <Input onChange={(e) => handleUsername(e)} />
       </Form.Item>
       <Form.Item
         label="Password"
         name="password"
         rules={[{ required: true, message: 'Please input your password!' }]}>
-        <Input.Password />
+        <Input.Password onChange={(e) => handlePassword(e)} />
       </Form.Item>
-      <Form.Item name="remember" valuePropName="checked">
-        <Checkbox>Remember me</Checkbox>
+      <Form.Item name="remember">
+        <Checkbox onChange={handleChange} defaultChecked={user.isRemembered}>Remember me</Checkbox>
       </Form.Item>
       <Form.Item>
         <Button type="primary" htmlType="submit" style={{ width: '100%' }}>
