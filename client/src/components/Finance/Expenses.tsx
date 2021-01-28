@@ -9,14 +9,17 @@ export const Expenses = () => {
     {
       title: 'Vendor',
       dataIndex: 'companyName',
+      responsive: ["sm"]
     },
     {
       title: 'Date',
       dataIndex: 'date',
+      responsive: ["sm"]
     },
     {
       title: 'Due Date',
       dataIndex: 'dateDue',
+      responsive: ["sm"]
     },
     {
       title: 'Billed',
@@ -25,6 +28,7 @@ export const Expenses = () => {
         compare: (a : any, b : any) => a.billed - b.billed,
         multiple: 3,
       },
+      responsive: ["sm"]
     },
     {
       title: 'Paid',
@@ -33,6 +37,7 @@ export const Expenses = () => {
         compare: (a : any, b : any) => a.paid - b.paid,
         multiple: 2,
       },
+      responsive: ["sm"]
     },
     {
       title: 'Balance',
@@ -41,6 +46,7 @@ export const Expenses = () => {
         compare: (a : any, b : any) => (a.billed - a.paid) - (b.billed - b.paid),
         multiple: 1,
       },
+      responsive: ["sm"]
     },
   ]);
 

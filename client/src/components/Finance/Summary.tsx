@@ -8,6 +8,7 @@ export const Summary = () => {
     {
       title: 'Date',
       dataIndex: 'date',
+      responsive: ["sm"]
     },
     {
       title: 'Income',
@@ -16,6 +17,7 @@ export const Summary = () => {
         compare: (a : any, b : any) => a.income - b.income,
         multiple: 3,
       },
+      responsive: ["sm"]
     },
     {
       title: 'Expenses',
@@ -24,6 +26,7 @@ export const Summary = () => {
         compare: (a : any, b : any) => a.expenses - b.expenses,
         multiple: 2,
       },
+      responsive: ["sm"]
     },
     {
       title: 'Profit',
@@ -32,6 +35,7 @@ export const Summary = () => {
         compare: (a : any, b : any) => (a.income - a.expenses) - (b.income - b.expenses),
         multiple: 1,
       },
+      responsive: ["sm"]
     },
   ]);
 

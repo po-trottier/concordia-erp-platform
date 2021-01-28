@@ -4,6 +4,7 @@ export interface tableColumn {
   sorter?: {
     compare: any,
     multiple: number
-  }
+  },
+  responsive: Array<string>
 }
 
