@@ -32,6 +32,6 @@ export const userSlice = createSlice({
 })
 
 export const {
-    login: loginActionCreator,
-    logout: logoutActionCreator
+    login: loginAction,
+    logout: logoutAction
 } = userSlice.actions;

@@ -6,9 +6,9 @@ import {NoPermissions} from '../../pages/NoPermissions';
 import {RootState} from '../../store/Store'
 
 const hasPermissions = (auth : RouteGuard[], userAuthType: RouteGuard, isLoggedIn : boolean, path : string) : boolean => {
-  
+
   auth.forEach((guard: RouteGuard) => {
-    if (guard !== userAuthType && guard !== RouteGuard.ANY) 
+    if (guard !== userAuthType && guard !== RouteGuard.ANY)
       return false;
   });
   return true;

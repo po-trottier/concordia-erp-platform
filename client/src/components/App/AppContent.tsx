@@ -5,7 +5,6 @@ import {Layout, Card} from 'antd';
 import {Routes} from "../../router/Routes";
 import {NotFound} from '../../pages/NotFound';
 import GuardedRoute from '../Router/GuardedRoute'
-import { Login } from '../../pages/Login';
 
 const {Content} = Layout;
 
@@ -15,7 +14,7 @@ export const AppContent = () => {
       <Card>
         <div className="site-layout-background">
           <Switch>
-            {Routes.filter(route => route.page !== Login).map((route, index) => (
+            {Routes.map((route, index) => (
               <GuardedRoute
                 key={index}
                 component={route.page}
@@ -27,7 +26,6 @@ export const AppContent = () => {
             <Route exact path="/">
               <Redirect to="/dashboard" />
             </Route>
-            <Route path="/login" component={Login} />
             {/* Redirect any invalid page to the 404 page */}
             <Route component={NotFound} />
           </Switch>

@@ -1,14 +1,14 @@
 import {combineReducers} from '@reduxjs/toolkit';
 import {persistReducer} from 'redux-persist';
-import storage from 'redux-persist/lib/storage'; // local storage 
-import { encryptTransform } from 'redux-persist-transform-encrypt';
+import {encryptTransform} from 'redux-persist-transform-encrypt';
 import {userSlice} from './slices/UserSlice';
+import storage from 'redux-persist/lib/storage';
 
 const persistConfig = {
     key: 'root',
-    storage, //type of storage
+    storage,
     whitelist: ['user'],
-    //whitelist contains the name of reducers that we want to persist
+    // whitelist contains the name of reducers that we want to persist
     transforms: [
         encryptTransform({
             secretKey: 'key',
