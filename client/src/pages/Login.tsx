@@ -18,7 +18,6 @@ const tailLayout = {
 export const Login = () => {
   const location = useLocation();
   const history = useHistory();
-  const user = useSelector((state: RootState) => state.user.user);
   const dispatch = useDispatch();
 
   const desiredPath = location.search
