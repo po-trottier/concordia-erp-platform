@@ -2,13 +2,14 @@ import React from 'react'; import {Card, Table, Statistic} from 'antd'
 import {Line} from '@ant-design/charts';
 import {tableColumn} from '../../interfaces/TableColumn'
 import {summaryEntry} from '../../interfaces/SummaryEntry'
+import { Breakpoint } from 'antd/lib/_util/responsiveObserve';
 
 export const Summary = () => {
   const getColumns = () : tableColumn[] => ([
     {
       title: 'Date',
       dataIndex: 'date',
-      responsive: ["sm"]
+      responsive: ["sm"] as Breakpoint[]
     },
     {
       title: 'Income',
@@ -17,7 +18,7 @@ export const Summary = () => {
         compare: (a : any, b : any) => a.income - b.income,
         multiple: 3,
       },
-      responsive: ["sm"]
+      responsive: ["sm"] as Breakpoint[]
     },
     {
       title: 'Expenses',
@@ -26,7 +27,7 @@ export const Summary = () => {
         compare: (a : any, b : any) => a.expenses - b.expenses,
         multiple: 2,
       },
-      responsive: ["sm"]
+      responsive: ["sm"] as Breakpoint[]
     },
     {
       title: 'Profit',
@@ -35,7 +36,7 @@ export const Summary = () => {
         compare: (a : any, b : any) => (a.income - a.expenses) - (b.income - b.expenses),
         multiple: 1,
       },
-      responsive: ["sm"]
+      responsive: ["sm"] as Breakpoint[]
     },
   ]);
 

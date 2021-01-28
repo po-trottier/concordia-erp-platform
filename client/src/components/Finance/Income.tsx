@@ -2,6 +2,7 @@ import React from 'react';
 import {Card, Table, Statistic} from 'antd'
 import {tableColumn} from '../../interfaces/TableColumn'
 import {financeEntry} from '../../interfaces/FinanceEntry'
+import { Breakpoint } from 'antd/lib/_util/responsiveObserve';
 
 export const Income = () => {
 
@@ -9,17 +10,17 @@ export const Income = () => {
     {
       title: 'Buyer',
       dataIndex: 'companyName',
-      responsive: ["sm"]
+      responsive: ["sm"] as Breakpoint[]
     },
     {
       title: 'Date',
       dataIndex: 'date',
-      responsive: ["sm"]
+      responsive: ["sm"] as Breakpoint[]
     },
     {
       title: 'Due Date',
       dataIndex: 'dateDue',
-      responsive: ["sm"]
+      responsive: ["sm"] as Breakpoint[]
     },
     {
       title: 'Billed',
@@ -28,7 +29,7 @@ export const Income = () => {
         compare: (a : any, b : any) => a.billed - b.billed,
         multiple: 3,
       },
-      responsive: ["sm"]
+      responsive: ["sm"] as Breakpoint[]
     },
     {
       title: 'Paid',
@@ -37,7 +38,7 @@ export const Income = () => {
         compare: (a : any, b : any) => a.paid - b.paid,
         multiple: 2,
       },
-      responsive: ["sm"]
+      responsive: ["sm"] as Breakpoint[]
     },
     {
       title: 'Balance',
@@ -46,7 +47,7 @@ export const Income = () => {
         compare: (a : any, b : any) => (a.billed - a.paid) - (b.billed - b.paid),
         multiple: 1,
       },
-      responsive: ["sm"]
+      responsive: ["sm"] as Breakpoint[]
     },
   ]);
 

@@ -1,3 +1,5 @@
+import { Breakpoint } from 'antd/lib/_util/responsiveObserve';
+
 export interface tableColumn {
   title: string,
   dataIndex: string,
@@ -5,6 +7,6 @@ export interface tableColumn {
     compare: any,
     multiple: number
   },
-  responsive: Array<string>
+  responsive: Breakpoint[]
 }
 
