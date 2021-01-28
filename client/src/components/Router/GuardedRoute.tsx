@@ -34,10 +34,9 @@ const GuardedRoute = ({ component: Component, auth, path, exact } :
 
   return (
     <Route path={path} exact={exact} render={(props) => (
-      // hasPermissions(auth, path, history)
-      //   ? <Component {...props} />
-      //   : <NoPermissions />
-      <Component {...props}/>
+      hasPermissions(auth, path, history)
+        ? <Component {...props} />
+        : <NoPermissions />
     )} />
   )
 }
