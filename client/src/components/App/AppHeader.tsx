@@ -1,12 +1,17 @@
 import React from 'react';
-import {useLocation} from "react-router-dom";
+import {useLocation, useHistory} from "react-router-dom";
 import {PageHeader, Avatar, Dropdown, Menu} from 'antd';
 import {UserOutlined} from '@ant-design/icons';
-
 import {Routes} from "../../router/Routes";
+import {RootState} from '../../store/Store'
+import {useDispatch, useSelector} from 'react-redux';
+import {logoutAction} from '../../store/slices/UserSlice';
 
 export const AppHeader = () => {
   const location = useLocation();
+  const history = useHistory();
+  const dispatch = useDispatch();
+  const user = useSelector((state : RootState) => state.user.user);
 
   // Used to determine the page title. If not page is found, we create a
   // dummy page with a "Page Not Found" title
@@ -18,15 +23,24 @@ export const AppHeader = () => {
     page: null,
   };
 
-  // TODO Replace this with a proper logout method
   const logOut = () => {
-    console.log('Log out');
+    try {
+      if (user.isRemembered)
+        dispatch(logoutAction({username: user.username, password: user.password, isRemembered: true}));
+
+      else
+        dispatch(logoutAction({username: '', password: '', isRemembered: false}));
+
+      history.push('/login')
+    } catch(e){
+      console.log(e)
+    }
   }
 
   const dropdown = (
     <Menu>
       <Menu.Item onClick={logOut}>
-        Log Out
+         Log Out
       </Menu.Item>
     </Menu>
   );
@@ -38,6 +52,7 @@ export const AppHeader = () => {
         title="EPIC Resource Planner"
         subTitle={notFound.title}
         style={{padding: '16px 0'}} />
+      {user.isLoggedIn &&
         <Dropdown overlay={dropdown} trigger={['click']} placement="bottomCenter">
           <Avatar
             className="ant-dropdown-link"
@@ -45,6 +60,7 @@ export const AppHeader = () => {
             size="large"
             icon={<UserOutlined />} />
         </Dropdown>
+      }
     </div>
   );
 }

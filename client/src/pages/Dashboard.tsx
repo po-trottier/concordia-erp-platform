@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-import axios from '../app/Axios'
+import axios from '../plugins/Axios'
 
 export const Dashboard = () => {
 
