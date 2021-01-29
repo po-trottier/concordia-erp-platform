@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import ReactDOM from 'react-dom';
 import {Button} from 'antd';
+import { List, Typography, Divider } from 'antd';
 
 export const Materials = () => {
 
@@ -12,31 +13,33 @@ export const Materials = () => {
   }
 
   const materialsData: IMaterial[] = [];
-  const [materials, setMaterials] = useState(materialsData);
+  const [materials, setMaterials] = useState<IMaterial[]|undefined>(undefined);
   const [materialName, setMaterialName] = useState("");
   const [materialQty, setMaterialQty] = useState();
   const [materialUnit, setMaterialUnit] = useState();
   const [materialPrice, setMaterialPrice] = useState();
+  materialsData[0] = {name: "cookie", quantity: 1, weight: 1, price: 1};
+  materialsData[1] = {name: "cookie2", quantity: 1, weight: 1, price: 1};
 
   let updateState = (e:any) =>
   {
-    materialsData[0] = {name: "cookie", quantity: 1, weight: 1, price: 1};
     console.log(materials);
-  }
-
-  let renderName = () => {
-    if (materialsData.length == 0){
-      console.log(materialsData)
-      return "metal";
-    }
-
-    return materialsData[0];
-  }
+    setMaterials(materialsData);
+  } 
   return(
     <div>    
       <h1>Materials</h1>
       <Button type="primary" onClick={updateState}>Primary Button</Button>
-      <h1>{renderName()}</h1>
+      <Divider orientation="left">Available</Divider>
+    <List
+      bordered
+      dataSource={materials}
+      renderItem={item => (
+        <List.Item>
+          {item.name} <h1>Buy</h1>
+        </List.Item>
+      )}
+    />
     </div>
   )
 }
