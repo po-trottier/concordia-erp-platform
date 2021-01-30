@@ -1,30 +1,36 @@
 import React, { useState } from "react";
-import { Layout, Card, Table, Space, Tabs } from 'antd';
-import { LineChartOutlined, DatabaseOutlined } from '@ant-design/icons';
+import { Card, Descriptions, Table, Badge, Button } from 'antd';
+import { LineChartOutlined, DatabaseOutlined, PlusOutlined } from '@ant-design/icons';
 import { Line } from '@ant-design/charts';
 import { Breakpoint } from 'antd/lib/_util/responsiveObserve';
 import { Menu } from 'antd';
 import { bicycle } from '../interfaces/Bicycle';
-
-const { TabPane } = Tabs;
+import ProductDetails from '../components/Product/ProductDetails';
  
-
 const data : bicycle[] =  [
     {
       key: '1',
-      name: 'Mongoose Legion L100 BMX 20inch wheel 2020 Blue',
+      name: 'Mongoose Legion L100 BMX',
       description: '10 Downing Street',
       parts: ["seat", 'handles', 'wheels', 'chain', 'gears'],
       quantity: 17,
       price: 99.99,
+      frameSize: "18in",
+      color: "Blue",
+      finish: "Matte",
+      grade: "Steel"
     },
     {
       key: '2',
-      name: 'Women\'s Newport 3SPD Grey',
+      name: 'Women\'s Newport 3SPD',
       description: '10 Downing Street',
       parts: ["seat", 'handles', 'wheels', 'chain', 'gears'],
       quantity: 32,
       price: 119.99,
+      frameSize: "18in",
+      color: "Grey",
+      finish: "Matte",
+      grade: "Steel"
     },
     {
       key: '3',
@@ -33,6 +39,10 @@ const data : bicycle[] =  [
       parts: ["seat", 'handles', 'wheels', 'chain', 'gears'],
       quantity: 17,
       price: 299.99,
+      frameSize: "18in",
+      color: "Red",
+      finish: "Chrome",
+      grade: "Aluminum"
     },
     {
       key: '4',
@@ -41,6 +51,10 @@ const data : bicycle[] =  [
       parts: ["seat", 'handles', 'wheels', 'chain', 'gears'],
       quantity: 32,
       price: 199.99,
+      frameSize: "18in",
+      color: "Silver",
+      finish: "Matte",
+      grade: "Carbon"
     },
     {
       key: '5',
@@ -49,6 +63,10 @@ const data : bicycle[] =  [
       parts: ["seat", 'handles', 'wheels', 'chain', 'gears'],
       quantity: 17,
       price: 399.99,
+      frameSize: "18in",
+      color: "Black",
+      finish: "Matte",
+      grade: "Carbon"
     },
     {
       key: '6',
@@ -57,6 +75,10 @@ const data : bicycle[] =  [
       parts: ["seat", 'handles', 'wheels', 'chain', 'gears'],
       quantity: 32,
       price: 199.99,
+      frameSize: "18in",
+      color: "White",
+      finish: "Matte",
+      grade: "Steel"
     },
     {
       key: '7',
@@ -65,6 +87,10 @@ const data : bicycle[] =  [
       parts: ["seat", 'handles', 'wheels', 'chain', 'gears'],
       quantity: 17,
       price: 299.99,
+      frameSize: "18in",
+      color: "Yellow",
+      finish: "Matte",
+      grade: "Steel"
     },
     {
       key: '8',
@@ -73,6 +99,10 @@ const data : bicycle[] =  [
       parts: ["seat", 'handles', 'wheels', 'chain', 'gears'],
       quantity: 32,
       price: 599.99,
+      frameSize: "18in",
+      color: "Black",
+      finish: "Chrome",
+      grade: "Aluminum"
     },
 ];
 
@@ -81,21 +111,30 @@ const columns = [
       title: 'Name',
       dataIndex: 'name',
       key: 'name',
+      sorter: {
+        compare: (a : any, b : any) => a.name.localeCompare(b.name),
+        multiple: 3,
+      },
       responsive: ["sm"] as Breakpoint[],
-      render: function displayProduct(text : any) {
-        return <a>{text}</a>;
-      } 
     },
     {
       title: 'Price (CAD)',
       dataIndex: 'price',
       key: 'price',
+      sorter: {
+        compare: (a : any, b : any) => a.price - b.price,
+        multiple: 1,
+      },
       responsive: ["sm"] as Breakpoint[]
     },
     {
       title: 'Quantity',
       dataIndex: 'quantity',
       key: 'quantity',
+      sorter: {
+        compare: (a : any, b : any) => a.quantity - b.quantity,
+        multiple: 2,
+      },
       responsive: ["sm"] as Breakpoint[]
     },
     {
@@ -107,18 +146,40 @@ const columns = [
 ];
 
 const inventory = (
-  <Card style={{ marginTop: '20px' }}>
-    <Table dataSource={data} columns={columns}></Table>
-  </Card>
+  <div>
+    <Card style={{ marginTop: '20px' }}>
+      <Table 
+        expandable={{
+          expandedRowRender: function displayProductDetails(record) {
+            return (
+              <ProductDetails 
+                name={record.name} 
+                price={record.price} 
+                parts={record.parts} 
+                frameSize={record.frameSize} 
+                color={record.color} 
+                finish={record.finish}                
+                grade={record.grade} 
+                quantity={record.quantity}
+                description={record.description}>
+              </ProductDetails>
+            );
+          }
+        }}
+        dataSource={data} 
+        columns={columns}></Table>
+      <Button type="primary" icon={<PlusOutlined />}>Add Product</Button>
+    </Card>
+  </div>
 );
 
 
 
 
-export const Products = () => {
+export const Products = (props: any) => {
   const [productState, setProductState] = useState("inventory");
 
-  let updateState = (e: any) => {
+  let updateTableState = (e: any) => {
     setProductState(e.key);
   };
 
@@ -135,7 +196,7 @@ export const Products = () => {
 
   return (
         <div>
-          <Menu onClick={updateState} mode="horizontal">
+          <Menu defaultSelectedKeys={['inventory']} onClick={updateTableState} mode="horizontal">
             <Menu.Item icon={<DatabaseOutlined />} key="inventory" >
               Inventory
             </Menu.Item>
