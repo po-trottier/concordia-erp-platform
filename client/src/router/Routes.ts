@@ -57,7 +57,11 @@ export const Routes : Route[] = [
     title: 'Materials',
     icon: 'codepen',
     page: Materials,
-    auth: [RouteGuard.ANY]
+    auth: [
+      RouteGuard.SYSTEM_ADMINISTRATOR,
+      RouteGuard.INVENTORY_MANAGER,
+      RouteGuard.SALESPERSON 
+    ]
   },
   {
     path: '/customers',
