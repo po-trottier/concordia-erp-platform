@@ -1,8 +1,9 @@
 import React, {useState} from "react";
 import ReactDOM from 'react-dom';
 import {Button} from 'antd';
-import { List, Typography, Divider } from 'antd';
+import { Divider } from 'antd';
 import { Table, Space } from 'antd';
+import {MaterialTimeline} from '../components/Material/MaterialTimeline';
 
 
 export const Materials = () => {
@@ -44,7 +45,7 @@ export const Materials = () => {
       // eslint-disable-next-line react/display-name
       render: (text: string, record: IMaterial) => (
         <Space size="middle">
-          <Button size="small">Buy More</Button>
+          <a>Buy More</a>
         </Space>
       ),
     },
@@ -73,7 +74,7 @@ export const Materials = () => {
       <Table columns={columns} dataSource={materials}/>
       <Divider orientation="left">Additional Options</Divider>
       <Button type="primary" onClick={updateState}>Create a material</Button>
-      {track()}
+      <MaterialTimeline></MaterialTimeline>
     </div>
   )
 }
