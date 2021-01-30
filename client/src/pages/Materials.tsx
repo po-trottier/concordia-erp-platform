@@ -4,6 +4,9 @@ import {Button} from 'antd';
 import { Divider } from 'antd';
 import { Table, Space } from 'antd';
 import {MaterialTimeline} from '../components/Material/MaterialTimeline';
+import MetalImg from '../assets/metal.png';
+import PlasticImg from '../assets/plastic.png';
+import WoodImg from '../assets/wood.png';
 
 
 export const Materials = () => {
@@ -12,22 +15,30 @@ export const Materials = () => {
     name: string;
     quantity: number;
     price: number;
+    img: string;
   }
 
   const materialsData: IMaterial[] = [];
-  const [materials, setMaterials] = useState<IMaterial[]|undefined>([{name: "Metal", quantity: 30, price: 5},{name: "Plastic", quantity: 10, price: 2}]);
+  const [materials, setMaterials] = useState<IMaterial[]|undefined>([{img: MetalImg, name: "Metal", quantity: 30, price: 5},{img: PlasticImg, name: "Plastic", quantity: 10, price: 2}]);
   const [materialName, setMaterialName] = useState("");
   const [materialQty, setMaterialQty] = useState();
   const [materialPrice, setMaterialPrice] = useState();
   const [trackedMat, setTrackedMat] = useState("");
-  materialsData[0] = {name: "Metal", quantity: 30, price: 5};
-  materialsData[1] = {name: "Plastic", quantity: 10, price: 2};
+  materialsData[0] = {img: '../assets/metal.png', name: "Metal", quantity: 30, price: 5};
+  materialsData[1] = {img: '../assets/plastic.png', name: "Plastic", quantity: 10, price: 2};
   
   const columns = [
     {
       title: 'Name',
       dataIndex: 'name',
       key: 'name',
+      // eslint-disable-next-line react/display-name
+      render: (text: string, record: IMaterial) => (
+        <p>
+          <img src={record.img} alt={record.name+" img"} width="30 px"/>
+          {record.name}
+        </p>
+      ),
     },
     {
       title: 'Quantity Owned',
@@ -53,8 +64,7 @@ export const Materials = () => {
 
   let updateState = (e:any) =>
   {
-    console.log(materials);
-    materialsData.push({name: "Wood", quantity: 3, price: 1})
+    materialsData.push({img: '../assets/wood.png', name: "Wood", quantity: 3, price: 1})
     setMaterials(materialsData);
   }
 
