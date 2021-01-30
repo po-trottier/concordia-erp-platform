@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 
-import axios from '../app/Axios'
+import axios from '../plugins/Axios'
+
 
 export const Dashboard = () => {
 
-  const [status, setStatus] = useState(['Unknown']);
+  const [status, setStatus] = useState('Unknown');
 
   useEffect(() => {
     axios.get('/')
