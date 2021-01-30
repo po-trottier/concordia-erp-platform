@@ -58,4 +58,4 @@ jobs:
             docker-compose up -d
             
             # Prune the images
-            docker image prune
+            docker image prune -f
