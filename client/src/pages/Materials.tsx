@@ -1,5 +1,4 @@
 import React, {useState} from "react";
-import ReactDOM from 'react-dom';
 import {Button} from 'antd';
 import { Divider } from 'antd';
 import { Table, Space } from 'antd';
@@ -64,7 +63,7 @@ export const Materials = () => {
 
   let updateState = (e:any) =>
   {
-    materialsData.push({img: '../assets/wood.png', name: "Wood", quantity: 3, price: 1})
+    materialsData.push({img: WoodImg, name: "Wood", quantity: 3, price: 1})
     setMaterials(materialsData);
   }
 
