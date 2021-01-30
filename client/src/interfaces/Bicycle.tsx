@@ -4,5 +4,9 @@ export interface bicycle {
     parts: String[],
     description: String,
     quantity: Number,
-    price: Number
+    price: Number,
+    frameSize: String,
+    color: String,
+    finish: String,
+    grade: String
 }
