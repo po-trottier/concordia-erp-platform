@@ -1,23 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import {Card, Statistic} from 'antd'
+import React from 'react';
+import {Card, Typography} from 'antd';
 import {Line} from '@ant-design/charts';
 
 import {ResponsiveTable} from '../ResponsiveTable';
-import {MaterialTimelineEntry} from '../../interfaces/MaterialTimelineEntry';
+import {MaterialsTimelineEntry} from '../../interfaces/MaterialsTimelineEntry';
 
-export const MaterialTimeline = () => {
-  const [balance, setBalance] = useState(0);
+const { Title } = Typography;
 
-  useEffect(() => {
-    let val = 0;
-    getRows().forEach((row : MaterialTimelineEntry) => {
-      if (row.stock) {
-        val += row.stock;
-      }
-    });
-    setBalance(val);
-  }, []);
-
+export const MaterialsTimeline = () => {
   const getColumns = () => ({
     material: 'material',
     date: 'Date',
@@ -27,7 +17,7 @@ export const MaterialTimeline = () => {
   });
 
   const getRows = () => {
-    const rows: MaterialTimelineEntry[] = [
+    const rows: MaterialsTimelineEntry[] = [
       {
         material: "Metal",
         date : (new Date("2021-01-30")).toLocaleDateString(),
@@ -185,30 +175,23 @@ export const MaterialTimeline = () => {
         used : 6700,
       },
     ];
-    rows.forEach((row : MaterialTimelineEntry) => {
+    rows.forEach((row : MaterialsTimelineEntry) => {
       row.stock  = row.bought - row.used;
     });
     return rows;
   }
 
-  var configMetal = {
-      data: getRows(),
-      xField: "date",
-      yField: "stock",
-      seriesField: 'material',
-      
-  }
-
   return (
     <div>
+      <Title level={4}>Stock Logs</Title>
       <Card style={{ margin: '24px 0' }}>
-        <Statistic title="Material Stock (Units)" value={balance} precision={2} />
-      </Card>
-      <Card style={{ margin: '24px 0' }}>
-        <Line {...configMetal} />
+        <Line
+          data={getRows()}
+          xField="date"
+          yField="stock"
+          seriesField="material" />
       </Card>
       <Card>
-        <h2>Daily Material Stock Timeline</h2>
         <ResponsiveTable rows={getRows()} cols={getColumns()} />
       </Card>
     </div>
