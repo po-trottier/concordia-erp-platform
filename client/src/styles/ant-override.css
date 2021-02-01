@@ -18,6 +18,10 @@
   top: 23px;
 }
 
+.ant-statistic-content-value {
+  font-weight: bold;
+}
+
 .ant-menu-item {
   margin: 0 !important;
   padding: 0 16px !important;

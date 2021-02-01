@@ -32,13 +32,15 @@ export const ResponsiveTable = (props : TableProps) => {
   };
 
   return (
-    <table className="responsive-table">
-      <thead>
-        {getColumns()}
-      </thead>
-      <tbody>
-        {getRows()}
-      </tbody>
-    </table>
+    <div style={{ overflowX: 'auto' }}>
+      <table className="responsive-table">
+        <thead>
+          {getColumns()}
+        </thead>
+        <tbody>
+          {getRows()}
+        </tbody>
+      </table>
+    </div>
   );
 }
