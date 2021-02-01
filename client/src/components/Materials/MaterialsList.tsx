@@ -1,5 +1,5 @@
 import React from "react";
-import {Typography} from 'antd'
+import {Card, Typography} from 'antd'
 
 import {ResponsiveTable} from '../ResponsiveTable'
 import {MaterialsListEntry} from '../../interfaces/MaterialsListEntry'
@@ -40,11 +40,11 @@ export const MaterialsList = () => {
   ];
 
   return(
-    <div style={{ marginBottom: '32px' }}>
+    <Card>
       <Title level={4} style={{ marginBottom: '24px' }}>
         Available Materials
       </Title>
       <ResponsiveTable cols={cols} rows={rows} />
-    </div>
+    </Card>
   )
 }

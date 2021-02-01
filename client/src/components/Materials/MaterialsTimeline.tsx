@@ -183,15 +183,16 @@ export const MaterialsTimeline = () => {
 
   return (
     <div>
-      <Title level={4}>Stock Logs</Title>
-      <Card style={{ margin: '24px 0' }}>
+      <Card style={{ marginTop: '24px' }}>
+        <Title level={4} style={{ marginBottom: '24px' }}>
+          Stock Logs
+        </Title>
         <Line
           data={getRows()}
           xField="date"
           yField="stock"
-          seriesField="material" />
-      </Card>
-      <Card>
+          seriesField="material"
+          style={{ marginBottom: '48px' }}/>
         <ResponsiveTable rows={getRows()} cols={getColumns()} />
       </Card>
     </div>

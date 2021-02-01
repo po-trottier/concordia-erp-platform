@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import {Card, Statistic} from 'antd'
+import {Card, Statistic, Typography} from 'antd'
 import {Line} from '@ant-design/charts';
 
 import {ResponsiveTable} from '../ResponsiveTable';
 import {SummaryEntry} from '../../interfaces/SummaryEntry';
+
+const {Title} = Typography;
 
 export const Summary = () => {
   const [balance, setBalance] = useState(0);
@@ -108,7 +110,9 @@ export const Summary = () => {
         <Line data={getRows()} xField="date" yField="profit" />
       </Card>
       <Card>
-        <h2>Daily Financial Summary</h2>
+        <Title level={4} style={{ marginBottom: '24px' }}>
+          Daily Financial Summary
+        </Title>
         <ResponsiveTable rows={getRows()} cols={getColumns()} />
       </Card>
     </div>
