@@ -19,7 +19,8 @@ export const PartInventory = () => {
 			data = data.filter(
 				(part) =>
 					part.name.toLowerCase().includes(searchValue) ||
-					part.description.toLowerCase().includes(searchValue)
+					part.description.toLowerCase().includes(searchValue) ||
+					part.id.includes(searchValue)
 			);
 		}
 
