@@ -12,15 +12,15 @@ export const PartCatalog = () => {
 		row.build = <Input placeholder="Input a quantity" />
 	});
 
-	const [tableData, setTableData] = useState(data);
-	const [searchValue, setSearchValue] = useState('');
-
 	const cols = {
 		name: 'Part Name',
 		materials: 'Materials',
 		quantity: 'Owned',
 		build: 'Build',
 	};
+
+	const [tableData, setTableData] = useState(data);
+	const [searchValue, setSearchValue] = useState('');
 
 	useEffect(() => {
 		let rows = data;
@@ -43,7 +43,7 @@ export const PartCatalog = () => {
 		<div>
 			<Card>
 				<Search
-					placeholder="Search for part"
+					placeholder="Search for a part"
 					onChange={onSearch}
 					style={{ marginBottom: 18 }} />
 				<ResponsiveTable cols={cols} rows={tableData} />

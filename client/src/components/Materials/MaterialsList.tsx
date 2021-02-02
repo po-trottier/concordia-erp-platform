@@ -1,5 +1,5 @@
-import React from "react";
-import {Card, Typography} from 'antd'
+import React, { useEffect, useState } from 'react'
+import { Button, Card, Input } from 'antd'
 
 import {ResponsiveTable} from '../ResponsiveTable'
 import {MaterialsListEntry} from '../../interfaces/MaterialsListEntry'
@@ -7,15 +7,15 @@ import MetalImg from '../../assets/metal.png';
 import PlasticImg from '../../assets/plastic.png';
 import WoodImg from '../../assets/wood.png';
 
-const {Title} = Typography;
+const {Search} = Input;
 
 export const MaterialsList = () => {
-
   const cols = {
     img: 'Preview',
     name: 'Product',
     quantity: 'Quantity Owned',
-    price: 'Price / Unit ($)'
+    price: 'Price / Unit ($)',
+    order: 'Order'
   };
 
   const rows : MaterialsListEntry[] = [
@@ -39,12 +39,47 @@ export const MaterialsList = () => {
     },
   ];
 
+  const data : any[] = rows;
+  data.forEach((row) => {
+    row.order = <Input placeholder="Input a quantity" />
+  });
+
+  const [tableData, setTableData] = useState(data);
+  const [searchValue, setSearchValue] = useState('');
+
+  useEffect(() => {
+    let rows = data;
+    if (searchValue.trim() !== '') {
+      rows = rows.filter((m) =>
+        m.name.toLowerCase().includes(searchValue.trim().toLowerCase()
+      ));
+    }
+    setTableData(rows);
+  }, [searchValue]);
+
+  const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(e.target.value);
+  };
+
   return(
-    <Card>
-      <Title level={4} style={{ marginBottom: '24px' }}>
-        Available Materials
-      </Title>
-      <ResponsiveTable cols={cols} rows={rows} />
-    </Card>
+    <div>
+      <Card>
+        <Search
+          placeholder="Search for a material"
+          onChange={onSearch}
+          style={{ marginBottom: 18 }} />
+        <ResponsiveTable cols={cols} rows={tableData} />
+      </Card>
+      <Button
+        type="primary"
+        style={{ marginTop: 16, float: 'right' }}>
+        Order Materials
+      </Button>
+      <Button
+        type="ghost"
+        style={{ marginTop: 16 }}>
+        Add a new Material
+      </Button>
+    </div>
   )
 }

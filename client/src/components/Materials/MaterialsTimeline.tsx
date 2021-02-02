@@ -1,11 +1,11 @@
-import React from 'react';
-import {Card, Typography} from 'antd';
+import React, { useEffect, useState } from 'react'
+import { Card, Input } from 'antd'
 import {Line} from '@ant-design/charts';
 
 import {ResponsiveTable} from '../ResponsiveTable';
 import {MaterialsTimelineEntry} from '../../interfaces/MaterialsTimelineEntry';
 
-const { Title } = Typography;
+const {Search} = Input;
 
 export const MaterialsTimeline = () => {
   const getColumns = () => ({
@@ -181,19 +181,41 @@ export const MaterialsTimeline = () => {
     return rows;
   }
 
+  const [tableData, setTableData] = useState(getRows());
+  const [searchValue, setSearchValue] = useState('');
+
+  useEffect(() => {
+    let rows = getRows();
+    if (searchValue.trim() !== '') {
+      rows = rows.filter(
+        (m) =>
+          m.material.toLowerCase().includes(searchValue.trim().toLowerCase()) ||
+          m.date.includes(searchValue.trim())
+      );
+    }
+    setTableData(rows);
+  }, [searchValue]);
+
+  const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(e.target.value);
+  };
+
   return (
     <div>
-      <Card style={{ marginTop: '24px' }}>
-        <Title level={4} style={{ marginBottom: '24px' }}>
-          Stock Logs
-        </Title>
+      <Card style={{ margin: '24px 0' }}>
+        <Search
+          placeholder="Search for a material"
+          onChange={onSearch}
+          style={{ marginBottom: 18 }} />
         <Line
-          data={getRows()}
+          data={tableData}
           xField="date"
           yField="stock"
           seriesField="material"
           style={{ marginBottom: '48px' }} />
-        <ResponsiveTable rows={getRows()} cols={getColumns()} />
+      </Card>
+      <Card>
+        <ResponsiveTable rows={tableData} cols={getColumns()} />
       </Card>
     </div>
   );
