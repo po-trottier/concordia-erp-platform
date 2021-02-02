@@ -39,8 +39,6 @@ export const Routes : Route[] = [
       RouteGuard.SYSTEM_ADMINISTRATOR,
       RouteGuard.INVENTORY_MANAGER,
       RouteGuard.SALESPERSON,
-      //Remove when done
-      RouteGuard.ANY
     ]
   },
   {
