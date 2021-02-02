@@ -21,8 +21,10 @@ export const PartCatalog = () => {
 	useEffect(() => {
 		let rows = dummyPartCatalogData;
 		if (searchValue) {
-			rows = rows.filter((part) =>
-				part.partName.toLowerCase().includes(searchValue)
+			rows = rows.filter(
+				(part) =>
+					part.partName.toLowerCase().includes(searchValue) ||
+					part.partId.includes(searchValue)
 			);
 		}
 
