@@ -5,8 +5,10 @@ import {Button} from 'antd';
 export const Users = () => {
   return (
     <div>
-      <Button type="primary" >Add User</Button>
-      <UserList/>
+      <UserList />
+      <Button type="primary" style={{ marginTop: 16 }}>
+        Add User
+      </Button>
     </div>
   );
 }
