@@ -1,18 +1,18 @@
 import React from 'react';
-import {Route, Switch, Redirect} from "react-router-dom";
-import {Layout, Card} from 'antd';
+import { Redirect, Route, Switch } from 'react-router-dom';
+import { Card, Layout } from 'antd';
 
-import {Routes} from "../../router/Routes";
-import {NotFound} from '../../pages/NotFound';
-import GuardedRoute from '../Router/GuardedRoute'
+import { Routes } from '../../router/Routes';
+import { NotFound } from '../../pages/NotFound';
+import GuardedRoute from '../Router/GuardedRoute';
 
-const {Content} = Layout;
+const { Content } = Layout;
 
 export const AppContent = () => {
   return (
-    <Content className="router-view">
+    <Content className='router-view'>
       <Card>
-        <div className="site-layout-background">
+        <div className='site-layout-background'>
           <Switch>
             {Routes.map((route, index) => (
               <GuardedRoute
@@ -23,8 +23,8 @@ export const AppContent = () => {
                 exact={route.exact} />
             ))}
             {/* Redirect home to dashboard */}
-            <Route exact path="/">
-              <Redirect to="/dashboard" />
+            <Route exact path='/'>
+              <Redirect to='/dashboard' />
             </Route>
             {/* Redirect any invalid page to the 404 page */}
             <Route component={NotFound} />
@@ -33,4 +33,4 @@ export const AppContent = () => {
       </Card>
     </Content>
   );
-}
+};

@@ -1,14 +1,14 @@
-import {Dashboard} from '../pages/Dashboard';
-import {Users} from '../pages/Users';
-import {Products} from '../pages/Products';
-import {Parts} from '../pages/Parts';
-import {Materials} from '../pages/Materials';
-import {Customers} from '../pages/Customers';
-import {Finances} from '../pages/Finances';
-import {Logs} from '../pages/Logs';
+import { Dashboard } from '../pages/Dashboard';
+import { Users } from '../pages/Users';
+import { Products } from '../pages/Products';
+import { Parts } from '../pages/Parts';
+import { Materials } from '../pages/Materials';
+import { Customers } from '../pages/Customers';
+import { Finances } from '../pages/Finances';
+import { Logs } from '../pages/Logs';
 
-import {Route} from "../interfaces/Route";
-import {RouteGuard} from './RouteGuards';
+import { Route } from '../interfaces/Route';
+import { RouteGuard } from './RouteGuards';
 
 export const Routes : Route[] = [
   {
@@ -20,12 +20,14 @@ export const Routes : Route[] = [
     auth: [RouteGuard.ANY]
   },
   {
-    path: '/users',
+    path: '/finances',
     exact: false,
-    title: 'Users',
-    icon: 'user',
-    page: Users,
-    auth: [RouteGuard.SYSTEM_ADMINISTRATOR]
+    title: 'Finances',
+    icon: 'dollar',
+    page: Finances,
+    auth: [
+      RouteGuard.ANY
+    ]
   },
   {
     path: '/products',
@@ -77,14 +79,12 @@ export const Routes : Route[] = [
     ]
   },
   {
-    path: '/finances',
+    path: '/users',
     exact: false,
-    title: 'Finances',
-    icon: 'dollar',
-    page: Finances,
-    auth: [
-      RouteGuard.ANY
-    ]
+    title: 'Users',
+    icon: 'user',
+    page: Users,
+    auth: [RouteGuard.SYSTEM_ADMINISTRATOR]
   },
   {
     path: '/logs',

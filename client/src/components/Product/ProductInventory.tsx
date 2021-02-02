@@ -1,9 +1,10 @@
-import React from 'react';
-import { Card } from 'antd';
-import { bicycle } from '../../interfaces/Bicycle';
+import React, { useState } from 'react';
+import { Button, Card, Modal } from 'antd';
+import { bicycleEntry } from '../../interfaces/BicycleEntry';
 import Title from 'antd/lib/typography/Title';
 import { Line } from '@ant-design/charts';
 import { ResponsiveTable } from '../ResponsiveTable';
+import ProductDetails from './ProductDetails';
 
 
 const data = [
@@ -61,7 +62,33 @@ const data = [
   },
 ];
 
-const inventory = (props: any) => {
+const ProductInventory = (props: any) => {
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [modalContent, setModalContent] = useState({
+    name: '',
+    description: '',
+    parts: [],
+    quantity: 0,
+    price: 0,
+    frameSize: "",
+    color: "",
+    finish: "",
+    grade: "",
+  });
+
+  const showModal = (row: any) => {
+    setIsModalVisible(true);
+    setModalContent(row)
+  };
+
+  const handleOk = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
 
   const getColumns = () => ({
     name: 'name',
@@ -72,7 +99,7 @@ const inventory = (props: any) => {
   });
 
   const getRows = () => {
-    const rows : bicycle[] =  [
+    const rows : bicycleEntry[] =  [
       {
         key: '1',
         name: 'Mongoose Legion L100 BMX',
@@ -170,6 +197,10 @@ const inventory = (props: any) => {
         grade: "Aluminum",
       },
     ];
+
+    rows.forEach((row : bicycleEntry) => {
+      row.details = <Button type='primary' onClick={() => showModal(row)}>More Details</Button>;
+    });
     return rows;
   }
 
@@ -179,11 +210,28 @@ const inventory = (props: any) => {
         <Title level={4} style={{ marginBottom: '24px' }}>
           Product Sales
         </Title>
-        <Line data={data} xField="date" yField="numberSold" style={{ marginBottom: '48px' }}/>
+        <Line
+          data={data}
+          xField="date"
+          yField="numberSold"
+          style={{ marginBottom: '48px' }} />
         <ResponsiveTable rows={getRows()} cols={getColumns()}></ResponsiveTable>
+        <Modal visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+          <ProductDetails
+            name={modalContent.name}
+            price={modalContent.price}
+            quantity={modalContent.quantity}
+            frameSize={modalContent.frameSize}
+            parts={modalContent.parts}
+            color={modalContent.color}
+            finish={modalContent.finish}
+            grade={modalContent.grade}
+            description={modalContent.description}
+          ></ProductDetails>
+      </Modal>
       </Card>
     </div>
   )
 }
 
-export default inventory;
+export default ProductInventory;

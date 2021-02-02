@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { DatabaseOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Card, Menu } from 'antd';
-import Inventory from "../components/Product/Inventory";
- 
+import Inventory from "../components/Product/ProductInventory";
+
 
 export const Products = (props: any) => {
   const [productState, setProductState] = useState("inventory");
@@ -25,7 +25,7 @@ export const Products = (props: any) => {
   return (
         <div>
           <Menu defaultSelectedKeys={['inventory']} onClick={updateTableState} mode="horizontal">
-            <Menu.Item icon={<DatabaseOutlined />} key="inventory" >
+            <Menu.Item icon={<DatabaseOutlined />} key="inventory">
               Inventory
             </Menu.Item>
             <Menu.Item icon={<PlusOutlined />} key="addProduct">
@@ -35,4 +35,4 @@ export const Products = (props: any) => {
           {switchTabs()}
         </div>
     );
-} 
+}

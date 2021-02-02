@@ -1,3 +1,14 @@
-import React from "react";
+import React from 'react';
+import { UserList } from '../components/Users/UserList';
+import { Button } from 'antd';
 
-export const Users = () => <h1>Users</h1>
+export const Users = () => {
+  return (
+    <div>
+      <UserList />
+      <Button type='primary' style={{ marginTop: 16 }}>
+        Add User
+      </Button>
+    </div>
+  );
+};

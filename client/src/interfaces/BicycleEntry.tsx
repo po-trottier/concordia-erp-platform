@@ -1,4 +1,6 @@
-export interface bicycle {
+import { ReactElement } from 'react';
+
+export interface bicycleEntry {
     key: String,
     name: String,
     parts: String[],
@@ -8,5 +10,6 @@ export interface bicycle {
     frameSize: String,
     color: String,
     finish: String,
-    grade: String, 
+    grade: String,
+    details?: ReactElement
 }
