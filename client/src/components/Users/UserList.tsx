@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { Card, Input } from 'antd';
 
 import { ResponsiveTable } from '../ResponsiveTable';
 import { UserEntry } from '../../interfaces/UserEntry';
+
+const { Search } = Input;
 
 export const UserList = () => {
 
@@ -72,7 +75,29 @@ export const UserList = () => {
     return users;
   };
 
+  const [tableData, setTableData] = useState(getRows());
+  const [searchValue, setSearchValue] = useState('');
+
+  useEffect(() => {
+    let rows = getRows();
+    if (searchValue.trim() !== '') {
+      rows = rows.filter(
+        (r) => r.name.trim().toLowerCase().includes(searchValue.trim().toLowerCase()));
+    }
+    setTableData(rows);
+  }, [searchValue]);
+
+  const onSearch = (e : React.ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(e.target.value);
+  };
+
   return (
-    <ResponsiveTable rows={getRows()} cols={getColumns()} />
+    <Card>
+      <Search
+        placeholder='Search for a customer'
+        onChange={onSearch}
+        style={{ marginBottom: 18 }} />
+      <ResponsiveTable rows={tableData} cols={getColumns()} />
+    </Card>
   );
 };
