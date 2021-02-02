@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { Menu } from 'antd';
-import { ContainerTwoTone, BookTwoTone } from '@ant-design/icons';
+import {Menu} from 'antd';
+import {ContainerTwoTone, BookTwoTone} from '@ant-design/icons';
 
-import { PartInventory } from '../components/Part/PartInventory';
-import { PartCatalog } from '../components/Part/PartCatalog';
+import {PartInventory} from '../components/Parts/PartInventory';
+import {PartCatalog} from '../components/Parts/PartCatalog';
 
 export const Parts = () => {
-	const [tableState, setTableState] = useState('summary');
+	const [tableState, setTableState] = useState('inventory');
 
 	let updateState = (e: any) => {
 		setTableState(e.key);
@@ -27,10 +27,9 @@ export const Parts = () => {
 		<div>
 			<Menu
 				onClick={updateState}
-				defaultSelectedKeys={['summary']}
+				defaultSelectedKeys={['inventory']}
 				mode="horizontal"
-				style={{ marginBottom: '16px' }}
-			>
+				style={{ marginBottom: '16px' }}>
 				<Menu.Item key="inventory" icon={<ContainerTwoTone />}>
 					Inventory
 				</Menu.Item>

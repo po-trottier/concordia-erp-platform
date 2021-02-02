@@ -50,7 +50,7 @@
   font-weight: bold;
 }
 
-@media screen and (min-width: 576px) {
+@media screen and (min-width: 992px) {
   .responsive-table thead {
     display: table-header-group;
   }
