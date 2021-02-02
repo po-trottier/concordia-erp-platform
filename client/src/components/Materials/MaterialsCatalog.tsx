@@ -13,8 +13,8 @@ export const MaterialsCatalog = () => {
   const cols = {
     img: 'Preview',
     name: 'Product',
-    quantity: 'Quantity Owned',
-    price: 'Price / Unit ($)',
+    quantity: 'Owned',
+    price: 'Price',
     order: 'Order',
   };
 
