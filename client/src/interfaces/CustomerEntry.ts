@@ -1,6 +1,6 @@
 export interface CustomerEntry {
-  company: string,
-  sold: number,
-  paid: number,
-  balance: number
+  company : string,
+  sold : number,
+  paid : number,
+  balance : number
 }

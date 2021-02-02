@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {BrowserRouter as Router} from "react-router-dom";
-import {Provider} from 'react-redux';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
 
-import {App} from './components/App/App'
-import {Store, Persistor} from './store/Store';
-import {PersistGate} from 'redux-persist/integration/react'
+import { App } from './components/App/App';
+import { Persistor, Store } from './store/Store';
 import * as pwa from './serviceWorker';
 
 import './styles/index.css';

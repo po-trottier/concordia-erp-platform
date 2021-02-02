@@ -1,16 +1,18 @@
 import React from 'react';
-import {useLocation, useHistory} from "react-router-dom";
-import {PageHeader, Avatar, Dropdown, Menu} from 'antd';
-import {UserOutlined} from '@ant-design/icons';
-import {Routes} from "../../router/Routes";
-import {RootState} from '../../store/Store'
-import {useDispatch, useSelector} from 'react-redux';
-import {logoutAction} from '../../store/slices/UserSlice';
+import { useHistory, useLocation } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { Avatar, Dropdown, Menu, PageHeader } from 'antd';
+import { UserOutlined } from '@ant-design/icons';
+
+import { Routes } from '../../router/Routes';
+import { RootState } from '../../store/Store';
+import { logoutAction } from '../../store/slices/UserSlice';
 
 export const AppHeader = () => {
   const location = useLocation();
   const history = useHistory();
   const dispatch = useDispatch();
+
   const user = useSelector((state : RootState) => state.user.user);
 
   // Used to determine the page title. If not page is found, we create a
@@ -25,42 +27,49 @@ export const AppHeader = () => {
 
   const logOut = () => {
     try {
-      if (user.isRemembered)
-        dispatch(logoutAction({username: user.username, password: user.password, isRemembered: true}));
-
-      else
-        dispatch(logoutAction({username: '', password: '', isRemembered: false}));
-
-      history.push('/login')
-    } catch(e){
-      console.log(e)
+      if (user.isRemembered) {
+        dispatch(logoutAction({
+          username: user.username,
+          password: user.password,
+          isRemembered: true
+        }));
+      } else {
+        dispatch(logoutAction({
+          username: '',
+          password: '',
+          isRemembered: false
+        }));
+      }
+      history.push('/login');
+    } catch (e) {
+      console.log(e);
     }
-  }
+  };
 
   const dropdown = (
     <Menu>
       <Menu.Item onClick={logOut}>
-         Log Out
+        Log Out
       </Menu.Item>
     </Menu>
   );
 
   return (
-    <div className="app-header">
+    <div className='app-header'>
       <PageHeader
-        className="site-page-header"
-        title="EPIC Resource Planner"
+        className='site-page-header'
+        title='EPIC Resource Planner'
         subTitle={notFound.title}
-        style={{padding: '16px 0'}} />
+        style={{ padding: '16px 0' }} />
       {user.isLoggedIn &&
-        <Dropdown overlay={dropdown} trigger={['click']} placement="bottomCenter">
-          <Avatar
-            className="ant-dropdown-link"
-            style={{ backgroundColor: '#1890ff' }}
-            size="large"
-            icon={<UserOutlined />} />
-        </Dropdown>
+      <Dropdown overlay={dropdown} trigger={['click']} placement='bottomCenter'>
+        <Avatar
+          className='ant-dropdown-link'
+          style={{ backgroundColor: '#1890ff' }}
+          size='large'
+          icon={<UserOutlined />} />
+      </Dropdown>
       }
     </div>
   );
-}
+};

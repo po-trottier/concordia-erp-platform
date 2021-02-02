@@ -14,7 +14,7 @@ export const CustomersList = () => {
     actions: 'Actions',
   });
 
-  const getRows = (): CustomerEntry[] => {
+  const getRows = () : CustomerEntry[] => {
     const customers = [
       {
         company: 'Sports Experts',
@@ -47,7 +47,7 @@ export const CustomersList = () => {
         balance: -240,
       },
     ];
-    customers.forEach((customer: any) => {
+    customers.forEach((customer : any) => {
       customer.actions = (<Button type='ghost'>Sell Items</Button>);
     });
     return customers;

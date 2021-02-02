@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {TableProps} from '../interfaces/TableProps';
+import { TableProps } from '../interfaces/TableProps';
 import '../styles/tables.css';
 
 export const ResponsiveTable = (props : TableProps) => {
@@ -13,7 +13,7 @@ export const ResponsiveTable = (props : TableProps) => {
         <th key={key}>{val}</th>
       );
     });
-    columns.unshift(<th key={'key'} />)
+    columns.unshift(<th key={'key'} />);
     return (
       <tr>{columns}</tr>
     );
@@ -26,23 +26,23 @@ export const ResponsiveTable = (props : TableProps) => {
           <td key={key + index} data-label={col}>{row[key as keyof object]}</td>
         );
       });
-      values.unshift(<td key={'key' + index}>{ index + 1 }</td>);
+      values.unshift(<td key={'key' + index}>{index + 1}</td>);
       return (
         <tr key={'row' + index.toString()}>{values}</tr>
       );
-    })
+    });
   };
 
   return (
     <div {...rest} style={{ overflowX: 'auto' }}>
-      <table className="responsive-table">
+      <table className='responsive-table'>
         <thead>
-          {getColumns()}
+        {getColumns()}
         </thead>
         <tbody>
-          {getRows()}
+        {getRows()}
         </tbody>
       </table>
     </div>
   );
-}
+};

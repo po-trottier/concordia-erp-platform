@@ -1,20 +1,20 @@
 import React from 'react';
-import {Button} from 'antd';
+import { Button } from 'antd';
 
-import {LogEntry} from "../../interfaces/LogEntry";
-import {ResponsiveTable} from "../ResponsiveTable";
+import { LogEntry } from '../../interfaces/LogEntry';
+import { ResponsiveTable } from '../ResponsiveTable';
 
-const LogList = () => {
+export const LogList = () => {
 
-  function getRows(){
-    const rows: LogEntry[] = [{
-        date: (new Date(2021,1,31,12,57)).toString(),
-        action: 'Create',
-        author: 'Mike',
-        target: '15 tires'
-      },
+  function getRows() {
+    const rows : LogEntry[] = [{
+      date: (new Date(2021, 1, 31, 12, 57)).toString(),
+      action: 'Create',
+      author: 'Mike',
+      target: '15 tires'
+    },
       {
-        date: (new Date(2021,1,31,12,54)).toString(),
+        date: (new Date(2021, 1, 31, 12, 54)).toString(),
         action: 'Login Success',
         author: 'Mike',
         target: 'self'
@@ -30,8 +30,6 @@ const LogList = () => {
     target: 'Target'
   });
 
-
-
   return (
     <div style={{ paddingTop: 24 }}>
       <ResponsiveTable rows={getRows()} cols={getColumns()} />
@@ -39,7 +37,5 @@ const LogList = () => {
         Clear Logs
       </Button>
     </div>
-  )
-}
-
-export default LogList;
+  );
+};

@@ -54,22 +54,27 @@
   .responsive-table thead {
     display: table-header-group;
   }
+
   .responsive-table tr {
     display: table-row;
     border-bottom-width: 1px;
     margin-bottom: 0;
   }
+
   .responsive-table tr:nth-child(even) {
     background: #fafafa;
   }
+
   .responsive-table td {
     display: table-cell;
     text-align: left;
     border-bottom: none;
   }
+
   .responsive-table td:first-child {
     display: table-cell;
   }
+
   .responsive-table td:before {
     content: "";
     display: none;

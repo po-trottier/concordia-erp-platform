@@ -1,4 +1,4 @@
 export interface TableProps {
-  cols: object,
-  rows: object[],
+  cols : object,
+  rows : object[],
 }

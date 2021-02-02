@@ -12,7 +12,7 @@ export const UserList = () => {
     actions: 'Actions'
   });
 
-  const getRows = (): UserEntry[] => {
+  const getRows = () : UserEntry[] => {
     const users = [
       {
         name: 'Pierre-Olivier Trottier',
@@ -60,7 +60,7 @@ export const UserList = () => {
         location: 'Montreal, Qc, Canada'
       },
     ];
-    users.forEach((user: any) => {
+    users.forEach((user : any) => {
       user.actions = (
         <div>
           <a href='?'>Reset Password</a>

@@ -1,49 +1,39 @@
-import React from 'react'
-import {
-  Popover,
-  Button,
-  Card,
-  Checkbox,
-  DatePicker,
-  Divider,
-  Menu,
-  Select,
-  Typography
-} from 'antd'
+import React from 'react';
+import { Button, Card, Checkbox, DatePicker, Divider, Menu, Popover, Select, Typography } from 'antd';
 
-import { PersonName } from '../../interfaces/PersonName'
+import { PersonName } from '../../interfaces/PersonName';
 
-const { Option } = Select
-const { RangePicker } = DatePicker
-const { Title } = Typography
+const { Option } = Select;
+const { RangePicker } = DatePicker;
+const { Title } = Typography;
 
 export const Audit = () => {
 
   const getNames = () => {
-    let names: PersonName[] = [
+    let names : PersonName[] = [
       { name: 'Mike' },
       { name: 'Alex' },
-    ]
+    ];
     return names.map((personName) => (
       <Option
         key={personName.name}
         value={personName.name}>
         {personName.name}
       </Option>),
-    )
-  }
+    );
+  };
 
-  const actionOptions = ['Create', 'Modify', 'Delete']
-  const securityOptions = ['Successful Login', 'Failed Login']
-  const materialsOptions = ['Steel', 'Titanium', 'Rubber', 'Lubricant']
-  const partsOptions = ['Frames', 'Tires', 'Handlebars', 'Chains']
-  const productsOptions = ['Hybrid Bike', 'Street Bike', 'Mountain Bike']
+  const actionOptions = ['Create', 'Modify', 'Delete'];
+  const securityOptions = ['Successful Login', 'Failed Login'];
+  const materialsOptions = ['Steel', 'Titanium', 'Rubber', 'Lubricant'];
+  const partsOptions = ['Frames', 'Tires', 'Handlebars', 'Chains'];
+  const productsOptions = ['Hybrid Bike', 'Street Bike', 'Mountain Bike'];
 
   const style = {
     marginBottom: 4,
     marginTop: 16,
     color: '#919191',
-  }
+  };
 
   const exportOptions = (
     <Menu>
@@ -57,7 +47,7 @@ export const Audit = () => {
         TXT
       </Menu.Item>
     </Menu>
-  )
+  );
 
   return (
     <div>
@@ -97,7 +87,7 @@ export const Audit = () => {
         <p style={style}>Select the products:</p>
         <Checkbox.Group options={productsOptions} />
       </Card>
-      <Popover content={exportOptions} title="Export Options" trigger="click">
+      <Popover content={exportOptions} title='Export Options' trigger='click'>
         <Button
           type='primary'
           onClick={e => e.preventDefault()}>
@@ -105,5 +95,5 @@ export const Audit = () => {
         </Button>
       </Popover>
     </div>
-  )
-}
+  );
+};

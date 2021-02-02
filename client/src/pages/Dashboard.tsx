@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import axios from '../plugins/Axios'
-
+import axios from '../plugins/Axios';
 
 export const Dashboard = () => {
 
@@ -9,7 +8,7 @@ export const Dashboard = () => {
 
   useEffect(() => {
     axios.get('/')
-      .then(({data}) => {
+      .then(({ data }) => {
         setStatus(data.status);
       })
       .catch(err => {
@@ -19,5 +18,5 @@ export const Dashboard = () => {
 
   return (
     <h1>Current API Status: <b>{status}</b></h1>
-  )
-}
+  );
+};
