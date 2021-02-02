@@ -1,7 +1,7 @@
 import React from "react";
 import {ResponsiveTable} from "../ResponsiveTable";
 import {UserEntry} from "../../interfaces/UserEntry";
-import {UserActions} from "./UserActions";
+
 
 export const UserList = () => {
 
@@ -17,55 +17,55 @@ export const UserList = () => {
       name: 'Pierre-Olivier Trottier',
       age: 23,
       location: 'Montreal, Qc, Canada',
-      actions: UserActions
+      actions: <div><a>Reset Password</a><p></p><a>Delete User</a></div>
     },
     {
       name: 'Camil Bouzidi',
       age: 24,
       location: 'Montreal, Qc, Canada',
-      actions: UserActions
+      actions: <div><a>Reset Password</a><p></p><a>Delete User</a></div>
     },
     {
       name: 'Radley Carpio',
       age: 23,
       location: 'Montreal, Qc, Canada',
-      actions: UserActions
+      actions: <div><a>Reset Password</a><p></p><a>Delete User</a></div>
     },
     {
       name: 'Bicher Chammaa',
       age: 25,
       location: 'Montreal, Qc, Canada',
-      actions: UserActions
+      actions: <div><a>Reset Password</a><p></p><a>Delete User</a></div>
     },
     {
       name: 'Matthew Kevork',
       age: 24,
       location: 'Montreal, Qc, Canada',
-      actions: UserActions
+      actions: <div><a>Reset Password</a><p></p><a>Delete User</a></div>
     },
     {
       name: 'Cedric Martens',
       age: 22,
       location: 'Montreal, Qc, Canada',
-      actions: UserActions
+      actions: <div><a>Reset Password</a><p></p><a>Delete User</a></div>
     },
     {
       name: 'William Morin-Laberge',
       age: 32,
       location: 'Montreal, Qc, Canada',
-      actions: UserActions
+      actions: <div><a>Reset Password</a><p></p><a>Delete User</a></div>
     },
     {
       name: 'Adrien Tremblay',
       age: 23,
       location: 'Montreal, Qc, Canada',
-      actions: UserActions
+      actions: <div><a>Reset Password</a><p></p><a>Delete User</a></div>
     },
     {
       name: 'Nimit Jaggi',
       age: 26,
       location: 'Montreal, Qc, Canada',
-      actions: UserActions
+      actions: <div><a>Reset Password</a><p></p><a>Delete User</a></div>
     },
   ]);
 
