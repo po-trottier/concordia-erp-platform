@@ -1,22 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
-import axios from '../plugins/Axios';
+import { DashboardGreetings } from '../components/Dashboard/DashboardGreetings';
 
 export const Dashboard = () => {
-
-  const [status, setStatus] = useState('Unknown');
-
-  useEffect(() => {
-    axios.get('/')
-      .then(({ data }) => {
-        setStatus(data.status);
-      })
-      .catch(err => {
-        console.error(err);
-      });
-  }, []);
-
   return (
-    <h1>Current API Status: <b>{status}</b></h1>
+    <DashboardGreetings />
   );
 };

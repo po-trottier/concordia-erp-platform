@@ -6,7 +6,7 @@ import { RouteGuard } from '../../router/RouteGuards';
 import { NoPermissions } from '../../pages/NoPermissions';
 import { RootState } from '../../store/Store';
 
-const hasPermissions = (auth : RouteGuard[], userAuthType : RouteGuard, isLoggedIn : boolean, path : string) : boolean => {
+const hasPermissions = (auth : RouteGuard[], userAuthType : RouteGuard) : boolean => {
 
   auth.forEach((guard : RouteGuard) => {
     if (guard !== userAuthType && guard !== RouteGuard.ANY) {
@@ -29,7 +29,7 @@ const GuardedRoute = ({ component: Component, auth, path, exact } :
   return (
     <Route path={path} exact={exact} render={(props) => (
       !user.isLoggedIn ? <Redirect to={'/login?redirect=' + path.substring(1)} /> :
-        hasPermissions(auth, user.authType, user.isLoggedIn, path)
+        hasPermissions(auth, user.authType)
           ? <Component {...props} />
           : <NoPermissions />
     )} />
