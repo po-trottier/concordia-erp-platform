@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import { LineChartOutlined, DatabaseOutlined, PlusOutlined } from '@ant-design/icons';
-import { Menu } from 'antd';
+import { DatabaseOutlined, PlusOutlined } from '@ant-design/icons';
+import { Button, Card, Menu } from 'antd';
 import Inventory from "../components/Product/Inventory";
-import Trend from "../components/Product/Trend";
  
 
 export const Products = (props: any) => {
@@ -16,8 +15,8 @@ export const Products = (props: any) => {
     switch (productState) {
       case "inventory":
         return <Inventory />;
-      case "trends":
-        return <Trend />;
+      case "addProduct":
+        return <Card><Button type="primary" icon={<PlusOutlined />}>Add Product</Button></Card>;
       default:
         return <Inventory />;
     }
@@ -29,8 +28,8 @@ export const Products = (props: any) => {
             <Menu.Item icon={<DatabaseOutlined />} key="inventory" >
               Inventory
             </Menu.Item>
-            <Menu.Item icon={<LineChartOutlined />} key="trends">
-              Trends
+            <Menu.Item icon={<PlusOutlined />} key="addProduct">
+              Add Product
             </Menu.Item>
           </Menu>
           {switchTabs()}

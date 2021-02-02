@@ -1,23 +1,14 @@
-import * as React from 'react'
+import {Dashboard} from '../pages/Dashboard';
+import {Users} from '../pages/Users';
+import {Products} from '../pages/Products';
+import {Parts} from '../pages/Parts';
+import {Materials} from '../pages/Materials';
+import {Customers} from '../pages/Customers';
+import {Finances} from '../pages/Finances';
+import {Logs} from '../pages/Logs';
 
-import { Dashboard } from '../pages/Dashboard'
-import { Users } from '../pages/Users'
-import { Products } from '../pages/Products'
-import { Parts } from '../pages/Parts'
-import { Materials } from '../pages/Materials'
-import { Customers } from '../pages/Customers'
-import { Finances } from '../pages/Finances'
-import { Logs } from '../pages/Logs'
-import { RouteGuard } from './RouteGuards'
-
-interface Route {
-  path: string,
-  exact: boolean,
-  title: string,
-  icon: string,
-  page: React.ComponentType<any>,
-  auth: RouteGuard[]
-}
+import {Route} from "../interfaces/Route";
+import {RouteGuard} from './RouteGuards';
 
 export const Routes : Route[] = [
   {
@@ -92,8 +83,7 @@ export const Routes : Route[] = [
     icon: 'dollar',
     page: Finances,
     auth: [
-      RouteGuard.SYSTEM_ADMINISTRATOR,
-      RouteGuard.ACCOUNTANT
+      RouteGuard.ANY
     ]
   },
   {

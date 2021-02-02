@@ -8,5 +8,5 @@ export interface bicycle {
     frameSize: String,
     color: String,
     finish: String,
-    grade: String
+    grade: String, 
 }

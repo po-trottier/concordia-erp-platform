@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import { render } from '@testing-library/react';
 
 import { App } from '../components/App/App'
-import { Store } from '../app/Store';
+import { Store } from '../store/Store';
 
 test('renders properly', () => {
   const { getByText } = render(
