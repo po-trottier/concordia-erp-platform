@@ -1,38 +1,39 @@
-import React, { useState } from "react";
-import { DatabaseOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Card, Menu } from 'antd';
-import Inventory from "../components/Product/ProductInventory";
+import React, { useState } from 'react';
+import { BookTwoTone, ContainerTwoTone } from '@ant-design/icons';
+import { Menu } from 'antd';
 
+import { ProductInventory } from '../components/Products/ProductInventory';
+import { ProductCatalog } from '../components/Products/ProductCatalog';
 
-export const Products = (props: any) => {
-  const [productState, setProductState] = useState("inventory");
+export const Products = () => {
+  const [productState, setProductState] = useState('inventory');
 
-  let updateTableState = (e: any) => {
+  let updateTableState = (e : any) => {
     setProductState(e.key);
   };
 
   let switchTabs = () => {
     switch (productState) {
-      case "inventory":
-        return <Inventory />;
-      case "addProduct":
-        return <Card><Button type="primary" icon={<PlusOutlined />}>Add Product</Button></Card>;
+      case 'inventory':
+        return <ProductInventory />;
+      case 'catalog':
+        return <ProductCatalog />;
       default:
-        return <Inventory />;
+        return <ProductInventory />;
     }
   };
 
   return (
-        <div>
-          <Menu defaultSelectedKeys={['inventory']} onClick={updateTableState} mode="horizontal">
-            <Menu.Item icon={<DatabaseOutlined />} key="inventory">
-              Inventory
-            </Menu.Item>
-            <Menu.Item icon={<PlusOutlined />} key="addProduct">
-              Add Product
-            </Menu.Item>
-          </Menu>
-          {switchTabs()}
-        </div>
-    );
-}
+    <div>
+      <Menu defaultSelectedKeys={['inventory']} onClick={updateTableState} mode='horizontal'>
+        <Menu.Item key='inventory' icon={<ContainerTwoTone />}>
+          Inventory
+        </Menu.Item>
+        <Menu.Item key='catalog' icon={<BookTwoTone twoToneColor='#52c41a' />}>
+          Catalog
+        </Menu.Item>
+      </Menu>
+      {switchTabs()}
+    </div>
+  );
+};
