@@ -29,7 +29,7 @@ export const Parts = () => {
         onClick={updateState}
         defaultSelectedKeys={['inventory']}
         mode='horizontal'
-        style={{ marginBottom: '16px' }}>
+        style={{ marginBottom: '24px' }}>
         <Menu.Item key='inventory' icon={<ContainerTwoTone />}>
           Inventory
         </Menu.Item>

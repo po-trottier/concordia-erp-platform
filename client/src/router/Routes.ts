@@ -20,12 +20,14 @@ export const Routes : Route[] = [
     auth: [RouteGuard.ANY]
   },
   {
-    path: '/users',
+    path: '/finances',
     exact: false,
-    title: 'Users',
-    icon: 'user',
-    page: Users,
-    auth: [RouteGuard.SYSTEM_ADMINISTRATOR]
+    title: 'Finances',
+    icon: 'dollar',
+    page: Finances,
+    auth: [
+      RouteGuard.ANY
+    ]
   },
   {
     path: '/products',
@@ -75,14 +77,12 @@ export const Routes : Route[] = [
     ]
   },
   {
-    path: '/finances',
+    path: '/users',
     exact: false,
-    title: 'Finances',
-    icon: 'dollar',
-    page: Finances,
-    auth: [
-      RouteGuard.ANY
-    ]
+    title: 'Users',
+    icon: 'user',
+    page: Users,
+    auth: [RouteGuard.SYSTEM_ADMINISTRATOR]
   },
   {
     path: '/logs',

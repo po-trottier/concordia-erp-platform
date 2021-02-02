@@ -9,7 +9,11 @@ const { Search } = Input;
 export const PartCatalog = () => {
   const data : any[] = dummyPartData;
   data.forEach((row) => {
-    row.build = <InputNumber placeholder='Input a quantity' />;
+    row.build = <InputNumber
+      placeholder='Input a quantity'
+      min={0}
+      style={{ width: '100%' }}
+    />;
   });
 
   const cols = {

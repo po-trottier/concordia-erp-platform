@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-
-import { MaterialsTimeline } from '../components/Materials/MaterialsTimeline';
-import { MaterialsList } from '../components/Materials/MaterialsList';
 import { Menu } from 'antd';
-import { DollarCircleTwoTone, NotificationTwoTone } from '@ant-design/icons';
+import { BookTwoTone, ContainerTwoTone } from '@ant-design/icons';
+
+import { MaterialsInventory } from '../components/Materials/MaterialsInventory';
+import { MaterialsCatalog } from '../components/Materials/MaterialsCatalog';
 
 export const Materials = () => {
   const [tableState, setTableState] = useState('summary');
@@ -15,11 +15,11 @@ export const Materials = () => {
   let renderSection = () => {
     switch (tableState) {
       case 'inventory':
-        return <MaterialsTimeline />;
+        return <MaterialsInventory />;
       case 'catalog':
-        return <MaterialsList />;
+        return <MaterialsCatalog />;
       default:
-        return <MaterialsTimeline />;
+        return <MaterialsInventory />;
     }
   };
 
@@ -27,10 +27,10 @@ export const Materials = () => {
     <div>
       <Menu onClick={updateState} defaultSelectedKeys={['inventory']} mode='horizontal'
             style={{ marginBottom: '16px' }}>
-        <Menu.Item key='inventory' icon={<NotificationTwoTone />}>
+        <Menu.Item key='inventory' icon={<ContainerTwoTone />}>
           Inventory
         </Menu.Item>
-        <Menu.Item key='catalog' icon={<DollarCircleTwoTone twoToneColor='#52c41a' />}>
+        <Menu.Item key='catalog' icon={<BookTwoTone twoToneColor='#52c41a' />}>
           Catalog
         </Menu.Item>
       </Menu>

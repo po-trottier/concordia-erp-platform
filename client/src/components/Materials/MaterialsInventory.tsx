@@ -7,7 +7,7 @@ import { MaterialsTimelineEntry } from '../../interfaces/MaterialsTimelineEntry'
 
 const { Search } = Input;
 
-export const MaterialsTimeline = () => {
+export const MaterialsInventory = () => {
   const getColumns = () => ({
     material: 'material',
     date: 'Date',

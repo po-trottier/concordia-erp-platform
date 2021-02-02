@@ -9,7 +9,7 @@ import WoodImg from '../../assets/wood.png';
 
 const { Search } = Input;
 
-export const MaterialsList = () => {
+export const MaterialsCatalog = () => {
   const cols = {
     img: 'Preview',
     name: 'Product',
@@ -41,7 +41,11 @@ export const MaterialsList = () => {
 
   const data : any[] = rows;
   data.forEach((row) => {
-    row.order = <InputNumber placeholder='Input a quantity' />;
+    row.order = <InputNumber
+      placeholder='Input a quantity'
+      min={0}
+      style={{ width: '100%' }}
+    />;
   });
 
   const [tableData, setTableData] = useState(data);
