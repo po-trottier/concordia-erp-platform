@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Space, Input, Button } from 'antd';
-
-import { PartInventoryEntry } from '../../interfaces/PartInventoryEntry';
-import { ColumnsType } from 'antd/lib/table';
-import { PartHistoryModal } from './PartHistoryModal';
+import { Input, Button } from 'antd';
+import { ResponsiveTable } from '../ResponsiveTable';
+import { Line } from '@ant-design/charts';
+import { dummyPartHistoryData, dummyPartInventoryData } from './PartDummyData';
 
 export const PartInventory = () => {
 	const { Search } = Input;
@@ -22,6 +21,13 @@ export const PartInventory = () => {
 					part.description.toLowerCase().includes(searchValue) ||
 					part.id.includes(searchValue)
 			);
+
+			timeLineData = [];
+			data.forEach(({ id: partId }) => {
+				timeLineData.push(
+					...dummyPartHistoryData.filter(({ id }) => id === partId)
+				);
+			});
 		}
 
 		setLineGraphData(timeLineData);
@@ -33,17 +39,12 @@ export const PartInventory = () => {
 		setSearchValue(value);
 	};
 
-	const showModal = (record: PartInventoryEntry) => {
-		setPartDetail(record);
-		setIsModalVisible(true);
-	};
-
-	const handleOk = () => {
-		setIsModalVisible(false);
-	};
-
-	const handleCancel = () => {
-		setIsModalVisible(false);
+	const cols = {
+		id: 'ID',
+		name: 'Part',
+		description: 'Description',
+		quantity: 'Quantity',
+		forecast: 'Forecast',
 	};
 
 	return (
@@ -54,19 +55,17 @@ export const PartInventory = () => {
 				onChange={onSearch}
 				style={{ width: 200, marginBottom: 18 }}
 			/>
-			<Table columns={columns} dataSource={rows} />
-			<Button type="primary" onClick={() => {}}>
+			<Line
+				data={lineGraphData}
+				xField="date"
+				yField="quantity"
+				seriesField="name"
+				style={{ marginBottom: '48px' }}
+			/>
+			<ResponsiveTable cols={cols} rows={tableData} />
+			<Button type="primary" onClick={() => {}} style={{ margin: 18 }}>
 				Add Part Record
 			</Button>
-			{partDetail && (
-				<PartHistoryModal
-					part={partDetail}
-					visible={isModalVisible}
-					onOk={handleOk}
-					onCancel={handleCancel}
-					data={dummyTimelineData}
-				/>
-			)}
 		</div>
 	);
 };
