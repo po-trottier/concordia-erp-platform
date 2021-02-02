@@ -22,9 +22,9 @@ export const AppContent = () => {
                 path={route.path}
                 exact={route.exact} />
             ))}
-            {/* Redirect home to dashboard */}
+            {/* Redirect home to home */}
             <Route exact path='/'>
-              <Redirect to='/dashboard' />
+              <Redirect to='/home' />
             </Route>
             {/* Redirect any invalid page to the 404 page */}
             <Route component={NotFound} />

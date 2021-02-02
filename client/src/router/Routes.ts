@@ -1,4 +1,4 @@
-import { Dashboard } from '../pages/Dashboard';
+import { Home } from '../pages/Home';
 import { Users } from '../pages/Users';
 import { Products } from '../pages/Products';
 import { Parts } from '../pages/Parts';
@@ -12,11 +12,11 @@ import { RouteGuard } from './RouteGuards';
 
 export const Routes : Route[] = [
   {
-    path: '/dashboard',
+    path: '/home',
     exact: false,
-    title: 'Dashboard',
+    title: 'Home',
     icon: 'home',
-    page: Dashboard,
+    page: Home,
     auth: [RouteGuard.ANY]
   },
   {

@@ -28,7 +28,7 @@ export const LoginForm = () => {
 
   const desiredPath = location.search
     ? '/' + new URLSearchParams(location.search).get('redirect')
-    : '/dashboard';
+    : '/home';
 
   const login = () => {
     try {

@@ -10,7 +10,7 @@ import { Icon } from '@ant-design/compatible';
 
 const { Title } = Typography;
 
-export const DashboardGreetings = () => {
+export const HomeGreetings = () => {
   const user = useSelector((state : RootState) => state.user.user);
 
   // Only get routes the user is allowed to see
