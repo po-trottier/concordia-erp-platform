@@ -1,119 +1,109 @@
-import React from 'react';
-import {Button, Card, Checkbox, DatePicker, Dropdown, Form, Menu, Select, Space} from "antd";
-import {Option} from "antd/es/mentions";
-import {PersonName} from "../../interfaces/PersonName";
+import React from 'react'
+import {
+  Popover,
+  Button,
+  Card,
+  Checkbox,
+  DatePicker,
+  Divider,
+  Menu,
+  Select,
+  Typography
+} from 'antd'
 
+import { PersonName } from '../../interfaces/PersonName'
 
+const { Option } = Select
+const { RangePicker } = DatePicker
+const { Title } = Typography
 
-const Audit = () => {
-  const layout = {
-      align: 'left',
-      textAlign: 'center',
-      labelCol: {
-          span: 2,
-      },
-      wrapperCol: {
-          span: 8,
-      },
-  };
+export const Audit = () => {
 
-  const title = {
-      align: 'left',
-      labelCol: {
-          span: 2,
-      },
-      fontWeight: 'bold',
+  const getNames = () => {
+    let names: PersonName[] = [
+      { name: 'Mike' },
+      { name: 'Alex' },
+    ]
+    return names.map((personName) => (
+      <Option
+        key={personName.name}
+        value={personName.name}>
+        {personName.name}
+      </Option>),
+    )
   }
 
-  const { RangePicker } = DatePicker;
+  const actionOptions = ['Create', 'Modify', 'Delete']
+  const securityOptions = ['Successful Login', 'Failed Login']
+  const materialsOptions = ['Steel', 'Titanium', 'Rubber', 'Lubricant']
+  const partsOptions = ['Frames', 'Tires', 'Handlebars', 'Chains']
+  const productsOptions = ['Hybrid Bike', 'Street Bike', 'Mountain Bike']
 
-  function getNames(){
-    let names: PersonName[] = [{
-        name: "Mike"
-      },
-      {
-        name: "Alex"
-      }
-    ]
-    return names.map((personName) => <Option key={personName.name} value={personName.name}>{personName.name}</Option>);
+  const style = {
+    marginBottom: 4,
+    marginTop: 16,
+    color: '#919191',
   }
 
   const exportOptions = (
     <Menu>
-        <Menu.Item>
-          PDF
-        </Menu.Item>
-        <Menu.Item>
-          CSV
-        </Menu.Item>
-        <Menu.Item>
-          TXT
-        </Menu.Item>
+      <Menu.Item>
+        PDF
+      </Menu.Item>
+      <Menu.Item>
+        CSV
+      </Menu.Item>
+      <Menu.Item>
+        TXT
+      </Menu.Item>
     </Menu>
-  );
-
-  const actionOptions = ['Create', 'Modify', 'Delete'];
-  const securityOptions = ['Successful Login', "Failed Login"]
-  const materialsOptions = ['Steel', "Titanium", "Rubber", "Lubricant"]
-  const manufacturedGoodsOptions = ['Frames', "Tires", "Handlebars", "Chains"]
+  )
 
   return (
-      <Form {...layout} name="audit-form">
-          <Card>
-              <h2 {...title}>Global</h2>
-              <Form.Item label="Action" name="action">
-                  <Checkbox.Group options={actionOptions}/>
-              </Form.Item>
-          </Card>
-          <Card>
-              <h2 {...title}>User</h2>
-              <Form.Item name='name' label="Name">
-                  <Select
-                      showSearch
-                      style={{ width: 150 }}
-                      placeholder="Select a person"
-                      optionFilterProp="children">
-                      {getNames()}
-                  </Select>
-              </Form.Item>
-              <Form.Item label="Security" name="security">
-                  <Checkbox.Group options={securityOptions}/>
-              </Form.Item>
-          </Card>
-          <Card>
-              <h2 {...title}>Inventory</h2>
-              <Form.Item label="Materials" name="materials">
-                  <Checkbox.Group style={{textAlign: 'center'}} options={materialsOptions}/>
-              </Form.Item>
-              <Form.Item label="Manufactured Goods" name="manufacturedGoods">
-                  <Checkbox.Group style={{textAlign: 'center'}} options={manufacturedGoodsOptions}/>
-              </Form.Item>
-          </Card>
-          <Card>
-              <h2 {...title}>Setting</h2>
-              <Form.Item label="Date" name="date">
-                  <Space direction="vertical" size={12}>
-                      <RangePicker
-                          showTime={{ format: 'HH:mm' }}
-                          format="YYYY-MM-DD HH:mm"
-                          //todo implement those
-                          // onChange={onChange}
-                          // onOk={onOk}
-                      />
-                  </Space>
-              </Form.Item>
-          </Card>
-          <Form.Item style={{alignItems: 'center', justifyContent:'center'}}>
-              <Form.Item style = {{padding: '2%', fontWeight: 'bold'}} name='create_audit' label="Create Audit">
-                  <Dropdown overlay={exportOptions}>
-                      <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
-                          Export as
-                      </a>
-                  </Dropdown>
-              </Form.Item>
-          </Form.Item>
-      </Form>
+    <div>
+      <Card style={{ margin: '24px 0' }}>
+        <Title level={4}>Global Filters</Title>
+        <p style={style}>Select the kind of action to query:</p>
+        <Checkbox.Group options={actionOptions} />
+        <p style={style}>Select the time range for which to query:</p>
+        <RangePicker
+          style={{ maxWidth: 400 }}
+          showTime={{ format: 'HH:mm' }}
+          format='YYYY-MM-DD HH:mm' />
+
+        <Divider />
+
+        <Title level={4}>User Filters</Title>
+        <p style={style}>Select the users to query:</p>
+        <Select
+          style={{ width: 400 }}
+          showSearch
+          allowClear
+          mode='multiple'
+          placeholder='Select users'
+          optionFilterProp='children'>
+          {getNames()}
+        </Select>
+        <p style={style}>Select the kind of action to query:</p>
+        <Checkbox.Group options={securityOptions} />
+
+        <Divider />
+
+        <Title level={4}>Inventory Filters</Title>
+        <p style={style}>Select the materials to query:</p>
+        <Checkbox.Group options={materialsOptions} />
+        <p style={style}>Select the product parts to query:</p>
+        <Checkbox.Group options={partsOptions} />
+        <p style={style}>Select the products:</p>
+        <Checkbox.Group options={productsOptions} />
+      </Card>
+      <Popover content={exportOptions} title="Export Options" trigger="click">
+        <Button
+          type='primary'
+          onClick={e => e.preventDefault()}>
+          Generate Audit
+        </Button>
+      </Popover>
+    </div>
   )
 }
-
-export default Audit;

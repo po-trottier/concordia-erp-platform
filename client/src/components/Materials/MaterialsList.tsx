@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Card, Input } from 'antd'
+import { Button, Card, Input, InputNumber } from 'antd'
 
-import {ResponsiveTable} from '../ResponsiveTable'
-import {MaterialsListEntry} from '../../interfaces/MaterialsListEntry'
-import MetalImg from '../../assets/metal.png';
-import PlasticImg from '../../assets/plastic.png';
-import WoodImg from '../../assets/wood.png';
+import { ResponsiveTable } from '../ResponsiveTable'
+import { MaterialsListEntry } from '../../interfaces/MaterialsListEntry'
+import MetalImg from '../../assets/metal.png'
+import PlasticImg from '../../assets/plastic.png'
+import WoodImg from '../../assets/wood.png'
 
-const {Search} = Input;
+const { Search } = Input
 
 export const MaterialsList = () => {
   const cols = {
@@ -15,68 +15,69 @@ export const MaterialsList = () => {
     name: 'Product',
     quantity: 'Quantity Owned',
     price: 'Price / Unit ($)',
-    order: 'Order'
-  };
+    order: 'Order',
+  }
 
-  const rows : MaterialsListEntry[] = [
+  const rows: MaterialsListEntry[] = [
     {
-      img: <img src={MetalImg} alt="Metal Preview" width={32} />,
-      name: "Metal",
+      img: <img src={MetalImg} alt='Metal Preview' width={32} />,
+      name: 'Metal',
       quantity: 30,
-      price: 5
+      price: 5,
     },
     {
-      img: <img src={PlasticImg} alt="Plastic Preview" width={32} />,
-      name: "Plastic",
+      img: <img src={PlasticImg} alt='Plastic Preview' width={32} />,
+      name: 'Plastic',
       quantity: 10,
-      price: 2
+      price: 2,
     },
     {
-      img: <img src={WoodImg} alt="Wood Preview" width={32} />,
-      name: "Wood",
+      img: <img src={WoodImg} alt='Wood Preview' width={32} />,
+      name: 'Wood',
       quantity: 15,
-      price: 4
+      price: 4,
     },
-  ];
+  ]
 
-  const data : any[] = rows;
+  const data: any[] = rows
   data.forEach((row) => {
-    row.order = <Input placeholder="Input a quantity" />
-  });
+    row.order = <InputNumber placeholder='Input a quantity' />
+  })
 
-  const [tableData, setTableData] = useState(data);
-  const [searchValue, setSearchValue] = useState('');
+  const [tableData, setTableData] = useState(data)
+  const [searchValue, setSearchValue] = useState('')
 
   useEffect(() => {
-    let rows = data;
+    let rows = data
     if (searchValue.trim() !== '') {
       rows = rows.filter((m) =>
-        m.name.toLowerCase().includes(searchValue.trim().toLowerCase()
-      ));
+        m.name.toLowerCase().includes(searchValue.trim().toLowerCase(),
+        ))
     }
-    setTableData(rows);
-  }, [searchValue]);
+    setTableData(rows)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchValue])
 
   const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(e.target.value);
-  };
+    setSearchValue(e.target.value)
+  }
 
-  return(
+  return (
     <div>
       <Card>
         <Search
-          placeholder="Search for a material"
+          placeholder='Search for a material'
           onChange={onSearch}
           style={{ marginBottom: 18 }} />
         <ResponsiveTable cols={cols} rows={tableData} />
       </Card>
       <Button
-        type="primary"
+        type='primary'
         style={{ marginTop: 16, float: 'right' }}>
         Order Materials
       </Button>
       <Button
-        type="ghost"
+        type='ghost'
         style={{ marginTop: 16 }}>
         Add a new Material
       </Button>

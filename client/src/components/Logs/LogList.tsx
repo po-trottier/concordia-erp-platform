@@ -1,4 +1,6 @@
 import React from 'react';
+import {Button} from 'antd';
+
 import {LogEntry} from "../../interfaces/LogEntry";
 import {ResponsiveTable} from "../ResponsiveTable";
 
@@ -31,7 +33,12 @@ const LogList = () => {
 
 
   return (
-    <ResponsiveTable rows={getRows()} cols={getColumns()} />
+    <div style={{ paddingTop: 24 }}>
+      <ResponsiveTable rows={getRows()} cols={getColumns()} />
+      <Button type='ghost' style={{ float: 'right', marginTop: 24 }}>
+        Clear Logs
+      </Button>
+    </div>
   )
 }
 

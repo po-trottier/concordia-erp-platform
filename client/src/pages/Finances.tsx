@@ -7,14 +7,14 @@ import {Income} from '../components/Finance/Income';
 import {Expenses} from '../components/Finance/Expenses';
 
 export const Finances = () => {
-  const [tableState, setTableState] = useState("summary");
+  const [sectionState, setSectionState] = useState("summary");
 
   let updateState = (e : any) => {
-    setTableState(e.key);
+    setSectionState(e.key);
   };
 
   let renderSection = () => {
-    switch(tableState) {
+    switch(sectionState) {
       case "summary":
         return <Summary />
       case "income":
