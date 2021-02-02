@@ -1,3 +1,15 @@
 import React from "react";
+import { Button } from 'antd';
 
-export const Customers = () => <h1>Customers</h1>
+import { CustomersList } from '../components/Customers/CustomersList';
+
+export const Customers = () => {
+  return (
+    <div>
+      <CustomersList />
+      <Button type="primary" style={{ marginTop: 16 }}>
+        Add Customer
+      </Button>
+    </div>
+  )
+}

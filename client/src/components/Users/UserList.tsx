@@ -1,7 +1,7 @@
-import React from "react";
-import {ResponsiveTable} from "../ResponsiveTable";
-import {UserEntry} from "../../interfaces/UserEntry";
+import React from 'react';
 
+import { ResponsiveTable } from '../ResponsiveTable';
+import { UserEntry } from '../../interfaces/UserEntry';
 
 export const UserList = () => {
 
@@ -59,8 +59,8 @@ export const UserList = () => {
         age: 26,
         location: 'Montreal, Qc, Canada'
       },
-    ]
-    users.forEach((user : any) => {
+    ];
+    users.forEach((user: any) => {
       user.actions = (
         <div>
           <a href='?'>Reset Password</a>
@@ -75,4 +75,4 @@ export const UserList = () => {
   return (
     <ResponsiveTable rows={getRows()} cols={getColumns()} />
   );
-}
+};
