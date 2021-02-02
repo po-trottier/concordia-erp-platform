@@ -9,13 +9,12 @@ const { Search } = Input;
 
 export const PartInventory = () => {
 
-  const [lineGraphData, setLineGraphData] = useState(dummyPartHistoryData);
+  const [lineGraphData, setLineGraphData] = useState(dummyPartHistoryData());
   const [searchValue, setSearchValue] = useState('');
-  const [tableData, setTableData] = useState(dummyPartData);
 
   useEffect(() => {
     let data = dummyPartData;
-    let timeLineData : any[] = dummyPartHistoryData;
+    let timeLineData : any[] = dummyPartHistoryData();
     if (searchValue) {
       data = data.filter(
         (part) =>
@@ -26,12 +25,11 @@ export const PartInventory = () => {
       timeLineData = [];
       data.forEach(({ id: partId }) => {
         timeLineData.push(
-          ...dummyPartHistoryData.filter(({ id }) => id === partId)
+          ...dummyPartHistoryData().filter(({ id }) => id === partId)
         );
       });
     }
     setLineGraphData(timeLineData);
-    setTableData(data);
   }, [searchValue]);
 
   const onSearch = (e : React.ChangeEvent<HTMLInputElement>) => {
@@ -41,9 +39,10 @@ export const PartInventory = () => {
 
   const cols = {
     name: 'Part',
-    description: 'Description',
-    quantity: 'Quantity',
-    forecast: 'Forecast',
+    date: 'Date',
+    built: 'Built',
+    used: 'Used',
+    quantity: 'Stock',
   };
 
   return (
@@ -60,7 +59,7 @@ export const PartInventory = () => {
           seriesField='name' />
       </Card>
       <Card>
-        <ResponsiveTable cols={cols} rows={tableData} />
+        <ResponsiveTable cols={cols} rows={lineGraphData} />
       </Card>
     </div>
   );
