@@ -1,5 +1,7 @@
 import React from 'react';
 import {Button, Card, Checkbox, DatePicker, Dropdown, Form, Menu, Select, Space} from "antd";
+import {Option} from "antd/es/mentions";
+import {PersonName} from "../../interfaces/PersonName";
 
 
 
@@ -21,17 +23,19 @@ const Audit = () => {
           span: 2,
       },
       fontWeight: 'bold',
-
   }
 
   const { RangePicker } = DatePicker;
 
-  function onChange() {
-
-  }
-
-  function onOk() {
-
+  function getNames(){
+    let names: PersonName[] = [{
+        name: "Mike"
+      },
+      {
+        name: "Alex"
+      }
+    ]
+    return names.map((personName) => <Option key={personName.name} value={personName.name}>{personName.name}</Option>);
   }
 
   const exportOptions = (
@@ -68,15 +72,8 @@ const Audit = () => {
                       showSearch
                       style={{ width: 150 }}
                       placeholder="Select a person"
-                      optionFilterProp="children"
-                      // onChange={onChange}
-                      // onFocus={onFocus}
-                      // onBlur={onBlur}
-                      // onSearch={onSearch}
-                      // filterOption={(input, option) =>
-                      //     option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                      // }
-                  >
+                      optionFilterProp="children">
+                      {getNames()}
                   </Select>
               </Form.Item>
               <Form.Item label="Security" name="security">
@@ -99,8 +96,9 @@ const Audit = () => {
                       <RangePicker
                           showTime={{ format: 'HH:mm' }}
                           format="YYYY-MM-DD HH:mm"
-                          onChange={onChange}
-                          onOk={onOk}
+                          //todo implement those
+                          // onChange={onChange}
+                          // onOk={onOk}
                       />
                   </Space>
               </Form.Item>

@@ -1,28 +1,37 @@
 import React from 'react';
-import {Route, useHistory} from 'react-router-dom';
-import {RouteGuard} from '../../router/RouteGuards';
-import {NoPermissions} from '../../pages/NoPermissions';
-import {Button, Card, Checkbox, DatePicker, Dropdown, Form, Menu, Select, Space} from "antd";
+import {LogEntry} from "../../interfaces/LogEntry";
+import {ResponsiveTable} from "../ResponsiveTable";
 
 const LogList = () => {
 
-  const action = 'action'
-  const author = 'author'
-  const target = 'target'
-  const date = 'date'
-
-  function getLogs(){
-    let logs = [{
-
-    },{
-
-    }];
-
-    return <h1>hey</h1>
+  function getRows(){
+    const rows: LogEntry[] = [{
+        date: (new Date(2021,1,31,12,57)).toString(),
+        action: 'Create',
+        author: 'Mike',
+        target: '15 tires'
+      },
+      {
+        date: (new Date(2021,1,31,12,54)).toString(),
+        action: 'Login Success',
+        author: 'Mike',
+        target: 'self'
+      }
+    ];
+    return rows;
   }
 
+  const getColumns = () => ({
+    date: 'Date',
+    action: 'Action',
+    author: 'Author',
+    target: 'Target'
+  });
+
+
+
   return (
-    <div>{getLogs}</div>
+    <ResponsiveTable rows={getRows()} cols={getColumns()} />
   )
 }
 
