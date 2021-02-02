@@ -5,8 +5,10 @@ import '../styles/tables.css';
 
 export const ResponsiveTable = (props : TableProps) => {
 
+  const { cols, rows, ...rest } = props;
+
   const getColumns = () => {
-    const columns = Object.entries(props.cols).map(([key, val]) => {
+    const columns = Object.entries(cols).map(([key, val]) => {
       return (
         <th key={key}>{val}</th>
       );
@@ -18,8 +20,8 @@ export const ResponsiveTable = (props : TableProps) => {
   };
 
   const getRows = () => {
-    return props.rows.map((row, index) => {
-      const values = Object.entries(props.cols).map(([key, col]) => {
+    return rows.map((row, index) => {
+      const values = Object.entries(cols).map(([key, col]) => {
         return (
           <td key={key + index} data-label={col}>{row[key as keyof object]}</td>
         );
@@ -32,7 +34,7 @@ export const ResponsiveTable = (props : TableProps) => {
   };
 
   return (
-    <div style={{ overflowX: 'auto' }}>
+    <div {...rest} style={{ overflowX: 'auto' }}>
       <table className="responsive-table">
         <thead>
           {getColumns()}
