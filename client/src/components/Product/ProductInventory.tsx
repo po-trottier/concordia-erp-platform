@@ -222,7 +222,7 @@ const ProductInventory = (props: any) => {
             price={modalContent.price}
             quantity={modalContent.quantity}
             frameSize={modalContent.frameSize}
-            parts={modalContent.parts}
+            parts={modalContent.parts.join(", ")}
             color={modalContent.color}
             finish={modalContent.finish}
             grade={modalContent.grade}
