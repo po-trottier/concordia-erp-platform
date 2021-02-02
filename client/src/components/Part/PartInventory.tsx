@@ -50,9 +50,9 @@ export const PartInventory = () => {
 		<div>
 			<h2>Parts Inventory</h2>
 			<Search
-				placeholder="input search text"
+				placeholder="Search for part"
 				onChange={onSearch}
-				style={{ width: 200 }}
+				style={{ width: 200, marginBottom: 18 }}
 			/>
 			<Table columns={columns} dataSource={rows} />
 			<Button type="primary" onClick={() => {}}>
