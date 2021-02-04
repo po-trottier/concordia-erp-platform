@@ -8,7 +8,7 @@ export const Customers = () => {
     <div>
       <CustomersList />
       <Button type='primary' style={{ marginTop: 16 }}>
-        Add Customer
+        Add a new Customer
       </Button>
     </div>
   );
