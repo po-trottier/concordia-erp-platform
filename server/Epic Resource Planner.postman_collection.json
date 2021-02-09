@@ -50,7 +50,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Speedy McSpeedster\",\n    \"description\": \"fastest bike on planet earth\",\n    \"stock\": 45\n}",
+							"raw": "{\n    \"name\": \"Pink bike tassels\",\n    \"description\": \"makes it go faster\",\n    \"stock\": 70000\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -76,7 +76,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"new name\"\n}",
+							"raw": "{\n    \"stock\": 4\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -84,13 +84,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}/parts/60220fd37d5a1f2c5a6d9778",
+							"raw": "{{url}}/parts/6023033e12523415393afc0f",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"parts",
-								"60220fd37d5a1f2c5a6d9778"
+								"6023033e12523415393afc0f"
 							]
 						}
 					},
