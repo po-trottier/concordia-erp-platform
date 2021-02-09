@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { ApiModule } from './api/api.module';
+import { FinanceService } from './finance/finance.service';
 
 @Module({
   imports: [
@@ -13,5 +14,6 @@ import { ApiModule } from './api/api.module';
       exclude: ['/api*'],
     }),
   ],
+  providers: [FinanceService],
 })
 export class AppModule {}
