@@ -7,7 +7,7 @@ export const Users = () => {
     <div>
       <UserList />
       <Button type='primary' style={{ marginTop: 16 }}>
-        Add User
+        Add a new User
       </Button>
     </div>
   );

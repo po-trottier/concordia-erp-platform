@@ -94,7 +94,7 @@ export const UserList = () => {
   return (
     <Card>
       <Search
-        placeholder='Search for a customer'
+        placeholder='Search for a user'
         onChange={onSearch}
         style={{ marginBottom: 18 }} />
       <ResponsiveTable rows={tableData} cols={getColumns()} />

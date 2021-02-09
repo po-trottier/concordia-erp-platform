@@ -33,10 +33,10 @@ export const ProductCatalog = () => {
         <ResponsiveTable rows={tableData} cols={dummyData.getCatalogColumns()} />
       </Card>
       <Button type='ghost'>
-        Add Product
+        Define a new Product
       </Button>
       <Button type='primary' style={{ float: 'right' }}>
-        Build Product
+        Build Products
       </Button>
     </div>
   );
