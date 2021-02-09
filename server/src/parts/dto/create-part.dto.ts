@@ -1,4 +1,10 @@
-import { IsInt, IsNotEmpty, IsPositive, IsString } from 'class-validator';
+import {
+  IsInt,
+  IsNotEmpty,
+  IsPositive,
+  IsString,
+  IsOptional,
+} from 'class-validator';
 
 /**
  * Part creation DTO
@@ -12,7 +18,7 @@ export class CreatePartDto {
   @IsString()
   description: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsInt()
   @IsPositive()
   stock: number;
