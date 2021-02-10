@@ -1,13 +1,13 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
-export type PartDocument = Part & Document;
+export type FinentryDocument = Finentry & Document;
 
 /**
- * Part collection mongoose schema
+ * Finentry collection mongoose schema
  */
 @Schema()
-export class Part {
+export class Finentry {
   @Prop({ required: true })
   name: string;
 
@@ -18,4 +18,4 @@ export class Part {
   stock: number;
 }
 
-export const PartSchema = SchemaFactory.createForClass(Part);
+export const FinentrySchema = SchemaFactory.createForClass(Finentry);

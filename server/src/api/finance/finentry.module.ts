@@ -1,17 +1,17 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { PartsService } from './parts.service';
-import { PartsController } from './parts.controller';
-import { PartSchema, Part } from './schemas/part.schema';
+import { FinentryService } from './finentry.service';
+import { FinentryController } from './finentry.controller';
+import { FinentrySchema, Finentry } from './schemas/finentry.schema';
 
 /**
- * Contains all logic and files related to parts
+ * Contains all logic and files related to finentry
  */
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: Part.name, schema: PartSchema }]),
+    MongooseModule.forFeature([{ name: Finentry.name, schema: FinentrySchema }]),
   ],
-  controllers: [PartsController],
-  providers: [PartsService],
+  controllers: [FinentryController],
+  providers: [FinentryService],
 })
-export class PartsModule {}
+export class FinentryModule {}

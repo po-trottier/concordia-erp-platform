@@ -8,66 +8,66 @@ import {
   Param,
   ValidationPipe,
 } from '@nestjs/common';
-import { PartsService } from './parts.service';
-import { CreatePartDto } from './dto/create-part.dto';
-import { UpdatePartDto } from './dto/update-part.dto';
+import { FinentryService } from './finentry.service';
+import { CreateFinentryDto } from './dto/create-finentry.dto';
+import { UpdateFinentryDto } from './dto/update-finentry.dto';
 
 /**
- * Controller class of the part entity
+ * Controller class of the finentry entity
  */
-@Controller('api/parts')
-export class PartsController {
-  constructor(private readonly partsService: PartsService) {}
+@Controller('api/finentry')
+export class FinEntryController {
+  constructor(private readonly finentryService: FinEntryService) {}
 
   /**
-   * Handles POST requests to create Parts
+   * Handles POST requests to create FinEntry
    *
-   * @param createPartDto dto used to create parts
+   * @param createFinentryDto dto used to create finentry
    */
   @Post()
-  create(@Body(ValidationPipe) createPartDto: CreatePartDto) {
-    return this.partsService.create(createPartDto);
+  create(@Body(ValidationPipe) createFinentryDto: CreateFinentryDto) {
+    return this.finentryService.create(createFinentryDto);
   }
 
   /**
-   * Handles GET requests to find all parts
+   * Handles GET requests to find all finentry
    */
   @Get()
   findAll() {
-    return this.partsService.findAll();
+    return this.finentryService.findAll();
   }
 
   /**
-   * Handles GET requests to find a part by id
+   * Handles GET requests to find a finentry by id
    *
-   * @param id string of the part's objectId
+   * @param id string of the finentry's objectId
    */
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.partsService.findOne(id);
+    return this.finentryService.findOne(id);
   }
 
   /**
-   * Handles PATCH requests to update a part by id
+   * Handles PATCH requests to update a finentry by id
    *
-   * @param id string of the part's objectId
-   * @param updatePartDto dto used to update parts
+   * @param id string of the finentry's objectId
+   * @param updateFinentryDto dto used to update finentry
    */
   @Patch(':id')
   update(
     @Param('id') id: string,
-    @Body(ValidationPipe) updatePartDto: UpdatePartDto,
+    @Body(ValidationPipe) updateFinentryDto: UpdateFinentryDto,
   ) {
-    return this.partsService.update(id, updatePartDto);
+    return this.finentryService.update(id, updateFinentryDto);
   }
 
   /**
-   * Handles DELETE requests to delete a part by id
+   * Handles DELETE requests to delete a finentry by id
    *
-   * @param id string of the part's objectId
+   * @param id string of the finentry's objectId
    */
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.partsService.remove(id);
+    return this.finentryService.remove(id);
   }
 }
