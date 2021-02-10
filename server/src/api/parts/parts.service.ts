@@ -1,7 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { ObjectId } from 'mongodb';
 import { CreatePartDto } from './dto/create-part.dto';
 import { UpdatePartDto } from './dto/update-part.dto';
 import { PartDocument, Part } from './schemas/part.schema';
@@ -14,45 +13,42 @@ export class PartsService {
   constructor(@InjectModel(Part.name) private partModel: Model<PartDocument>) {}
 
   /**
-   * Creates part using PartRepository
+   * Creates part using mongoose partModel
    *
    * @param createPartDto dto used to create parts
    */
-  create(createPartDto: CreatePartDto): Promise<PartDocument> {
+  async create(createPartDto: CreatePartDto): Promise<Part> {
     const createdPart = new this.partModel(createPartDto);
     return createdPart.save();
   }
 
   /**
-   * Retrieves all parts using PartRepository
+   * Retrieves all parts using mongoose partModel
    */
-  async findAll(): Promise<PartDocument[]> {
-    return await this.partModel.find();
+  async findAll(): Promise<Part[]> {
+    return await this.partModel.find().exec();
   }
 
   /**
-   * Retrieves a part by id using PartRepository
+   * Retrieves a part by id using mongoose partModel
    *
    * @param id string of the part's objectId
    */
-  async findOne(id: string): Promise<PartDocument> {
-    const part = await this.partModel.findOne({ _id: new ObjectId(id) });
+  async findOne(id: string): Promise<Part> {
+    const part = await this.partModel.findById(id);
 
     return this.checkPartFound(part, id);
   }
 
   /**
-   * Updates part by id using PartRepository
+   * Updates part by id using mongoose partModel
    *
    * @param id string of the part's objectId
    * @param updatePartDto dto used to update parts
    */
-  async update(
-    id: string,
-    updatePartDto: UpdatePartDto,
-  ): Promise<PartDocument> {
-    const updatedPart = await this.partModel.findOneAndUpdate(
-      { _id: new ObjectId(id) },
+  async update(id: string, updatePartDto: UpdatePartDto): Promise<Part> {
+    const updatedPart = await this.partModel.findByIdAndUpdate(
+      id,
       { $set: { ...updatePartDto } },
       { new: true },
     );
@@ -61,14 +57,12 @@ export class PartsService {
   }
 
   /**
-   * Deletes part by id using PartRepository
+   * Deletes part by id using mongoose partModel
    *
    * @param id string of the part's objectId
    */
   async remove(id: string): Promise<PartDocument> {
-    const deletedPart = await this.partModel.findOneAndDelete({
-      _id: new ObjectId(id),
-    });
+    const deletedPart = await this.partModel.findByIdAndDelete(id);
 
     return this.checkPartFound(deletedPart, id);
   }
