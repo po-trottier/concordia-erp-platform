@@ -15,7 +15,7 @@ import { UpdatePartDto } from './dto/update-part.dto';
 /**
  * Controller class of the part entity
  */
-@Controller('api/parts')
+@Controller()
 export class PartsController {
   constructor(private readonly partsService: PartsService) {}
 

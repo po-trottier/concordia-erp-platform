@@ -26,6 +26,14 @@
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
+## Local Deployment
+
+The following command must be run before starting the server in a development environment. It will spin up a MongoDB container that will be connected to the local server.
+
+```bash
+$ docker run --name mongodb -d -p 27017:27017 mongo
+```
+
 ## Installation
 
 ```bash
