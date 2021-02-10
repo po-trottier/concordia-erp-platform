@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
+import { MongooseModule } from '@nestjs/mongoose';
 import { PartsService } from './parts.service';
 import { PartsController } from './parts.controller';
-import { MongooseModule } from '@nestjs/mongoose';
 import { PartSchema, Part } from './schemas/part.schema';
 
 /**

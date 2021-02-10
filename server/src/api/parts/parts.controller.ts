@@ -1,11 +1,11 @@
 import {
-  Controller,
   Get,
   Post,
+  Patch,
+  Delete,
+  Controller,
   Body,
   Param,
-  Delete,
-  Patch,
   ValidationPipe,
 } from '@nestjs/common';
 import { PartsService } from './parts.service';
