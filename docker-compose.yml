@@ -1,4 +1,4 @@
-version: "3"
+version: '3'
 services:
   server:
     depends_on:
@@ -7,11 +7,11 @@ services:
     image: docker.pkg.github.com/po-trottier/soen390-team04/epic-erp:main
     container_name: nestjs
     ports:
-      - "1337:1337"
+      - '1337:1337'
     environment:
       - PORT=1337
       - DB_URL=mongodb://db_mongo
-      
+      - DB_NAME=ERP_DB
   db:
     image: mongo:latest
     restart: unless-stopped
@@ -19,7 +19,7 @@ services:
     volumes:
       - mongodata:/data/db
     expose:
-      - "27017"
+      - '27017'
 
 volumes:
-  mongodata: 
+  mongodata:
