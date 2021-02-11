@@ -13,9 +13,8 @@ export class AuthService {
   async validateUser(username: string, pass: string): Promise<any> {
     const user = await this.usersService.findOneInternal(username);
     if (user && (await compare(pass, user.password))) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { password, ...result } = user;
-      return result;
+      user.password = undefined;
+      return user;
     }
     return null;
   }
@@ -27,6 +26,9 @@ export class AuthService {
     }
     const payload = { username: valid.username, sub: valid.userId };
     return {
+      name: valid.name,
+      username: valid.username,
+      role: valid.role,
       token: this.jwtService.sign(payload),
     };
   }
