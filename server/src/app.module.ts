@@ -1,5 +1,5 @@
-import { Module } from '@nestjs/common';
 import { join } from 'path';
+import { Module } from '@nestjs/common';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { ApiModule } from './api/api.module';
 import { AuthModule } from './api/auth/auth.module';
