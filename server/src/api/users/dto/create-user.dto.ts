@@ -1,4 +1,10 @@
-import { IsInt, IsNotEmpty, IsString, IsDefined } from 'class-validator';
+import {
+  IsInt,
+  IsNotEmpty,
+  IsString,
+  IsDefined,
+  Matches,
+} from 'class-validator';
 import { Role } from '../../roles/roles.enum';
 
 export class CreateUserDto {
@@ -8,6 +14,7 @@ export class CreateUserDto {
 
   @IsNotEmpty()
   @IsString()
+  @Matches(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/)
   password: string;
 
   @IsNotEmpty()

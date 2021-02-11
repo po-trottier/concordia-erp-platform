@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  NotFoundException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -36,8 +32,8 @@ export class UsersService {
   }
 
   async findOne(username: string): Promise<User> {
-    const part = await this.userModel.findOne({ username });
-    return this.validateUserFound(part, username);
+    const user = await this.userModel.findOne({ username });
+    return this.validateUserFound(user, username);
   }
 
   async update(username: string, dto: UpdateUserDto): Promise<User> {
@@ -54,11 +50,11 @@ export class UsersService {
     return this.validateUserFound(deletedUser, username);
   }
 
-  validateUserFound(partResult: any, username: string) {
-    if (!partResult) {
+  validateUserFound(userResult: any, username: string) {
+    if (!userResult) {
       throw new NotFoundException(`User with username "${username}" not found`);
     } else {
-      const resp = partResult;
+      const resp = userResult;
       if (resp.password) {
         resp.password = undefined;
       }

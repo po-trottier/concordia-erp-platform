@@ -1,13 +1,13 @@
 import {
+  Get,
+  Post,
+  Patch,
+  Delete,
   Body,
   Controller,
-  Delete,
-  Get,
   Param,
-  Patch,
-  Post,
-  UnauthorizedException,
   ValidationPipe,
+  ConflictException,
 } from '@nestjs/common';
 import { hash } from 'bcrypt';
 import { UsersService } from './users.service';
@@ -18,16 +18,16 @@ import { Role } from '../roles/roles.enum';
 
 @Controller()
 export class UsersController {
-  constructor(private readonly partsService: UsersService) {}
+  constructor(private readonly usersService: UsersService) {}
 
   @Roles(Role.SYSTEM_ADMINISTRATOR)
   @Post()
   async create(@Body(ValidationPipe) dto: CreateUserDto) {
     const body = dto;
     body.password = await hash(dto.password, 16);
-    const user = await this.partsService.create(body);
+    const user = await this.usersService.create(body);
     if (user === undefined) {
-      return new UnauthorizedException('User already exists');
+      return new ConflictException('User already exists');
     }
     return user;
   }
@@ -35,13 +35,13 @@ export class UsersController {
   @Roles(Role.SYSTEM_ADMINISTRATOR)
   @Get()
   findAll() {
-    return this.partsService.findAll();
+    return this.usersService.findAll();
   }
 
   @Roles(Role.SYSTEM_ADMINISTRATOR)
   @Get(':username')
   findOne(@Param('username') username: string) {
-    return this.partsService.findOne(username);
+    return this.usersService.findOne(username);
   }
 
   @Roles(Role.SYSTEM_ADMINISTRATOR)
@@ -51,16 +51,16 @@ export class UsersController {
     @Body(ValidationPipe) dto: UpdateUserDto,
   ) {
     if (!dto.password) {
-      return this.partsService.update(username, dto);
+      return this.usersService.update(username, dto);
     }
     const body = dto;
     body.password = await hash(dto.password, 16);
-    return this.partsService.update(username, body);
+    return this.usersService.update(username, body);
   }
 
   @Roles(Role.SYSTEM_ADMINISTRATOR)
   @Delete(':username')
   remove(@Param('username') username: string) {
-    return this.partsService.remove(username);
+    return this.usersService.remove(username);
   }
 }
