@@ -1,5 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
-import { Public } from '../exports/public';
+import { Public } from '../shared/public';
 
 @Controller('api')
 export class ApiController {

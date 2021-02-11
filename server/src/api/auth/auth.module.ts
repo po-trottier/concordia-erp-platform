@@ -6,7 +6,7 @@ import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { UsersModule } from '../users/users.module';
-import { JWT_SECRET } from '../../exports/constants';
+import { JWT_SECRET } from '../../shared/constants';
 
 @Module({
   imports: [
