@@ -1,5 +1,5 @@
 import { IsInt, IsNotEmpty, IsString, IsDefined } from 'class-validator';
-import { Role } from '../../../enums/Roles';
+import { Role } from '../../../exports/Roles';
 
 export class CreateUserDto {
   @IsNotEmpty()
