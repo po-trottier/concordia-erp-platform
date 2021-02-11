@@ -26,7 +26,7 @@ export class PartsService {
    * Retrieves all parts using mongoose partModel
    */
   async findAll(): Promise<Part[]> {
-    return await this.partModel.find().exec();
+    return this.partModel.find();
   }
 
   /**
@@ -36,8 +36,7 @@ export class PartsService {
    */
   async findOne(id: string): Promise<Part> {
     const part = await this.partModel.findById(id);
-
-    return this.checkPartFound(part, id);
+    return this.validatePartFound(part, id);
   }
 
   /**
@@ -52,8 +51,7 @@ export class PartsService {
       { $set: { ...updatePartDto } },
       { new: true },
     );
-
-    return this.checkPartFound(updatedPart, id);
+    return this.validatePartFound(updatedPart, id);
   }
 
   /**
@@ -61,10 +59,9 @@ export class PartsService {
    *
    * @param id string of the part's objectId
    */
-  async remove(id: string): Promise<PartDocument> {
+  async remove(id: string): Promise<Part> {
     const deletedPart = await this.partModel.findByIdAndDelete(id);
-
-    return this.checkPartFound(deletedPart, id);
+    return this.validatePartFound(deletedPart, id);
   }
 
   /**
@@ -73,7 +70,7 @@ export class PartsService {
    * @param partResult a retrieved part
    * @param id string of the part's objectId
    */
-  checkPartFound(partResult: any, id: string) {
+  validatePartFound(partResult: any, id: string) {
     if (!partResult) {
       throw new NotFoundException(`Part with id ${id} not found`);
     } else {

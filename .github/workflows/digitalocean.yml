@@ -9,6 +9,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+    - name: Unlock ENV File
+      run: |
+        npm ci
+        npm run unlock ${{ secrets.ENV_PASSWORD }}
     - name: Build and Push Docker Image
       uses: docker/build-push-action@v1
       with:
@@ -17,7 +21,7 @@ jobs:
         registry: docker.pkg.github.com
         repository: po-trottier/soen390-team04/epic-erp
         tag_with_ref: true
-      
+
   Deploy:
     runs-on: ubuntu-latest
     needs: Build
@@ -44,18 +48,18 @@ jobs:
           SCRIPT: |
             # Navigate to the server directory
             cd /srv/nestjs
-            
+
             # Login to the repository
-            docker login docker.pkg.github.com -u $USER -p $TOKEN 
-            
+            docker login docker.pkg.github.com -u $USER -p $TOKEN
+
             # Stop running containers
             docker-compose down
-            
+
             # Pull the new image
             docker-compose pull
 
             # Run a new container from a new image
             docker-compose up -d
-            
+
             # Prune the images
             docker image prune -f

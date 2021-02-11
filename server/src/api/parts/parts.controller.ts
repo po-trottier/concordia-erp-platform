@@ -3,56 +3,40 @@ import {
   Post,
   Patch,
   Delete,
-  Controller,
   Body,
+  Controller,
   Param,
   ValidationPipe,
 } from '@nestjs/common';
 import { PartsService } from './parts.service';
 import { CreatePartDto } from './dto/create-part.dto';
 import { UpdatePartDto } from './dto/update-part.dto';
+import { Roles } from '../roles/roles.decorator';
+import { Role } from '../roles/roles.enum';
 
-/**
- * Controller class of the part entity
- */
-@Controller('api/parts')
+@Controller()
 export class PartsController {
   constructor(private readonly partsService: PartsService) {}
 
-  /**
-   * Handles POST requests to create Parts
-   *
-   * @param createPartDto dto used to create parts
-   */
+  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
   @Post()
   create(@Body(ValidationPipe) createPartDto: CreatePartDto) {
     return this.partsService.create(createPartDto);
   }
 
-  /**
-   * Handles GET requests to find all parts
-   */
+  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
   @Get()
   findAll() {
     return this.partsService.findAll();
   }
 
-  /**
-   * Handles GET requests to find a part by id
-   *
-   * @param id string of the part's objectId
-   */
+  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.partsService.findOne(id);
   }
 
-  /**
-   * Handles PATCH requests to update a part by id
-   *
-   * @param id string of the part's objectId
-   * @param updatePartDto dto used to update parts
-   */
+  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
   @Patch(':id')
   update(
     @Param('id') id: string,
@@ -61,11 +45,7 @@ export class PartsController {
     return this.partsService.update(id, updatePartDto);
   }
 
-  /**
-   * Handles DELETE requests to delete a part by id
-   *
-   * @param id string of the part's objectId
-   */
+  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.partsService.remove(id);
