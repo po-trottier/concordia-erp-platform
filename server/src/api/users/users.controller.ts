@@ -3,21 +3,24 @@ import {
   Controller,
   Delete,
   Get,
-  InternalServerErrorException,
   Param,
   Patch,
-  Post, UnauthorizedException,
-  ValidationPipe
-} from "@nestjs/common";
+  Post,
+  UnauthorizedException,
+  ValidationPipe,
+} from '@nestjs/common';
 import { hash } from 'bcrypt';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { Roles } from '../roles/roles.decorator';
+import { Role } from '../roles/roles.enum';
 
 @Controller()
 export class UsersController {
   constructor(private readonly partsService: UsersService) {}
 
+  @Roles(Role.SYSTEM_ADMINISTRATOR)
   @Post()
   async create(@Body(ValidationPipe) dto: CreateUserDto) {
     const body = dto;
@@ -29,16 +32,19 @@ export class UsersController {
     return user;
   }
 
+  @Roles(Role.SYSTEM_ADMINISTRATOR)
   @Get()
   findAll() {
     return this.partsService.findAll();
   }
 
+  @Roles(Role.SYSTEM_ADMINISTRATOR)
   @Get(':username')
   findOne(@Param('username') username: string) {
     return this.partsService.findOne(username);
   }
 
+  @Roles(Role.SYSTEM_ADMINISTRATOR)
   @Patch(':username')
   async update(
     @Param('username') username: string,
@@ -52,6 +58,7 @@ export class UsersController {
     return this.partsService.update(username, body);
   }
 
+  @Roles(Role.SYSTEM_ADMINISTRATOR)
   @Delete(':username')
   remove(@Param('username') username: string) {
     return this.partsService.remove(username);

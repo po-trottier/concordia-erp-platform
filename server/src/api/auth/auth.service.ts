@@ -24,7 +24,11 @@ export class AuthService {
     if (!valid) {
       return new UnauthorizedException();
     }
-    const payload = { username: valid.username, sub: valid['_id'] };
+    const payload = {
+      username: valid.username,
+      id: valid['_id'],
+      roles: valid.role,
+    };
     return {
       name: valid.name,
       username: valid.username,
