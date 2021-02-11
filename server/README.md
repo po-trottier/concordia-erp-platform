@@ -26,6 +26,18 @@
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
+## Development
+
+If the `.env` file is modified, the developer is responsible for updating the encrypted variables file in the repository. To do so, simply run the following command while replacing `"ENTER_PASSWORD_HERE"` with the password provided.
+```bash
+$ npm run lock "ENTER_PASSWORD_HERE"
+```
+
+In order to take advantage of the ENV file, the following command must also be run. The `"ENTER_PASSWORD_HERE"` part must be replaced with the proper password to unlock the environment variables.
+```bash
+$ npm run unlock "ENTER_PASSWORD_HERE"
+```
+
 ## Local Deployment
 
 The following command must be run before starting the server in a development environment. It will spin up a MongoDB container that will be connected to the local server.
