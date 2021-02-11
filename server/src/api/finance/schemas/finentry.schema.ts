@@ -8,14 +8,21 @@ export type FinentryDocument = Finentry & Document;
  */
 @Schema()
 export class Finentry {
-  @Prop({ required: true })
-  name: string;
 
-  @Prop()
-  description: string;
+  @Prop({ required: true })
+  dateEntered: Date;
+
+  @Prop({ required: true })
+  dateDue: Date;
+
+  @Prop({ required: true })
+  company_name: string;
 
   @Prop({ required: true, default: 0 })
-  stock: number;
+  amount: number;
+
+  @Prop({ required: false, default: 0 })
+  paid: number;
 }
 
 export const FinentrySchema = SchemaFactory.createForClass(Finentry);

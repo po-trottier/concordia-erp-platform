@@ -1,19 +1,12 @@
-import { IsOptional, IsString, IsInt, IsPositive } from 'class-validator';
+import { IsNotEmpty, IsPositive } from 'class-validator';
 
 /**
- * Part update DTO
+ * Finentry update DTO
  */
-export class UpdatePartDto {
-  @IsString()
-  @IsOptional()
-  name: string;
+export class UpdateFinentryDto {
+  @IsNotEmpty()
+  dateDue: Date;
 
-  @IsString()
-  @IsOptional()
-  description: string;
-
-  @IsInt()
   @IsPositive()
-  @IsOptional()
-  stock: number;
+  paid: number;
 }

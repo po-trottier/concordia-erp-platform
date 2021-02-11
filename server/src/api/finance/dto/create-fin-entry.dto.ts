@@ -1,9 +1,7 @@
 import {
-  IsInt,
   IsNotEmpty,
   IsPositive,
   IsString,
-  IsOptional,
 } from 'class-validator';
 
 /**
@@ -11,15 +9,18 @@ import {
  */
 export class CreateFinanceEntryDto {
   @IsNotEmpty()
-  @IsString()
-  name: string;
+  dateEntered: Date;
+
+  @IsNotEmpty()
+  dateDue: Date;
 
   @IsNotEmpty()
   @IsString()
-  description: string;
+  company_name: string;
 
-  @IsOptional()
-  @IsInt()
   @IsPositive()
-  stock: number;
+  amount: number;
+
+  @IsPositive()
+  paid: number;
 }
