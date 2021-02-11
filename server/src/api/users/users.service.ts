@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -9,13 +13,26 @@ import { UserDocument, User } from './schemas/user.schema';
 export class UsersService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
-  async create(dto: CreateUserDto): Promise<User> {
+  // To be used internally only as it leaks the password hash!
+  async findOneInternal(username: string): Promise<User> {
+    return this.userModel.findOne({ username });
+  }
+
+  async create(dto: CreateUserDto): Promise<User> | undefined {
+    if (await this.userModel.findOne({ username: dto.username })) {
+      return undefined;
+    }
     const createdUser = new this.userModel(dto);
-    return createdUser.save();
+    const user = await createdUser.save();
+    return this.validateUserFound(user, user.username);
   }
 
   async findAll(): Promise<User[]> {
-    return this.userModel.find();
+    const users = await this.userModel.find();
+    users.forEach((user) => {
+      user.password = undefined;
+    });
+    return users;
   }
 
   async findOne(username: string): Promise<User> {
@@ -41,9 +58,11 @@ export class UsersService {
     if (!partResult) {
       throw new NotFoundException(`User with username "${username}" not found`);
     } else {
-      const response = partResult;
-      delete response.password;
-      return response;
+      const resp = partResult;
+      if (resp.password) {
+        resp.password = undefined;
+      }
+      return resp;
     }
   }
 }
