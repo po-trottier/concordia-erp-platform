@@ -1,83 +1,83 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { CreatePartDto } from './dto/create-part.dto';
-import { UpdatePartDto } from './dto/update-part.dto';
-import { PartDocument, Part } from './schemas/part.schema';
+import { CreateFinentryDto } from './dto/create-finentry.dto';
+import { UpdateFinentryDto } from './dto/update-finentry.dto';
+import { FinentryDocument, Finentry } from './schemas/finentry.schema';
 
 /**
- * Used by the PartsController, handles part data storage and retrieval.
+ * Used by the FinentrysController, handles finentry data storage and retrieval.
  */
 @Injectable()
-export class PartsService {
-  constructor(@InjectModel(Part.name) private partModel: Model<PartDocument>) {}
+export class FinentrysService {
+  constructor(@InjectModel(Finentry.name) private finentryModel: Model<FinentryDocument>) {}
 
   /**
-   * Creates part using mongoose partModel
+   * Creates finentry using mongoose finentryModel
    *
-   * @param createPartDto dto used to create parts
+   * @param createFinentryDto dto used to create finentrys
    */
-  async create(createPartDto: CreatePartDto): Promise<Part> {
-    const createdPart = new this.partModel(createPartDto);
-    return createdPart.save();
+  async create(createFinentryDto: CreateFinentryDto): Promise<Finentry> {
+    const createdFinentry = new this.finentryModel(createFinentryDto);
+    return createdFinentry.save();
   }
 
   /**
-   * Retrieves all parts using mongoose partModel
+   * Retrieves all finentrys using mongoose finentryModel
    */
-  async findAll(): Promise<Part[]> {
-    return await this.partModel.find().exec();
+  async findAll(): Promise<Finentry[]> {
+    return await this.finentryModel.find().exec();
   }
 
   /**
-   * Retrieves a part by id using mongoose partModel
+   * Retrieves a finentry by id using mongoose finentryModel
    *
-   * @param id string of the part's objectId
+   * @param id string of the finentry's objectId
    */
-  async findOne(id: string): Promise<Part> {
-    const part = await this.partModel.findById(id);
+  async findOne(id: string): Promise<Finentry> {
+    const finentry = await this.finentryModel.findById(id);
 
-    return this.checkPartFound(part, id);
+    return this.checkFinentryFound(finentry, id);
   }
 
   /**
-   * Updates part by id using mongoose partModel
+   * Updates finentry by id using mongoose finentryModel
    *
-   * @param id string of the part's objectId
-   * @param updatePartDto dto used to update parts
+   * @param id string of the finentry's objectId
+   * @param updateFinentryDto dto used to update finentrys
    */
-  async update(id: string, updatePartDto: UpdatePartDto): Promise<Part> {
-    const updatedPart = await this.partModel.findByIdAndUpdate(
+  async update(id: string, updateFinentryDto: UpdateFinentryDto): Promise<Finentry> {
+    const updatedFinentry = await this.finentryModel.findByIdAndUpdate(
       id,
-      { $set: { ...updatePartDto } },
+      { $set: { ...updateFinentryDto } },
       { new: true },
     );
 
-    return this.checkPartFound(updatedPart, id);
+    return this.checkFinentryFound(updatedFinentry, id);
   }
 
   /**
-   * Deletes part by id using mongoose partModel
+   * Deletes finentry by id using mongoose finentryModel
    *
-   * @param id string of the part's objectId
+   * @param id string of the finentry's objectId
    */
-  async remove(id: string): Promise<PartDocument> {
-    const deletedPart = await this.partModel.findByIdAndDelete(id);
+  async remove(id: string): Promise<FinentryDocument> {
+    const deletedFinentry = await this.finentryModel.findByIdAndDelete(id);
 
-    return this.checkPartFound(deletedPart, id);
+    return this.checkFinentryFound(deletedFinentry, id);
   }
 
   /**
-   * Returns NotFoundException if part is null, otherwise returns part
+   * Returns NotFoundException if finentry is null, otherwise returns finentry
    *
-   * @param partResult a retrieved part
-   * @param id string of the part's objectId
+   * @param finentryResult a retrieved finentry
+   * @param id string of the finentry's objectId
    */
-  checkPartFound(partResult: any, id: string) {
-    if (!partResult) {
-      throw new NotFoundException(`Part with id ${id} not found`);
+  checkFinentryFound(finentryResult: any, id: string) {
+    if (!finentryResult) {
+      throw new NotFoundException(`Finentry with id ${id} not found`);
     } else {
-      return partResult;
+      return finentryResult;
     }
   }
 }
