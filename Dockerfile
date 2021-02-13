@@ -8,14 +8,14 @@ WORKDIR /srv/webapp
 
 # Build the client
 COPY ./client/package*.json ./client/
-RUN cd client && npm ci 
+RUN cd client && npm ci
 COPY ./client/ ./client/
 RUN cd client && npm run build
 
 # Build the server
 RUN npm install -g @nestjs/cli
 COPY ./server/package*.json ./server/
-RUN cd server && npm ci 
+RUN cd server && npm ci
 COPY ./server/ ./server/
 RUN cd server && npm run build
 
@@ -29,6 +29,7 @@ WORKDIR /srv/webapp
 
 # Copy the production build from the builder step
 COPY --from=builder /srv/webapp/client/build/ ./client/build/
+COPY --from=builder /srv/webapp/server/.env ./server/.env
 COPY --from=builder /srv/webapp/server/dist/ ./server/dist/
 COPY --from=builder /srv/webapp/server/node_modules/ ./server/node_modules/
 
