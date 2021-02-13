@@ -12,8 +12,6 @@ import { JwtAuthGuard } from './auth/guards/jwt.guard';
 import { RolesGuard } from './roles/roles.guard';
 import { routes } from '../routes';
 
-@Module({
-
 const mongoDbUrl = process.env.DB_URL || 'mongodb://localhost:27017';
 const mongoDbName = process.env.DB_NAME || 'ERP_db';
 
@@ -26,7 +24,7 @@ const mongoDbName = process.env.DB_NAME || 'ERP_db';
     PartsModule,
     AuthModule,
     UsersModule,
-    FinentryModule,
+    FinanceModule,
   ],
   providers: [
     {
@@ -40,3 +38,4 @@ const mongoDbName = process.env.DB_NAME || 'ERP_db';
   ],
   controllers: [ApiController],
 })
+export class ApiModule {}

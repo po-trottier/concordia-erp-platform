@@ -1,9 +1,9 @@
 import { IsNotEmpty, IsPositive } from 'class-validator';
 
 /**
- * Finentry update DTO
+ * FinanceEntry update DTO
  */
-export class UpdateFinentryDto {
+export class UpdateFinanceEntryDto {
   @IsNotEmpty()
   dateDue: Date;
 

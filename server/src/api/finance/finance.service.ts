@@ -1,24 +1,24 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { CreateFinentryDto } from './dto/create-finentry.dto';
-import { UpdateFinentryDto } from './dto/update-finentry.dto';
-import { FinentryDocument, Finentry } from './schemas/finentry.schema';
+import { CreateFinanceEntryDto } from './dto/create-fin-entry.dto';
+import { UpdateFinanceEntryDto } from './dto/update-fin-entry.dto';
+import { FinentryDocument, Finentry } from './schemas/finance.schema';
 
 /**
  * Used by the FinentrysController, handles finentry data storage and retrieval.
  */
 @Injectable()
-export class FinentrysService {
+export class FinanceService {
   constructor(@InjectModel(Finentry.name) private finentryModel: Model<FinentryDocument>) {}
 
   /**
    * Creates finentry using mongoose finentryModel
    *
-   * @param createFinentryDto dto used to create finentrys
+   * @param createFinanceEntryDto dto used to create finentrys
    */
-  async create(createFinentryDto: CreateFinentryDto): Promise<Finentry> {
-    const createdFinentry = new this.finentryModel(createFinentryDto);
+  async create(createFinanceEntryDto: CreateFinanceEntryDto): Promise<Finentry> {
+    const createdFinentry = new this.finentryModel(createFinanceEntryDto);
     return createdFinentry.save();
   }
 
@@ -44,12 +44,12 @@ export class FinentrysService {
    * Updates finentry by id using mongoose finentryModel
    *
    * @param id string of the finentry's objectId
-   * @param updateFinentryDto dto used to update finentrys
+   * @param updateFinanceEntryDto dto used to update finentrys
    */
-  async update(id: string, updateFinentryDto: UpdateFinentryDto): Promise<Finentry> {
+  async update(id: string, updateFinanceEntryDto: UpdateFinanceEntryDto): Promise<Finentry> {
     const updatedFinentry = await this.finentryModel.findByIdAndUpdate(
       id,
-      { $set: { ...updateFinentryDto } },
+      { $set: { ...updateFinanceEntryDto } },
       { new: true },
     );
 

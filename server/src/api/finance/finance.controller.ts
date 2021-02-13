@@ -8,25 +8,25 @@ import {
   Param,
   ValidationPipe,
 } from '@nestjs/common';
-import { FinanceService } from './finentry.service';
-import { CreateFinentryDto } from './dto/create-finentry.dto';
-import { UpdateFinentryDto } from './dto/update-finentry.dto';
+import { FinanceService } from './finance.service';
+import { CreateFinanceEntryDto } from './dto/create-fin-entry.dto';
+import { UpdateFinanceEntryDto } from './dto/update-fin-entry.dto';
 
 /**
  * Controller class of the finentry entity
  */
-@Controller('api/finentry')
-export class FinEntryController {
+@Controller()
+export class FinanceController {
   constructor(private readonly financeService: FinanceService) {}
 
   /**
    * Handles POST requests to create FinEntry
    *
-   * @param createFinentryDto dto used to create finentry
+   * @param createFinanceEntryDto dto used to create finentry
    */
   @Post()
-  create(@Body(ValidationPipe) createFinentryDto: CreateFinentryDto) {
-    return this.financeService.create(createFinentryDto);
+  create(@Body(ValidationPipe) createFinanceEntryDto: CreateFinanceEntryDto) {
+    return this.financeService.create(createFinanceEntryDto);
   }
 
   /**
@@ -51,14 +51,14 @@ export class FinEntryController {
    * Handles PATCH requests to update a finentry by id
    *
    * @param id string of the finentry's objectId
-   * @param updateFinentryDto dto used to update finentry
+   * @param updateFinanceEntryDto dto used to update finentry
    */
   @Patch(':id')
   update(
     @Param('id') id: string,
-    @Body(ValidationPipe) updateFinentryDto: UpdateFinentryDto,
+    @Body(ValidationPipe) updateFinanceEntryDto: UpdateFinanceEntryDto,
   ) {
-    return this.financeService.update(id, updateFinentryDto);
+    return this.financeService.update(id, updateFinanceEntryDto);
   }
 
   /**
