@@ -8,7 +8,7 @@ import {
   Param,
   ValidationPipe,
 } from '@nestjs/common';
-import { FinentryService } from './finentry.service';
+import { FinanceService } from './finentry.service';
 import { CreateFinentryDto } from './dto/create-finentry.dto';
 import { UpdateFinentryDto } from './dto/update-finentry.dto';
 
@@ -17,7 +17,7 @@ import { UpdateFinentryDto } from './dto/update-finentry.dto';
  */
 @Controller('api/finentry')
 export class FinEntryController {
-  constructor(private readonly finentryService: FinEntryService) {}
+  constructor(private readonly financeService: FinanceService) {}
 
   /**
    * Handles POST requests to create FinEntry
@@ -26,7 +26,7 @@ export class FinEntryController {
    */
   @Post()
   create(@Body(ValidationPipe) createFinentryDto: CreateFinentryDto) {
-    return this.finentryService.create(createFinentryDto);
+    return this.financeService.create(createFinentryDto);
   }
 
   /**
@@ -34,7 +34,7 @@ export class FinEntryController {
    */
   @Get()
   findAll() {
-    return this.finentryService.findAll();
+    return this.financeService.findAll();
   }
 
   /**
@@ -44,7 +44,7 @@ export class FinEntryController {
    */
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.finentryService.findOne(id);
+    return this.financeService.findOne(id);
   }
 
   /**
@@ -58,7 +58,7 @@ export class FinEntryController {
     @Param('id') id: string,
     @Body(ValidationPipe) updateFinentryDto: UpdateFinentryDto,
   ) {
-    return this.finentryService.update(id, updateFinentryDto);
+    return this.financeService.update(id, updateFinentryDto);
   }
 
   /**
@@ -68,6 +68,6 @@ export class FinEntryController {
    */
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.finentryService.remove(id);
+    return this.financeService.remove(id);
   }
 }
