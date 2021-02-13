@@ -6,7 +6,7 @@ import { ApiController } from './api.controller';
 
 @Module({
 import { PartsModule } from './parts/parts.module';
-import { FinentryModule } from './finance/finentry.module';
+import { FinentryModule } from './finance/finance.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { JwtAuthGuard } from './auth/guards/jwt.guard';

@@ -21,6 +21,10 @@ export const routes: Routes = [
         path: '/users',
         module: UsersModule,
       },
+      {
+        path: '/finance',
+        module: FinentryModule,
+      },
     ],
   },
 ];
