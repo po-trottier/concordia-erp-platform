@@ -18,11 +18,11 @@ export const UserList = () => {
   axios.defaults.headers.common = {'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkpvaG5TbWl0aDE5NjUiLCJpZCI6IjYwMmMzN2ZjNTMzMGM2NDQwNzdlNmVlZSIsInJvbGVzIjo0LCJpYXQiOjE2MTM1MTA3NzEsImV4cCI6MTY0NTA0Njc3MX0.xZkFNVbyAls43uga3IcAYT3JA9yVZc267_k6--NYw4g'}
 
 
-  const getRows = () : Promise<UserEntry[]> => {
-    const users = [];
-    const response = await axios.get('http://localhost:5500/api/users')
-    response.data.forEach((user : any) => {
-        let u : UserEntry;
+  const getRows = async () : Promise<UserEntry[]> => {
+    return await axios.get('http://localhost:5500/api/users')
+    .then(response => {
+      response.data.forEach((user : any) => {
+       let u : UserEntry;
         u.name = user.name;
         u.username = user.username;
         u.role = user.role;
@@ -34,9 +34,8 @@ export const UserList = () => {
             <a href='?'>Delete User</a>
           </div>
         );
-        users.push(u);
+      }
     });
-    return users;
   };
 
   const [tableData, setTableData] = useState(getRows());
