@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Input } from 'antd';
-
 import { ResponsiveTable } from '../ResponsiveTable';
 import { UserEntry } from '../../interfaces/UserEntry';
+import axios from 'axios';
 
 const { Search } = Input;
 
@@ -15,6 +15,10 @@ export const UserList = () => {
     actions: 'Actions'
   });
 
+  axios.get('http://localhost:5500/api/users')
+      .then(res => {
+        console.log(res);
+      })
   const getRows = () : UserEntry[] => {
     const users = [
       {
