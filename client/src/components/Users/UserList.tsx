@@ -10,15 +10,16 @@ export const UserList = () => {
 
   const getColumns = () => ({
     name: 'Name',
-    age: 'Age',
-    location: 'Location',
+    age: 'Username',
     actions: 'Actions'
   });
 
+  // todo: Should use current user's token
+  axios.defaults.headers.common = {'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkpvaG5TbWl0aDE5NjUiLCJpZCI6IjYwMmMzN2ZjNTMzMGM2NDQwNzdlNmVlZSIsInJvbGVzIjo0LCJpYXQiOjE2MTM1MTA3NzEsImV4cCI6MTY0NTA0Njc3MX0.xZkFNVbyAls43uga3IcAYT3JA9yVZc267_k6--NYw4g'}
+
   axios.get('http://localhost:5500/api/users')
-      .then(res => {
-        console.log(res);
-      })
+  .then(response => console.log(response.data));
+
   const getRows = () : UserEntry[] => {
     const users = [
       {

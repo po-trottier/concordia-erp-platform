@@ -1,5 +1,6 @@
 export interface UserEntry {
+  email : string,
   name : string,
-  age : number,
-  location : string
+  username : string,
+  role : string,
 }
