@@ -3,4 +3,5 @@ export interface UserEntry {
   name : string,
   username : string,
   role : string,
+  actions : string,
 }

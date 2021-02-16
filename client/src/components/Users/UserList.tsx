@@ -17,65 +17,24 @@ export const UserList = () => {
   // todo: Should use current user's token
   axios.defaults.headers.common = {'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkpvaG5TbWl0aDE5NjUiLCJpZCI6IjYwMmMzN2ZjNTMzMGM2NDQwNzdlNmVlZSIsInJvbGVzIjo0LCJpYXQiOjE2MTM1MTA3NzEsImV4cCI6MTY0NTA0Njc3MX0.xZkFNVbyAls43uga3IcAYT3JA9yVZc267_k6--NYw4g'}
 
-  axios.get('http://localhost:5500/api/users')
-  .then(response => console.log(response.data));
 
-  const getRows = () : UserEntry[] => {
-    const users = [
-      {
-        name: 'Pierre-Olivier Trottier',
-        age: 23,
-        location: 'Montreal, Qc, Canada'
-      },
-      {
-        name: 'Camil Bouzidi',
-        age: 24,
-        location: 'Montreal, Qc, Canada'
-      },
-      {
-        name: 'Radley Carpio',
-        age: 23,
-        location: 'Montreal, Qc, Canada'
-      },
-      {
-        name: 'Bicher Chammaa',
-        age: 25,
-        location: 'Montreal, Qc, Canada'
-      },
-      {
-        name: 'Matthew Kevork',
-        age: 24,
-        location: 'Montreal, Qc, Canada'
-      },
-      {
-        name: 'Cedric Martens',
-        age: 22,
-        location: 'Montreal, Qc, Canada'
-      },
-      {
-        name: 'William Morin-Laberge',
-        age: 32,
-        location: 'Montreal, Qc, Canada'
-      },
-      {
-        name: 'Adrien Tremblay',
-        age: 23,
-        location: 'Montreal, Qc, Canada'
-      },
-      {
-        name: 'Nimit Jaggi',
-        age: 26,
-        location: 'Montreal, Qc, Canada'
-      },
-    ];
-    users.forEach((user : any) => {
-      user.actions = (
-        <div>
-          <a href='?'>Reset Password</a>
-          <br />
-          <a href='?'>Delete User</a>
-        </div>
-      );
+  const getRows = () : Promise<UserEntry[]> => {
+    const users = [];
+    const response = await axios.get('http://localhost:5500/api/users')
+    response.data.forEach((user : any) => {
+        let u : UserEntry;
+        u.name = user.name;
+        u.username = user.username;
+        u.role = user.role;
+        u.email = 'temp@gmail.com'; // todo: remove this
+        u.actions = (
+          <div>
+            <a href='?'>Reset Password</a>
+            <br />
+            <a href='?'>Delete User</a>
+          </div>
+        );
+        users.push(u);
     });
     return users;
   };
