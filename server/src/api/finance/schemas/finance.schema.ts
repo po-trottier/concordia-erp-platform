@@ -1,13 +1,13 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
-export type FinentryDocument = Finentry & Document;
+export type FinanceEntryDocument = FinanceEntry & Document;
 
 /**
- * Finentry collection mongoose schema
+ * FinanceEntry collection mongoose schema
  */
 @Schema()
-export class Finentry {
+export class FinanceEntry {
 
   @Prop({ required: true })
   dateEntered: Date;
@@ -25,4 +25,4 @@ export class Finentry {
   paid: number;
 }
 
-export const FinentrySchema = SchemaFactory.createForClass(Finentry);
+export const FinanceEntrySchema = SchemaFactory.createForClass(FinanceEntry);

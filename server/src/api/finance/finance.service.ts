@@ -3,81 +3,81 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateFinanceEntryDto } from './dto/create-fin-entry.dto';
 import { UpdateFinanceEntryDto } from './dto/update-fin-entry.dto';
-import { FinentryDocument, Finentry } from './schemas/finance.schema';
+import { FinanceEntryDocument, FinanceEntry } from './schemas/finance.schema';
 
 /**
- * Used by the FinentrysController, handles finentry data storage and retrieval.
+ * Used by the FinanceEntrysController, handles financeEntry data storage and retrieval.
  */
 @Injectable()
 export class FinanceService {
-  constructor(@InjectModel(Finentry.name) private finentryModel: Model<FinentryDocument>) {}
+  constructor(@InjectModel(FinanceEntry.name) private financeEntryModel: Model<FinanceEntryDocument>) {}
 
   /**
-   * Creates finentry using mongoose finentryModel
+   * Creates financeEntry using mongoose financeEntryModel
    *
-   * @param createFinanceEntryDto dto used to create finentrys
+   * @param createFinanceEntryDto dto used to create financeEntrys
    */
-  async create(createFinanceEntryDto: CreateFinanceEntryDto): Promise<Finentry> {
-    const createdFinentry = new this.finentryModel(createFinanceEntryDto);
-    return createdFinentry.save();
+  async create(createFinanceEntryDto: CreateFinanceEntryDto): Promise<FinanceEntry> {
+    const createdFinanceEntry = new this.financeEntryModel(createFinanceEntryDto);
+    return createdFinanceEntry.save();
   }
 
   /**
-   * Retrieves all finentrys using mongoose finentryModel
+   * Retrieves all financeEntrys using mongoose financeEntryModel
    */
-  async findAll(): Promise<Finentry[]> {
-    return await this.finentryModel.find().exec();
+  async findAll(): Promise<FinanceEntry[]> {
+    return await this.financeEntryModel.find().exec();
   }
 
   /**
-   * Retrieves a finentry by id using mongoose finentryModel
+   * Retrieves a financeEntry by id using mongoose financeEntryModel
    *
-   * @param id string of the finentry's objectId
+   * @param id string of the financeEntry's objectId
    */
-  async findOne(id: string): Promise<Finentry> {
-    const finentry = await this.finentryModel.findById(id);
+  async findOne(id: string): Promise<FinanceEntry> {
+    const financeEntry = await this.financeEntryModel.findById(id);
 
-    return this.checkFinentryFound(finentry, id);
+    return this.checkFinanceEntryFound(financeEntry, id);
   }
 
   /**
-   * Updates finentry by id using mongoose finentryModel
+   * Updates financeEntry by id using mongoose financeEntryModel
    *
-   * @param id string of the finentry's objectId
-   * @param updateFinanceEntryDto dto used to update finentrys
+   * @param id string of the financeEntry's objectId
+   * @param updateFinanceEntryDto dto used to update financeEntrys
    */
-  async update(id: string, updateFinanceEntryDto: UpdateFinanceEntryDto): Promise<Finentry> {
-    const updatedFinentry = await this.finentryModel.findByIdAndUpdate(
+  async update(id: string, updateFinanceEntryDto: UpdateFinanceEntryDto): Promise<FinanceEntry> {
+    const updatedFinanceEntry = await this.financeEntryModel.findByIdAndUpdate(
       id,
       { $set: { ...updateFinanceEntryDto } },
       { new: true },
     );
 
-    return this.checkFinentryFound(updatedFinentry, id);
+    return this.checkFinanceEntryFound(updatedFinanceEntry, id);
   }
 
   /**
-   * Deletes finentry by id using mongoose finentryModel
+   * Deletes financeEntry by id using mongoose financeEntryModel
    *
-   * @param id string of the finentry's objectId
+   * @param id string of the financeEntry's objectId
    */
-  async remove(id: string): Promise<FinentryDocument> {
-    const deletedFinentry = await this.finentryModel.findByIdAndDelete(id);
+  async remove(id: string): Promise<FinanceEntryDocument> {
+    const deletedFinanceEntry = await this.financeEntryModel.findByIdAndDelete(id);
 
-    return this.checkFinentryFound(deletedFinentry, id);
+    return this.checkFinanceEntryFound(deletedFinanceEntry, id);
   }
 
   /**
-   * Returns NotFoundException if finentry is null, otherwise returns finentry
+   * Returns NotFoundException if financeEntry is null, otherwise returns financeEntry
    *
-   * @param finentryResult a retrieved finentry
-   * @param id string of the finentry's objectId
+   * @param financeEntryResult a retrieved financeEntry
+   * @param id string of the financeEntry's objectId
    */
-  checkFinentryFound(finentryResult: any, id: string) {
-    if (!finentryResult) {
-      throw new NotFoundException(`Finentry with id ${id} not found`);
+  checkFinanceEntryFound(financeEntryResult: any, id: string) {
+    if (!financeEntryResult) {
+      throw new NotFoundException(`FinanceEntry with id ${id} not found`);
     } else {
-      return finentryResult;
+      return financeEntryResult;
     }
   }
 }
