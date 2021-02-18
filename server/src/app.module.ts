@@ -13,5 +13,6 @@ import { ApiModule } from './api/api.module';
       exclude: ['/api*'],
     }),
   ],
+  providers: [],
 })
 export class AppModule {}
