@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Card, Input } from 'antd';
-
+import { Modal, Button, Card, Input } from 'antd';
 import dummyData from './ProductDummyData';
 import { ResponsiveTable } from '../ResponsiveTable';
-
 const { Search } = Input;
 
 export const ProductCatalog = () => {
@@ -23,6 +21,20 @@ export const ProductCatalog = () => {
     setSearchValue(e.target.value);
   };
 
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleOk = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+  
   return (
     <div>
       <Card style={{ margin: '24px 0' }}>
@@ -32,12 +44,17 @@ export const ProductCatalog = () => {
           style={{ marginBottom: 18 }} />
         <ResponsiveTable rows={tableData} cols={dummyData.getCatalogColumns()} />
       </Card>
-      <Button type='ghost'>
+      <Button type='ghost' onClick={showModal}>
         Define a new Product
       </Button>
       <Button type='primary' style={{ float: 'right' }}>
         Build Products
       </Button>
+      <Modal title="Define Product" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+      </Modal>
     </div>
   );
 };
