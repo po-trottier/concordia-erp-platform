@@ -40,7 +40,7 @@ export const UserList = () => {
           </div>
         );
       })
-      setTableData(rows);
+      setTableData([]);
     });
 
     }, [searchValue]);
@@ -51,11 +51,17 @@ export const UserList = () => {
 
   return (
     <Card>
-      <Search
-        placeholder='Search for a user'
-        onChange={onSearch}
-        style={{ marginBottom: 18 }} />
-      <ResponsiveTable rows={tableData} cols={getColumns()} />
+      {tableData.length > 0 ? 
+        <div>
+          <Search
+            placeholder='Search for a user'
+            onChange={onSearch}
+            style={{ marginBottom: 18 }} />
+          <ResponsiveTable rows={tableData} cols={getColumns()} />
+        </div>
+        : 
+        <div>No users have been found.</div>
+      }
     </Card>
   );
 };
