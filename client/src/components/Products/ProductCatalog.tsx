@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Modal, Button, Card, Input } from 'antd';
+import { Modal, Button, Card, Input, InputNumber, Select } from 'antd';
 import dummyData from './ProductDummyData';
 import { ResponsiveTable } from '../ResponsiveTable';
+
 const { Search } = Input;
+const { Option } = Select;
 
 export const ProductCatalog = () => {
   const [tableData, setTableData] = useState(dummyData.getRows());
@@ -51,9 +53,20 @@ export const ProductCatalog = () => {
         Build Products
       </Button>
       <Modal title="Define Product" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
+        <Input placeholder="Product Name"/>
+        <InputNumber defaultValue={0} />
+        <Select
+          showSearch
+          style={{ width: 200 }}
+          placeholder="Search to Select"
+        >
+          <Option value="1">Not Identified</Option>
+          <Option value="2">Closed</Option>
+          <Option value="3">Communicated</Option>
+          <Option value="4">Identified</Option>
+          <Option value="5">Resolved</Option>
+          <Option value="6">Cancelled</Option>
+        </Select>,
       </Modal>
     </div>
   );
