@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Modal, Button, Card, Input, InputNumber, Select } from 'antd';
+import { Modal, Button, Card, Input, InputNumber, Select, Divider} from 'antd';
 import dummyData from './ProductDummyData';
 import { ResponsiveTable } from '../ResponsiveTable';
 import { PartEntry } from '../../interfaces/PartEntry';
@@ -23,8 +23,8 @@ export const ProductCatalog = () => {
   }, [searchValue]);
 
   useEffect(() => {
-    let rows : any = [];
-    
+    let rows : any = [{name:'Pink Tassels', id:'23'}, {name:'Hot wheel', id:'42'}, {name:'Bike Frame', id:'22'}];
+
     setPartsData(rows);
   });
 
@@ -62,14 +62,19 @@ export const ProductCatalog = () => {
         Build Products
       </Button>
       <Modal title="Define Product" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+        <h2>Name</h2>
         <Input placeholder="Product Name"/>
+        <Divider/>
+        <h2>Quantity</h2>
         <InputNumber 
           defaultValue={0}  
           /* formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} */
           /* parser={value => value.replace(/\$\s?|(,*)/g, '')} */ 
         />
+        <Divider/>
+        <h2>Select Parts</h2>
         <Select
-          // showSearch
+          showSearch
           style={{ width: 200 }}
           placeholder="Search to Select"
           optionFilterProp="children"
