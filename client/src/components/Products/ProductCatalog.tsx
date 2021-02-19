@@ -9,6 +9,8 @@ const { Search } = Input;
 const { Option } = Select;
 
 export const ProductCatalog = () => {
+  axios.defaults.headers.common = {'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkpvaG5TbWl0aDE5NjUiLCJpZCI6IjYwMmMzN2ZjNTMzMGM2NDQwNzdlNmVlZSIsInJvbGVzIjo0LCJpYXQiOjE2MTM1MTA3NzEsImV4cCI6MTY0NTA0Njc3MX0.xZkFNVbyAls43uga3IcAYT3JA9yVZc267_k6--NYw4g'}
+
   const [tableData, setTableData] = useState(dummyData.getRows());
   const [searchValue, setSearchValue] = useState('');
   const [partsData, setPartsData] = useState([]);
@@ -38,8 +40,13 @@ export const ProductCatalog = () => {
     setIsModalVisible(true);
   };
 
-  const handleOk = () => {
+  const handleCreateProduct = () => {
     setIsModalVisible(false);
+    useEffect(() => {
+      axios.post('product', {})
+      .then(response => {console.log(response)})
+      .catch(error => {console.log(error)});
+    });
   };
 
   const handleCancel = () => {
@@ -61,7 +68,7 @@ export const ProductCatalog = () => {
       <Button type='primary' style={{ float: 'right' }}>
         Build Products
       </Button>
-      <Modal title="Define Product" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+      <Modal title="Define Product" visible={isModalVisible} onOk={handleCreateProduct} onCancel={handleCancel}>
         <h2>Name</h2>
         <Input placeholder="Product Name"/>
         <Divider/>
@@ -71,6 +78,7 @@ export const ProductCatalog = () => {
           /* formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} */
           /* parser={value => value.replace(/\$\s?|(,*)/g, '')} */ 
         />
+
         <Divider/>
         <h2>Select Parts</h2>
         <Select
@@ -78,12 +86,12 @@ export const ProductCatalog = () => {
           style={{ width: 200 }}
           placeholder="Search to Select"
           optionFilterProp="children"
-          //filterOption={(input, option) =>
-          //  option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-          //}
-          //filterSort={(optionA, optionB) =>
-          //  optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
-          //}
+          filterOption={(input, option) =>
+            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+          }
+          filterSort={(optionA, optionB) =>
+            optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
+          }
         >
           {partsData.map((part : any) => {
               return (<Option key={part.id} value="1">{part.name}</Option>)
