@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Modal, Button, Card, Input, InputNumber, Select } from 'antd';
 import dummyData from './ProductDummyData';
 import { ResponsiveTable } from '../ResponsiveTable';
+import { PartEntry } from '../../interfaces/PartEntry';
+import axios from '../../plugins/Axios'
 
 const { Search } = Input;
 const { Option } = Select;
@@ -9,6 +11,7 @@ const { Option } = Select;
 export const ProductCatalog = () => {
   const [tableData, setTableData] = useState(dummyData.getRows());
   const [searchValue, setSearchValue] = useState('');
+  const [partsData, setPartsData] = useState([]);
 
   useEffect(() => {
     let rows = dummyData.getRows();
@@ -18,6 +21,12 @@ export const ProductCatalog = () => {
     }
     setTableData(rows);
   }, [searchValue]);
+
+  useEffect(() => {
+    let rows : any = [];
+    
+    setPartsData(rows);
+  });
 
   const onSearch = (e : React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
@@ -54,19 +63,27 @@ export const ProductCatalog = () => {
       </Button>
       <Modal title="Define Product" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
         <Input placeholder="Product Name"/>
-        <InputNumber defaultValue={0} />
+        <InputNumber 
+          defaultValue={0}  
+          /* formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} */
+          /* parser={value => value.replace(/\$\s?|(,*)/g, '')} */ 
+        />
         <Select
-          showSearch
+          // showSearch
           style={{ width: 200 }}
           placeholder="Search to Select"
+          optionFilterProp="children"
+          //filterOption={(input, option) =>
+          //  option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+          //}
+          //filterSort={(optionA, optionB) =>
+          //  optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
+          //}
         >
-          <Option value="1">Not Identified</Option>
-          <Option value="2">Closed</Option>
-          <Option value="3">Communicated</Option>
-          <Option value="4">Identified</Option>
-          <Option value="5">Resolved</Option>
-          <Option value="6">Cancelled</Option>
-        </Select>,
+          {partsData.map((part : any) => {
+              return (<Option key={part.id} value="1">{part.name}</Option>)
+            })}
+        </Select>
       </Modal>
     </div>
   );

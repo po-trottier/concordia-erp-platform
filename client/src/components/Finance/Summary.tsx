@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Statistic, Typography } from 'antd';
-import { Line } from '@ant-design/charts';
-
-import { ResponsiveTable } from '../ResponsiveTable';
+import { Line } from '@ant-design/charts'; import { ResponsiveTable } from '../ResponsiveTable';
 import { SummaryEntry } from '../../interfaces/SummaryEntry';
 
 const { Title } = Typography;
