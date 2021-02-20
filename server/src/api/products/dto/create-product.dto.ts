@@ -1,6 +1,5 @@
 import { IsInt, IsNotEmpty, IsOptional, isPositive, IsPositive, IsString, IsDecimal, IsDate } from "class-validator";
 
-
 export class CreateProductDto {
     @IsNotEmpty()
     @IsString()
