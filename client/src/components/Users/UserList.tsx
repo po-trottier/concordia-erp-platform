@@ -40,7 +40,7 @@ export const UserList = () => {
           </div>
         );
       })
-      setTableData([]);
+      setTableData(rows);
     });
 
     }, [searchValue]);
