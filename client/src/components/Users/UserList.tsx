@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Input } from 'antd';
+import { Button, Card, Input } from 'antd';
 import { ResponsiveTable } from '../ResponsiveTable';
 import { UserEntry } from '../../interfaces/UserEntry';
 import axios from '../../plugins/Axios'
@@ -42,11 +42,11 @@ export const UserList = () => {
         user.email = "temp@gmail.com"
         user.actions = (
           <div>
-            <Button type="primary" onClick={() => resetPassword(user.username)}>
+            <Button type="primary" size="small" onClick={() => resetPassword(user.username)}>
               Reset Password
             </Button>  
             <br />
-            <Button type="primary" onClick={() => deleteUser(user.username)}>
+            <Button type="primary" size="small" onClick={() => deleteUser(user.username)}>
               Delete User
             </Button>  
           </div>
