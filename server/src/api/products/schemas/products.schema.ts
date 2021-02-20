@@ -11,9 +11,30 @@ export class Product {
     @Prop()
     description: string;
 
-    @Prop({ required: true, default: 0 })
-    quantity: number;
-}
+    @Prop({ required: true })
+    price: number;
 
+    // Will become a parts object
+    @Prop({ required: true })
+    parts: string[];
+    
+    @Prop({ required: true })
+    frameSize: string;
+    
+    @Prop({ required: true })
+    color: string
+    
+    @Prop({ required: true })
+    finish: string;
+
+    @Prop({ required: true })
+    grade: string;
+
+    @Prop({ required: true, default: Date.now })
+    dateManufactured: Date;
+
+    @Prop()
+    dateSold?: Date;
+}
 
 export const ProductSchema = SchemaFactory.createForClass(Product);
