@@ -22,6 +22,14 @@ export const UserList = () => {
   const [tableData, setTableData] = useState([]);
   const [searchValue, setSearchValue] = useState('');
 
+  const resetPassword = (username : any) => {
+    console.log(username)
+  };
+
+  const deleteUser = (username : any) => {
+    console.log(username)
+  };
+
   useEffect(() => {
     let rows = [];
     axios.get('users').then(({data}) => {
@@ -34,9 +42,13 @@ export const UserList = () => {
         user.email = "temp@gmail.com"
         user.actions = (
           <div>
-            <a href='?'>Reset Password</a>
+            <Button type="primary" onClick={() => resetPassword(user.username)}>
+              Reset Password
+            </Button>  
             <br />
-            <a href='?'>Delete User</a>
+            <Button type="primary" onClick={() => deleteUser(user.username)}>
+              Delete User
+            </Button>  
           </div>
         );
       })
