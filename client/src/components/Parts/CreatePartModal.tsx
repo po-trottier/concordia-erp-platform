@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import 'antd/dist/antd.css';
-import './index.css';
 import { Form, Input, Button, Modal, Select } from 'antd';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 
@@ -41,14 +40,14 @@ export const CreatePartModal = () => {
 
   return (
     <>
-      <Button type="primary" onClick={showModal}>
+      <Button type="primary" onClick={showModal} style={{ marginTop: 16 }}>
         Create New Part
       </Button>
       <Modal title="Create New Part" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
         <Form name="dynamic_form_item" {...formItemLayoutWithOutLabel}>
           <Form.Item>
             <Input placeholder='Part Name'
-              style={{width: '90%', position: 'absolute'}}/>
+              style={{width: '90%', position: 'absolute'}} />
           </Form.Item>
           <Form.List name="names">
 
@@ -68,7 +67,7 @@ export const CreatePartModal = () => {
                     >
                       <Select
                         showSearch
-                        style={{ width: 350 }}
+                        style={{ width: 355 }}
                         placeholder="Select a material"
                         optionFilterProp="children"
                       >
@@ -103,5 +102,4 @@ export const CreatePartModal = () => {
       </Modal>
     </>
   );
-
 };
