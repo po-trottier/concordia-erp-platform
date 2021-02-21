@@ -2,18 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { Modal, Button, Card, Input, InputNumber, Select, Divider} from 'antd';
 import dummyData from './ProductDummyData';
 import { ResponsiveTable } from '../ResponsiveTable';
-import { PartEntry } from '../../interfaces/PartEntry';
+import {CreateProductModal } from './CreateProductModal'
 import axios from '../../plugins/Axios'
 
 const { Search } = Input;
 const { Option } = Select;
 
 export const ProductCatalog = () => {
-  axios.defaults.headers.common = {'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkpvaG5TbWl0aDE5NjUiLCJpZCI6IjYwMmMzN2ZjNTMzMGM2NDQwNzdlNmVlZSIsInJvbGVzIjo0LCJpYXQiOjE2MTM1MTA3NzEsImV4cCI6MTY0NTA0Njc3MX0.xZkFNVbyAls43uga3IcAYT3JA9yVZc267_k6--NYw4g'}
 
   const [tableData, setTableData] = useState(dummyData.getRows());
   const [searchValue, setSearchValue] = useState('');
-  const [partsData, setPartsData] = useState([]);
 
   useEffect(() => {
     let rows = dummyData.getRows();
@@ -24,35 +22,10 @@ export const ProductCatalog = () => {
     setTableData(rows);
   }, [searchValue]);
 
-  useEffect(() => {
-    let rows : any = [{name:'Pink Tassels', id:'23'}, {name:'Hot wheel', id:'42'}, {name:'Bike Frame', id:'22'}];
-
-    setPartsData(rows);
-  });
-
   const onSearch = (e : React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
   };
 
-  const [isModalVisible, setIsModalVisible] = useState(false);
-
-  const showModal = () => {
-    setIsModalVisible(true);
-  };
-
-  const handleCreateProduct = () => {
-    setIsModalVisible(false);
-    useEffect(() => {
-      axios.post('product', {})
-      .then(response => {console.log(response)})
-      .catch(error => {console.log(error)});
-    });
-  };
-
-  const handleCancel = () => {
-    setIsModalVisible(false);
-  };
-  
   return (
     <div>
       <Card style={{ margin: '24px 0' }}>
@@ -62,42 +35,10 @@ export const ProductCatalog = () => {
           style={{ marginBottom: 18 }} />
         <ResponsiveTable rows={tableData} cols={dummyData.getCatalogColumns()} />
       </Card>
-      <Button type='ghost' onClick={showModal}>
-        Define a new Product
-      </Button>
-      <Button type='primary' style={{ float: 'right' }}>
+      <Button type='primary' style={{ marginTop: 16, float: 'right' }}>
         Build Products
       </Button>
-      <Modal title="Define Product" visible={isModalVisible} onOk={handleCreateProduct} onCancel={handleCancel}>
-        <h2>Name</h2>
-        <Input placeholder="Product Name"/>
-        <Divider/>
-        <h2>Quantity</h2>
-        <InputNumber 
-          defaultValue={0}  
-          /* formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} */
-          /* parser={value => value.replace(/\$\s?|(,*)/g, '')} */ 
-        />
-
-        <Divider/>
-        <h2>Select Parts</h2>
-        <Select
-          showSearch
-          style={{ width: 200 }}
-          placeholder="Search to Select"
-          optionFilterProp="children"
-          filterOption={(input, option) =>
-            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-          }
-          filterSort={(optionA, optionB) =>
-            optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
-          }
-        >
-          {partsData.map((part : any) => {
-              return (<Option key={part.id} value="1">{part.name}</Option>)
-            })}
-        </Select>
-      </Modal>
+      <CreateProductModal/>
     </div>
   );
 };
