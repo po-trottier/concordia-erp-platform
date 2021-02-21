@@ -1,8 +1,6 @@
 import React from 'react';
 import { Button, Card, Checkbox, DatePicker, Divider, Menu, Popover, Select, Typography } from 'antd';
 
-import { PersonName } from '../../interfaces/PersonName';
-
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 const { Title } = Typography;
@@ -10,7 +8,7 @@ const { Title } = Typography;
 export const Audit = () => {
 
   const getNames = () => {
-    let names : PersonName[] = [
+    let names : { name: string }[] = [
       { name: 'Mike' },
       { name: 'Alex' },
     ];
