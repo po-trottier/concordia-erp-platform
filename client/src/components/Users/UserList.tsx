@@ -10,7 +10,7 @@ export const UserList = () => {
 
   const getColumns = () => ({
     name: 'Name',
-    age: 'Username',
+    username : 'Username',
     email: 'Email',
     role: 'Role',
     actions: 'Actions'
