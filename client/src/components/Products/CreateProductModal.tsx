@@ -20,6 +20,7 @@ export const CreateProductModal = () => {
   const handleSubmit = (values : any) => {
     setIsModalVisible(false);
     console.log(values);
+    form.resetFields();
   };
 
   const handleCancel = () => {
@@ -53,10 +54,10 @@ export const CreateProductModal = () => {
       </Button>
       <Modal title="Create New Product" visible={isModalVisible} onOk={form.submit} onCancel={handleCancel}>
         <Form form={form} onFinish={handleSubmit} name="dynamic_form_item" {...formItemLayoutWithOutLabel}>
+          <h3>Product Name</h3>
           <Form.Item 
             name="product_name"
             rules={[{ required: true, message: 'Please enter a product name!' }]}>
-            <h3>Product Name</h3>
             <Input placeholder='Product Name'
               style={{width: '90%'}} />
           </Form.Item>
