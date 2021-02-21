@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "f559927e-e43f-45e3-a202-3b61edff6382",
+		"_postman_id": "746a336b-8621-49ab-a20d-436f75c1b898",
 		"name": "Epic Resource Planner",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -50,12 +50,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Pink bike tassels\",\n    \"description\": \"makes it go faster\",\n    \"stock\": 70000\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
+							"raw": "{\n    \"name\": \"Pink bike tassels\",\n    \"description\": \"makes it go faster\",\n    \"stock\": 70000\n}"
 						},
 						"url": {
 							"raw": "{{url}}/parts",
@@ -76,12 +71,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"stock\": 4\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
+							"raw": "{\n    \"stock\": 4\n}"
 						},
 						"url": {
 							"raw": "{{url}}/parts/6023033e12523415393afc0f",
@@ -101,6 +91,10 @@
 					"request": {
 						"method": "DELETE",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
 							"raw": "{{url}}/parts/60220fd37d5a1f2c5a6d9778",
 							"host": [
@@ -108,6 +102,107 @@
 							],
 							"path": [
 								"parts",
+								"60220fd37d5a1f2c5a6d9778"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Finance",
+			"item": [
+				{
+					"name": "Get Finance Entries",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/finance",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"finance"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Finance Entry by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/finance/60245c2d2816ce3290065c38",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"finance",
+								"60245c2d2816ce3290065c38"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Finance Entry",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Pink bike tassels\",\n    \"description\": \"makes it go faster\",\n    \"stock\": 70000\n}"
+						},
+						"url": {
+							"raw": "{{url}}/finance",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"finance"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Finance Entry by Id",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"stock\": 4\n}"
+						},
+						"url": {
+							"raw": "{{url}}/finance/6023033e12523415393afc0f",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"finance",
+								"6023033e12523415393afc0f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Finance Entry",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/finance/60220fd37d5a1f2c5a6d9778",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"finance",
 								"60220fd37d5a1f2c5a6d9778"
 							]
 						}
@@ -126,7 +221,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"user\", \r\n    \"password\": \"password\"\r\n}",
+							"raw": "{\r\n    \"username\": \"user\", \r\n    \"password\": \"Jr:6sh[3F}`^ns\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -154,8 +249,25 @@
 				{
 					"name": "Get users",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIiLCJpZCI6IjYwMmYxMDQwM2M0MTAyNWRmNGE3NzcwMyIsInJvbGVzIjo0LCJpYXQiOjE2MTM3NDA2ODIsImV4cCI6MTY0NTI3NjY4Mn0.MDtn-AGo-_5GQw7ctUDcgWfZIUzV4evHYMf2rJNyI5k",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIiLCJpZCI6IjYwMmYxMDQwM2M0MTAyNWRmNGE3NzcwMyIsInJvbGVzIjo0LCJpYXQiOjE2MTM3NDA2ODIsImV4cCI6MTY0NTI3NjY4Mn0.MDtn-AGo-_5GQw7ctUDcgWfZIUzV4evHYMf2rJNyI5k",
+								"type": "text",
+								"disabled": true
+							}
+						],
 						"url": {
 							"raw": "{{url}}/users",
 							"host": [
@@ -189,11 +301,21 @@
 				{
 					"name": "Create user",
 					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"user\",\r\n    \"password\": \"password\",\r\n    \"name\": \"Tom Cruz\",\r\n    \"role\": 4\r\n}",
+							"raw": "{\r\n    \"username\": \"user\",\r\n    \"password\": \"Jr:6sh[3F}`^ns\",\r\n    \"name\": \"Tom Cruz\",\r\n    \"role\": 4\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -219,12 +341,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"password\": \"password\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
+							"raw": "{\r\n    \"password\": \"password\"\r\n}"
 						},
 						"url": {
 							"raw": "{{url}}/users/user",
@@ -244,6 +361,10 @@
 					"request": {
 						"method": "DELETE",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
 							"raw": "{{url}}/users/user",
 							"host": [
@@ -252,6 +373,178 @@
 							"path": [
 								"users",
 								"user"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "Get products",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIiLCJpZCI6IjYwMmYxMDQwM2M0MTAyNWRmNGE3NzcwMyIsInJvbGVzIjo0LCJpYXQiOjE2MTM3NDA2ODIsImV4cCI6MTY0NTI3NjY4Mn0.MDtn-AGo-_5GQw7ctUDcgWfZIUzV4evHYMf2rJNyI5k",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/products",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get product by id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIiLCJpZCI6IjYwMmYxMDQwM2M0MTAyNWRmNGE3NzcwMyIsInJvbGVzIjo0LCJpYXQiOjE2MTM3NDA2ODIsImV4cCI6MTY0NTI3NjY4Mn0.MDtn-AGo-_5GQw7ctUDcgWfZIUzV4evHYMf2rJNyI5k",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/products/602fc1c35ec85b42243e6b1c",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"products",
+								"602fc1c35ec85b42243e6b1c"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIiLCJpZCI6IjYwMmYxMDQwM2M0MTAyNWRmNGE3NzcwMyIsInJvbGVzIjo0LCJpYXQiOjE2MTM3NDA2ODIsImV4cCI6MTY0NTI3NjY4Mn0.MDtn-AGo-_5GQw7ctUDcgWfZIUzV4evHYMf2rJNyI5k",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "602f10403c41025df4a77703",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"bike3\",\n    \"description\": \"amazing bike\",\n    \"price\": 299.99,\n    \"parts\": [\"seat\", \"tassels\"],\n    \"frameSize\": \"18in\",\n    \"color\": \"green\",\n    \"finish\": \"matte\",\n    \"grade\": \"steel\"    \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/products",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update product by id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIiLCJpZCI6IjYwMmYxMDQwM2M0MTAyNWRmNGE3NzcwMyIsInJvbGVzIjo0LCJpYXQiOjE2MTM3NDA2ODIsImV4cCI6MTY0NTI3NjY4Mn0.MDtn-AGo-_5GQw7ctUDcgWfZIUzV4evHYMf2rJNyI5k",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"color\": \"black\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/products/6030880079bffd26ac1b4a16",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"products",
+								"6030880079bffd26ac1b4a16"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete product by id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIiLCJpZCI6IjYwMmYxMDQwM2M0MTAyNWRmNGE3NzcwMyIsInJvbGVzIjo0LCJpYXQiOjE2MTM3NDA2ODIsImV4cCI6MTY0NTI3NjY4Mn0.MDtn-AGo-_5GQw7ctUDcgWfZIUzV4evHYMf2rJNyI5k",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/products/602fc1ac5ec85b42243e6b1b",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"products",
+								"602fc1ac5ec85b42243e6b1b"
 							]
 						}
 					},
@@ -272,41 +565,6 @@
 				}
 			},
 			"response": []
-		}
-	],
-	"auth": {
-		"type": "bearer",
-		"bearer": [
-			{
-				"key": "token",
-				"value": "{{JWT}}",
-				"type": "string"
-			},
-			{
-				"key": "password",
-				"value": "{{JWT}}",
-				"type": "string"
-			}
-		]
-	},
-	"event": [
-		{
-			"listen": "prerequest",
-			"script": {
-				"type": "text/javascript",
-				"exec": [
-					""
-				]
-			}
-		},
-		{
-			"listen": "test",
-			"script": {
-				"type": "text/javascript",
-				"exec": [
-					""
-				]
-			}
 		}
 	]
 }
