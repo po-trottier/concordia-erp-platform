@@ -35,10 +35,6 @@ export class UpdateProductDto {
   @IsOptional()
   finish: string;
 
-  @IsString()
-  @IsOptional()
-  grade: string;
-
   @IsNotEmpty()
   @IsPositive()
   @IsInt()

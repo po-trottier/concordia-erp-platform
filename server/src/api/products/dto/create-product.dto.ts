@@ -1,4 +1,4 @@
-import { IsInt, IsNotEmpty, IsPositive, IsString } from 'class-validator';
+import { IsInt, IsNotEmpty, IsOptional, IsPositive, IsString } from 'class-validator';
 
 export class CreateProductDto {
   @IsNotEmpty()
@@ -28,10 +28,6 @@ export class CreateProductDto {
   @IsString()
   @IsNotEmpty()
   finish: string;
-
-  @IsString()
-  @IsNotEmpty()
-  grade: string;
 
   @IsNotEmpty()
   @IsPositive()

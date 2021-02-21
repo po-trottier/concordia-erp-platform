@@ -28,9 +28,6 @@ export class Product {
   finish: string;
 
   @Prop({ required: true })
-  grade: string;
-
-  @Prop({ required: true })
   quantity: number;
 }
 
