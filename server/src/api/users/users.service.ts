@@ -1,13 +1,51 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  UnauthorizedException,
+  NotFoundException,
+  OnApplicationBootstrap,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { hash } from 'bcrypt';
+
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { UserDocument, User } from './schemas/user.schema';
+import { User, UserDocument } from './schemas/user.schema';
+import { Role } from '../roles/roles.enum';
+import { DEFAULT_USER } from '../../shared/constants';
 
 @Injectable()
-export class UsersService {
+export class UsersService implements OnApplicationBootstrap {
+  async onApplicationBootstrap(): Promise<void> {
+    await this.createDefaultUser();
+  }
+
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
+
+  // Create default user if he doesn't exist
+  async createDefaultUser(): Promise<void> {
+    try {
+      const admin = await this.findOne(DEFAULT_USER);
+      if (admin) {
+        console.log('Default user already exits.');
+      }
+    } catch (err) {
+      if (err.status == 404) {
+        const user = new CreateUserDto();
+        user.username = DEFAULT_USER;
+        user.name = 'Administrator';
+        user.role = Role.SYSTEM_ADMINISTRATOR;
+        user.password = await hash(process.env.DEFAULT_PASSWORD, 16);
+        await this.create(user);
+        console.log('Default user was created successfully.');
+      } else {
+        console.error(
+          'Something went wrong while creating the default user.',
+          err,
+        );
+      }
+    }
+  }
 
   // To be used internally only as it leaks the password hash!
   async findOneInternal(username: string): Promise<User> {
@@ -37,6 +75,15 @@ export class UsersService {
   }
 
   async update(username: string, dto: UpdateUserDto): Promise<User> {
+    // Cannot change the default user's username
+    const isAdmin = username === DEFAULT_USER;
+    const adminChanged =
+      dto.username != username || dto.role != Role.SYSTEM_ADMINISTRATOR;
+    if (isAdmin && adminChanged) {
+      throw new UnauthorizedException(
+        "You cannot change the default user's username.",
+      );
+    }
     const updatedUser = await this.userModel.findOneAndUpdate(
       { username },
       { $set: { ...dto } },
@@ -46,6 +93,10 @@ export class UsersService {
   }
 
   async remove(username: string): Promise<User> {
+    // Cannot delete the default user
+    if (username === DEFAULT_USER) {
+      throw new UnauthorizedException('You cannot delete the default user.');
+    }
     const deletedUser = await this.userModel.findOneAndDelete({ username });
     return this.validateUserFound(deletedUser, username);
   }
