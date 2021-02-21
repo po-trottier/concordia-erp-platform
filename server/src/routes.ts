@@ -4,6 +4,7 @@ import { AuthModule } from './api/auth/auth.module';
 import { PartsModule } from './api/parts/parts.module';
 import { UsersModule } from './api/users/users.module';
 import { FinanceModule } from './api/finance/finance.module';
+import { ProductsModule } from './api/products/products.module';
 
 export const routes: Routes = [
   {
@@ -25,6 +26,10 @@ export const routes: Routes = [
       {
         path: '/finance',
         module: FinanceModule,
+      },
+      {
+        path: '/products',
+        module: ProductsModule,
       },
     ],
   },
