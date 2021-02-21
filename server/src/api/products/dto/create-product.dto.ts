@@ -1,43 +1,40 @@
-import { IsInt, IsNotEmpty, IsOptional, isPositive, IsPositive, IsString, IsDecimal, IsDate } from "class-validator";
+import { IsInt, IsNotEmpty, IsPositive, IsString } from 'class-validator';
 
 export class CreateProductDto {
-    @IsNotEmpty()
-    @IsString()
-    name: string;
+  @IsNotEmpty()
+  @IsString()
+  name: string;
 
-    @IsNotEmpty()
-    @IsString()
-    description: string;
+  @IsNotEmpty()
+  @IsString()
+  description: string;
 
-    @IsPositive()
-    @IsNotEmpty()
-    price: number;
+  @IsPositive()
+  @IsNotEmpty()
+  price: number;
 
-    // Will become a Parts object
-    @IsNotEmpty()
-    parts : string[];
+  // Will become a Parts object
+  @IsNotEmpty()
+  parts: string[];
 
-    @IsString()
-    @IsNotEmpty()
-    frameSize : string;
+  @IsString()
+  @IsNotEmpty()
+  frameSize: string;
 
-    @IsString()
-    @IsNotEmpty()
-    color : string;
+  @IsString()
+  @IsNotEmpty()
+  color: string;
 
-    @IsString()
-    @IsNotEmpty()
-    finish : string;
+  @IsString()
+  @IsNotEmpty()
+  finish: string;
 
-    @IsString()
-    @IsNotEmpty()
-    grade : string;
+  @IsString()
+  @IsNotEmpty()
+  grade: string;
 
-    @IsDate()
-    @IsOptional()
-    dateManufactured: Date;
-
-    @IsDate()
-    @IsOptional()
-    dateSold?: Date;
+  @IsNotEmpty()
+  @IsPositive()
+  @IsInt()
+  quantity?: number;
 }

@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "746a336b-8621-49ab-a20d-436f75c1b898",
+		"_postman_id": "efa0bef8-3e23-46c3-8546-a03602c1bd8f",
 		"name": "Epic Resource Planner",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -391,7 +391,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIiLCJpZCI6IjYwMmYxMDQwM2M0MTAyNWRmNGE3NzcwMyIsInJvbGVzIjo0LCJpYXQiOjE2MTM3NDA2ODIsImV4cCI6MTY0NTI3NjY4Mn0.MDtn-AGo-_5GQw7ctUDcgWfZIUzV4evHYMf2rJNyI5k",
+									"value": "{{JWT}}",
 									"type": "string"
 								}
 							]
@@ -418,7 +418,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIiLCJpZCI6IjYwMmYxMDQwM2M0MTAyNWRmNGE3NzcwMyIsInJvbGVzIjo0LCJpYXQiOjE2MTM3NDA2ODIsImV4cCI6MTY0NTI3NjY4Mn0.MDtn-AGo-_5GQw7ctUDcgWfZIUzV4evHYMf2rJNyI5k",
+									"value": "{{JWT}}",
 									"type": "string"
 								}
 							]
@@ -446,7 +446,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIiLCJpZCI6IjYwMmYxMDQwM2M0MTAyNWRmNGE3NzcwMyIsInJvbGVzIjo0LCJpYXQiOjE2MTM3NDA2ODIsImV4cCI6MTY0NTI3NjY4Mn0.MDtn-AGo-_5GQw7ctUDcgWfZIUzV4evHYMf2rJNyI5k",
+									"value": "{{JWT}}",
 									"type": "string"
 								}
 							]
@@ -462,7 +462,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"bike3\",\n    \"description\": \"amazing bike\",\n    \"price\": 299.99,\n    \"parts\": [\"seat\", \"tassels\"],\n    \"frameSize\": \"18in\",\n    \"color\": \"green\",\n    \"finish\": \"matte\",\n    \"grade\": \"steel\"    \n}",
+							"raw": "{\n    \"name\": \"bike2\",\n    \"description\": \"amazing bike\",\n    \"price\": 299.99,\n    \"parts\": [\"seat\", \"tassels\"],\n    \"frameSize\": \"18in\",\n    \"color\": \"green\",\n    \"finish\": \"matte\",\n    \"grade\": \"steel\",\n    \"quantity\": 420\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -489,7 +489,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIiLCJpZCI6IjYwMmYxMDQwM2M0MTAyNWRmNGE3NzcwMyIsInJvbGVzIjo0LCJpYXQiOjE2MTM3NDA2ODIsImV4cCI6MTY0NTI3NjY4Mn0.MDtn-AGo-_5GQw7ctUDcgWfZIUzV4evHYMf2rJNyI5k",
+									"value": "{{JWT}}",
 									"type": "string"
 								}
 							]
@@ -498,7 +498,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"color\": \"black\"\n}",
+							"raw": "{\n    \"quantity\": 12\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -506,13 +506,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}/products/6030880079bffd26ac1b4a16",
+							"raw": "{{url}}/products/6032ab325ea8744bc3814bbe",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"products",
-								"6030880079bffd26ac1b4a16"
+								"6032ab325ea8744bc3814bbe"
 							]
 						}
 					},
@@ -526,7 +526,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIiLCJpZCI6IjYwMmYxMDQwM2M0MTAyNWRmNGE3NzcwMyIsInJvbGVzIjo0LCJpYXQiOjE2MTM3NDA2ODIsImV4cCI6MTY0NTI3NjY4Mn0.MDtn-AGo-_5GQw7ctUDcgWfZIUzV4evHYMf2rJNyI5k",
+									"value": "{{JWT}}",
 									"type": "string"
 								}
 							]
@@ -538,13 +538,13 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{url}}/products/602fc1ac5ec85b42243e6b1b",
+							"raw": "{{url}}/products/603274de1b3538335387c8a8",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"products",
-								"602fc1ac5ec85b42243e6b1b"
+								"603274de1b3538335387c8a8"
 							]
 						}
 					},
