@@ -6,6 +6,8 @@ const { Option } = Select;
 
 export const CreateProductModal = () => {
 
+  const [form] = Form.useForm();
+
   interface Part {
     name:string,
     id:string,
@@ -18,12 +20,14 @@ export const CreateProductModal = () => {
     setIsModalVisible(true);
   };
 
-  const handleOk = () => {
+  const handleSubmit = (values : any) => {
     setIsModalVisible(false);
+    console.log(values);
   };
 
   const handleCancel = () => {
     setIsModalVisible(false);
+    form.resetFields();
   };
 
   const formItemLayout = {
@@ -50,9 +54,11 @@ export const CreateProductModal = () => {
       <Button type="primary" onClick={showModal} style={{ marginTop: 16 }}>
         Create New Product
       </Button>
-      <Modal title="Create New Product" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
-        <Form name="dynamic_form_item" {...formItemLayoutWithOutLabel}>
-          <Form.Item>
+      <Modal title="Create New Product" visible={isModalVisible} onOk={form.submit} onCancel={handleCancel}>
+        <Form form={form} onFinish={handleSubmit} name="dynamic_form_item" {...formItemLayoutWithOutLabel}>
+          <Form.Item 
+            name="product_name"
+            rules={[{ required: true, message: 'Please enter a product name!' }]}>
             <h3>Product Name</h3>
             <Input placeholder='Product Name'
               style={{width: '90%'}} />
