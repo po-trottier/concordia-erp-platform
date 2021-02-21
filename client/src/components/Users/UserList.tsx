@@ -23,7 +23,7 @@ export const UserList = () => {
   const [searchValue, setSearchValue] = useState('');
 
   const resetPassword = (username : any) => {
-    axios.delete('/users/' + username)
+    axios.patch('/users/' + username)
     .catch(err => console.log(err));
   };
 
