@@ -52,15 +52,12 @@ export const ProductCatalog = () => {
         />;
       });
       console.log(data);
+      if (searchValue.trim() !== '') {
+        data = data.filter(
+           (row: any) => row.name.trim().toLowerCase().includes(searchValue.trim().toLowerCase()));
+      }
       setTableData(data);
-    })
-
-    let rows = dummyData.getRows();
-    if (searchValue.trim() !== '') {
-      rows = rows.filter(
-        (r) => r.name.trim().toLowerCase().includes(searchValue.trim().toLowerCase()));
-    }
-    setTableData(rows);
+    });
   }, [searchValue]);
 
   const onSearch = (e : React.ChangeEvent<HTMLInputElement>) => {

@@ -2,7 +2,6 @@ import React from 'react';
 import { Button, InputNumber, Modal } from 'antd';
 
 import { BicycleEntry } from '../../interfaces/BicycleEntry';
-import ProductDetails from './ProductDetails';
 
 interface LinePoint {
   date : string,
@@ -11,27 +10,6 @@ interface LinePoint {
   sold? : number,
   built? : number,
 }
-
-const showModal = (row : any) => {
-  Modal.info({
-    onOk() {
-    },
-    title: 'Product Details',
-    width: 500,
-    content: (
-      <ProductDetails
-        name={row.name}
-        price={row.price}
-        quantity={row.quantity}
-        frameSize={row.frameSize}
-        parts={row.parts.join(', ')}
-        color={row.color}
-        finish={row.finish}
-        grade={row.grade}
-        description={row.description} />
-    )
-  });
-};
 
 const data = {
   getInventoryColumns: () => ({
@@ -50,6 +28,7 @@ const data = {
     build: 'Build'
   }),
 
+  /**
   getRows: () => {
     const rows : BicycleEntry[] = [
       {
@@ -166,6 +145,7 @@ const data = {
 
     return rows;
   },
+  */
 
   getLineData: () => {
     const data : LinePoint[] = [
