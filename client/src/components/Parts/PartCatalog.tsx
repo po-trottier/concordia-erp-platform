@@ -3,6 +3,8 @@ import { Button, Card, Input, InputNumber } from 'antd';
 
 import { dummyPartData } from './PartDummyData';
 import { ResponsiveTable } from '../ResponsiveTable';
+//import { CreatePartModal } from '../CreatePartModal';
+
 
 const { Search } = Input;
 

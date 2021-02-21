@@ -1,5 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import {Button, Modal, Input} from 'antd';
+import React, { useState } from 'react';
+import 'antd/dist/antd.css';
+import './index.css';
+import { Form, Input, Button, Modal } from 'antd';
+import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 
 export const CreatePartModal = () => {
 
@@ -17,17 +20,82 @@ export const CreatePartModal = () => {
     setIsModalVisible(false);
   };
 
+  const formItemLayout = {
+    labelCol: {
+      xs: { span: 24 },
+      sm: { span: 4 },
+    },
+    wrapperCol: {
+      xs: { span: 24 },
+      sm: { span: 20 },
+    },
+  };
+  const formItemLayoutWithOutLabel = {
+    wrapperCol: {
+      xs: { span: 24, offset: 0 },
+      sm: { span: 20, offset: 4 },
+    },
+  };
+
+
   return (
-    <div>
+    <>
       <Button type="primary" onClick={showModal}>
-        Open Modal
+        Create New Part
       </Button>
-      <Modal title="Basic Modal" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
-        <Input placeholder="Part Name"/>
-        <br/>
-        <Button>+</Button>
+      <Modal title="Create New Part" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+        <Form name="dynamic_form_item" {...formItemLayoutWithOutLabel}>
+          <Form.Item>
+            <Input placeholder='Part Name'
+                   style={{ width: '90%', position: 'absolute'}}>
+            </Input>
+          </Form.Item>
+          <Form.List name="names">
+
+            {(fields, { add, remove }, { errors }) => (
+              <>
+                {fields.map((field, index) => (
+                  <Form.Item
+                    {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
+                    label={index === 0 ? 'Materials' : ''}
+                    required={false}
+                    key={field.key}
+                  >
+                    <Form.Item
+                      {...field}
+                      validateTrigger={['onChange', 'onBlur']}
+                      noStyle
+                    >
+                      <Input placeholder="Material required" style={{ width: '90%' }} />
+                    </Form.Item>
+                    {fields.length > 1 ? (
+                      <MinusCircleOutlined
+                        className="dynamic-delete-button"
+                        style={{marginLeft: 10}}
+                        onClick={() => remove(field.name)}
+                      />
+                    ) : null}
+                  </Form.Item>
+                ))}
+
+                <Form.Item>
+
+                  <Button
+                    type="dashed"
+                    onClick={() => add()}
+                    style={{ width: '90%', position: 'absolute'}}
+                    icon={<PlusOutlined />}
+                  >
+                    Add Material
+                  </Button>
+                  <Form.ErrorList errors={errors} />
+                </Form.Item>
+              </>
+            )}
+          </Form.List>
+        </Form>
       </Modal>
-    </div>
+    </>
   );
 
 };
