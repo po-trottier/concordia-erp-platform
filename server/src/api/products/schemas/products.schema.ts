@@ -29,6 +29,9 @@ export class Product {
 
   @Prop({ required: true })
   quantity: number;
+
+  @Prop({ optional: true })
+  dynamic: { key: string, value: string }[]
 }
 
 export const ProductSchema = SchemaFactory.createForClass(Product);

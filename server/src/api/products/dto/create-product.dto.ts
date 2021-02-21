@@ -33,4 +33,7 @@ export class CreateProductDto {
   @IsPositive()
   @IsInt()
   quantity?: number;
+
+  @IsOptional()
+  dynamic?: { key: string, value: string }[]
 }
