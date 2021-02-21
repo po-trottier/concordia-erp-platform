@@ -9,7 +9,7 @@ export class AuthController {
 
   @Public()
   @Post('login')
-  async login(@Body(ValidationPipe) dto: LoginAuthDto) {
+  login(@Body(ValidationPipe) dto: LoginAuthDto) {
     return this.authService.login(dto);
   }
 }

@@ -9,7 +9,7 @@ const { Content } = Layout;
 export const Login = () => {
   return (
     <Layout className='ant-layout-sider' style={{ minHeight: '100vh', minWidth: '100%' }}>
-      <Content>
+      <Content className='robot-background'>
         <div className='app-centered-card'>
           <Card style={{ margin: '0 32px' }}>
             <Title style={{ textAlign: 'center' }}>Log In</Title>

@@ -8,7 +8,7 @@ import { Finances } from '../pages/Finances';
 import { Logs } from '../pages/Logs';
 
 import { Route } from '../interfaces/Route';
-import { RouteGuard } from './RouteGuards';
+import { Role } from './Roles';
 
 export const Routes : Route[] = [
   {
@@ -17,7 +17,7 @@ export const Routes : Route[] = [
     title: 'Home',
     icon: 'home',
     page: Home,
-    auth: [RouteGuard.ANY]
+    auth: [Role.ANY]
   },
   {
     path: '/finances',
@@ -26,7 +26,7 @@ export const Routes : Route[] = [
     icon: 'dollar',
     page: Finances,
     auth: [
-      RouteGuard.ANY
+      Role.ANY
     ]
   },
   {
@@ -36,9 +36,9 @@ export const Routes : Route[] = [
     icon: 'car',
     page: Products,
     auth: [
-      RouteGuard.SYSTEM_ADMINISTRATOR,
-      RouteGuard.INVENTORY_MANAGER,
-      RouteGuard.SALESPERSON
+      Role.SYSTEM_ADMINISTRATOR,
+      Role.INVENTORY_MANAGER,
+      Role.SALESPERSON
     ]
   },
   {
@@ -48,9 +48,9 @@ export const Routes : Route[] = [
     icon: 'setting',
     page: Parts,
     auth: [
-      RouteGuard.SYSTEM_ADMINISTRATOR,
-      RouteGuard.INVENTORY_MANAGER,
-      RouteGuard.SALESPERSON
+      Role.SYSTEM_ADMINISTRATOR,
+      Role.INVENTORY_MANAGER,
+      Role.SALESPERSON
     ]
   },
   {
@@ -60,9 +60,9 @@ export const Routes : Route[] = [
     icon: 'codepen',
     page: Materials,
     auth: [
-      RouteGuard.SYSTEM_ADMINISTRATOR,
-      RouteGuard.INVENTORY_MANAGER,
-      RouteGuard.SALESPERSON
+      Role.SYSTEM_ADMINISTRATOR,
+      Role.INVENTORY_MANAGER,
+      Role.SALESPERSON
     ]
   },
   {
@@ -72,8 +72,8 @@ export const Routes : Route[] = [
     icon: 'team',
     page: Customers,
     auth: [
-      RouteGuard.SYSTEM_ADMINISTRATOR,
-      RouteGuard.SALESPERSON
+      Role.SYSTEM_ADMINISTRATOR,
+      Role.SALESPERSON
     ]
   },
   {
@@ -82,7 +82,7 @@ export const Routes : Route[] = [
     title: 'Users',
     icon: 'user',
     page: Users,
-    auth: [RouteGuard.SYSTEM_ADMINISTRATOR]
+    auth: [Role.SYSTEM_ADMINISTRATOR]
   },
   {
     path: '/logs',
@@ -90,6 +90,6 @@ export const Routes : Route[] = [
     title: 'Logs & Audits',
     icon: 'bars',
     page: Logs,
-    auth: [RouteGuard.ANY]
+    auth: [Role.ANY]
   }
 ];
