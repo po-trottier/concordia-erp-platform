@@ -23,11 +23,13 @@ export const UserList = () => {
   const [searchValue, setSearchValue] = useState('');
 
   const resetPassword = (username : any) => {
-    console.log(username)
+    axios.delete('/users/' + username)
+    .catch(err => console.log(err));
   };
 
   const deleteUser = (username : any) => {
-    console.log(username)
+    axios.delete('/users/' + username)
+    .catch(err => console.log(err));
   };
 
   useEffect(() => {
