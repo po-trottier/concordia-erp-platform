@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import 'antd/dist/antd.css';
 import './index.css';
-import { Form, Input, Button, Modal } from 'antd';
+import { Form, Input, Button, Modal, Select } from 'antd';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 
 export const CreatePartModal = () => {
@@ -38,6 +38,7 @@ export const CreatePartModal = () => {
   };
 
 
+
   return (
     <>
       <Button type="primary" onClick={showModal}>
@@ -47,8 +48,7 @@ export const CreatePartModal = () => {
         <Form name="dynamic_form_item" {...formItemLayoutWithOutLabel}>
           <Form.Item>
             <Input placeholder='Part Name'
-                   style={{ width: '90%', position: 'absolute'}}>
-            </Input>
+              style={{width: '90%', position: 'absolute'}}/>
           </Form.Item>
           <Form.List name="names">
 
@@ -66,7 +66,13 @@ export const CreatePartModal = () => {
                       validateTrigger={['onChange', 'onBlur']}
                       noStyle
                     >
-                      <Input placeholder="Material required" style={{ width: '90%' }} />
+                      <Select
+                        showSearch
+                        style={{ width: 350 }}
+                        placeholder="Select a material"
+                        optionFilterProp="children"
+                      >
+                      </Select>
                     </Form.Item>
                     {fields.length > 1 ? (
                       <MinusCircleOutlined
