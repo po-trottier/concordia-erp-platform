@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Card, Input, InputNumber, Modal } from 'antd';
 import axios from '../../plugins/Axios'
-import dummyData from './ProductDummyData';
 import { ResponsiveTable } from '../ResponsiveTable';
 import {BicycleEntry} from '../../interfaces/BicycleEntry';
 import ProductDetails from './ProductDetails';
@@ -28,6 +27,14 @@ const showModal = (row : any) => {
     )
   });
 };
+
+const catalogColumns = {
+  name: 'Name',
+  details: 'Details',
+  quantity: 'Owned',
+  price: 'Price',
+  build: 'Build'
+}
 
 export const ProductCatalog = () => {
   const emptyData : BicycleEntry[] = [];
@@ -71,7 +78,7 @@ export const ProductCatalog = () => {
           placeholder='Search for a product'
           onChange={onSearch}
           style={{ marginBottom: 18 }} />
-        <ResponsiveTable rows={tableData} cols={dummyData.getCatalogColumns()} />
+        <ResponsiveTable rows={tableData} cols={catalogColumns} />
       </Card>
       <Button type='ghost'>
         Define a new Product
