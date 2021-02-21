@@ -2,16 +2,13 @@ import React, { useState } from 'react';
 import 'antd/dist/antd.css';
 import { InputNumber, Form, Input, Button, Modal, Select } from 'antd';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { PartEntry } from '../../interfaces/PartEntry'
+
 const { Option } = Select;
 
 export const CreateProductModal = () => {
 
   const [form] = Form.useForm();
-
-  interface Part {
-    name:string,
-    id:string,
-  };
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [partsData, setPartsData] = useState([{name:'Pink Tassels', id:'23'}, {name:'A very cool wheel', id:'42'}, {name:'Bike Frame', id:'22'}]);
