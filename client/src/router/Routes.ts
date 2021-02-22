@@ -26,7 +26,8 @@ export const Routes : Route[] = [
     icon: 'dollar',
     page: Finances,
     auth: [
-      Role.ANY
+      Role.ACCOUNTANT,
+      Role.SYSTEM_ADMINISTRATOR
     ]
   },
   {
@@ -90,6 +91,6 @@ export const Routes : Route[] = [
     title: 'Logs & Audits',
     icon: 'bars',
     page: Logs,
-    auth: [Role.ANY]
+    auth: [Role.SYSTEM_ADMINISTRATOR]
   }
 ];

@@ -7,13 +7,14 @@ import { NoPermissions } from '../../pages/NoPermissions';
 import { RootState } from '../../store/Store';
 
 const hasPermissions = (auth : Role[], userAuthType : Role) : boolean => {
-
+  let hasPerms = false;
   auth.forEach((guard : Role) => {
-    if (guard !== userAuthType && guard !== Role.ANY) {
-      return false;
+    if (guard === userAuthType || guard === Role.ANY) {
+      hasPerms = true;
+      return;
     }
   });
-  return true;
+  return hasPerms;
 };
 
 const GuardedRoute = ({ component: Component, auth, path, exact } :

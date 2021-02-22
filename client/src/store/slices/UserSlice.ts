@@ -23,7 +23,7 @@ export const userSlice = createSlice({
       state.user.username = payload.username;
       state.user.email = payload.email;
       state.user.name = payload.name;
-      state.user.authType = Role.SYSTEM_ADMINISTRATOR;
+      state.user.authType = payload.role;
       state.user.isLoggedIn = true;
       state.user.isRemembered = payload.isRemembered;
 
