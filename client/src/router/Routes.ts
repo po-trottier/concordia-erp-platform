@@ -1,4 +1,5 @@
 import { Home } from '../pages/Home';
+import { Login } from '../pages/Login';
 import { Users } from '../pages/Users/Users';
 import { AddUser } from '../pages/Users/AddUser';
 import { EditUser } from '../pages/Users/EditUser';
@@ -96,3 +97,10 @@ export const Routes : Route[] = [
     auth: [Role.SYSTEM_ADMINISTRATOR]
   }
 ];
+
+//Routes that are not to be shown in appmenu and home page
+export const exludedRoutes: React.ComponentType<any>[] = [
+  Login,
+  AddUser,
+  EditUser,
+]
