@@ -1,16 +1,22 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectModel } from '@nestjs/mongoose';
+import { format } from 'date-fns';
 import { Model } from 'mongoose';
 import { CreatePartDto } from './dto/create-part.dto';
 import { UpdatePartDto } from './dto/update-part.dto';
 import { PartDocument, Part } from './schemas/part.schema';
+import { PartQuantityUpdatedEvent } from './events/part-quantity-updated.event';
 
 /**
  * Used by the PartsController, handles part data storage and retrieval.
  */
 @Injectable()
 export class PartsService {
-  constructor(@InjectModel(Part.name) private partModel: Model<PartDocument>) {}
+  constructor(
+    @InjectModel(Part.name) private partModel: Model<PartDocument>,
+    private eventEmitter: EventEmitter2,
+  ) {}
 
   /**
    * Creates part using mongoose partModel
@@ -41,6 +47,7 @@ export class PartsService {
 
   /**
    * Updates part by id using mongoose partModel
+   * If stock is part of the update, emits the part.quantity.updated event
    *
    * @param id string of the part's objectId
    * @param updatePartDto dto used to update parts
@@ -51,6 +58,17 @@ export class PartsService {
       { $set: { ...updatePartDto } },
       { new: true },
     );
+
+    if (updatedPart && updatePartDto.stock) {
+      const event: PartQuantityUpdatedEvent = {
+        partId: id,
+        stock: updatePartDto.stock,
+        date: format(new Date(), 'd/M/y'),
+      };
+
+      this.eventEmitter.emit('part.quantity.updated', event);
+    }
+
     return this.validatePartFound(updatedPart, id);
   }
 
