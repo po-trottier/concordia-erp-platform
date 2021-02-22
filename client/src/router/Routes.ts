@@ -1,6 +1,7 @@
 import { Home } from '../pages/Home';
 import { Users } from '../pages/Users/Users';
 import { AddUser } from '../pages/Users/AddUser';
+import { EditUser } from '../pages/Users/EditUser';
 import { Products } from '../pages/Products';
 import { Parts } from '../pages/Parts';
 import { Materials } from '../pages/Materials';

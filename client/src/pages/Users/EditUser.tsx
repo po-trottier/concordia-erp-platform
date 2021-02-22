@@ -1,18 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from 'antd';
-import { AddUserForm } from '../../components/Users/AddUserForm';
+import { EditUserForm } from '../../components/Users/EditUserForm';
 
-export const AddUser = () => {
+export const EditUser = (props: any) => {
 
-    return(
-      <div>
+	return(
+		<div>
         <Link to='/users'>
           <Button type='primary' style={{marginBottom: 16 }}>
             Back to Users
           </Button>
         </Link>
-        <AddUserForm></AddUserForm>
-      </div>
-    );
+        <EditUserForm id={props.id}></EditUserForm>
+		</div>
+	);
 }
