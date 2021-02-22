@@ -54,24 +54,34 @@ export const CreateProductModal = () => {
       </Button>
       <Modal title="Create New Product" visible={isModalVisible} onOk={form.submit} onCancel={handleCancel}>
         <Form form={form} onFinish={handleSubmit} name="dynamic_form_item" {...formItemLayoutWithOutLabel}>
-          <h3>Product Name</h3>
+          <div style={{display:'flex', alignItems:'center', padding:4}}>
+            <span style={{marginRight:4}}>Product Name : </span>
           <Form.Item 
             name="product_name"
             rules={[{ required: true, message: 'Please enter a product name!' }]}>
             <Input placeholder='Product Name'
-              style={{width: '90%'}} />
+              style={{width: 335}} />
           </Form.Item>
-          <Form.List name="names">
+          </div>
+          <Form.List name="list_parts"
+           rules={[
+                    {
+                      validator: async (_, parts) => {
+                        console.log(parts)
+                         if (!parts || parts.length < 1 || !parts[0]) { 
+                           return Promise.reject(new Error('Add at least one part')); 
+                         } 
+                      },
+                    },
+                  ]}
+
+          >
 
             {(fields, { add, remove }, { errors }) => (
               <>
                 {fields.map((field, index) => (
-                  <Form.Item
-                    {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
-                    label={index === 0 ? 'Parts' : ''}
-                    required={false}
-                    key={field.key}
-                  >
+                  <div style={{display:'flex', alignItems:'center', padding:4}} key={index}>
+                    <span style={{marginRight:4}}>Part :</span>
                     <Form.Item
                       {...field}
                       validateTrigger={['onChange', 'onBlur']}
@@ -79,36 +89,37 @@ export const CreateProductModal = () => {
                     >
                       <Select
                         showSearch
-                        style={{ width: 220 }}
+                        style={{ width: 220, display:'inline-table' }}
                         placeholder="Select a part"
                         optionFilterProp="children"
                       >
                         {partsData.map((part, index) => (<Option key={part.id} value={part.id}>{part.name}</Option>))}
                       </Select>
-                      <span style={{margin:10}}>Qty</span>
+                    </Form.Item>
+                    <span style={{marginLeft:8, marginRight:4}}>Quantity : </span>
+                    <Form.Item
+                      style={{marginBottom:0}}>
                       <InputNumber min={1} defaultValue={1}/>
                     </Form.Item>
-                    {fields.length > 1 ? (
                       <MinusCircleOutlined
+                        style={{marginLeft:4}}
                         className="dynamic-delete-button"
-                        style={{marginLeft: 10}}
                         onClick={() => remove(field.name)}
                       />
-                    ) : null}
-                  </Form.Item>
+                  </div>
                 ))}
 
+                <Form.ErrorList errors={errors} />
                 <Form.Item>
 
                   <Button
                     type="dashed"
                     onClick={() => add()}
-                    style={{ width: '90%', position: 'absolute'}}
+                    style={{width:'-webkit-fill-available', marginLeft:50, marginTop:10}}
                     icon={<PlusOutlined />}
                   >
                     Add Part
                   </Button>
-                  <Form.ErrorList errors={errors} />
                 </Form.Item>
               </>
             )}
