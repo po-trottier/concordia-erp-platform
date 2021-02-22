@@ -15,12 +15,18 @@ export class PartLogsService {
   ) {}
 
   /**
-   * Retrieves all partLog entries using mongoose partModel
+   * Retrieves all partLog entries using mongoose partLogModel
    */
   async findAll(): Promise<PartLog[]> {
     return this.partLogModel.find();
   }
 
+  /**
+   * Updates partLog by id using mongoose partLogModel
+   * If stock is part of the update, emits the part.quantity.updated event
+   *
+   * @param updatePartLogDto dto used to update part logs
+   */
   async update(updatePartLogDto: UpdatePartLogDto): Promise<PartLog> {
     const { partId, date, stock } = updatePartLogDto;
 
@@ -34,7 +40,7 @@ export class PartLogsService {
   }
 
   /**
-   * Returns NotFoundException if part is null, otherwise returns part
+   * Returns NotFoundException if partLog is null, otherwise returns partLog
    *
    * @param partLogResult a retrieved part
    * @param partId the id of the corresponding part

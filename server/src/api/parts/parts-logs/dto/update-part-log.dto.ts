@@ -1,7 +1,7 @@
 import { IsInt, IsNotEmpty, IsPositive, IsString } from 'class-validator';
 
 /**
- * Part creation DTO
+ * PartLog creation DTO
  */
 export class UpdatePartLogDto {
   @IsNotEmpty()

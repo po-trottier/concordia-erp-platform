@@ -4,7 +4,7 @@ import { Document, Schema as mongooseSchema } from 'mongoose';
 export type PartLogDocument = PartLog & Document;
 
 /**
- * Part collection mongoose schema
+ * PartLog collection mongoose schema
  */
 @Schema({ _id: false })
 export class PartLog {
