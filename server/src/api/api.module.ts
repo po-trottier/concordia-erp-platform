@@ -11,6 +11,7 @@ import { UsersModule } from './users/users.module';
 import { JwtAuthGuard } from './auth/guards/jwt.guard';
 import { RolesGuard } from './roles/roles.guard';
 import { routes } from '../routes';
+import { ProductsModule } from './products/products.module';
 
 const mongoDbUrl = process.env.DB_URL || 'mongodb://localhost:27017';
 const mongoDbName = process.env.DB_NAME || 'ERP_db';
@@ -26,6 +27,7 @@ const mongoDbName = process.env.DB_NAME || 'ERP_db';
     AuthModule,
     UsersModule,
     FinanceModule,
+    ProductsModule,
   ],
   providers: [
     {
