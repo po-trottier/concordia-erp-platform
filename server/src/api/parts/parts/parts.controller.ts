@@ -11,8 +11,8 @@ import {
 import { PartsService } from './parts.service';
 import { CreatePartDto } from './dto/create-part.dto';
 import { UpdatePartDto } from './dto/update-part.dto';
-import { Roles } from '../roles/roles.decorator';
-import { Role } from '../roles/roles.enum';
+import { Roles } from '../../roles/roles.decorator';
+import { Role } from '../../roles/roles.enum';
 
 @Controller()
 export class PartsController {
