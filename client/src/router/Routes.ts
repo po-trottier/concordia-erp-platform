@@ -1,5 +1,6 @@
 import { Home } from '../pages/Home';
-import { Users } from '../pages/Users';
+import { Users } from '../pages/Users/Users';
+import { AddUser } from '../pages/Users/AddUser';
 import { Products } from '../pages/Products';
 import { Parts } from '../pages/Parts';
 import { Materials } from '../pages/Materials';
@@ -79,7 +80,7 @@ export const Routes : Route[] = [
   },
   {
     path: '/users',
-    exact: false,
+    exact: true,
     title: 'Users',
     icon: 'user',
     page: Users,
