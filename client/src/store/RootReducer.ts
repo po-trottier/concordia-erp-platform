@@ -11,7 +11,7 @@ const persistConfig = {
   // whitelist contains the name of reducers that we want to persist
   transforms: [
     encryptTransform({
-      secretKey: 'key',
+      secretKey: 'A2esCQW4z4N2MT5n',
       onError: (error) => {
         console.log(error);
       },

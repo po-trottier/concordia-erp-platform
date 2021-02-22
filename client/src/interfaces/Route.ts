@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { RouteGuard } from '../router/RouteGuards';
+import { Role } from '../router/Roles';
 
 export interface Route {
   path : string,
@@ -7,5 +7,5 @@ export interface Route {
   title : string,
   icon : string,
   page : React.ComponentType<any>,
-  auth : RouteGuard[]
+  auth : Role[]
 }

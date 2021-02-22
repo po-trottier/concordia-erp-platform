@@ -27,19 +27,7 @@ export const AppHeader = () => {
 
   const logOut = () => {
     try {
-      if (user.isRemembered) {
-        dispatch(logoutAction({
-          username: user.username,
-          password: user.password,
-          isRemembered: true
-        }));
-      } else {
-        dispatch(logoutAction({
-          username: '',
-          password: '',
-          isRemembered: false
-        }));
-      }
+      dispatch(logoutAction());
       history.push('/login');
     } catch (e) {
       console.log(e);
