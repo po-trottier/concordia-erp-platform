@@ -18,8 +18,18 @@ export class CreateMaterialDto {
   @IsString()
   description: string;
 
-  @IsOptional()
   @IsInt()
   @IsPositive()
   stock: number;
+
+  @IsInt()
+  @IsPositive()
+  density: number;
+
+  @IsNotEmpty()
+  @IsString()
+  vendorName: string;
+
+  @IsPositive()
+  price: number;
 }
