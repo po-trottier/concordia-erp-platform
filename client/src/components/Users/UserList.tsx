@@ -3,7 +3,7 @@ import { Button, Card, Modal, Input, message } from 'antd';
 import { ResponsiveTable } from '../ResponsiveTable';
 import axios from '../../plugins/Axios'
 import { UserEntry } from '../../interfaces/UserEntry';
-import { getRoleString } from '../../router/RouteGuards';
+import { getRoleString } from '../../router/Roles';
 
 const { Search } = Input;
 
