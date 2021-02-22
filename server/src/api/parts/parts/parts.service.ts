@@ -25,7 +25,17 @@ export class PartsService {
    */
   async create(createPartDto: CreatePartDto): Promise<Part> {
     const createdPart = new this.partModel(createPartDto);
-    return createdPart.save();
+    createdPart.save();
+
+    const event: PartQuantityUpdatedEvent = {
+      partId: createdPart.id,
+      stock: createPartDto.stock || 0,
+      date: format(new Date(), 'd/M/y'),
+    };
+
+    this.eventEmitter.emit('part.quantity.updated', event);
+
+    return createdPart;
   }
 
   /**
