@@ -3,6 +3,7 @@ import { Button, Card, Input, InputNumber } from 'antd';
 
 import { dummyPartData } from './PartDummyData';
 import { ResponsiveTable } from '../ResponsiveTable';
+import { CreatePartModal } from './CreatePartModal';
 
 const { Search } = Input;
 
@@ -58,11 +59,7 @@ export const PartCatalog = () => {
         style={{ marginTop: 16, float: 'right' }}>
         Build Parts
       </Button>
-      <Button
-        type='ghost'
-        style={{ marginTop: 16 }}>
-        Define a new Part
-      </Button>
+      <CreatePartModal />
     </div>
   );
 };

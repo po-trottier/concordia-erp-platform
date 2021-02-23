@@ -35,6 +35,16 @@
   background-position: center;
 }
 
+@media only screen and (max-width: 576px) {
+  .text-left-mobile {
+    text-align: left !important;
+  }
+
+  .margin-bottom-mobile {
+    margin-bottom: 4px !important;
+  }
+}
+
 @media only screen and (max-width: 768px) {
   .app-layout {
     margin: 0 16px;

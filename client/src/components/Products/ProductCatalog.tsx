@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Card, Input, InputNumber, Modal } from 'antd';
-import axios from '../../plugins/Axios';
-
 import { ResponsiveTable } from '../ResponsiveTable';
 import ProductDetails from './ProductDetails';
 import { ProductEditModal } from './ProductEditModal';
 import { BicycleEntry } from '../../interfaces/BicycleEntry';
+import { CreateProductModal } from './CreateProductModal';
+import axios from '../../plugins/Axios';
+
 
 const { Search } = Input;
 
@@ -102,12 +103,10 @@ export const ProductCatalog = () => {
           style={{ marginBottom: 18 }} />
         <ResponsiveTable rows={tableData} cols={catalogColumns} />
       </Card>
-      <Button type='ghost'>
-        Define a new Product
-      </Button>
-      <Button type='primary' style={{ float: 'right' }}>
+      <Button type='primary' style={{ marginTop: 16, float: 'right' }}>
         Build Products
       </Button>
+      <CreateProductModal />
     </div>
   );
 };
