@@ -38,8 +38,9 @@ export class UpdateProductDto {
   @IsNotEmpty()
   @IsPositive()
   @IsInt()
+  @IsOptional()
   quantity?: number;
 
   @IsOptional()
-  dynamic?: { key: string, value: string }[]
+  dynamic?: { key: string; value: string }[];
 }

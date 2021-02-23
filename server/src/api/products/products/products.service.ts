@@ -4,6 +4,8 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { ProductQuantityUpdatedEvent } from './events/product-quantity-updated.event';
 
 /**
  * Used by the ProductsController, handles product data storage and retrieval.
@@ -12,6 +14,7 @@ import { Model } from 'mongoose';
 export class ProductsService {
   constructor(
     @InjectModel(Product.name) private productModel: Model<ProductDocument>,
+    private eventEmitter: EventEmitter2,
   ) {}
 
   /**
@@ -21,7 +24,19 @@ export class ProductsService {
    */
   async create(createProductDto: CreateProductDto): Promise<Product> {
     const createdProduct = new this.productModel(createProductDto);
-    return createdProduct.save();
+    createdProduct.save();
+
+    const event: ProductQuantityUpdatedEvent = {
+      productId: createdProduct.id,
+      stock: createProductDto.quantity || 0,
+      date: new Date(),
+      built: 0,
+      used: 0,
+    };
+
+    this.eventEmitter.emit('product.quantity.updated', event);
+
+    return createdProduct;
   }
 
   /**
@@ -43,6 +58,7 @@ export class ProductsService {
 
   /**
    * Updates product by id using mongoose productModel
+   * If quantity is product of the update, emits the product.quantity.updated event
    *
    * @param id string of the product's objectId
    * @param updateProductDto dto used to update products
@@ -56,6 +72,20 @@ export class ProductsService {
       { $set: { ...updateProductDto } },
       { new: true },
     );
+
+    if (updatedProduct && updateProductDto.quantity) {
+      const event: ProductQuantityUpdatedEvent = {
+        productId: id,
+        stock: updateProductDto.quantity,
+        date: new Date(),
+        // TODO: calculate built and used
+        built: 420,
+        used: 420,
+      };
+
+      this.eventEmitter.emit('product.quantity.updated', event);
+    }
+
     return this.verifyProductFound(id, updatedProduct);
   }
 
