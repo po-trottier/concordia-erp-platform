@@ -23,7 +23,7 @@ export class AuthService {
   async login(dto: LoginAuthDto) {
     const user = await this.validateUser(dto.username, dto.password);
     if (!user) {
-      return new UnauthorizedException();
+      throw new UnauthorizedException('Invalid login information.');
     }
     const payload = {
       username: user.username,
