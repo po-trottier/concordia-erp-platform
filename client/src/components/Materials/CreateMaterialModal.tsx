@@ -16,7 +16,7 @@ export const CreateMaterialModal = () => {
 
   const [form] = Form.useForm();
 
-  const dummyVendorsData: string[] = ['BHP', 'Rio Tinto', 'China National Mining Company'];
+  const dummyVendorsData: string[] = ['BHP', 'Rio Tinto', 'China Mining Inc.'];
 
   // TODO Actually use the img data to update the material (as soon as it's figured out)
   const dummyImagesData: MaterialsListEntry[] = [
@@ -169,18 +169,9 @@ export const CreateMaterialModal = () => {
                         </Select>
                       </Form.Item>
                     </Col>
-                    {/*Quantity Selector*/}
-                    <Col className='text-left-mobile' sm={4} span={6} style={{ textAlign: 'right', paddingRight: 8 }}>
-                      Quantity Vendable:
-                    </Col>
-                    <Col sm={3} span={14}>
-                      <Form.Item style={{ marginBottom: 0 }}>
-                        <InputNumber style={{ width: '100%' }} min={1} defaultValue={1} />
-                      </Form.Item>
-                    </Col>
                     {/*Price Selector*/}
                     <Col className='text-left-mobile' sm={4} span={6} style={{ textAlign: 'right', paddingRight: 8 }}>
-                      Price per unit:
+                      Price/Unit:
                     </Col>
                     <Col sm={3} span={14}>
                       <Form.Item style={{ marginBottom: 0 }}>
