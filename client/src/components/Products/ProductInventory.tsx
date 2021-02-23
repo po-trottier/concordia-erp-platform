@@ -27,6 +27,8 @@ export const ProductInventory = () => {
     axios.get('products/logs').then(({data}) => {
       data.forEach((row: any) => {
         row.date = new Date(row.date).toLocaleDateString();
+        // Once naming conventions are finalized: perhaps just fucking rename 'stock' to 'quantity' in the product-log schema or vice versa
+        row.quantity = row.stock;
       });
 
       data.sort((a: any, b: any) => {
