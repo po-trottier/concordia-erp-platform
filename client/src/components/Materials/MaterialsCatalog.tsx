@@ -7,7 +7,7 @@ import MetalImg from '../../assets/metal.png';
 import PlasticImg from '../../assets/plastic.png';
 import WoodImg from '../../assets/wood.png';
 
-// import { CreateMaterialModal } from '../CreateMaterialModal';
+import { CreateMaterialModal } from './CreateMaterialModal';
 
 const { Search } = Input;
 
@@ -94,12 +94,7 @@ Delete
         style={{ marginTop: 16, float: 'right' }}>
         Order Materials
       </Button>
-      <CreateMaterialModal></CreateMaterialModal>
-      <Button
-        type='ghost'
-        style={{ marginTop: 16 }}>
-        Add a new Material
-      </Button>
+      <CreateMaterialModal/>
     </div>
   );
 };
