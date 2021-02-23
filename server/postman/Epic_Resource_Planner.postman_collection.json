@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "11d56e46-d920-4e46-9319-c78aff1db2c8",
-		"name": "Epic Resource Planner",
+		"_postman_id": "b351d01f-1d6a-4555-8d61-718258c0847e",
+		"name": "Epic Resource Planner Copy",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -381,16 +381,6 @@
 				{
 					"name": "Get products",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{JWT}}",
-									"type": "string"
-								}
-							]
-						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -408,16 +398,6 @@
 				{
 					"name": "Get product by id",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{JWT}}",
-									"type": "string"
-								}
-							]
-						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -436,16 +416,6 @@
 				{
 					"name": "Create product",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{JWT}}",
-									"type": "string"
-								}
-							]
-						},
 						"method": "POST",
 						"header": [
 							{
@@ -457,7 +427,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"bike2\",\n    \"description\": \"amazing bike\",\n    \"price\": 299.99,\n    \"parts\": [\"seat\", \"tassels\"],\n    \"frameSize\": \"18in\",\n    \"color\": \"green\",\n    \"finish\": \"matte\",\n    \"grade\": \"steel\",\n    \"quantity\": 420\n}",
+							"raw": "{\n    \"name\": \"bike2\",\n    \"description\": \"amazing bike\",\n    \"price\": 299.99,\n    \"parts\": [\"seat\", \"tassels\"],\n    \"frameSize\": \"18in\",\n    \"color\": \"green\",\n    \"finish\": \"matte\",\n    \"dynamic\": [\n        {\"key\": \"swag level\", \"value\": \"9000\"}\n    ],\n    \"quantity\": 20\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -479,16 +449,6 @@
 				{
 					"name": "Update product by id",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{JWT}}",
-									"type": "string"
-								}
-							]
-						},
 						"method": "PATCH",
 						"header": [],
 						"body": {
@@ -516,16 +476,6 @@
 				{
 					"name": "Delete product by id",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{JWT}}",
-									"type": "string"
-								}
-							]
-						},
 						"method": "DELETE",
 						"header": [],
 						"body": {
@@ -540,6 +490,24 @@
 							"path": [
 								"products",
 								"603274de1b3538335387c8a8"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get product logs",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/products/logs",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"products",
+								"logs"
 							]
 						}
 					},
