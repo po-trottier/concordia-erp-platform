@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Card, Input, InputNumber, Modal } from 'antd';
 import axios from '../../plugins/Axios'
 import { ResponsiveTable } from '../ResponsiveTable';
-import {BicycleEntry} from '../../interfaces/BicycleEntry';
+import {ProductEntry} from '../../interfaces/ProductEntry';
 import ProductDetails from './ProductDetails';
 import { CreateProductModal } from './CreateProductModal';
 
@@ -38,7 +38,7 @@ const catalogColumns = {
 }
 
 export const ProductCatalog = () => {
-  const emptyData : BicycleEntry[] = [];
+  const emptyData : ProductEntry[] = [];
   const [tableData, setTableData] = useState(emptyData);
   const [searchValue, setSearchValue] = useState('');
 

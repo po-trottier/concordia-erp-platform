@@ -1,4 +1,4 @@
-export interface BicycleEntry {
+export interface ProductEntry {
   key : String,
   name : String,
   parts : String[],
