@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Col, Form, Input, InputNumber, Modal, Row, Select } from 'antd';
 import { MinusCircleTwoTone, PlusOutlined } from '@ant-design/icons';
-import { PartEntry } from '../../interfaces/PartEntry';
+import { PartDropdownEntry } from '../../interfaces/PartDropdownEntry';
 
 const { Option } = Select;
 
@@ -9,7 +9,7 @@ export const CreateProductModal = () => {
 
   const [form] = Form.useForm();
 
-  const emptyData : PartEntry[] = [];
+  const emptyData : PartDropdownEntry[] = [];
   // TODO Actually use the parts data to update the product
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [partsData, setPartsData] = useState(emptyData);
@@ -65,8 +65,8 @@ export const CreateProductModal = () => {
         Add a New Product
       </Button>
 
-      <Modal title='Create New Product' visible={isModalVisible} onOk={form.submit} onCancel={handleCancel}>
-        <Form form={form} onFinish={handleSubmit} name='dynamic_form_item'>
+      <Modal title='Define a New Product' visible={isModalVisible} onOk={form.submit} onCancel={handleCancel}>
+        <Form form={form} onFinish={handleSubmit}>
           {/*Product Name Field*/}
           <Row align='middle' style={{ marginBottom: 16 }}>
             <Col sm={6} span={9}>

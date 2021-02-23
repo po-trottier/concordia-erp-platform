@@ -5,7 +5,6 @@ import { dummyPartData } from './PartDummyData';
 import { ResponsiveTable } from '../ResponsiveTable';
 import { CreatePartModal } from './CreatePartModal';
 
-
 const { Search } = Input;
 
 export const PartCatalog = () => {
@@ -60,7 +59,7 @@ export const PartCatalog = () => {
         style={{ marginTop: 16, float: 'right' }}>
         Build Parts
       </Button>
-      <CreatePartModal/>
+      <CreatePartModal />
     </div>
   );
 };

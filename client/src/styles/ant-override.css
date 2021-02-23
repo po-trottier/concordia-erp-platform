@@ -41,15 +41,6 @@
   padding: 0 16px !important;
 }
 
-.ant-col-sm-offset-4
-{
-  margin-left: 0;
-}
-
-.ant-form-item{
-  margin-bottom: 0px;
-}
-
 @media only screen and (max-width: 768px) {
   .ant-page-header-heading {
     justify-content: center;
