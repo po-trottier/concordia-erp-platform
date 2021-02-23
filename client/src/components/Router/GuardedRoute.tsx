@@ -2,24 +2,25 @@ import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-import { RouteGuard } from '../../router/RouteGuards';
+import { Role } from '../../router/Roles';
 import { NoPermissions } from '../../pages/NoPermissions';
 import { RootState } from '../../store/Store';
 
-const hasPermissions = (auth : RouteGuard[], userAuthType : RouteGuard) : boolean => {
-
-  auth.forEach((guard : RouteGuard) => {
-    if (guard !== userAuthType && guard !== RouteGuard.ANY) {
-      return false;
+const hasPermissions = (auth : Role[], userAuthType : Role) : boolean => {
+  let hasPerms = false;
+  auth.forEach((guard : Role) => {
+    if (guard === userAuthType || guard === Role.ANY) {
+      hasPerms = true;
+      return;
     }
   });
-  return true;
+  return hasPerms;
 };
 
 const GuardedRoute = ({ component: Component, auth, path, exact } :
   {
     component : React.ComponentType<any>,
-    auth : RouteGuard[],
+    auth : Role[],
     path : string,
     exact : boolean
   }) => {

@@ -29,7 +29,11 @@
   transform: translate(-50%, -50%);
 }
 
-
+.robot-background {
+  background: url("../assets/bicycle.svg");
+  background-size: 200px;
+  background-position: center;
+}
 
 @media only screen and (max-width: 576px) {
   .text-left-mobile {
