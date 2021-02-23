@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Button, Col, Form, Input, InputNumber, Modal, Row, Select } from 'antd';
-import { MinusCircleTwoTone, PlusOutlined } from '@ant-design/icons';
+import { Button, Col, Form, Input, InputNumber, Modal, Row, Select, Upload, message } from 'antd';
+import { MinusCircleTwoTone, PlusOutlined, UploadOutlined } from '@ant-design/icons';
 
 //Materials Dummy Data
 import MetalImg from '../../assets/metal.png';
@@ -8,6 +8,7 @@ import PlasticImg from '../../assets/plastic.png';
 import WoodImg from '../../assets/wood.png';
 import GoldImg from '../../assets/gold.png';
 import { MaterialsListEntry } from '../../interfaces/MaterialsListEntry';
+import { ImgUploader } from './ImgUploader';
 
 const { Option } = Select;
 
@@ -128,18 +129,7 @@ export const CreateMaterialModal = () => {
             </Col>
             {/*Image Selector*/}
             <Col className='margin-bottom-mobile' sm={12} span={18}>
-              <Form.Item
-                validateTrigger={['onChange', 'onBlur']}
-                noStyle>
-                <Select
-                  style={{ width: '100%', display: 'inline-table' }}
-                  placeholder='Select an image'
-                  optionFilterProp='children'
-                  onChange={hideVendorsError}>
-                  {imgsData.map((img, index) => (
-                    <Option key={img.name} value={img.name}>{img.img}</Option>))}
-                </Select>
-              </Form.Item>
+              <ImgUploader></ImgUploader>
             </Col>
           </Row>
           {/*Material Vendors Fields*/}
