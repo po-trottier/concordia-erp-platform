@@ -1,15 +1,20 @@
 import React, { useState } from 'react';
-import { Form, Input, Modal, Select } from 'antd';
+import { Form, Input, Select, Spin } from 'antd';
 import { LabeledValue } from 'antd/lib/select';
+import 'antd/dist/antd.css';
+import { LoadingOutlined } from '@ant-design/icons';
 
-export const EditUserForm = () => {
+export const EditUserForm = (props : any) => {
 
-	const { Option } = Select;
+	const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
+  const { Option } = Select;
   const [form] = Form.useForm();
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [username, setUsername] = useState('');
+
+	const [editLoading, setEditLoading] = useState(props.editLoading);
+  const [firstName, setFirstName] = useState('first name');
+  const [lastName, setLastName] = useState('last name');
+  const [email, setEmail] = useState('test@email.com');
+  const [username, setUsername] = useState('username');
   let role : LabeledValue;
 
   const handleFirstName = (e : React.FormEvent<HTMLInputElement>) =>
@@ -27,28 +32,18 @@ export const EditUserForm = () => {
   const handleUsername = (e : React.FormEvent<HTMLInputElement>) =>
   setUsername(e.currentTarget.value);
 
-  const addUser = () => {
-    console.log(firstName);
-    console.log(lastName);
-    console.log(email);
-    console.log(email);
-    console.log(username);
-    console.log(role);
-    form.resetFields();
-  }
-
-  const handleCancel = () => {
-    form.resetFields();
-  };
-
-
   return (
-		<Form
+		<Spin indicator={antIcon} spinning={editLoading}>
+			<Form
 				form={form}
-				onFinish={addUser}
+				onFinish={props.editUser}
 				name='basic'
 				style={{ marginBottom: '-24px', width: '100%', maxWidth: '500px'}}
 				initialValues={{
+					firstName,
+					lastName,
+					email,
+					username,
 				}}>
 				<Form.Item
 					label='First Name'
@@ -93,5 +88,6 @@ export const EditUserForm = () => {
 					</Select>
 				</Form.Item>
 			</Form>
+		</Spin>
   );
 };

@@ -1,16 +1,22 @@
 import React, { useState } from 'react';
-import { Button, Form, Input, Modal, Select } from 'antd';
+import { Button, Form, Input, Modal, Select, message, Spin } from 'antd';
 import { LabeledValue } from 'antd/lib/select';
+import 'antd/dist/antd.css';
+import { LoadingOutlined } from '@ant-design/icons';
+import axios from '../../plugins/Axios';
 
 export const AddUserModal = () => {
 
+  const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
   const { Option } = Select;
   const [form] = Form.useForm();
+
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
+  const [addLoading, setAddLoading] = useState(false);
   let role : LabeledValue;
 
   const handleFirstName = (e : React.FormEvent<HTMLInputElement>) =>
@@ -30,14 +36,26 @@ export const AddUserModal = () => {
   setUsername(e.currentTarget.value);
 
   const addUser = () => {
-    console.log(firstName);
-    console.log(lastName);
-    console.log(email);
-    console.log(email);
-    console.log(username);
-    console.log(role);
-    setIsModalVisible(false);
-    form.resetFields();
+    setAddLoading(true);
+    axios.post('/users')
+      .catch(err => {
+        message.error('Something went wrong with adding the new user.');
+        console.error(err);
+      })
+      .then(resp => {
+        //message.success('User was added successfully.');
+      })
+      .finally(() => {
+        setAddLoading(false);
+        form.resetFields();
+        setIsModalVisible(false);
+        console.log(firstName);
+        console.log(lastName);
+        console.log(email);
+        console.log(email);
+        console.log(username);
+        console.log(role);
+      })
   }
 
   const handleCancel = () => {
@@ -52,6 +70,7 @@ export const AddUserModal = () => {
       Add a new User
       </Button>
       <Modal title='Add New User' visible={isModalVisible} onOk={form.submit} onCancel={handleCancel}>
+      <Spin indicator={antIcon} spinning={addLoading}>
       <Form
           form={form}
           onFinish={addUser}
@@ -102,6 +121,7 @@ export const AddUserModal = () => {
 						</Select>
 					</Form.Item>
 				</Form>
+        </Spin>
       </Modal>
     </div> 
   );

@@ -145,7 +145,7 @@ export const UserList = () => {
         confirmLoading={editLoading}
         onOk={() => editUser(selectedUser)}
         onCancel={() => setEditVisible(false)}>
-        <EditUserForm />
+        <EditUserForm editLoading={editLoading} editUser={editUser} />
       </Modal>
       <Modal
         title="Delete User"
