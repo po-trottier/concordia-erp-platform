@@ -6,6 +6,7 @@ import { MaterialsListEntry } from '../../interfaces/MaterialsListEntry';
 import MetalImg from '../../assets/metal.png';
 import PlasticImg from '../../assets/plastic.png';
 import WoodImg from '../../assets/wood.png';
+import GoldImg from '../../assets/gold.png';
 
 import { CreateMaterialModal } from './CreateMaterialModal';
 
@@ -43,23 +44,11 @@ export const MaterialsCatalog = () => {
 
   const data : any[] = rows;
   data.forEach((row) => {
-    row.order = <div><Button
-    type='primary'
-    style={{ width: '100%' }}>
-    Edit
-</Button>
-<br/>
-<Button
-type='ghost'
-style={{ width: '100%' }}>
-Delete
-  </Button>
-</div>
-    // row.order = <InputNumber
-    //   placeholder='Input a quantity'
-    //   min={0}
-    //   style={{ width: '100%' }}
-    // />;
+    row.order = <InputNumber
+      placeholder='Input a quantity'
+      min={0}
+      style={{ width: '100%' }}
+    />;
   });
 
   const [tableData, setTableData] = useState(data);
