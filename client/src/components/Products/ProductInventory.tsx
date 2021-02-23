@@ -69,7 +69,7 @@ export const ProductInventory = () => {
         <Line
           data={tableData}
           xField='date'
-          yField='quantity'
+          yField='stock'
           seriesField='name' />
       </Card>
       <Card>
