@@ -16,7 +16,7 @@ export const AddUserModal = () => {
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [addLoading, setAddLoading] = useState(false);
-  let role : LabeledValue;
+  const [role, setRole] = useState(0);
 
   const handleFirstName = (e : React.FormEvent<HTMLInputElement>) =>
   setFirstName(e.currentTarget.value);
@@ -27,24 +27,21 @@ export const AddUserModal = () => {
   const handleEmail = (e : React.FormEvent<HTMLInputElement>) =>
   setEmail(e.currentTarget.value);
 
-  const handleRole = (e : LabeledValue) => {
-    role = e;
-  }
-
   const handleUsername = (e : React.FormEvent<HTMLInputElement>) =>
   setUsername(e.currentTarget.value);
 
+  const handleRole = (e : number) => {
+    setRole(e);
+  }
+
   const addUser = () => {
-    const name = firstName + ' ' + lastName;
-    const password = 'Password1!';
-    const userRole = 4; 
     
     setAddLoading(true);
     axios.post('/users', {
-      name: name,
+      name: firstName + ' ' + lastName,
       username: username,
-      password: password,
-      role: userRole,
+      password: 'Password1!',
+      role: role,
     })
       .catch(err => {
         message.error('Something went wrong with adding the new user.');
@@ -120,11 +117,11 @@ export const AddUserModal = () => {
 								allowClear
 								onSelect={handleRole}
 						>
-              <Option value="Basic User">Basic User</Option>
-              <Option value="Salesperson">Salesperson</Option>
-              <Option value="Accountant">Accountant</Option>
-              <Option value="Inventory Manager">Invetory Manager</Option>
-              <Option value="System Administrator">System Administator</Option>
+              <Option value={0}>Basic User</Option>
+              <Option value={1}>Salesperson</Option>
+              <Option value={2}>Accountant</Option>
+              <Option value={3}>Invetory Manager</Option>
+              <Option value={4}>System Administator</Option>
 						</Select>
 					</Form.Item>
 				</Form>
