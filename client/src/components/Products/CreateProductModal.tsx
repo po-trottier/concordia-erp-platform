@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import 'antd/dist/antd.css';
 import {Button, Col, Form, Input, InputNumber, Modal, Row, Select} from 'antd';
-import {MinusCircleOutlined, PlusOutlined} from '@ant-design/icons';
+import {MinusCircleTwoTone, PlusOutlined} from '@ant-design/icons';
 
 const {Option} = Select;
 
@@ -19,7 +19,41 @@ export const CreateProductModal = () => {
     setIsModalVisible(true);
   };
 
+  const hidePartsError = () => {
+      const partsError = document.getElementById('display-parts-error');
+      if(partsError) {
+          partsError.style.display = 'none';
+      }
+  }
+
+  const displayPartsError = () => {
+    const partsError = document.getElementById('display-parts-error');
+    if(partsError) {
+        partsError.style.display = 'block';
+    }
+  };
+
   const handleSubmit = (values: any) => {
+  let parts = values['list_parts'];
+
+    if (!parts) {
+        displayPartsError();
+        return;
+    }
+
+    let hasDefinedPart = false;
+    for (let i = 0; i < parts.length; i++) {
+        if (parts[i]) {
+            hasDefinedPart = true;
+            break;
+        }
+    }
+    if (!hasDefinedPart) {
+        displayPartsError();
+        return;
+    }
+
+
     setIsModalVisible(false);
     form.resetFields();
   };
@@ -49,29 +83,7 @@ export const CreateProductModal = () => {
               </Form.Item>
             </Col>
           </Row>
-          <Form.List name="list_parts"
-                     rules={[
-                       {
-                         validator: async (_, parts) => {
-                           if (!parts) {
-                             return Promise.reject(new Error('Add at least one part'));
-                           }
-
-                           let hasDefinedPart = false;
-                           for (let i = 0; i < parts.length; i++) {
-                             if (parts[i]) {
-                               hasDefinedPart = true;
-                               break;
-                             }
-                           }
-                           if (!hasDefinedPart) {
-                             return Promise.reject(new Error('Add at least one part'));
-                           }
-                         },
-                       },
-                     ]}
-
-          >
+          <Form.List name="list_parts">
 
             {(fields, {add, remove}, {errors}) => (
               <div>
@@ -91,6 +103,7 @@ export const CreateProductModal = () => {
                           style={{width: '100%', display: 'inline-table'}}
                           placeholder="Select a part"
                           optionFilterProp="children"
+                          onChange={hidePartsError}
                         >
                           {partsData.map((part, index) => (
                             <Option key={part.id} value={part.id}>{part.name}</Option>))}
@@ -106,14 +119,15 @@ export const CreateProductModal = () => {
                       </Form.Item>
                     </Col>
                     <Col sm={2} span={4} style={{textAlign:'right'}}>
-                      <MinusCircleOutlined
+                      <MinusCircleTwoTone
                         className="dynamic-delete-button"
+                        twoToneColor="red"
                         onClick={() => remove(field.name)}
                       />
                     </Col>
                   </Row>
                 ))}
-
+                <span id="display-parts-error" style={{color:'red', display:'none'}}>Please add at least one part</span>
                 <Form.ErrorList errors={errors}/>
                 <Row>
                   <Col span={24}>
