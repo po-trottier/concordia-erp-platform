@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import 'antd/dist/antd.css';
-import { Form, Input, Button, Modal, Select } from 'antd';
+import { Form, Input, Button, Modal, Select, InputNumber } from 'antd';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 
 export const CreateMaterialModal = () => {
@@ -50,13 +50,12 @@ export const CreateMaterialModal = () => {
               style={{width: '90%', position: 'absolute'}} />
           </Form.Item>
           <Form.List name="names">
-
             {(fields, { add, remove }, { errors }) => (
               <>
                 {fields.map((field, index) => (
                   <Form.Item
                     {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
-                    label={index === 0 ? 'Materials' : ''}
+                    label={index === 0 ? 'Vendor' : ''}
                     required={false}
                     key={field.key}
                   >
@@ -68,7 +67,7 @@ export const CreateMaterialModal = () => {
                       <Select
                         showSearch
                         style={{ width: 355 }}
-                        placeholder="Select a material"
+                        placeholder="Select a vendor"
                         optionFilterProp="children"
                       >
                       </Select>
@@ -82,18 +81,9 @@ export const CreateMaterialModal = () => {
                     ) : null}
                   </Form.Item>
                 ))}
-
                 <Form.Item>
-
-                  <Button
-                    type="dashed"
-                    onClick={() => add()}
-                    style={{ width: '90%', position: 'absolute'}}
-                    icon={<PlusOutlined />}
-                  >
-                    Add Material
-                  </Button>
-                  <Form.ErrorList errors={errors} />
+                    <InputNumber placeholder='Enter weight (kg)'
+                        style={{width: '90%', position: 'absolute'}} />
                 </Form.Item>
               </>
             )}
