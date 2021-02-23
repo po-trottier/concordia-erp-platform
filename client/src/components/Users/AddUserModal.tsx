@@ -4,6 +4,7 @@ import { LabeledValue } from 'antd/lib/select';
 
 export const AddUserModal = () => {
 
+  const { Option } = Select;
   const [form] = Form.useForm();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [firstName, setFirstName] = useState('');
@@ -21,8 +22,9 @@ export const AddUserModal = () => {
   const handleEmail = (e : React.FormEvent<HTMLInputElement>) =>
   setEmail(e.currentTarget.value);
 
-  const handleRole = (e : LabeledValue) =>
-  role = e;
+  const handleRole = (e : LabeledValue) => {
+    role = e;
+  }
 
   const handleUsername = (e : React.FormEvent<HTMLInputElement>) =>
   setUsername(e.currentTarget.value);
@@ -92,6 +94,11 @@ export const AddUserModal = () => {
 								allowClear
 								onSelect={handleRole}
 						>
+              <Option value="Basic User">Basic User</Option>
+              <Option value="Salesperson">Salesperson</Option>
+              <Option value="Accountant">Accountant</Option>
+              <Option value="Inventory Manager">Invetory Manager</Option>
+              <Option value="System Administrator">System Administator</Option>
 						</Select>
 					</Form.Item>
 				</Form>

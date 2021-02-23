@@ -4,6 +4,7 @@ import { LabeledValue } from 'antd/lib/select';
 
 export const EditUserForm = () => {
 
+	const { Option } = Select;
   const [form] = Form.useForm();
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -84,6 +85,11 @@ export const EditUserForm = () => {
 							allowClear
 							onSelect={handleRole}
 					>
+							<Option value="Basic User">Basic User</Option>
+              <Option value="Salesperson">Salesperson</Option>
+              <Option value="Accountant">Accountant</Option>
+              <Option value="Inventory Manager">Invetory Manager</Option>
+              <Option value="System Administrator">System Administator</Option>
 					</Select>
 				</Form.Item>
 			</Form>
