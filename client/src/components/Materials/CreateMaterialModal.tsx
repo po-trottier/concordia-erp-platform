@@ -10,37 +10,37 @@ export const CreateMaterialModal = () => {
   const [form] = Form.useForm();
 
   const emptyData : PartEntry[] = [];
-  // TODO Actually use the parts data to update the material
+  // TODO Actually use the vendors data to update the material
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [partsData, setPartsData] = useState(emptyData);
+  const [vendorsData, setPartsData] = useState(emptyData);
 
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const hidePartsError = () => {
-    const partsError = document.getElementById('display-parts-error');
-    if (partsError) {
-      partsError.style.display = 'none';
+    const vendorsError = document.getElementById('display-vendors-error');
+    if (vendorsError) {
+      vendorsError.style.display = 'none';
     }
   };
 
   const displayPartsError = () => {
-    const partsError = document.getElementById('display-parts-error');
-    if (partsError) {
-      partsError.style.display = 'block';
+    const vendorsError = document.getElementById('display-vendors-error');
+    if (vendorsError) {
+      vendorsError.style.display = 'block';
     }
   };
 
   const handleSubmit = (values : any) => {
-    let parts = values['list_parts'];
+    let vendors = values['list_vendors'];
 
-    if (!parts) {
+    if (!vendors) {
       displayPartsError();
       return;
     }
 
     let hasDefinedPart = false;
-    for (let i = 0; i < parts.length; i++) {
-      if (parts[i]) {
+    for (let i = 0; i < vendors.length; i++) {
+      if (vendors[i]) {
         hasDefinedPart = true;
         break;
       }
@@ -82,7 +82,7 @@ export const CreateMaterialModal = () => {
             </Col>
           </Row>
           {/*Material Vendors Fields*/}
-          <Form.List name='list_parts'>
+          <Form.List name='list_vendors'>
             {(fields, { add, remove }, { errors }) => (
               <div>
                 {fields.map((field, index) => (
@@ -103,8 +103,8 @@ export const CreateMaterialModal = () => {
                           placeholder='Select a vendor'
                           optionFilterProp='children'
                           onChange={hidePartsError}>
-                          {partsData.map((part, index) => (
-                            <Option key={part.id} value={part.id}>{part.name}</Option>))}
+                          {vendorsData.map((vendor, index) => (
+                            <Option key={vendor.id} value={vendor.id}>{vendor.name}</Option>))}
                         </Select>
                       </Form.Item>
                     </Col>
@@ -127,8 +127,8 @@ export const CreateMaterialModal = () => {
                   </Row>
                 ))}
                 {/*Custom error message*/}
-                <span id='display-parts-error' style={{ color: 'red', display: 'none' }}>
-                  Please add at least one part.
+                <span id='display-vendors-error' style={{ color: 'red', display: 'none' }}>
+                  Please add at least one vendor.
                 </span>
                 {/*Default error messages*/}
                 <Form.ErrorList errors={errors} />
