@@ -20,7 +20,7 @@ export class Material {
   @Prop({ required: true, default: 1 })
   density: number;
 
-  @Prop({ required: true, default: 1 })
+  @Prop({ required: true})
   vendorName: string;
 
   @Prop({ required: true, default: 1 })
