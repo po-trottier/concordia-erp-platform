@@ -76,7 +76,12 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"stock\": 4\n}"
+							"raw": "{\n    \"stock\": 4\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
 						"url": {
 							"raw": "{{url}}/parts/6023033e12523415393afc0f",
@@ -101,13 +106,13 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{url}}/parts/60220fd37d5a1f2c5a6d9778",
+							"raw": "{{url}}/parts/60245c2d2816ce3290065c38",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"parts",
-								"60220fd37d5a1f2c5a6d9778"
+								"60245c2d2816ce3290065c38"
 							]
 						}
 					},
@@ -160,7 +165,12 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Pink bike tassels\",\n    \"description\": \"makes it go faster\",\n    \"stock\": 70000\n}"
+							"raw": "{\n    \"name\": \"Pink bike tassels\",\n    \"description\": \"makes it go faster\",\n    \"stock\": 70000\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
 						"url": {
 							"raw": "{{url}}/finance",
@@ -181,7 +191,12 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"stock\": 4\n}"
+							"raw": "{\n    \"stock\": 4\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
 						"url": {
 							"raw": "{{url}}/finance/6023033e12523415393afc0f",
@@ -296,21 +311,11 @@
 				{
 					"name": "Create user",
 					"request": {
-						"auth": {
-							"type": "oauth2",
-							"oauth2": [
-								{
-									"key": "addTokenTo",
-									"value": "header",
-									"type": "string"
-								}
-							]
-						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"user\",\r\n    \"password\": \"Jr:6sh[3F}`^ns\",\r\n    \"name\": \"Tom Cruz\",\r\n    \"role\": 4\r\n}",
+							"raw": "{\r\n    \"username\": \"inventory\",\r\n    \"password\": \"Password1!\",\r\n    \"name\": \"Inventory Manager\",\r\n    \"role\": 3\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -336,7 +341,12 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"password\": \"password\"\r\n}"
+							"raw": "{\r\n    \"password\": \"password\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
 						"url": {
 							"raw": "{{url}}/users/user",
@@ -352,7 +362,7 @@
 					"response": []
 				},
 				{
-					"name": "Delete part by id",
+					"name": "Delete user by id",
 					"request": {
 						"method": "DELETE",
 						"header": [],
@@ -381,16 +391,6 @@
 				{
 					"name": "Get products",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIiLCJpZCI6IjYwMmYxMDQwM2M0MTAyNWRmNGE3NzcwMyIsInJvbGVzIjo0LCJpYXQiOjE2MTM3NDA2ODIsImV4cCI6MTY0NTI3NjY4Mn0.MDtn-AGo-_5GQw7ctUDcgWfZIUzV4evHYMf2rJNyI5k",
-									"type": "string"
-								}
-							]
-						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -408,16 +408,6 @@
 				{
 					"name": "Get product by id",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIiLCJpZCI6IjYwMmYxMDQwM2M0MTAyNWRmNGE3NzcwMyIsInJvbGVzIjo0LCJpYXQiOjE2MTM3NDA2ODIsImV4cCI6MTY0NTI3NjY4Mn0.MDtn-AGo-_5GQw7ctUDcgWfZIUzV4evHYMf2rJNyI5k",
-									"type": "string"
-								}
-							]
-						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -436,16 +426,6 @@
 				{
 					"name": "Create product",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIiLCJpZCI6IjYwMmYxMDQwM2M0MTAyNWRmNGE3NzcwMyIsInJvbGVzIjo0LCJpYXQiOjE2MTM3NDA2ODIsImV4cCI6MTY0NTI3NjY4Mn0.MDtn-AGo-_5GQw7ctUDcgWfZIUzV4evHYMf2rJNyI5k",
-									"type": "string"
-								}
-							]
-						},
 						"method": "POST",
 						"header": [
 							{
@@ -479,16 +459,6 @@
 				{
 					"name": "Update product by id",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIiLCJpZCI6IjYwMmYxMDQwM2M0MTAyNWRmNGE3NzcwMyIsInJvbGVzIjo0LCJpYXQiOjE2MTM3NDA2ODIsImV4cCI6MTY0NTI3NjY4Mn0.MDtn-AGo-_5GQw7ctUDcgWfZIUzV4evHYMf2rJNyI5k",
-									"type": "string"
-								}
-							]
-						},
 						"method": "PATCH",
 						"header": [],
 						"body": {
@@ -516,16 +486,6 @@
 				{
 					"name": "Delete product by id",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIiLCJpZCI6IjYwMmYxMDQwM2M0MTAyNWRmNGE3NzcwMyIsInJvbGVzIjo0LCJpYXQiOjE2MTM3NDA2ODIsImV4cCI6MTY0NTI3NjY4Mn0.MDtn-AGo-_5GQw7ctUDcgWfZIUzV4evHYMf2rJNyI5k",
-									"type": "string"
-								}
-							]
-						},
 						"method": "DELETE",
 						"header": [],
 						"body": {
