@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "5e574cac-fb09-47c6-8b4f-83fb4c15e5a2",
+		"_postman_id": "11d56e46-d920-4e46-9319-c78aff1db2c8",
 		"name": "Epic Resource Planner",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -500,6 +500,117 @@
 							"path": [
 								"products",
 								"602fc1ac5ec85b42243e6b1b"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Materials",
+			"item": [
+				{
+					"name": "Get materials",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/materials",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"materials"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get material by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/materials/60245c2d2816ce3290065c38",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"materials",
+								"60245c2d2816ce3290065c38"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create material",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Titanium\",\r\n    \"description\": \"great for when the frame enters the atmosphere\",\r\n    \"stock\": 5,\r\n    \"density\": 10,\r\n    \"vendorName\": \"US Military\",\r\n    \"price\": 4500\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/materials",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"materials"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update material by ID",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"price\":420\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/materials/60345637fb095c1370323654",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"materials",
+								"60345637fb095c1370323654"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete material",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/materials/60345637fb095c1370323654",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"materials",
+								"60345637fb095c1370323654"
 							]
 						}
 					},
