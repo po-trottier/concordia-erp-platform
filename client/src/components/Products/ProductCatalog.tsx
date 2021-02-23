@@ -4,6 +4,8 @@ import axios from '../../plugins/Axios'
 import { ResponsiveTable } from '../ResponsiveTable';
 import {BicycleEntry} from '../../interfaces/BicycleEntry';
 import ProductDetails from './ProductDetails';
+import { CreateProductModal } from './CreateProductModal';
+import dummyData from './ProductDummyData';
 
 const { Search } = Input;
 
@@ -80,12 +82,10 @@ export const ProductCatalog = () => {
           style={{ marginBottom: 18 }} />
         <ResponsiveTable rows={tableData} cols={catalogColumns} />
       </Card>
-      <Button type='ghost'>
-        Define a new Product
-      </Button>
-      <Button type='primary' style={{ float: 'right' }}>
+      <Button type='primary' style={{ marginTop: 16, float: 'right' }}>
         Build Products
       </Button>
+      <CreateProductModal />
     </div>
   );
 };
