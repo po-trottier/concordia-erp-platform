@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Col, Form, Input, InputNumber, Modal, Row, Select } from 'antd';
 import { MinusCircleTwoTone, PlusOutlined } from '@ant-design/icons';
-import { PartEntry } from '../../interfaces/PartEntry';
 
 const { Option } = Select;
 
@@ -9,10 +8,10 @@ export const CreateMaterialModal = () => {
 
   const [form] = Form.useForm();
 
-  const emptyData : PartEntry[] = [];
-  // TODO Actually use the vendors data to update the material
+  const dummyVendorData: string[] = ['BHP', 'Rio Tinto', 'China National Mining Company'];
+  // TODO Actually use the vendors data to update the material (as soon as it's figured out)
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [vendorsData, setPartsData] = useState(emptyData);
+  const [vendorsData, setVendorsData] = useState(dummyVendorData);
 
   const [isModalVisible, setIsModalVisible] = useState(false);
 
@@ -30,7 +29,7 @@ export const CreateMaterialModal = () => {
     }
   };
 
-  const handleSubmit = (values : any) => {
+  const handleSubmit = (values: any) => {
     let vendors = values['list_vendors'];
 
     if (!vendors) {
@@ -104,7 +103,7 @@ export const CreateMaterialModal = () => {
                           optionFilterProp='children'
                           onChange={hidePartsError}>
                           {vendorsData.map((vendor, index) => (
-                            <Option key={vendor.id} value={vendor.id}>{vendor.name}</Option>))}
+                            <Option key={vendor} value={vendor}>{vendor}</Option>))}
                         </Select>
                       </Form.Item>
                     </Col>

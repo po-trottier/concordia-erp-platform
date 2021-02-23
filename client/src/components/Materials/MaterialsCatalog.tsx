@@ -6,6 +6,8 @@ import { MaterialsListEntry } from '../../interfaces/MaterialsListEntry';
 import MetalImg from '../../assets/metal.png';
 import PlasticImg from '../../assets/plastic.png';
 import WoodImg from '../../assets/wood.png';
+// TODO find a way to update the table on Modal submit with the gold image
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import GoldImg from '../../assets/gold.png';
 
 import { CreateMaterialModal } from './CreateMaterialModal';
@@ -21,7 +23,7 @@ export const MaterialsCatalog = () => {
     order: 'Order',
   };
 
-  const rows : MaterialsListEntry[] = [
+  const rows: MaterialsListEntry[] = [
     {
       img: <img src={MetalImg} alt='Metal Preview' width={32} />,
       name: 'Metal',
@@ -42,7 +44,7 @@ export const MaterialsCatalog = () => {
     },
   ];
 
-  const data : any[] = rows;
+  const data: any[] = rows;
   data.forEach((row) => {
     row.order = <InputNumber
       placeholder='Input a quantity'
@@ -65,7 +67,7 @@ export const MaterialsCatalog = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchValue]);
 
-  const onSearch = (e : React.ChangeEvent<HTMLInputElement>) => {
+  const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
   };
 
@@ -83,7 +85,7 @@ export const MaterialsCatalog = () => {
         style={{ marginTop: 16, float: 'right' }}>
         Order Materials
       </Button>
-      <CreateMaterialModal/>
+      <CreateMaterialModal />
     </div>
   );
 };
