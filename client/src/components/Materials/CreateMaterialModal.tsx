@@ -17,7 +17,7 @@ export const CreateMaterialModal = () => {
   const [form] = Form.useForm();
 
   const dummyVendorsData: string[] = ['BHP', 'Rio Tinto', 'China National Mining Company'];
-  
+
   // TODO Actually use the img data to update the material (as soon as it's figured out)
   const dummyImagesData: MaterialsListEntry[] = [
     {
@@ -56,14 +56,14 @@ export const CreateMaterialModal = () => {
 
   const [isModalVisible, setIsModalVisible] = useState(false);
 
-  const hidePartsError = () => {
+  const hideVendorsError = () => {
     const vendorsError = document.getElementById('display-vendors-error');
     if (vendorsError) {
       vendorsError.style.display = 'none';
     }
   };
 
-  const displayPartsError = () => {
+  const displayVendorsError = () => {
     const vendorsError = document.getElementById('display-vendors-error');
     if (vendorsError) {
       vendorsError.style.display = 'block';
@@ -74,7 +74,7 @@ export const CreateMaterialModal = () => {
     let vendors = values['list_vendors'];
 
     if (!vendors) {
-      displayPartsError();
+      displayVendorsError();
       return;
     }
 
@@ -86,7 +86,7 @@ export const CreateMaterialModal = () => {
       }
     }
     if (!hasDefinedPart) {
-      displayPartsError();
+      displayVendorsError();
       return;
     }
 
@@ -135,7 +135,7 @@ export const CreateMaterialModal = () => {
                   style={{ width: '100%', display: 'inline-table' }}
                   placeholder='Select an image'
                   optionFilterProp='children'
-                  onChange={hidePartsError}>
+                  onChange={hideVendorsError}>
                   {imgsData.map((img, index) => (
                     <Option key={img.name} value={img.name}>{img.img}</Option>))}
                 </Select>
@@ -163,7 +163,7 @@ export const CreateMaterialModal = () => {
                           style={{ width: '100%', display: 'inline-table' }}
                           placeholder='Select a vendor'
                           optionFilterProp='children'
-                          onChange={hidePartsError}>
+                          onChange={hideVendorsError}>
                           {vendorsData.map((vendor, index) => (
                             <Option key={vendor} value={vendor}>{vendor}</Option>))}
                         </Select>
