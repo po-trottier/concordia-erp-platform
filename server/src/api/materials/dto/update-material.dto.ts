@@ -17,7 +17,6 @@ export class UpdateMaterialDto {
   @IsOptional()
   stock: number;
 
-  @IsInt()
   @IsPositive()
   @IsOptional()
   density: number;

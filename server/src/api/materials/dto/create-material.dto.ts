@@ -16,13 +16,13 @@ export class CreateMaterialDto {
 
   @IsNotEmpty()
   @IsString()
+  @IsOptional()
   description: string;
 
   @IsInt()
   @IsPositive()
   stock: number;
 
-  @IsInt()
   @IsPositive()
   density: number;
 
