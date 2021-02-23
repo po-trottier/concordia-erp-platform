@@ -5,7 +5,6 @@ import { ResponsiveTable } from '../ResponsiveTable';
 import {BicycleEntry} from '../../interfaces/BicycleEntry';
 import ProductDetails from './ProductDetails';
 import { CreateProductModal } from './CreateProductModal';
-import dummyData from './ProductDummyData';
 
 const { Search } = Input;
 
@@ -60,7 +59,6 @@ export const ProductCatalog = () => {
           style={{ width: '100%' }}
         />;
       });
-      console.log(data);
       if (searchValue.trim() !== '') {
         data = data.filter(
            (row: any) => row.name.trim().toLowerCase().includes(searchValue.trim().toLowerCase()));

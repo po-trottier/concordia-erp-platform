@@ -1,32 +1,5 @@
-import React from 'react';
-import { Button, InputNumber, Modal } from 'antd';
-
-import { BicycleEntry } from '../../interfaces/BicycleEntry';
-
-interface LinePoint {
-  date : string,
-  quantity : number,
-  name : string,
-  sold? : number,
-  built? : number,
-}
 
 const data = {
-  getInventoryColumns: () => ({
-    name: 'Name',
-    date: 'Date',
-    built: 'Built',
-    sold: 'Sold',
-    quantity: 'Stock',
-  }),
-
-  getCatalogColumns: () => ({
-    name: 'Name',
-    details: 'Details',
-    quantity: 'Owned',
-    price: 'Price',
-    build: 'Build'
-  }),
 
   /**
   getRows: () => {
@@ -147,6 +120,7 @@ const data = {
   },
   */
 
+  /**
   getLineData: () => {
     const data : LinePoint[] = [
       {
@@ -303,6 +277,7 @@ const data = {
 
     return data;
   },
+  **/
 };
 
 export default data;
