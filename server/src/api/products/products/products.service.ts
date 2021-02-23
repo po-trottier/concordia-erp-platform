@@ -67,6 +67,15 @@ export class ProductsService {
     id: string,
     updateProductDto: UpdateProductDto,
   ): Promise<Product> {
+    let builtAmount = 0;
+    let usedAmount = 0;
+    if (updateProductDto.quantity) {
+      const oldQuantity = (await this.productModel.findById(id)).quantity;
+      const netChange = updateProductDto.quantity - oldQuantity;
+      builtAmount = netChange > 0 ? netChange : 0;
+      usedAmount = netChange < 0 ? -netChange : 0;
+    }
+
     const updatedProduct = await this.productModel.findByIdAndUpdate(
       id,
       { $set: { ...updateProductDto } },
@@ -78,9 +87,8 @@ export class ProductsService {
         productId: id,
         stock: updateProductDto.quantity,
         date: new Date(),
-        // TODO: calculate built and used
-        built: 420,
-        used: 420,
+        built: builtAmount,
+        used: usedAmount,
       };
 
       this.eventEmitter.emit('product.quantity.updated', event);
