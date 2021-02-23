@@ -35,6 +35,8 @@ export const UserList = () => {
   const [selectedUser, setSelectedUser] = React.useState(defaultUser);
 
   const editUser = (user : UserEntry) => {
+
+    console.log('hello world');
     setEditLoading(true);
     axios.patch('/users/' + user.username)
       .catch((err) => {

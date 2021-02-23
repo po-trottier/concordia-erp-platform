@@ -10,7 +10,6 @@ export const EditUserForm = (props : any) => {
   const { Option } = Select;
   const [form] = Form.useForm();
 
-	const [editLoading, setEditLoading] = useState(props.editLoading);
   const [firstName, setFirstName] = useState('first name');
   const [lastName, setLastName] = useState('last name');
   const [email, setEmail] = useState('test@email.com');
@@ -33,7 +32,7 @@ export const EditUserForm = (props : any) => {
   setUsername(e.currentTarget.value);
 
   return (
-		<Spin indicator={antIcon} spinning={editLoading}>
+		<Spin indicator={antIcon} spinning={props.editLoading}>
 			<Form
 				form={form}
 				onFinish={props.editUser}
