@@ -1,55 +1,52 @@
 import React, { useState } from 'react';
 import { Button, Col, Form, Input, InputNumber, Modal, Row, Select } from 'antd';
 import { MinusCircleTwoTone, PlusOutlined } from '@ant-design/icons';
-import { PartDropdownEntry } from '../../interfaces/PartDropdownEntry';
+import { MaterialDropdownEntry } from '../../interfaces/MaterialDropdownEntry';
 
 const { Option } = Select;
 
-export const CreateProductModal = () => {
+export const CreatePartModal = () => {
 
   const [form] = Form.useForm();
 
-  const emptyData : PartDropdownEntry[] = [];
+  const emptyData : MaterialDropdownEntry[] = [];
   // TODO Actually use the parts data to update the product
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [partsData, setPartsData] = useState(emptyData);
+  const [materialsData, setMaterialsData] = useState(emptyData);
 
   const [isModalVisible, setIsModalVisible] = useState(false);
 
-  const hidePartsError = () => {
-    const partsError = document.getElementById('display-parts-error');
-    if (partsError) {
-      partsError.style.display = 'none';
+  const hideMaterialsError = () => {
+    const materialsError = document.getElementById('display-materials-error');
+    if (materialsError) {
+      materialsError.style.display = 'none';
     }
   };
 
-  const displayPartsError = () => {
-    const partsError = document.getElementById('display-parts-error');
-    if (partsError) {
-      partsError.style.display = 'block';
+  const showMaterialsError = () => {
+    const materialsError = document.getElementById('display-materials-error');
+    if (materialsError) {
+      materialsError.style.display = 'block';
     }
   };
 
   const handleSubmit = (values : any) => {
-    let parts = values['list_parts'];
-
-    if (!parts) {
-      displayPartsError();
+    let materials = values['list_materials'];
+    if (!materials) {
+      showMaterialsError();
       return;
     }
-
-    let hasDefinedPart = false;
-    for (let i = 0; i < parts.length; i++) {
-      if (parts[i]) {
-        hasDefinedPart = true;
+    let hasDefinedMaterial = false;
+    for (let i = 0; i < materials.length; i++) {
+      if (materials[i]) {
+        hasDefinedMaterial = true;
         break;
       }
     }
-    if (!hasDefinedPart) {
-      displayPartsError();
+    if (!hasDefinedMaterial) {
+      showMaterialsError();
       return;
     }
-
     setIsModalVisible(false);
     form.resetFields();
   };
@@ -62,37 +59,37 @@ export const CreateProductModal = () => {
   return (
     <div>
       <Button type='primary' onClick={() => setIsModalVisible(true)} style={{ marginTop: 16 }}>
-        Add a New Product
+        Define a new part
       </Button>
 
-      <Modal title='Define a New Product' visible={isModalVisible} onOk={form.submit} onCancel={handleCancel}>
+      <Modal title='Define a new part' visible={isModalVisible} onOk={form.submit} onCancel={handleCancel}>
         <Form form={form} onFinish={handleSubmit}>
-          {/*Product Name Field*/}
+          {/*Part Name Entry*/}
           <Row align='middle' style={{ marginBottom: 16 }}>
             <Col sm={6} span={9}>
-              <span>Product Name:</span>
+              <span>Part Name:</span>
             </Col>
             <Col sm={18} span={15}>
               <Form.Item
                 style={{ marginBottom: 0 }}
-                name='product_name'
-                rules={[{ required: true, message: 'Please enter a product name.' }]}>
-                <Input placeholder='Product Name' />
+                name='part_name'
+                rules={[{ required: true, message: 'Please enter a part name!' }]}>
+                <Input placeholder='Part Name' />
               </Form.Item>
             </Col>
           </Row>
-          {/*Product Parts Fields*/}
-          <Form.List name='list_parts'>
+          {/*Materials List*/}
+          <Form.List name='list_materials'>
             {(fields, { add, remove }, { errors }) => (
               <div>
                 {fields.map((field, index) => (
-                  // Single Product Part Entry
+                  // Single Material Entry
                   <Row key={index} align='middle' style={{ marginBottom: 8 }}>
-                    {/*Part Selector*/}
-                    <Col sm={3} span={6} style={{ paddingRight: 8 }}>
-                      Part:
+                    {/*Material Selector*/}
+                    <Col sm={4} span={6} style={{ paddingRight: 8 }}>
+                      Material:
                     </Col>
-                    <Col className='margin-bottom-mobile' sm={12} span={18}>
+                    <Col className='margin-bottom-mobile' sm={11} span={18}>
                       <Form.Item
                         {...field}
                         validateTrigger={['onChange', 'onBlur']}
@@ -100,11 +97,11 @@ export const CreateProductModal = () => {
                         <Select
                           showSearch
                           style={{ width: '100%', display: 'inline-table' }}
-                          placeholder='Select a part'
+                          placeholder='Select a material'
                           optionFilterProp='children'
-                          onChange={hidePartsError}>
-                          {partsData.map((part, index) => (
-                            <Option key={part.id} value={part.id}>{part.name}</Option>))}
+                          onChange={hideMaterialsError}>
+                          {materialsData.map((material, index) => (
+                            <Option key={material.id} value={material.id}>{material.name}</Option>))}
                         </Select>
                       </Form.Item>
                     </Col>
@@ -127,12 +124,12 @@ export const CreateProductModal = () => {
                   </Row>
                 ))}
                 {/*Custom error message*/}
-                <span id='display-parts-error' style={{ color: 'red', display: 'none' }}>
-                  Please add at least one part.
+                <span id='display-materials-error' style={{ color: 'red', display: 'none' }}>
+                  Please add at least one material.
                 </span>
                 {/*Default error messages*/}
                 <Form.ErrorList errors={errors} />
-                {/*Add Part Button*/}
+                {/*Add Material Button*/}
                 <Row>
                   <Col span={24}>
                     <Form.Item style={{ marginBottom: 0, marginTop: 16 }}>
@@ -141,7 +138,7 @@ export const CreateProductModal = () => {
                         onClick={() => add()}
                         style={{ width: '100%' }}
                         icon={<PlusOutlined />}>
-                        Add a Part
+                        Add a Material
                       </Button>
                     </Form.Item>
                   </Col>
