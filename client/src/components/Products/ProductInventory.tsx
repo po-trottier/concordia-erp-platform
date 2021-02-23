@@ -13,7 +13,7 @@ const inventoryColumns = {
   date: 'Date',
   built: 'Built',
   sold: 'Sold',
-  quantity: 'Stock',
+  stock: 'Stock',
 };
 
 export const ProductInventory = () => {
@@ -24,12 +24,15 @@ export const ProductInventory = () => {
   axios.defaults.headers.common = {'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkpvaG5TbWl0aDE5NjUiLCJpZCI6IjYwMmMzN2ZjNTMzMGM2NDQwNzdlNmVlZSIsInJvbGVzIjo0LCJpYXQiOjE2MTM1MTA3NzEsImV4cCI6MTY0NTA0Njc3MX0.xZkFNVbyAls43uga3IcAYT3JA9yVZc267_k6--NYw4g'}
 
   useEffect(() => {
-    axios.get('products/logs').then(({data}) => {
-      data.forEach((row: any) => {
-        row.date = new Date(row.date).toLocaleDateString();
-        // Once naming conventions are finalized: perhaps just fucking rename 'stock' to 'quantity' in the product-log schema or vice versa
-        row.quantity = row.stock;
-      });
+    axios.get('products/logs').then(async ({data}) => {
+      for (let i = 0 ; i < data.length ; i ++) {
+        let row = data[i];
+        row.date = new Date(row.date).toLocaleDateString(); 
+        // this is highly inefficient
+        row.name = await axios.get('products/'+ row.productId).then(({data}) => {
+          return data.name;
+        })
+      }
 
       data.sort((a: any, b: any) => {
         const dateA = a.date;
@@ -47,6 +50,7 @@ export const ProductInventory = () => {
         data = data.filter(
            (row: any) => row.name.trim().toLowerCase().includes(searchValue.trim().toLowerCase()));
       }
+
       setTableData(data);
     });
   }, [searchValue]);
