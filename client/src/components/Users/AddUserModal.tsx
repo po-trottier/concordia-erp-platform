@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Button, Form, Input, Modal, Select, message, Spin } from 'antd';
-import { LabeledValue } from 'antd/lib/select';
 import 'antd/dist/antd.css';
 import { LoadingOutlined } from '@ant-design/icons';
 import axios from '../../plugins/Axios';
@@ -15,8 +14,8 @@ export const AddUserModal = () => {
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
-  const [addLoading, setAddLoading] = useState(false);
   const [role, setRole] = useState(0);
+  const [addLoading, setAddLoading] = useState(false);
 
   const handleFirstName = (e : React.FormEvent<HTMLInputElement>) =>
   setFirstName(e.currentTarget.value);
@@ -35,7 +34,6 @@ export const AddUserModal = () => {
   }
 
   const addUser = () => {
-    
     setAddLoading(true);
     axios.post('/users', {
       name: firstName + ' ' + lastName,
@@ -47,7 +45,8 @@ export const AddUserModal = () => {
         message.error('Something went wrong with adding the new user.');
         console.error(err);
       })
-      .then(resp => {
+      .then(res => {
+        console.log(res);
         message.success('User was added successfully.');
       })
       .finally(() => {
@@ -127,6 +126,6 @@ export const AddUserModal = () => {
 				</Form>
         </Spin>
       </Modal>
-    </div> 
-  );
+    </div>
+    );
 };

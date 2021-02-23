@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, Route, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Layout, Menu } from 'antd';
 import { Icon } from '@ant-design/compatible';
 
@@ -11,9 +11,8 @@ const { Sider } = Layout;
 
 export const AppMenu = () => {
   const location = useLocation();
-  
   return (
-    <Sider
+  <Sider
       collapsible
       breakpoint='md'
       collapsedWidth='0'>

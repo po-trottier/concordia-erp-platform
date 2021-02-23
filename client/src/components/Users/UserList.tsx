@@ -91,8 +91,7 @@ export const UserList = () => {
            (r : UserEntry) => r.name.trim().toLowerCase().includes(searchValue.trim().toLowerCase()));
       }
       rows.forEach((user : UserEntry) => {
-        // TODO Remove email and use the backend value
-        user.email = "temp@gmail.com";
+        user.email = 'temp@gmail.com';
         user.roleString = getRoleString(user.role);
         user.actions = (
           <div>
@@ -147,7 +146,11 @@ export const UserList = () => {
         confirmLoading={editLoading}
         onOk={() => editUser(selectedUser)}
         onCancel={() => setEditVisible(false)}>
-        <EditUserForm editLoading={editLoading} editUser={editUser} />
+        <EditUserForm
+        initialiName={selectedUser.name}
+        initialiUsername={selectedUser.username}
+        editLoading={editLoading}
+        editUser={editUser} />
       </Modal>
       <Modal
         title="Delete User"

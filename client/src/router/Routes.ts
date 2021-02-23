@@ -1,5 +1,4 @@
 import { Home } from '../pages/Home';
-import { Login } from '../pages/Login';
 import { Users } from '../pages/Users';
 import { Products } from '../pages/Products';
 import { Parts } from '../pages/Parts';

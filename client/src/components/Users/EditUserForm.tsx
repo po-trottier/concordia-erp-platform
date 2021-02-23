@@ -1,35 +1,30 @@
 import React, { useState } from 'react';
 import { Form, Input, Select, Spin } from 'antd';
-import { LabeledValue } from 'antd/lib/select';
 import 'antd/dist/antd.css';
 import { LoadingOutlined } from '@ant-design/icons';
 
 export const EditUserForm = (props : any) => {
 
-	const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
+  const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
   const { Option } = Select;
   const [form] = Form.useForm();
 
-  const [firstName, setFirstName] = useState('first name');
-  const [lastName, setLastName] = useState('last name');
-  const [email, setEmail] = useState('test@email.com');
-  const [username, setUsername] = useState('username');
-  let role : LabeledValue;
+	const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState(props.initialiUsername);
+  const [role, setRole] = useState(0);
 
-  const handleFirstName = (e : React.FormEvent<HTMLInputElement>) =>
-  setFirstName(e.currentTarget.value);
+  const handleFirstName = (e : React.FormEvent<HTMLInputElement>) =>{}
 
-  const handleLastName = (e : React.FormEvent<HTMLInputElement>) =>
-  setLastName(e.currentTarget.value);
+  const handleLastName = (e : React.FormEvent<HTMLInputElement>) =>{}
 
-  const handleEmail = (e : React.FormEvent<HTMLInputElement>) =>
-  setEmail(e.currentTarget.value);
-
-  const handleRole = (e : LabeledValue) =>
-  role = e;
+  const handleEmail = (e : React.FormEvent<HTMLInputElement>) =>{}
 
   const handleUsername = (e : React.FormEvent<HTMLInputElement>) =>
-  setUsername(e.currentTarget.value);
+	setUsername(e.currentTarget.value);
+
+  const handleRole = (e : number) =>{}
 
   return (
 		<Spin indicator={antIcon} spinning={props.editLoading}>
@@ -39,10 +34,11 @@ export const EditUserForm = (props : any) => {
 				name='basic'
 				style={{ marginBottom: '-24px', width: '100%', maxWidth: '500px'}}
 				initialValues={{
-					firstName,
-					lastName,
-					email,
+					firstName: props.name,
+					lastName: props.name,
+					email: props.email,
 					username,
+					role: props.role,
 				}}>
 				<Form.Item
 					label='First Name'
@@ -79,11 +75,11 @@ export const EditUserForm = (props : any) => {
 							allowClear
 							onSelect={handleRole}
 					>
-							<Option value="Basic User">Basic User</Option>
-              <Option value="Salesperson">Salesperson</Option>
-              <Option value="Accountant">Accountant</Option>
-              <Option value="Inventory Manager">Invetory Manager</Option>
-              <Option value="System Administrator">System Administator</Option>
+						<Option value={0}>Basic User</Option>
+						<Option value={1}>Salesperson</Option>
+						<Option value={2}>Accountant</Option>
+						<Option value={3}>Invetory Manager</Option>
+						<Option value={4}>System Administator</Option>
 					</Select>
 				</Form.Item>
 			</Form>
