@@ -1,23 +1,93 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Card, Input } from 'antd';
+import { Button, Card, Input, InputNumber, Modal } from 'antd';
+import axios from '../../plugins/Axios';
 
-import dummyData from './ProductDummyData';
 import { ResponsiveTable } from '../ResponsiveTable';
+import ProductDetails from './ProductDetails';
+import { ProductEditModal } from './ProductEditModal';
+import { BicycleEntry } from '../../interfaces/BicycleEntry';
 
 const { Search } = Input;
 
+const showModal = (row : any) => {
+  Modal.info({
+    onOk() {
+    },
+    title: 'Product Details',
+    width: 500,
+    content: (
+      <ProductDetails
+        name={row.name}
+        price={row.price}
+        quantity={row.quantity}
+        frameSize={row.frameSize}
+        parts={row.parts.join(', ')}
+        color={row.color}
+        finish={row.finish}
+        grade={row.grade}
+        description={row.description} />
+    )
+  });
+};
+
+const catalogColumns = {
+  name: 'Name',
+  details: 'Details',
+  quantity: 'Owned',
+  price: 'Price',
+  build: 'Build',
+  actions: 'Actions'
+}
+
 export const ProductCatalog = () => {
-  const [tableData, setTableData] = useState(dummyData.getRows());
+  const emptyData : BicycleEntry[] = [];
+  const [tableData, setTableData] = useState(emptyData);
   const [searchValue, setSearchValue] = useState('');
 
+  const submitEditHandler = (values: any) => {
+    console.log(values);
+  }
+
   useEffect(() => {
-    let rows = dummyData.getRows();
-    if (searchValue.trim() !== '') {
-      rows = rows.filter(
-        (r) => r.name.trim().toLowerCase().includes(searchValue.trim().toLowerCase()));
-    }
-    setTableData(rows);
+    axios.get('products').then(({data}) => {
+      data.forEach((row: any) => {
+        row.details = (
+          <Button type='ghost' onClick={() => showModal(row)}>
+            See Details
+          </Button>
+        );
+
+        row.build = <InputNumber
+          placeholder='Input a quantity'
+          min={0}
+          style={{ width: '100%' }}
+        />;
+
+        row.actions = 
+      <>
+        <ProductEditModal
+          name={row.name}
+          price={row.price}
+          frameSize={row.frameSize}
+          parts={row.parts.join(', ')}
+          color={row.color}
+          finish={row.finish}
+          grade={row.grade} 
+          submitEditHandler = {submitEditHandler}/>
+          <Button type='ghost' danger style={{marginLeft:10}}>Delete</Button>
+      </>
+      });
+      if (searchValue.trim() !== '') {
+        data = data.filter(
+           (row: any) => row.name.trim().toLowerCase().includes(searchValue.trim().toLowerCase()));
+      }
+      setTableData(data);
+    });
   }, [searchValue]);
+
+  useEffect(() => {
+
+  })
 
   const onSearch = (e : React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
@@ -30,7 +100,7 @@ export const ProductCatalog = () => {
           placeholder='Search for a product'
           onChange={onSearch}
           style={{ marginBottom: 18 }} />
-        <ResponsiveTable rows={tableData} cols={dummyData.getCatalogColumns()} />
+        <ResponsiveTable rows={tableData} cols={catalogColumns} />
       </Card>
       <Button type='ghost'>
         Define a new Product
