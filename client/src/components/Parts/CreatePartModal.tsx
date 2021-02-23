@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import 'antd/dist/antd.css';
 import {Button, Col, Form, Input, InputNumber, Modal, Row, Select} from 'antd';
 import {MinusCircleTwoTone, PlusOutlined} from '@ant-design/icons';
 
