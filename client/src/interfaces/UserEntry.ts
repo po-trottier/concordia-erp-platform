@@ -1,5 +1,10 @@
+import React from 'react';
+
 export interface UserEntry {
-  name : string,
-  age : number,
-  location : string
+  username : string,
+  name: string,
+  role: number,
+  roleString?: string,
+  email?: string,
+  actions?: React.ReactNode
 }

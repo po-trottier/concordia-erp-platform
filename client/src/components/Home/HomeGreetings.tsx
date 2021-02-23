@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 import { RootState } from '../../store/Store';
 import { Routes } from '../../router/Routes';
-import { RouteGuard } from '../../router/RouteGuards';
+import { Role } from '../../router/Roles';
 import { Icon } from '@ant-design/compatible';
 
 const { Title } = Typography;
@@ -15,7 +15,7 @@ export const HomeGreetings = () => {
 
   // Only get routes the user is allowed to see
   const routes = Routes.filter((route) => (
-    route.auth.includes(user.authType) || route.auth.includes(RouteGuard.ANY)
+    route.auth.includes(user.authType) || route.auth.includes(Role.ANY)
   ));
   // Remove the dashboard from the list
   routes.shift();

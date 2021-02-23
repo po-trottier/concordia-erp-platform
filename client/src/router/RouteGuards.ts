@@ -1,7 +1,0 @@
-export enum RouteGuard {
-  ANY,
-  SALESPERSON,
-  ACCOUNTANT,
-  INVENTORY_MANAGER,
-  SYSTEM_ADMINISTRATOR,
-}
