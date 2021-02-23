@@ -8,8 +8,8 @@ import {
   Post,
   ValidationPipe,
 } from '@nestjs/common';
-import { Roles } from '../roles/roles.decorator';
-import { Role } from '../roles/roles.enum';
+import { Roles } from '../../roles/roles.decorator';
+import { Role } from '../../roles/roles.enum';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
