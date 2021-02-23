@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Card, Input, InputNumber, Modal } from 'antd';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { ResponsiveTable } from '../ResponsiveTable';
 import ProductDetails from './ProductDetails';
 import { ProductEditModal } from './ProductEditModal';
@@ -30,6 +31,19 @@ const showModal = (row : any) => {
     )
   });
 };
+
+const showDeleteConfirmModal = () => {
+  Modal.confirm({
+    title: 'Are you sure delete this task?',
+    icon: <ExclamationCircleOutlined />,
+    content: 'Some descriptions',
+    okText: 'Yes',
+    okType: 'danger',
+    cancelText: 'No',
+    onOk() {},
+    onCancel() {},
+  });
+}
 
 const catalogColumns = {
   name: 'Name',
@@ -75,7 +89,7 @@ export const ProductCatalog = () => {
           finish={row.finish}
           grade={row.grade} 
           submitEditHandler = {submitEditHandler}/>
-          <Button type='ghost' danger style={{marginLeft:10}}>Delete</Button>
+          <Button type='ghost' danger style={{marginLeft:10}} onClick={showDeleteConfirmModal}>Delete</Button>
       </>
       });
       if (searchValue.trim() !== '') {
