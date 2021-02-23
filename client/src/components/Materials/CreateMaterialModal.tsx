@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Button, Col, Form, Input, InputNumber, Modal, Row, Select, Upload, message } from 'antd';
-import { MinusCircleTwoTone, PlusOutlined, UploadOutlined } from '@ant-design/icons';
+import { Button, Col, Form, Input, InputNumber, Modal, Row, Select} from 'antd';
+import { MinusCircleTwoTone, PlusOutlined} from '@ant-design/icons';
 
 //Materials Dummy Data
 import MetalImg from '../../assets/metal.png';

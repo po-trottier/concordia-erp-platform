@@ -6,17 +6,17 @@ import { UploadChangeParam, UploadFile } from 'antd/lib/upload/interface';
 const uf: UploadFile = {
     uid: 'gold',
     size: 1,
-    name: 'string',
+    name: 'default',
     fileName: 'string',
     lastModified: 1,
     lastModifiedDate: new Date("5/10/2018"),
-    url: 'string',
+    url: '../../assets/gold.png',
     status: 'error',
     type: 'png'
 };
 const ufl: UploadFile[] = [uf];
-const [fileList, updateFileList] = useState(ufl);
 export const ImgUploader = () => {
+    const [fileList, updateFileList] = useState(ufl);
     const props = {
         fileList,
         beforeUpload: (file: UploadFile) => {
