@@ -21,6 +21,11 @@ export class UpdateProductLogDto {
   @IsNotEmpty()
   @IsInt()
   @IsPositive()
+  stock: number;
+
+  @IsNotEmpty()
+  @IsInt()
+  @IsPositive()
   built: number;
 
   @IsNotEmpty()

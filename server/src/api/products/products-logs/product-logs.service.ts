@@ -28,13 +28,10 @@ export class ProductLogsService {
    * @param updateProductLogDto dto used to update product logs
    */
   async update(updateProductLogDto: UpdateProductLogDto): Promise<ProductLog> {
-    const { productId, date, built, used } = updateProductLogDto;
-    //TODO: calculate new stock
-    const stock = 420;
-
+    const { productId, date,stock, built, used } = updateProductLogDto;
     const updatedProductLog = await this.productLogModel.findOneAndUpdate(
       { productId, date },
-      { stock },
+      { stock, built, used },
       { new: true, upsert: true },
     );
 
