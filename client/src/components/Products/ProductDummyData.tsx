@@ -3,6 +3,7 @@ import { Button, InputNumber, Modal } from 'antd';
 
 import { BicycleEntry } from '../../interfaces/BicycleEntry';
 import ProductDetails from './ProductDetails';
+import { ProductEditModal } from './ProductEditModal';
 
 interface LinePoint {
   date : string,
@@ -47,7 +48,8 @@ const data = {
     details: 'Details',
     quantity: 'Owned',
     price: 'Price',
-    build: 'Build'
+    build: 'Build',
+    actions: 'Actions'
   }),
 
   getRows: () => {
@@ -162,6 +164,19 @@ const data = {
         min={0}
         style={{ width: '100%' }}
       />;
+
+      row.actions = 
+      <>
+        <ProductEditModal
+          name={row.name}
+          price={row.price}
+          frameSize={row.frameSize}
+          parts={row.parts.join(', ')}
+          color={row.color}
+          finish={row.finish}
+          grade={row.grade} />
+          <Button type='ghost' danger style={{marginLeft:10}}>Delete</Button>
+      </>
     });
 
     return rows;
