@@ -1,18 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { UserList } from '../../components/Users/UserList';
-import { Button } from 'antd';
+import { AddUserModal } from '../../components/Users/AddUserModal';
+import { Button, Modal, Form } from 'antd';
 
 export const Users = () => {
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   return (
     <div>
       <UserList />
-      <Link to="/users/add-user">
-        <Button type='primary' style={{ marginTop: 16 }}>
-        Add a new User
-        </Button>
-      </Link>
+      <AddUserModal />
     </div> 
   );
 };

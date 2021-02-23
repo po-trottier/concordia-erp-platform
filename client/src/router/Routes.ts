@@ -1,7 +1,6 @@
 import { Home } from '../pages/Home';
 import { Login } from '../pages/Login';
 import { Users } from '../pages/Users/Users';
-import { AddUser } from '../pages/Users/AddUser';
 import { Products } from '../pages/Products';
 import { Parts } from '../pages/Parts';
 import { Materials } from '../pages/Materials';
@@ -88,14 +87,6 @@ export const Routes : Route[] = [
     auth: [Role.SYSTEM_ADMINISTRATOR]
   },
   {
-    path: '/users/add-user',
-    exact: true,
-    title: 'Add User',
-    icon: '',
-    page: AddUser,
-    auth: [Role.SYSTEM_ADMINISTRATOR]
-  },
-  {
     path: '/logs',
     exact: false,
     title: 'Logs & Audits',
@@ -104,9 +95,3 @@ export const Routes : Route[] = [
     auth: [Role.SYSTEM_ADMINISTRATOR]
   }
 ];
-
-//Routes that are not to be shown in appmenu and home page
-export const exludedRoutes: React.ComponentType<any>[] = [
-  Login,
-  AddUser,
-]
