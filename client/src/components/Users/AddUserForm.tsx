@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Form, Input, Button, Select, Card, Typography } from 'antd';
+import { LabeledValue } from 'antd/lib/select';
 
 const { Title } = Typography;
 const { Option } = Select; 
@@ -11,7 +12,7 @@ export const AddUserForm = () => {
 		const [lastName, setLastName] = useState('');
 		const [email, setEmail] = useState('');
 		const [username, setUsername] = useState('');
-		const [role, setRole] = useState('');
+		let role : LabeledValue;
 
 		const handleFirstName = (e : React.FormEvent<HTMLInputElement>) =>
     setFirstName(e.currentTarget.value);
@@ -22,8 +23,8 @@ export const AddUserForm = () => {
 		const handleEmail = (e : React.FormEvent<HTMLInputElement>) =>
     setEmail(e.currentTarget.value);
 
-		const handleRole = (e : React.FormEvent<HTMLInputElement>) =>
-    setRole(e.currentTarget.value);
+		const handleRole = (e : LabeledValue) =>
+    role = e;
 
 		const handleUsername = (e : React.FormEvent<HTMLInputElement>) =>
     setUsername(e.currentTarget.value);
@@ -80,12 +81,13 @@ export const AddUserForm = () => {
 						<Select
 								placeholder="Select the user's role"
 								allowClear
+								onSelect={handleRole}
 						>
-								<Option value="basicUser">Basic User</Option>
-								<Option value="salesperson">Salesperson</Option>
-								<Option value="accountant">Accountant</Option>
-								<Option value="invetoryManager">Invetory Manager</Option>
-								<Option value="systemAdmin">System Administator</Option>
+								<Option value="Basic User">Basic User</Option>
+								<Option value="Salesperson">Salesperson</Option>
+								<Option value="Accountant">Accountant</Option>
+								<Option value="Inventory Manager">Invetory Manager</Option>
+								<Option value="System Administrator">System Administator</Option>
 						</Select>
 					</Form.Item>
 					<Form.Item>
