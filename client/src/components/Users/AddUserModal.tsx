@@ -10,7 +10,6 @@ export const AddUserModal = () => {
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
   const { Option } = Select;
   const [form] = Form.useForm();
-
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -36,14 +35,23 @@ export const AddUserModal = () => {
   setUsername(e.currentTarget.value);
 
   const addUser = () => {
+    const name = firstName + ' ' + lastName;
+    const password = 'Password1!';
+    const userRole = 4; 
+    
     setAddLoading(true);
-    axios.post('/users')
+    axios.post('/users', {
+      name: name,
+      username: username,
+      password: password,
+      role: userRole,
+    })
       .catch(err => {
         message.error('Something went wrong with adding the new user.');
         console.error(err);
       })
       .then(resp => {
-        //message.success('User was added successfully.');
+        message.success('User was added successfully.');
       })
       .finally(() => {
         setAddLoading(false);
@@ -51,7 +59,6 @@ export const AddUserModal = () => {
         setIsModalVisible(false);
         console.log(firstName);
         console.log(lastName);
-        console.log(email);
         console.log(email);
         console.log(username);
         console.log(role);
