@@ -9,7 +9,7 @@ export class ProductLogsController {
 
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
   @Get()
-  findAllLog() {
+  findAll() {
     return this.productsLogService.findAll();
   }
 }
