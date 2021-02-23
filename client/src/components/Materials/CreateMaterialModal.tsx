@@ -90,7 +90,7 @@ export const CreateMaterialModal = () => {
                   <Row key={index} align='middle' style={{ marginBottom: 8 }}>
                     {/*Vendor Selector*/}
                     <Col sm={3} span={6} style={{ paddingRight: 8 }}>
-                      Part:
+                      Vendor:
                     </Col>
                     <Col className='margin-bottom-mobile' sm={12} span={18}>
                       <Form.Item
@@ -110,7 +110,7 @@ export const CreateMaterialModal = () => {
                     </Col>
                     {/*Quantity Selector*/}
                     <Col className='text-left-mobile' sm={4} span={6} style={{ textAlign: 'right', paddingRight: 8 }}>
-                      Quantity:
+                      Quantity Vendable:
                     </Col>
                     <Col sm={3} span={14}>
                       <Form.Item style={{ marginBottom: 0 }}>
@@ -132,7 +132,7 @@ export const CreateMaterialModal = () => {
                 </span>
                 {/*Default error messages*/}
                 <Form.ErrorList errors={errors} />
-                {/*Add Part Button*/}
+                {/*Add Vendor Button*/}
                 <Row>
                   <Col span={24}>
                     <Form.Item style={{ marginBottom: 0, marginTop: 16 }}>
