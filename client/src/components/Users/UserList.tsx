@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Card, Modal, Input, message } from 'antd';
 import { ResponsiveTable } from '../ResponsiveTable';
+import { EditUserForm } from './EditUserForm';
 import axios from '../../plugins/Axios'
 import { UserEntry } from '../../interfaces/UserEntry';
 import { getRoleString } from '../../router/Roles';
@@ -144,7 +145,7 @@ export const UserList = () => {
         confirmLoading={editLoading}
         onOk={() => editUser(selectedUser)}
         onCancel={() => setEditVisible(false)}>
-        <p>TODO: Edit User</p>
+        <EditUserForm />
       </Modal>
       <Modal
         title="Delete User"
