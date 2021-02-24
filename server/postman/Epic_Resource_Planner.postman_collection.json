@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "b351d01f-1d6a-4555-8d61-718258c0847e",
-		"name": "Epic Resource Planner",
+		"name": "Epic_Resource_Planner",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -76,12 +76,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"stock\": 4\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
+							"raw": "{\n    \"stock\": 4\n}"
 						},
 						"url": {
 							"raw": "{{url}}/parts/6023033e12523415393afc0f",
@@ -106,13 +101,13 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{url}}/parts/60245c2d2816ce3290065c38",
+							"raw": "{{url}}/parts/60220fd37d5a1f2c5a6d9778",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"parts",
-								"60245c2d2816ce3290065c38"
+								"60220fd37d5a1f2c5a6d9778"
 							]
 						}
 					},
@@ -165,12 +160,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Pink bike tassels\",\n    \"description\": \"makes it go faster\",\n    \"stock\": 70000\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
+							"raw": "{\n    \"name\": \"Pink bike tassels\",\n    \"description\": \"makes it go faster\",\n    \"stock\": 70000\n}"
 						},
 						"url": {
 							"raw": "{{url}}/finance",
@@ -191,12 +181,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"stock\": 4\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
+							"raw": "{\n    \"stock\": 4\n}"
 						},
 						"url": {
 							"raw": "{{url}}/finance/6023033e12523415393afc0f",
@@ -311,11 +296,21 @@
 				{
 					"name": "Create user",
 					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"inventory\",\r\n    \"password\": \"Password1!\",\r\n    \"name\": \"Inventory Manager\",\r\n    \"role\": 3\r\n}",
+							"raw": "{\r\n    \"username\": \"user\",\r\n    \"password\": \"Jr:6sh[3F}`^ns\",\r\n    \"name\": \"Tom Cruz\",\r\n    \"role\": 4\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -341,12 +336,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"password\": \"password\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
+							"raw": "{\r\n    \"password\": \"password\"\r\n}"
 						},
 						"url": {
 							"raw": "{{url}}/users/user",
@@ -362,7 +352,7 @@
 					"response": []
 				},
 				{
-					"name": "Delete user by id",
+					"name": "Delete part by id",
 					"request": {
 						"method": "DELETE",
 						"header": [],
@@ -411,13 +401,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{url}}/products/602fc1c35ec85b42243e6b1c",
+							"raw": "{{url}}/products/60367da1c6945e5fe2688ce3",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"products",
-								"602fc1c35ec85b42243e6b1c"
+								"60367da1c6945e5fe2688ce3"
 							]
 						}
 					},
@@ -437,7 +427,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"bike2\",\n    \"description\": \"amazing bike\",\n    \"price\": 299.99,\n    \"parts\": [\"seat\", \"tassels\"],\n    \"frameSize\": \"18in\",\n    \"color\": \"green\",\n    \"finish\": \"matte\",\n    \"dynamic\": [\n        {\"key\": \"swag level\", \"value\": \"9000\"}\n    ],\n    \"quantity\": 20\n}",
+							"raw": "{\n    \"name\": \"bike2\",\n    \"price\": 299.99,\n    \"quantity\": 12,\n    \"parts\": [],\n    \"properties\": [\n        {\"key\": \"swag level\", \"value\": \"9000\"}\n    ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -463,7 +453,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"quantity\": 12\n}",
+							"raw": "{\n    \"quantity\": 160\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -471,13 +461,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}/products/6032ab325ea8744bc3814bbe",
+							"raw": "{{url}}/products/60367da1c6945e5fe2688ce3",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"products",
-								"6032ab325ea8744bc3814bbe"
+								"60367da1c6945e5fe2688ce3"
 							]
 						}
 					},
