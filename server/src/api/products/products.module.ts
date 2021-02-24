@@ -25,18 +25,13 @@ import { UpdateProductLogDto } from './products-logs/dto/update-product-log.dto'
         useFactory: (productLogsService: ProductLogsService) => {
           const schema = ProductSchema;
           schema.pre('save', function () {
-            console.log('Hello from pre save');
-            console.log(this);
-
             const updateProductLogDto: UpdateProductLogDto = {
               productId: this.id,
-              stock: 13,
-              built: 13,
-              used: 13,
+              stock: this['quantity'],
+              built: 0,
+              used: 0,
               date: new Date(),
             };
-
-            console.log(updateProductLogDto);
             productLogsService.update(updateProductLogDto);
           });
           return schema;
