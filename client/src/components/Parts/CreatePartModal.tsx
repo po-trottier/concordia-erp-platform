@@ -1,54 +1,103 @@
-import React, { useState } from 'react';
-import { Button, Col, Form, Input, InputNumber, Modal, Row, Select } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Button, Col, Form, Input, InputNumber, message, Modal, Row, Select } from 'antd';
 import { MinusCircleTwoTone, PlusOutlined } from '@ant-design/icons';
 import { MaterialDropdownEntry } from '../../interfaces/MaterialDropdownEntry';
+import axios from '../../plugins/Axios';
 
 const { Option } = Select;
+
+interface Part {
+  partId : string,
+  quantity : number
+}
 
 export const CreatePartModal = () => {
 
   const [form] = Form.useForm();
 
   const emptyData : MaterialDropdownEntry[] = [];
-  // TODO Actually use the parts data to update the product
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [materialsData, setMaterialsData] = useState(emptyData);
-
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [updated, setUpdated] = useState(false);
 
-  const hideMaterialsError = () => {
-    const materialsError = document.getElementById('display-materials-error');
-    if (materialsError) {
-      materialsError.style.display = 'none';
+  useEffect(() => {
+    axios.get('/parts')
+      .then((res) => {
+        if (res && res.data) {
+          const data : MaterialDropdownEntry[] = [];
+          res.data.forEach((m : any) => {
+            data.push({
+              id: m['_id'],
+              name: m.name
+            });
+          });
+          setMaterialsData(data);
+        }
+      })
+      .catch(err => {
+        message.error('Something went wrong while fetching the list of parts.');
+        console.error(err);
+      })
+      .finally(() => setUpdated(true));
+  }, [updated]);
+
+  const hidePartsError = () => {
+    const partsError = document.getElementById('display-parts-error');
+    if (partsError) {
+      partsError.style.display = 'none';
     }
   };
 
-  const showMaterialsError = () => {
-    const materialsError = document.getElementById('display-materials-error');
-    if (materialsError) {
-      materialsError.style.display = 'block';
+  const displayPartsError = () => {
+    const partsError = document.getElementById('display-parts-error');
+    if (partsError) {
+      partsError.style.display = 'block';
     }
   };
 
   const handleSubmit = (values : any) => {
-    let materials = values['list_materials'];
-    if (!materials) {
-      showMaterialsError();
+    let parts = values['list_parts'];
+
+    if (!parts) {
+      displayPartsError();
       return;
     }
-    let hasDefinedMaterial = false;
-    for (let i = 0; i < materials.length; i++) {
-      if (materials[i]) {
-        hasDefinedMaterial = true;
-        break;
+
+    let hasDefinedPart = false;
+    parts.forEach((p : Part) => {
+      if (p && p.partId) {
+        hasDefinedPart = true;
+        return;
       }
-    }
-    if (!hasDefinedMaterial) {
-      showMaterialsError();
+    });
+    if (!hasDefinedPart) {
+      displayPartsError();
       return;
     }
-    setIsModalVisible(false);
-    form.resetFields();
+
+    let partsFiltered : Part[] = [];
+
+    parts.forEach((p : Part) => {
+      if (p.partId) {
+        partsFiltered.push({ partId: p.partId, quantity: p.quantity ? p.quantity : 1 });
+      }
+    });
+
+    axios.post('parts', {
+      name: values['part_name'],
+      parts: partsFiltered,
+      price: values['part_price'],
+      properties: values['list_properties']
+    })
+      .then(() => {
+        setIsModalVisible(false);
+        form.resetFields();
+        message.success('The part was successfully created.');
+      })
+      .catch(err => {
+        console.error(err);
+        message.error('Something went wrong while creating the part.');
+      });
   };
 
   const handleCancel = () => {
@@ -59,12 +108,12 @@ export const CreatePartModal = () => {
   return (
     <div>
       <Button type='primary' onClick={() => setIsModalVisible(true)} style={{ marginTop: 16 }}>
-        Define a new part
+        Add a New Part
       </Button>
 
-      <Modal title='Define a new part' visible={isModalVisible} onOk={form.submit} onCancel={handleCancel}>
+      <Modal title='Define a New Part' visible={isModalVisible} onOk={form.submit} onCancel={handleCancel}>
         <Form form={form} onFinish={handleSubmit}>
-          {/*Part Name Entry*/}
+          {/*part Name Field*/}
           <Row align='middle' style={{ marginBottom: 16 }}>
             <Col sm={6} span={9}>
               <span>Part Name:</span>
@@ -73,35 +122,55 @@ export const CreatePartModal = () => {
               <Form.Item
                 style={{ marginBottom: 0 }}
                 name='part_name'
-                rules={[{ required: true, message: 'Please enter a part name!' }]}>
+                rules={[{ required: true, message: 'Please enter a part name.' }]}>
                 <Input placeholder='Part Name' />
               </Form.Item>
             </Col>
           </Row>
-          {/*Materials List*/}
-          <Form.List name='list_materials'>
+          <Row align='middle' style={{ marginBottom: 16 }}>
+            <Col sm={6} span={9}>
+              <span>Price:</span>
+            </Col>
+            <Col sm={18} span={15}>
+              <Form.Item
+                style={{ marginBottom: 0 }}
+                name='part_price'
+                rules={[{ required: true, message: 'Please enter a price.' }]}>
+                <InputNumber
+                  style={{ width: '100%' }}
+                  defaultValue={0}
+                  formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                />
+              </Form.Item>
+            </Col>
+          </Row>
+          <h4 style={{ fontWeight: 'bold' }}>Part Materials</h4>
+          <Form.List name='list_parts'>
             {(fields, { add, remove }, { errors }) => (
               <div>
                 {fields.map((field, index) => (
-                  // Single Material Entry
+                  // Single part Part Entry
                   <Row key={index} align='middle' style={{ marginBottom: 8 }}>
-                    {/*Material Selector*/}
-                    <Col sm={4} span={6} style={{ paddingRight: 8 }}>
-                      Material:
+                    {/*Part Selector*/}
+                    <Col sm={3} span={6} style={{ paddingRight: 8 }}>
+                      Part:
                     </Col>
-                    <Col className='margin-bottom-mobile' sm={11} span={18}>
+                    <Col className='margin-bottom-mobile' sm={12} span={18}>
                       <Form.Item
-                        {...field}
+                        name={[field.name, 'partId']}
+                        fieldKey={[field.fieldKey, 'partId']}
                         validateTrigger={['onChange', 'onBlur']}
                         noStyle>
                         <Select
                           showSearch
                           style={{ width: '100%', display: 'inline-table' }}
-                          placeholder='Select a material'
+                          placeholder='Select a part'
                           optionFilterProp='children'
-                          onChange={hideMaterialsError}>
-                          {materialsData.map((material, index) => (
-                            <Option key={material.id} value={material.id}>{material.name}</Option>))}
+                          onChange={hidePartsError}>
+                          {materialsData.map((material) => (
+                            <Option key={material.id} value={material.id}>
+                              {material.name}
+                            </Option>))}
                         </Select>
                       </Form.Item>
                     </Col>
@@ -110,8 +179,14 @@ export const CreatePartModal = () => {
                       Quantity:
                     </Col>
                     <Col sm={3} span={14}>
-                      <Form.Item style={{ marginBottom: 0 }}>
-                        <InputNumber style={{ width: '100%' }} min={1} defaultValue={1} />
+                      <Form.Item
+                        name={[field.name, 'quantity']}
+                        fieldKey={[field.fieldKey, 'quantity']}
+                        style={{ marginBottom: 0 }}>
+                        <InputNumber
+                          style={{ width: '100%' }}
+                          min={1}
+                          defaultValue={1} />
                       </Form.Item>
                     </Col>
                     {/*Delete Button*/}
@@ -124,12 +199,12 @@ export const CreatePartModal = () => {
                   </Row>
                 ))}
                 {/*Custom error message*/}
-                <span id='display-materials-error' style={{ color: 'red', display: 'none' }}>
-                  Please add at least one material.
+                <span id='display-parts-error' style={{ color: 'red', display: 'none' }}>
+                  Please add at least one part.
                 </span>
                 {/*Default error messages*/}
                 <Form.ErrorList errors={errors} />
-                {/*Add Material Button*/}
+                {/*Add Part Button*/}
                 <Row>
                   <Col span={24}>
                     <Form.Item style={{ marginBottom: 0, marginTop: 16 }}>
@@ -139,6 +214,68 @@ export const CreatePartModal = () => {
                         style={{ width: '100%' }}
                         icon={<PlusOutlined />}>
                         Add a Material
+                      </Button>
+                    </Form.Item>
+                  </Col>
+                </Row>
+              </div>
+            )}
+          </Form.List>
+          <h4 style={{ fontWeight: 'bold', marginTop: 16 }}>Part Properties</h4>
+          {/*part Properties Fields*/}
+          <Form.List name='list_properties'>
+            {(fields, { add, remove }, { errors }) => (
+              <div>
+                {fields.map((field, index) => (
+                  // Single part Property Entry
+                  <Row key={index} align='middle' style={{ marginBottom: 8 }}>
+                    {/*Property Name*/}
+                    <Col sm={4} span={6} style={{ paddingRight: 8 }}>
+                      Property:
+                    </Col>
+                    <Col className='margin-bottom-mobile' sm={7} span={18}>
+                      <Form.Item
+                        {...field}
+                        name={[field.name, 'key']}
+                        fieldKey={[field.fieldKey, 'key']}
+                        validateTrigger={['onChange', 'onBlur']}
+                        noStyle>
+                        <Input placeholder='Property Name' />
+                      </Form.Item>
+                    </Col>
+                    {/*Property Value*/}
+                    <Col className='text-left-mobile' sm={4} span={6} style={{ textAlign: 'right', paddingRight: 8 }}>
+                      Value:
+                    </Col>
+                    <Col sm={7} span={14}>
+                      <Form.Item
+                        name={[field.name, 'value']}
+                        fieldKey={[field.fieldKey, 'value']}
+                        style={{ marginBottom: 0 }}>
+                        <Input placeholder='Property Value' />
+                      </Form.Item>
+                    </Col>
+                    {/*Delete Button*/}
+                    <Col sm={2} span={4} style={{ textAlign: 'right' }}>
+                      <MinusCircleTwoTone
+                        className='dynamic-delete-button'
+                        twoToneColor='red'
+                        onClick={() => remove(field.name)} />
+                    </Col>
+                  </Row>
+                ))}
+                {/*Default error messages*/}
+                <Form.ErrorList errors={errors} />
+                {/*Add Property Button*/}
+                <Row>
+                  <Col span={24}>
+                    <Form.Item style={{ marginBottom: 0, marginTop: 16 }}>
+                      <Button
+                        type='dashed'
+                        onClick={() => add()}
+                        style={{ width: '100%' }}
+                        icon={<PlusOutlined />}>
+                        Add a Property
                       </Button>
                     </Form.Item>
                   </Col>
