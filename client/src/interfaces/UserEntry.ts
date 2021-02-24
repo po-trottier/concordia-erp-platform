@@ -5,7 +5,7 @@ export interface UserEntry {
   firstName: string,
   lastName: string,
   role: number,
+  email: string,
   roleString?: string,
-  email?: string,
   actions?: React.ReactNode
 }

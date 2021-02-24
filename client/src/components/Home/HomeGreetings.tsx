@@ -22,7 +22,7 @@ export const HomeGreetings = () => {
 
   return (
     <div>
-      <Title level={2}>Hello {user.name}!</Title>
+      <Title level={2}>Hello {user.firstName}!</Title>
       <p style={{ fontSize: 16 }}>
         Welcome to the EPIC Resource Planner.
         Here are some pages for you to visit today.

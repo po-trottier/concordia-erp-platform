@@ -40,8 +40,6 @@ export const LoginForm = () => {
         if (resp) {
           const user : LoginRequest = resp.data;
           user.isRemembered = remember;
-          // TODO: Simply use the user's email
-          user.email = 'test@test.com';
           dispatch(loginAction(user));
           history.replace(desiredPath);
         }

@@ -25,29 +25,20 @@ export class UsersService implements OnApplicationBootstrap {
 
   // Create default user if he doesn't exist
   async createDefaultUser(): Promise<void> {
-    try {
-      const admin = await this.findOne(DEFAULT_USER);
-      if (admin) {
-        console.log('Default user already exits.');
-      }
-    } catch (err) {
-      if (err.status == 404) {
+      const admin = await this.findOneInternal(DEFAULT_USER);
+      if (!admin) {
         const user = new CreateUserDto();
         user.username = DEFAULT_USER;
         user.firstName = 'Administrator';
         user.lastName = 'Person';
-        user.email = 'temp@gmail.com';
+        user.email = 'admin@null.com';
         user.role = Role.SYSTEM_ADMINISTRATOR;
         user.password = await hash(process.env.DEFAULT_PASSWORD, 16);
         await this.create(user);
         console.log('Default user was created successfully.');
       } else {
-        console.error(
-          'Something went wrong while creating the default user.',
-          err,
-        );
-      }
-    }
+        console.log('Default user already exits.');
+      } 
   }
 
   // To be used internally only as it leaks the password hash!
@@ -62,6 +53,11 @@ export class UsersService implements OnApplicationBootstrap {
     if (await this.findOneInternal(account.username)) {
       throw new ConflictException(
         'A user with the same username already exists.',
+      );
+    }
+    if (await this.userModel.findOne({email: account.email})) {
+      throw new ConflictException(
+        'A user with the same email already exists.',
       );
     }
     const createdUser = new this.userModel(account);

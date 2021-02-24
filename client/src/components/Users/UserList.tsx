@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Input } from 'antd';
 import { ResponsiveTable } from '../ResponsiveTable';
-import axios from '../../plugins/Axios'
+import axios from '../../plugins/Axios';
 import { UserListActions } from './UserListActions';
 import { UserEntry } from '../../interfaces/UserEntry';
 import { getRoleString } from '../../router/Roles';
@@ -13,7 +13,7 @@ export const UserList = () => {
   const getColumns = () => ({
     firstName: 'First Name',
     lastName: 'Last Name',
-    username : 'Username',
+    username: 'Username',
     email: 'Email',
     roleString: 'Role',
     actions: 'Actions'
@@ -26,25 +26,24 @@ export const UserList = () => {
 
   useEffect(() => {
     let rows = [];
-    axios.get('users').then(({data}) => {
+    axios.get('users').then(({ data }) => {
       rows = data;
       if (searchValue.trim() !== '') {
         rows = rows.filter(
-           (r : UserEntry) => {
-             let name = r.firstName + ' ' + r.lastName;
-             name.trim().toLowerCase().includes(searchValue.trim().toLowerCase())
-            }
+          (r : UserEntry) => {
+            const name = r.firstName + ' ' + r.lastName;
+            return name.trim().toLowerCase().includes(searchValue.trim().toLowerCase());
+          }
         );
       }
       rows.forEach((user : UserEntry) => {
-        user.email = user.email;
         user.roleString = getRoleString(user.role);
         user.actions = <UserListActions user={user} />;
-      })
+      });
       setTableData(rows);
     });
 
-    }, [searchValue]);
+  }, [searchValue]);
 
   const onSearch = (e : React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
