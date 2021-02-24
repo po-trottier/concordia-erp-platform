@@ -34,7 +34,7 @@ export class ProductsService {
       used: 0,
     };
 
-    this.eventEmitter.emit('product.quantity.updated', event);
+    // this.eventEmitter.emit('product.quantity.updated', event);
 
     return createdProduct;
   }
@@ -91,7 +91,7 @@ export class ProductsService {
         used: usedAmount,
       };
 
-      this.eventEmitter.emit('product.quantity.updated', event);
+//      this.eventEmitter.emit('product.quantity.updated', event);
     }
 
     return this.verifyProductFound(id, updatedProduct);
