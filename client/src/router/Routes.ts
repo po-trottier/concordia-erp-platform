@@ -79,7 +79,7 @@ export const Routes : Route[] = [
   },
   {
     path: '/users',
-    exact: true,
+    exact: false,
     title: 'Users',
     icon: 'user',
     page: Users,

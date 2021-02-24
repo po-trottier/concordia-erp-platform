@@ -55,11 +55,6 @@ export class UsersService implements OnApplicationBootstrap {
         'A user with the same username already exists.',
       );
     }
-    if (await this.userModel.findOne({email: account.email})) {
-      throw new ConflictException(
-        'A user with the same email already exists.',
-      );
-    }
     const createdUser = new this.userModel(account);
     const user = await createdUser.save();
     return this.validateUserFound(user, user.username);
