@@ -7,7 +7,7 @@ import axios from '../../plugins/Axios';
 const { Option } = Select;
 
 interface Material {
-  partId : string,
+  materialId : string,
   quantity : number
 }
 
@@ -21,7 +21,7 @@ export const CreatePartModal = () => {
   const [updated, setUpdated] = useState(false);
 
   useEffect(() => {
-    axios.get('/parts')
+    axios.get('/materials')
       .then((res) => {
         if (res && res.data) {
           const data : MaterialDropdownEntry[] = [];
@@ -35,7 +35,7 @@ export const CreatePartModal = () => {
         }
       })
       .catch(err => {
-        message.error('Something went wrong while fetching the list of parts.');
+        message.error('Something went wrong while fetching the list of materials.');
         console.error(err);
       })
       .finally(() => setUpdated(true));
@@ -49,23 +49,21 @@ export const CreatePartModal = () => {
   };
 
   const displayMaterialsError = () => {
-    const materialsError = document.getElementById('display-materials-error');
+    const materialsError = document.getElementById('display-parts-error');
     if (materialsError) {
       materialsError.style.display = 'block';
     }
   };
 
   const handleSubmit = (values : any) => {
-    let parts = values['list_parts'];
-
-    if (!parts) {
+    let materials = values['list_materials'];
+    if (!materials) {
       displayMaterialsError();
       return;
     }
-
     let hasDefinedMaterial = false;
-    parts.forEach((p : Material) => {
-      if (p && p.partId) {
+    materials.forEach((m : Material) => {
+      if (m && m.materialId) {
         hasDefinedMaterial = true;
         return;
       }
@@ -77,17 +75,14 @@ export const CreatePartModal = () => {
 
     let materialsFiltered : Material[] = [];
 
-    parts.forEach((p : Material) => {
-      if (p.partId) {
-        materialsFiltered.push({ partId: p.partId, quantity: p.quantity ? p.quantity : 1 });
+    materials.forEach((m : Material) => {
+      if (m.materialId) {
+        materialsFiltered.push({ materialId: m.materialId, quantity: m.quantity ? m.quantity : 1 });
       }
     });
-
-    axios.post('parts', {
-      name: values['part_name'],
+    axios.post('materials', {
+      name: values['material_name'],
       parts: materialsFiltered,
-      price: values['part_price'],
-      properties: values['list_properties']
     })
       .then(() => {
         setIsModalVisible(false);
@@ -127,44 +122,44 @@ export const CreatePartModal = () => {
               </Form.Item>
             </Col>
           </Row>
-          <Row align='middle' style={{ marginBottom: 16 }}>
-            <Col sm={6} span={9}>
-              <span>Price:</span>
-            </Col>
-            <Col sm={18} span={15}>
-              <Form.Item
-                style={{ marginBottom: 0 }}
-                name='part_price'
-                rules={[{ required: true, message: 'Please enter a price.' }]}>
-                <InputNumber
-                  style={{ width: '100%' }}
-                  defaultValue={0}
-                  formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                />
-              </Form.Item>
-            </Col>
-          </Row>
+          {/*<Row align='middle' style={{ marginBottom: 16 }}>*/}
+          {/*  <Col sm={6} span={9}>*/}
+          {/*    <span>Price:</span>*/}
+          {/*  </Col>*/}
+          {/*  <Col sm={18} span={15}>*/}
+          {/*    <Form.Item*/}
+          {/*      style={{ marginBottom: 0 }}*/}
+          {/*      name='part_price'*/}
+          {/*      rules={[{ required: true, message: 'Please enter a price.' }]}>*/}
+          {/*      <InputNumber*/}
+          {/*        style={{ width: '100%' }}*/}
+          {/*        defaultValue={0}*/}
+          {/*        formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}*/}
+          {/*      />*/}
+          {/*    </Form.Item>*/}
+          {/*  </Col>*/}
+          {/*</Row>*/}
           <h4 style={{ fontWeight: 'bold' }}>Part Materials</h4>
-          <Form.List name='list_parts'>
+          <Form.List name='list_materials'>
             {(fields, { add, remove }, { errors }) => (
               <div>
                 {fields.map((field, index) => (
                   // Single part Part Entry
                   <Row key={index} align='middle' style={{ marginBottom: 8 }}>
                     {/*Part Selector*/}
-                    <Col sm={3} span={6} style={{ paddingRight: 8 }}>
-                      Part:
+                    <Col sm={4} span={6} style={{ paddingRight: 8 }}>
+                      Materials:
                     </Col>
-                    <Col className='margin-bottom-mobile' sm={12} span={18}>
+                    <Col className='margin-bottom-mobile' sm={11} span={18}>
                       <Form.Item
-                        name={[field.name, 'partId']}
-                        fieldKey={[field.fieldKey, 'partId']}
+                        name={[field.name, 'materialId']}
+                        fieldKey={[field.fieldKey, 'materialId']}
                         validateTrigger={['onChange', 'onBlur']}
                         noStyle>
                         <Select
                           showSearch
                           style={{ width: '100%', display: 'inline-table' }}
-                          placeholder='Select a part'
+                          placeholder='Select a material'
                           optionFilterProp='children'
                           onChange={hideMaterialsError}>
                           {materialsData.map((material) => (
@@ -200,7 +195,7 @@ export const CreatePartModal = () => {
                 ))}
                 {/*Custom error message*/}
                 <span id='display-parts-error' style={{ color: 'red', display: 'none' }}>
-                  Please add at least one part.
+                  Please add at least one material.
                 </span>
                 {/*Default error messages*/}
                 <Form.ErrorList errors={errors} />
@@ -221,68 +216,68 @@ export const CreatePartModal = () => {
               </div>
             )}
           </Form.List>
-          <h4 style={{ fontWeight: 'bold', marginTop: 16 }}>Part Properties</h4>
+          {/*<h4 style={{ fontWeight: 'bold', marginTop: 16 }}>Part Properties</h4>*/}
           {/*part Properties Fields*/}
-          <Form.List name='list_properties'>
-            {(fields, { add, remove }, { errors }) => (
-              <div>
-                {fields.map((field, index) => (
-                  // Single part Property Entry
-                  <Row key={index} align='middle' style={{ marginBottom: 8 }}>
-                    {/*Property Name*/}
-                    <Col sm={4} span={6} style={{ paddingRight: 8 }}>
-                      Property:
-                    </Col>
-                    <Col className='margin-bottom-mobile' sm={7} span={18}>
-                      <Form.Item
-                        {...field}
-                        name={[field.name, 'key']}
-                        fieldKey={[field.fieldKey, 'key']}
-                        validateTrigger={['onChange', 'onBlur']}
-                        noStyle>
-                        <Input placeholder='Property Name' />
-                      </Form.Item>
-                    </Col>
-                    {/*Property Value*/}
-                    <Col className='text-left-mobile' sm={4} span={6} style={{ textAlign: 'right', paddingRight: 8 }}>
-                      Value:
-                    </Col>
-                    <Col sm={7} span={14}>
-                      <Form.Item
-                        name={[field.name, 'value']}
-                        fieldKey={[field.fieldKey, 'value']}
-                        style={{ marginBottom: 0 }}>
-                        <Input placeholder='Property Value' />
-                      </Form.Item>
-                    </Col>
-                    {/*Delete Button*/}
-                    <Col sm={2} span={4} style={{ textAlign: 'right' }}>
-                      <MinusCircleTwoTone
-                        className='dynamic-delete-button'
-                        twoToneColor='red'
-                        onClick={() => remove(field.name)} />
-                    </Col>
-                  </Row>
-                ))}
-                {/*Default error messages*/}
-                <Form.ErrorList errors={errors} />
-                {/*Add Property Button*/}
-                <Row>
-                  <Col span={24}>
-                    <Form.Item style={{ marginBottom: 0, marginTop: 16 }}>
-                      <Button
-                        type='dashed'
-                        onClick={() => add()}
-                        style={{ width: '100%' }}
-                        icon={<PlusOutlined />}>
-                        Add a Property
-                      </Button>
-                    </Form.Item>
-                  </Col>
-                </Row>
-              </div>
-            )}
-          </Form.List>
+          {/*<Form.List name='list_properties'>*/}
+          {/*  {(fields, { add, remove }, { errors }) => (*/}
+          {/*    <div>*/}
+          {/*      {fields.map((field, index) => (*/}
+          {/*        // Single part Property Entry*/}
+          {/*        <Row key={index} align='middle' style={{ marginBottom: 8 }}>*/}
+          {/*          Property Name*/}
+          {/*          <Col sm={4} span={6} style={{ paddingRight: 8 }}>*/}
+          {/*            Property:*/}
+          {/*          </Col>*/}
+          {/*          <Col className='margin-bottom-mobile' sm={7} span={18}>*/}
+          {/*            <Form.Item*/}
+          {/*              {...field}*/}
+          {/*              name={[field.name, 'key']}*/}
+          {/*              fieldKey={[field.fieldKey, 'key']}*/}
+          {/*              validateTrigger={['onChange', 'onBlur']}*/}
+          {/*              noStyle>*/}
+          {/*              <Input placeholder='Property Name' />*/}
+          {/*            </Form.Item>*/}
+          {/*          </Col>*/}
+          {/*          Property Value*/}
+          {/*          <Col className='text-left-mobile' sm={4} span={6} style={{ textAlign: 'right', paddingRight: 8 }}>*/}
+          {/*            Value:*/}
+          {/*          </Col>*/}
+          {/*          <Col sm={7} span={14}>*/}
+          {/*            <Form.Item*/}
+          {/*              name={[field.name, 'value']}*/}
+          {/*              fieldKey={[field.fieldKey, 'value']}*/}
+          {/*              style={{ marginBottom: 0 }}>*/}
+          {/*              <Input placeholder='Property Value' />*/}
+          {/*            </Form.Item>*/}
+          {/*          </Col>*/}
+          {/*          Delete Button*/}
+          {/*          <Col sm={2} span={4} style={{ textAlign: 'right' }}>*/}
+          {/*            <MinusCircleTwoTone*/}
+          {/*              className='dynamic-delete-button'*/}
+          {/*              twoToneColor='red'*/}
+          {/*              onClick={() => remove(field.name)} />*/}
+          {/*          </Col>*/}
+          {/*        </Row>*/}
+          {/*      ))}*/}
+          {/*      Default error messages*/}
+          {/*      <Form.ErrorList errors={errors} />*/}
+          {/*      Add Property Button*/}
+          {/*      <Row>*/}
+          {/*        <Col span={24}>*/}
+          {/*          <Form.Item style={{ marginBottom: 0, marginTop: 16 }}>*/}
+          {/*            <Button*/}
+          {/*              type='dashed'*/}
+          {/*              onClick={() => add()}*/}
+          {/*              style={{ width: '100%' }}*/}
+          {/*              icon={<PlusOutlined />}>*/}
+          {/*              Add a Property*/}
+          {/*            </Button>*/}
+          {/*          </Form.Item>*/}
+          {/*        </Col>*/}
+          {/*      </Row>*/}
+          {/*    </div>*/}
+          {/*  )}*/}
+          {/*</Form.List>*/}
         </Form>
       </Modal>
     </div>
