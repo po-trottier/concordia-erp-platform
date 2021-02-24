@@ -8,8 +8,8 @@ export class PartLogsController {
   constructor(private readonly partsLogService: PartLogsService) {}
 
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
-  @Get('')
-  findAllLog() {
+  @Get()
+  findAll() {
     return this.partsLogService.findAll();
   }
 }
