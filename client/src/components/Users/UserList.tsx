@@ -36,7 +36,6 @@ export const UserList = () => {
 
   const editUser = (user : UserEntry) => {
 
-    console.log('hello world');
     setEditLoading(true);
     axios.patch('/users/' + user.username)
       .catch((err) => {
@@ -86,6 +85,7 @@ export const UserList = () => {
     let rows = [];
     axios.get('users').then(({data}) => {
       rows = data;
+      console.log(data)
       if (searchValue.trim() !== '') {
         rows = rows.filter(
            (r : UserEntry) => r.name.trim().toLowerCase().includes(searchValue.trim().toLowerCase()));

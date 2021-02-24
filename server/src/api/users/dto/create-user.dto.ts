@@ -34,6 +34,15 @@ export class CreateUserDto {
   })
   password: string;
 
+  @IsNotEmpty()
+  @IsString()
+  email: string;
+
+
+  @IsNotEmpty()
+  @IsString()
+  name: string;
+
   @IsDefined()
   @IsInt()
   role: Role;

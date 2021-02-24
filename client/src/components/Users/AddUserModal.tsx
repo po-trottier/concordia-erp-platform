@@ -38,6 +38,7 @@ export const AddUserModal = () => {
     axios.post('/users', {
       name: firstName + ' ' + lastName,
       username: username,
+      email: email,
       password: 'Password1!',
       role: role,
     })

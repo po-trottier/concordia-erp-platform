@@ -36,6 +36,7 @@ export class UsersService implements OnApplicationBootstrap {
         user.username = DEFAULT_USER;
         user.firstName = 'Administrator';
         user.lastName = 'Person';
+        user.email = 'temp@gmail.com';
         user.role = Role.SYSTEM_ADMINISTRATOR;
         user.password = await hash(process.env.DEFAULT_PASSWORD, 16);
         await this.create(user);
