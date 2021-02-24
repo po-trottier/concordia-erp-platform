@@ -1,9 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Types } from 'mongoose';
-import {
-  ProductProperty,
-} from './product-property.schema';
-import { ProductPart } from './product-part.schema';
+import { Document } from 'mongoose';
 
 export type ProductDocument = Product & Document;
 
@@ -31,11 +27,11 @@ export class Product {
   @Prop({ required: true, default: 0 })
   quantity: number;
 
-  @Prop([{ type: Types.ObjectId, ref: ProductPart.name }])
-  parts: ProductPart[];
+  @Prop()
+  parts: ProductPartInterface[];
 
-  @Prop([{ type: Types.ObjectId, ref: ProductProperty.name }])
-  properties: ProductProperty[];
+  @Prop()
+  properties: ProductPropertyInterface[];
 }
 
 export const ProductSchema = SchemaFactory.createForClass(Product);
