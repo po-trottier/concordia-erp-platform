@@ -9,11 +9,11 @@ export const EditUserForm = (props : any) => {
   const { Option } = Select;
   const [form] = Form.useForm();
 
-	const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
+  const [firstName, setFirstName] = useState(props.initialiName);
+  const [lastName, setLastName] = useState(props.initialiName);
+  const [email, setEmail] = useState(props.initialEmail);
   const [username, setUsername] = useState(props.initialiUsername);
-  const [role, setRole] = useState(0);
+  const [role, setRole] = useState(props.initialRole);
 
   const handleFirstName = (e : React.FormEvent<HTMLInputElement>) =>{}
 
@@ -34,11 +34,11 @@ export const EditUserForm = (props : any) => {
 				name='basic'
 				style={{ marginBottom: '-24px', width: '100%', maxWidth: '500px'}}
 				initialValues={{
-					firstName: props.name,
-					lastName: props.name,
-					email: props.email,
+					firstName,
+					lastName,
+					email,
 					username,
-					role: props.role,
+					role,
 				}}>
 				<Form.Item
 					label='First Name'

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Card, Modal, Input, message } from 'antd';
+import { Card, Input } from 'antd';
 import { ResponsiveTable } from '../ResponsiveTable';
-import { EditUserForm } from './EditUserForm';
 import axios from '../../plugins/Axios'
+import { UserListActions } from './UserListActions';
 import { UserEntry } from '../../interfaces/UserEntry';
 import { getRoleString } from '../../router/Roles';
 
@@ -18,68 +18,10 @@ export const UserList = () => {
     actions: 'Actions'
   });
 
-
   const emptyData : UserEntry[] = [];
-  const defaultUser : UserEntry = {
-    username: '',
-    name: '',
-    role: 0
-  };
 
   const [tableData, setTableData] = useState(emptyData);
   const [searchValue, setSearchValue] = useState('');
-  const [deleteVisible, setDeleteVisible] = React.useState(false);
-  const [deleteLoading, setDeleteLoading] = React.useState(false);
-  const [editVisible, setEditVisible] = React.useState(false);
-  const [editLoading, setEditLoading] = React.useState(false);
-  const [selectedUser, setSelectedUser] = React.useState(defaultUser);
-
-  const editUser = (user : UserEntry) => {
-
-    setEditLoading(true);
-    axios.patch('/users/' + user.username)
-      .catch((err) => {
-        message.error('Something went wrong while editing the user.');
-        console.error(err);
-      })
-      .then((resp) => {
-        message.success('User was edited successfully.');
-        const table = tableData;
-        const index = table.indexOf(user);
-        if (index !== -1 && resp) {
-          table[index].username = resp.data.username;
-          table[index].name = resp.data.name;
-          table[index].role = resp.data.role;
-        }
-        setTableData(table);
-      })
-      .finally(() => {
-        setEditVisible(false);
-        setEditLoading(false);
-      });
-  };
-
-  const deleteUser = (user : UserEntry) => {
-    setDeleteLoading(true);
-    axios.delete('/users/' + user.username)
-      .catch((err) => {
-        message.error('Something went wrong while deleting the user.');
-        console.error(err);
-      })
-      .then(() => {
-        message.success('User was deleted successfully.');
-        const data = tableData;
-        const index = data.indexOf(user);
-        if (index !== -1) {
-          data.splice(index, 1);
-        }
-        setTableData(data);
-      })
-      .finally(() => {
-        setDeleteVisible(false);
-        setDeleteLoading(false);
-      });
-  };
 
   useEffect(() => {
     let rows = [];
@@ -91,32 +33,10 @@ export const UserList = () => {
            (r : UserEntry) => r.name.trim().toLowerCase().includes(searchValue.trim().toLowerCase()));
       }
       rows.forEach((user : UserEntry) => {
-        user.email = 'temp@gmail.com';
+
+        user.email = user.email;
         user.roleString = getRoleString(user.role);
-        user.actions = (
-          <div>
-            <Button
-              type="primary"
-              size="small"
-              style={{ marginRight: 8, width: 60 }}
-              onClick={() => {
-                setSelectedUser(user);
-                setEditVisible(true);
-              }}>
-              Edit
-            </Button>
-            <Button
-              type="ghost"
-              size="small"
-              style={{ width: 60 }}
-              onClick={() => {
-                setSelectedUser(user);
-                setDeleteVisible(true);
-              }}>
-              Delete
-            </Button>
-          </div>
-        );
+        user.actions = <UserListActions user={user} />;
       })
       setTableData(rows);
     });
@@ -140,26 +60,6 @@ export const UserList = () => {
             <span>No users were found.</span>
         }
       </Card>
-      <Modal
-        title="Edit User"
-        visible={editVisible}
-        confirmLoading={editLoading}
-        onOk={() => editUser(selectedUser)}
-        onCancel={() => setEditVisible(false)}>
-        <EditUserForm
-        initialiName={selectedUser.name}
-        initialiUsername={selectedUser.username}
-        editLoading={editLoading}
-        editUser={editUser} />
-      </Modal>
-      <Modal
-        title="Delete User"
-        visible={deleteVisible}
-        confirmLoading={deleteLoading}
-        onOk={() => deleteUser(selectedUser)}
-        onCancel={() => setDeleteVisible(false)}>
-        <p>Are you sure you want to delete the user &quot;{selectedUser.username}&quot;?</p>
-      </Modal>
     </div>
   );
 };
