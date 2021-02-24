@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Modal, message } from 'antd';
 import axios from '../../plugins/Axios'
-import { UserEntry } from '../../interfaces/UserEntry';
 import { EditUserForm } from './EditUserForm';
-
 
 export const UserListActions = (props : any) => {
 
@@ -12,18 +10,7 @@ export const UserListActions = (props : any) => {
 		const [editVisible, setEditVisible] = React.useState(false);
 		const [deleteVisible, setDeleteVisible] = React.useState(false);
 
-		const handleEditButton = (user : UserEntry) => {
-			console.log(user);
-			setEditVisible(true);
-		}
-
-		const handleDeleteButton = (user : UserEntry) => {
-			console.log(user);
-			setDeleteVisible(true);
-		}
-
 		const editUser = () => {
-
 			setEditLoading(true);
 			axios.patch('/users/' + props.user.username)
 				.catch((err) => {
@@ -35,13 +22,12 @@ export const UserListActions = (props : any) => {
 					message.success('User was edited successfully.');
 				})
 				.finally(() => {
-					props.setEditVisible(false);
-					props.setEditLoading(false);
+					setEditVisible(false);
+					setEditLoading(false);
 				});
 		};
 	
 		const deleteUser = () => {
-			console.log('fuck');
 			setDeleteLoading(true);
 			axios.delete('/users/' + props.user.username)
 				.catch((err) => {
@@ -63,14 +49,14 @@ export const UserListActions = (props : any) => {
 					type="primary"
 					size="small"
 					style={{ marginRight: 8, width: 60 }}
-					onClick={() => handleEditButton(props.user)}>
+					onClick={() => setEditVisible(true)}>
 					Edit
 				</Button>
 				<Button
 					type="ghost"
 					size="small"
 					style={{ width: 60 }}
-					onClick={() => handleDeleteButton(props.user)}>
+					onClick={() => setDeleteVisible(true)}>
 					Delete
 				</Button>
 				<Modal
