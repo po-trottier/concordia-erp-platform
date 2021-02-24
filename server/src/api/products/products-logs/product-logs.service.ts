@@ -28,7 +28,7 @@ export class ProductLogsService {
    * @param updateProductLogDto dto used to update product logs
    */
   async update(updateProductLogDto: UpdateProductLogDto): Promise<ProductLog> {
-    const { productId, date,stock, built, used } = updateProductLogDto;
+    const { productId, date, stock, built, used } = updateProductLogDto;
     const updatedProductLog = await this.productLogModel.findOneAndUpdate(
       { productId, date },
       { stock, built, used },
@@ -36,6 +36,13 @@ export class ProductLogsService {
     );
 
     return this.validateProductLogFound(updatedProductLog, productId, date);
+  }
+
+  async findOne(productId: string): Promise<ProductLog> {
+    const productLog = await this.productLogModel.findOne({
+      productId: productId,
+    });
+    return this.validateProductLogFound(productLog, productId, productLog.date);
   }
 
   /**
