@@ -28,13 +28,15 @@ export class PartsService {
     const createdPart = new this.partModel(createPartDto);
     createdPart.save();
 
-    const updatePartLogDto: UpdatePartLogDto = {
-      partId: createdPart.id,
-      stock: createPartDto.stock || 0,
-      stockBuilt: 0,
-      stockUsed: 0,
-      date: parse(format(new Date(), 'd/M/y'), 'dd/MM/yyyy', new Date()),
-    };
+    const updatePartLogDto: UpdatePartLogDto = new UpdatePartLogDto();
+
+    updatePartLogDto.partId = createdPart.id;
+    updatePartLogDto.stock = createPartDto.stock || 0;
+    updatePartLogDto.date = parse(
+      format(new Date(), 'd/M/y'),
+      'dd/MM/yyyy',
+      new Date(),
+    );
 
     await this.partLogsService.update(updatePartLogDto);
 
@@ -89,11 +91,19 @@ export class PartsService {
 
     const netStockChange = stockBuilt - stockUsed;
 
-    const updatedPart = await this.partModel.findByIdAndUpdate(
+    let updatedPart = await this.partModel.findByIdAndUpdate(
       id,
       { $inc: { stock: netStockChange } },
       { new: true },
     );
+
+    if (updatedPart.stock < 0) {
+      updatedPart = await this.partModel.findByIdAndUpdate(
+        id,
+        { $set: { stock: 0 } },
+        { new: true },
+      );
+    }
 
     if (updatedPart) {
       const updatePartLogDto: UpdatePartLogDto = {
