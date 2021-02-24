@@ -1,18 +1,16 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { PartsService } from '../../../src/api/parts/parts.service';
+import { Model } from 'mongoose';
+import { PartDocument } from '../../../src/api/parts/schemas/part.schema';
 
 describe('PartsService', () => {
-  let service: PartsService;
+  let partsService: PartsService;
+  let partsDocumentModel: Model<PartDocument>;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [PartsService],
-    }).compile();
-
-    service = module.get<PartsService>(PartsService);
+    partsService = new PartsService(partsDocumentModel);
   });
 
   it('should be defined', () => {
-    expect(service).toBeDefined();
+    expect(partsService).toBeDefined();
   });
 });
