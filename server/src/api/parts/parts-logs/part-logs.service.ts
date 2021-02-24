@@ -22,17 +22,27 @@ export class PartLogsService {
   }
 
   /**
+   * Retrieves a partLog by composite key using mongoose partLogModel
+   *
+   * @param partId the id of the corresponding part
+   * @param date the date in history
+   */
+  async findOne(partId: string, date: Date): Promise<PartLog> {
+    const partLog = await this.partLogModel.findOne({ partId, date });
+    return this.validatePartLogFound(partLog, partId, date);
+  }
+
+  /**
    * Updates partLog by id using mongoose partLogModel
-   * If stock is part of the update, emits the part.quantity.updated event
    *
    * @param updatePartLogDto dto used to update part logs
    */
   async update(updatePartLogDto: UpdatePartLogDto): Promise<PartLog> {
-    const { partId, date, stock } = updatePartLogDto;
+    const { partId, date, stock, stockBuilt, stockUsed } = updatePartLogDto;
 
     const updatedPartLog = await this.partLogModel.findOneAndUpdate(
       { partId, date },
-      { stock },
+      { stock, stockBuilt, stockUsed },
       { new: true, upsert: true },
     );
 
@@ -46,10 +56,10 @@ export class PartLogsService {
    * @param partId the id of the corresponding part
    * @param date the date in history
    */
-  validatePartLogFound(partLogResult: any, partId: string, date: string) {
+  validatePartLogFound(partLogResult: any, partId: string, date: Date) {
     if (!partLogResult) {
       throw new NotFoundException(
-        `PartLog entry with partId ${partId} on ${date} not found`,
+        `PartLog entry with partId ${partId} on ${date.toString()} not found`,
       );
     } else {
       return partLogResult;

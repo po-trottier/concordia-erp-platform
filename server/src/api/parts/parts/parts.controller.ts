@@ -13,6 +13,7 @@ import { CreatePartDto } from './dto/create-part.dto';
 import { UpdatePartDto } from './dto/update-part.dto';
 import { Roles } from '../../roles/roles.decorator';
 import { Role } from '../../roles/roles.enum';
+import { UpdatePartStockDto } from './dto/update-part-stock.dto';
 
 @Controller()
 export class PartsController {
@@ -34,6 +35,15 @@ export class PartsController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.partsService.findOne(id);
+  }
+
+  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
+  @Patch(':id/stock')
+  updateStock(
+    @Param('id') id: string,
+    @Body(ValidationPipe) updatePartStockDto: UpdatePartStockDto,
+  ) {
+    return this.partsService.updateStock(id, updatePartStockDto);
   }
 
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)

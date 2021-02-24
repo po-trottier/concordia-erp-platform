@@ -1,12 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectModel } from '@nestjs/mongoose';
-import { format } from 'date-fns';
+import { format, parse } from 'date-fns';
 import { Model } from 'mongoose';
 import { CreatePartDto } from './dto/create-part.dto';
 import { UpdatePartDto } from './dto/update-part.dto';
 import { PartDocument, Part } from './schemas/part.schema';
-import { PartQuantityUpdatedEvent } from './events/part-quantity-updated.event';
+import { UpdatePartLogDto } from '../parts-logs/dto/update-part-log.dto';
+import { UpdatePartStockDto } from './dto/update-part-stock.dto';
+import { PartLogsService } from '../parts-logs/part-logs.service';
 
 /**
  * Used by the PartsController, handles part data storage and retrieval.
@@ -15,7 +16,7 @@ import { PartQuantityUpdatedEvent } from './events/part-quantity-updated.event';
 export class PartsService {
   constructor(
     @InjectModel(Part.name) private partModel: Model<PartDocument>,
-    private eventEmitter: EventEmitter2,
+    private readonly partLogsService: PartLogsService,
   ) {}
 
   /**
@@ -27,13 +28,15 @@ export class PartsService {
     const createdPart = new this.partModel(createPartDto);
     createdPart.save();
 
-    const event: PartQuantityUpdatedEvent = {
+    const updatePartLogDto: UpdatePartLogDto = {
       partId: createdPart.id,
       stock: createPartDto.stock || 0,
-      date: format(new Date(), 'd/M/y'),
+      stockBuilt: 0,
+      stockUsed: 0,
+      date: parse(format(new Date(), 'd/M/y'), 'dd/MM/yyyy', new Date()),
     };
 
-    this.eventEmitter.emit('part.quantity.updated', event);
+    await this.partLogsService.update(updatePartLogDto);
 
     return createdPart;
   }
@@ -57,7 +60,6 @@ export class PartsService {
 
   /**
    * Updates part by id using mongoose partModel
-   * If stock is part of the update, emits the part.quantity.updated event
    *
    * @param id string of the part's objectId
    * @param updatePartDto dto used to update parts
@@ -69,14 +71,40 @@ export class PartsService {
       { new: true },
     );
 
-    if (updatedPart && updatePartDto.stock) {
-      const event: PartQuantityUpdatedEvent = {
+    return this.validatePartFound(updatedPart, id);
+  }
+
+  /**
+   * Updates part stock by id using mongoose partModel
+   * Emits the part.quantity.updated event
+   *
+   * @param id string of the part's objectId
+   * @param updatePartStockDto dto used to update part stock
+   */
+  async updateStock(
+    id: string,
+    updatePartStockDto: UpdatePartStockDto,
+  ): Promise<Part> {
+    const { stockBuilt, stockUsed } = updatePartStockDto;
+
+    const netStockChange = stockBuilt - stockUsed;
+
+    const updatedPart = await this.partModel.findByIdAndUpdate(
+      id,
+      { $inc: { stock: netStockChange } },
+      { new: true },
+    );
+
+    if (updatedPart) {
+      const updatePartLogDto: UpdatePartLogDto = {
         partId: id,
-        stock: updatePartDto.stock,
-        date: format(new Date(), 'd/M/y'),
+        stock: updatedPart.stock,
+        stockBuilt,
+        stockUsed,
+        date: parse(format(new Date(), 'd/M/y'), 'dd/MM/yyyy', new Date()),
       };
 
-      this.eventEmitter.emit('part.quantity.updated', event);
+      await this.partLogsService.update(updatePartLogDto);
     }
 
     return this.validatePartFound(updatedPart, id);
