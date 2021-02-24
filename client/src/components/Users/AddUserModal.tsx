@@ -1,9 +1,14 @@
 import React, { useState } from 'react';
 import { Button, Form, Input, message, Modal, Select } from 'antd';
+import { useDispatch } from 'react-redux';
+
+import { addUserEntry } from '../../store/slices/UserList';
 import axios from '../../plugins/Axios';
 
+const { Option } = Select;
+
 export const AddUserModal = () => {
-  const { Option } = Select;
+  const dispatch = useDispatch();
 
   const [form] = Form.useForm();
 
@@ -16,15 +21,18 @@ export const AddUserModal = () => {
   const [loading, setLoading] = useState(false);
 
   const addUser = () => {
+    const newUser = {
+      firstName,
+      lastName,
+      username,
+      email,
+      role,
+    };
+
     setLoading(true);
-    axios.post('/users', {
-      firstName: firstName,
-      lastName: lastName,
-      username: username,
-      email: email,
-      role: role,
-    })
+    axios.post('/users', newUser)
       .then(() => {
+        dispatch(addUserEntry(newUser));
         setIsModalVisible(false);
         form.resetFields();
         message.success('User was added successfully.');

@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
 import { Button, message, Modal } from 'antd';
+import { useDispatch, useSelector } from 'react-redux';
+
 import { EditUserForm } from './EditUserForm';
+import { RootState } from '../../store/Store';
+import { updateUserEntry, removeUserEntry } from '../../store/slices/UserList';
 import axios from '../../plugins/Axios';
-import { useDispatch } from 'react-redux';
 
 export const UserListActions = (props : any) => {
   const dispatch = useDispatch();
+
+  const updatedUser = useSelector((state : RootState) => state.edit.selectedUser);
 
   const [editLoading, setEditLoading] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
@@ -13,13 +18,18 @@ export const UserListActions = (props : any) => {
   const [deleteVisible, setDeleteVisible] = useState(false);
 
   const initiateEdit = () => {
+    dispatch(initializeSelectedUser(props.user));
     setEditVisible(true);
   };
 
   const editUser = () => {
     setEditLoading(true);
-    axios.patch('/users/' + props.user.username)
-      .then(res => {
+    axios.patch('/users/' + props.user.username, updatedUser)
+      .then(() => {
+        dispatch(updateUserEntry({
+          username: props.user.username,
+          newUser: updatedUser,
+        }));
         setEditVisible(false);
         message.success('User was edited successfully.');
       })
@@ -36,6 +46,7 @@ export const UserListActions = (props : any) => {
     setDeleteLoading(true);
     axios.delete('/users/' + props.user.username)
       .then(() => {
+        dispatch(removeUserEntry(props.user.username));
         setDeleteVisible(false);
         message.success('User was deleted successfully.');
       })

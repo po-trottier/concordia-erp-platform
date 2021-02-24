@@ -1,17 +1,18 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Form, Input, Select } from 'antd';
-import { getRoleString } from '../../router/Roles';
+import { useDispatch, useSelector } from 'react-redux';
 
-export const EditUserForm = (props : any) => {
-  const { Option } = Select;
+import { getRoleString } from '../../router/Roles';
+import { RootState } from '../../store/Store';
+
+const { Option } = Select;
+
+export const EditUserForm = () => {
+  const dispatch = useDispatch();
 
   const [form] = Form.useForm();
 
-  const [firstName, setFirstName] = useState(props.user.firstName);
-  const [lastName, setLastName] = useState(props.user.lastName);
-  const [email, setEmail] = useState(props.user.email);
-  const [username, setUsername] = useState(props.user.username);
-  const [role, setRole] = useState(props.user.role);
+  const selectedUser = useSelector((state : RootState) => state.edit.selectedUser);
 
   return (
     <Form
@@ -19,43 +20,43 @@ export const EditUserForm = (props : any) => {
       name='basic'
       style={{ marginBottom: '-24px', width: '100%', maxWidth: '500px' }}
       initialValues={{
-        firstName,
-        lastName,
-        email,
-        username
+        'firstName': selectedUser.firstName,
+        'lastName': selectedUser.lastName,
+        'email': selectedUser.email,
+        'username': selectedUser.username,
+        'role': getRoleString(selectedUser.role),
       }}>
       <Form.Item
         label='First Name'
         name='firstName'
         rules={[{ required: true, message: 'Please input first name!' }]}>
-        <Input onChange={(e) => setFirstName(e.currentTarget.value)} />
+        <Input onChange={(e) => dispatch(setFirstName(e.currentTarget.value))} />
       </Form.Item>
       <Form.Item
         label='Last Name'
         name='lastName'
         rules={[{ required: true, message: 'Please input last name!' }]}>
-        <Input onChange={(e) => setLastName(e.currentTarget.value)} />
+        <Input onChange={(e) => dispatch(setLastName(e.currentTarget.value))} />
       </Form.Item>
       <Form.Item
         label='Email'
         name='email'
         rules={[{ required: true, message: 'Please input email address!' }]}>
-        <Input onChange={(e) => setEmail(e.currentTarget.value)} />
+        <Input onChange={(e) => dispatch(setEmail(e.currentTarget.value))} />
       </Form.Item>
       <Form.Item
         label='Username'
         name='username'
         rules={[{ required: true, message: 'Please input username!' }]}>
-        <Input onChange={(e) => setUsername(e.currentTarget.value)} />
+        <Input onChange={(e) => dispatch(setUsername(e.currentTarget.value))} />
       </Form.Item>
       <Form.Item
         label='Role'
-        name='Role'
+        name='role'
         rules={[{ required: true, message: 'Please select a role!' }]}>
         <Select
           placeholder="Select the user's role"
-          onSelect={() => (e : number) => setRole(e)}
-          defaultValue={getRoleString(role)}>
+          onSelect={() => (e : number) => dispatch(setRole(e))}>
           <Option value={1}>Salesperson</Option>
           <Option value={2}>Accountant</Option>
           <Option value={3}>Inventory Manager</Option>

@@ -1,27 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Input } from 'antd';
+import { useDispatch, useSelector } from 'react-redux';
+
 import { ResponsiveTable } from '../ResponsiveTable';
-import axios from '../../plugins/Axios';
 import { UserListActions } from './UserListActions';
-import { UserEntry } from '../../interfaces/UserEntry';
 import { getRoleString } from '../../router/Roles';
+import { setUserList } from '../../store/slices/UserList'
+import { RootState } from '../../store/Store';
+import { UserEntry } from '../../interfaces/UserEntry';
+import axios from '../../plugins/Axios';
 
 const { Search } = Input;
 
 export const UserList = () => {
+  const dispatch = useDispatch();
 
-  const getColumns = () => ({
-    firstName: 'First Name',
-    lastName: 'Last Name',
-    username: 'Username',
-    email: 'Email',
-    roleString: 'Role',
-    actions: 'Actions'
-  });
+  const userList = useSelector((state : RootState) => state.userList.list);
 
-  const emptyData : UserEntry[] = [];
-
-  const [tableData, setTableData] = useState(emptyData);
   const [searchValue, setSearchValue] = useState('');
 
   useEffect(() => {
@@ -40,7 +35,7 @@ export const UserList = () => {
         user.roleString = getRoleString(user.role);
         user.actions = <UserListActions user={user} />;
       });
-      setTableData(rows);
+      dispatch(setUserList(rows));
     });
 
   }, [searchValue]);
@@ -48,6 +43,15 @@ export const UserList = () => {
   const onSearch = (e : React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
   };
+
+  const getColumns = () => ({
+    firstName: 'First Name',
+    lastName: 'Last Name',
+    username: 'Username',
+    email: 'Email',
+    roleString: 'Role',
+    actions: 'Actions'
+  });
 
   return (
     <div>
@@ -57,8 +61,8 @@ export const UserList = () => {
           onChange={onSearch}
           style={{ marginBottom: 18 }} />
         {
-          tableData.length > 0 ?
-            <ResponsiveTable rows={tableData} cols={getColumns()} /> :
+          userList.length > 0 ?
+            <ResponsiveTable rows={userList} cols={getColumns()} /> :
             <span>No users were found.</span>
         }
       </Card>
