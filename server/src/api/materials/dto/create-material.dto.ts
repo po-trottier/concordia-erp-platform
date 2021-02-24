@@ -4,6 +4,8 @@ import {
   IsPositive,
   IsString,
   IsOptional,
+  IsNumber,
+  Min,
 } from 'class-validator';
 
 /**
@@ -14,15 +16,12 @@ export class CreateMaterialDto {
   @IsString()
   name: string;
 
-  @IsNotEmpty()
-  @IsString()
-  @IsOptional()
-  description: string;
-
   @IsInt()
-  @IsPositive()
-  stock: number;
+  @Min(0)
+  @IsOptional()
+  stock: number = 0;
 
+  @IsNumber()
   @IsPositive()
   density: number;
 
@@ -30,6 +29,11 @@ export class CreateMaterialDto {
   @IsString()
   vendorName: string;
 
+  @IsNotEmpty()
+  @IsString()
+  image: string;
+
+  @IsNumber()
   @IsPositive()
   price: number;
 }

@@ -1,17 +1,74 @@
 import React, { useState } from 'react';
-import { Button, Col, Form, Input, InputNumber, Modal, Row } from 'antd';
+import { Button, Col, Form, Input, InputNumber, message, Modal, Row } from 'antd';
+import { useDispatch, useSelector } from 'react-redux';
+
 import { MaterialImageUploader } from './MaterialImageUploader';
+import { RootState } from '../../store/Store';
+import { setSelected } from '../../store/slices/UploadSlice';
+import axios from '../../plugins/Axios';
 
-// TODO find a way to update the table on Modal submit with the gold image
 export const CreateMaterialModal = () => {
-
+  const dispatch = useDispatch();
   const [form] = Form.useForm();
 
+  const selectedFile = useSelector((state : RootState) => state.upload.selectedFile);
+
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const displayFileError = () => {
+    setLoading(false);
+    const fileError = document.getElementById('display-file-error');
+    if (fileError) {
+      fileError.style.display = 'block';
+    }
+  };
 
   const handleSubmit = (values : any) => {
-    setIsModalVisible(false);
-    form.resetFields();
+    if (!selectedFile) {
+      displayFileError();
+      return;
+    }
+
+    setLoading(true);
+
+    const reader = new FileReader();
+    reader.readAsDataURL(selectedFile);
+
+    reader.onloadend = () => {
+      const newMaterial = {
+        density: values.density,
+        name: values.name,
+        price: values.price,
+        vendorName: values.vendor,
+        image: reader.result
+      };
+
+      if (!newMaterial.density) {
+        newMaterial.density = 1;
+      }
+      if (!newMaterial.price) {
+        newMaterial.price = 1;
+      }
+
+      axios.post('/materials', newMaterial)
+        .then(() => {
+          setIsModalVisible(false);
+          message.success('The material was successfully added.')
+          dispatch(setSelected({ selectedFile: undefined }));
+          form.resetFields();
+        })
+        .catch((err) => {
+          message.error('Something went wrong while adding the material.')
+          console.error(err);
+        })
+        .finally(() => setLoading(false));
+    };
+
+    reader.onerror = () => {
+      setLoading(false);
+      message.error('Something went wrong while reading the uploaded image');
+    };
   };
 
   const handleCancel = () => {
@@ -30,7 +87,12 @@ export const CreateMaterialModal = () => {
         Add a New Material
       </Button>
 
-      <Modal title='Add a New Material' visible={isModalVisible} onOk={form.submit} onCancel={handleCancel}>
+      <Modal
+        title='Add a New Material'
+        visible={isModalVisible}
+        confirmLoading={loading}
+        onOk={form.submit}
+        onCancel={handleCancel}>
         <Form form={form} onFinish={handleSubmit} initialValues={initialValues}>
           {/*Material Name Field*/}
           <Row align='middle' style={{ marginBottom: 16 }}>
@@ -102,6 +164,10 @@ export const CreateMaterialModal = () => {
               <MaterialImageUploader />
             </Col>
           </Row>
+          {/*Custom error message*/}
+          <span id='display-file-error' style={{ color: 'red', display: 'none' }}>
+            Please select at least one image.
+          </span>
         </Form>
       </Modal>
     </div>
