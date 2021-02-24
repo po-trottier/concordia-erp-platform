@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Button, Col, Form, Input, InputNumber, Modal, Row, Select } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Button, Col, Form, Input, InputNumber, message, Modal, Row, Select } from 'antd';
 import { MinusCircleTwoTone, PlusOutlined } from '@ant-design/icons';
 import { PartDropdownEntry } from '../../interfaces/PartDropdownEntry';
 import axios from '../../plugins/Axios';
@@ -16,11 +16,30 @@ export const CreateProductModal = () => {
   const [form] = Form.useForm();
 
   const emptyData : PartDropdownEntry[] = [];
-  // TODO Actually use the parts data to update the product
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [partsData, setPartsData] = useState(emptyData);
-
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [updated, setUpdated] = useState(false);
+
+  useEffect(() => {
+    axios.get('/parts')
+      .then((res) => {
+        if (res && res.data) {
+          const data : PartDropdownEntry[] = [];
+          res.data.forEach((p : any) => {
+            data.push({
+              id: p['_id'],
+              name: p.name
+            });
+          });
+          setPartsData(data);
+        }
+      })
+      .catch(err => {
+        message.error('Something went wrong while fetching the list of parts.');
+        console.error(err);
+      })
+      .finally(() => setUpdated(true));
+  }, [updated]);
 
   const hidePartsError = () => {
     const partsError = document.getElementById('display-parts-error');
@@ -73,8 +92,12 @@ export const CreateProductModal = () => {
       .then(() => {
         setIsModalVisible(false);
         form.resetFields();
+        message.success('The product was successfully created.');
       })
-      .catch(err => console.error(err));
+      .catch(err => {
+        console.error(err);
+        message.error('Something went wrong while creating the product.');
+      });
   };
 
   const handleCancel = () => {
@@ -135,7 +158,6 @@ export const CreateProductModal = () => {
                     </Col>
                     <Col className='margin-bottom-mobile' sm={12} span={18}>
                       <Form.Item
-                        {...field}
                         name={[field.name, 'partId']}
                         fieldKey={[field.fieldKey, 'partId']}
                         validateTrigger={['onChange', 'onBlur']}
@@ -146,8 +168,10 @@ export const CreateProductModal = () => {
                           placeholder='Select a part'
                           optionFilterProp='children'
                           onChange={hidePartsError}>
-                          {partsData.map((part, index) => (
-                            <Option key={part.id} value={part.id}>{part.name}</Option>))}
+                          {partsData.map((part) => (
+                            <Option key={part.id} value={part.id}>
+                              {part.name}
+                            </Option>))}
                         </Select>
                       </Form.Item>
                     </Col>
@@ -160,7 +184,10 @@ export const CreateProductModal = () => {
                         name={[field.name, 'quantity']}
                         fieldKey={[field.fieldKey, 'quantity']}
                         style={{ marginBottom: 0 }}>
-                        <InputNumber style={{ width: '100%' }} min={1} defaultValue={1} />
+                        <InputNumber
+                          style={{ width: '100%' }}
+                          min={1}
+                          defaultValue={1} />
                       </Form.Item>
                     </Col>
                     {/*Delete Button*/}
