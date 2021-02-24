@@ -23,7 +23,9 @@ export const ResponsiveTable = (props : TableProps) => {
     return rows.map((row, index) => {
       const values = Object.entries(cols).map(([key, col]) => {
         return (
-          <td key={key + index} data-label={col}>{row[key as keyof object]}</td>
+          <td key={key + index} data-label={col}>
+            {row[key as keyof object] ? row[key as keyof object] : <i>?</i>}
+          </td>
         );
       });
       values.unshift(<td key={'key' + index}>{index + 1}</td>);

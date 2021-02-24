@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Card, Input } from 'antd';
-
-import dummyData from './ProductDummyData';
 import { ResponsiveTable } from '../ResponsiveTable';
+import { CreateProductModal } from './CreateProductModal';
+import dummyData from './ProductDummyData';
 
 const { Search } = Input;
 
 export const ProductCatalog = () => {
+
   const [tableData, setTableData] = useState(dummyData.getRows());
   const [searchValue, setSearchValue] = useState('');
 
@@ -32,12 +33,10 @@ export const ProductCatalog = () => {
           style={{ marginBottom: 18 }} />
         <ResponsiveTable rows={tableData} cols={dummyData.getCatalogColumns()} />
       </Card>
-      <Button type='ghost'>
-        Define a new Product
-      </Button>
-      <Button type='primary' style={{ float: 'right' }}>
+      <Button type='primary' style={{ marginTop: 16, float: 'right' }}>
         Build Products
       </Button>
+      <CreateProductModal />
     </div>
   );
 };

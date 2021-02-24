@@ -3,6 +3,7 @@ import {
   UnauthorizedException,
   NotFoundException,
   OnApplicationBootstrap,
+  ConflictException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -24,27 +25,20 @@ export class UsersService implements OnApplicationBootstrap {
 
   // Create default user if he doesn't exist
   async createDefaultUser(): Promise<void> {
-    try {
-      const admin = await this.findOne(DEFAULT_USER);
-      if (admin) {
-        console.log('Default user already exits.');
-      }
-    } catch (err) {
-      if (err.status == 404) {
+      const admin = await this.findOneInternal(DEFAULT_USER);
+      if (!admin) {
         const user = new CreateUserDto();
         user.username = DEFAULT_USER;
-        user.name = 'Administrator';
+        user.firstName = 'Administrator';
+        user.lastName = 'Person';
+        user.email = 'admin@null.com';
         user.role = Role.SYSTEM_ADMINISTRATOR;
         user.password = await hash(process.env.DEFAULT_PASSWORD, 16);
         await this.create(user);
         console.log('Default user was created successfully.');
       } else {
-        console.error(
-          'Something went wrong while creating the default user.',
-          err,
-        );
-      }
-    }
+        console.log('Default user already exits.');
+      } 
   }
 
   // To be used internally only as it leaks the password hash!
@@ -53,10 +47,15 @@ export class UsersService implements OnApplicationBootstrap {
   }
 
   async create(dto: CreateUserDto): Promise<User> | undefined {
-    if (await this.userModel.findOne({ username: dto.username })) {
-      return undefined;
+    const account = dto;
+    account.username = account.username.trim().toLowerCase();
+    account.email = account.email.trim().toLowerCase();
+    if (await this.findOneInternal(account.username)) {
+      throw new ConflictException(
+        'A user with the same username already exists.',
+      );
     }
-    const createdUser = new this.userModel(dto);
+    const createdUser = new this.userModel(account);
     const user = await createdUser.save();
     return this.validateUserFound(user, user.username);
   }
@@ -75,10 +74,15 @@ export class UsersService implements OnApplicationBootstrap {
   }
 
   async update(username: string, dto: UpdateUserDto): Promise<User> {
+    // Trim & Lowercase to make search not case-sensitive
+    const user = dto;
+    user.username = user.username.trim().toLowerCase();
+    user.email = user.email.trim().toLowerCase();
     // Cannot change the default user's username
     const isAdmin = username === DEFAULT_USER;
-    const adminChanged =
-      dto.username != username || dto.role != Role.SYSTEM_ADMINISTRATOR;
+    const usernameChanged = dto.username != username 
+    const roleChanged = dto.role != Role.SYSTEM_ADMINISTRATOR;
+    const adminChanged= usernameChanged || roleChanged;
     if (isAdmin && adminChanged) {
       throw new UnauthorizedException(
         "You cannot change the default user's username.",
@@ -86,10 +90,10 @@ export class UsersService implements OnApplicationBootstrap {
     }
     const updatedUser = await this.userModel.findOneAndUpdate(
       { username },
-      { $set: { ...dto } },
+      { ...user },
       { new: true },
     );
-    return this.validateUserFound(updatedUser, username);
+    return this.validateUserFound(updatedUser, user.username);
   }
 
   async remove(username: string): Promise<User> {

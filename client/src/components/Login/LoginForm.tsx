@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { Button, Checkbox, Form, Input } from 'antd';
+import { Button, Checkbox, Form, Input, message } from 'antd';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
+import axios from '../../plugins/Axios';
 import { RootState } from '../../store/Store';
 import { loginAction } from '../../store/slices/UserSlice';
+import { LoginRequest } from '../../interfaces/LoginRequest';
 
 export const LoginForm = () => {
   const location = useLocation();
@@ -13,6 +15,7 @@ export const LoginForm = () => {
 
   const user = useSelector((state : RootState) => state.user.user);
 
+  const [loading, setLoading] = useState(false);
   const [remember, setRemember] = useState(user.isRemembered);
   const [username, setUsername] = useState(user.username);
   const [password, setPassword] = useState(user.password);
@@ -31,34 +34,21 @@ export const LoginForm = () => {
     : '/home';
 
   const login = () => {
-    try {
-      if (remember) {
-        dispatch(loginAction({
-          id: '69420',
-          name: 'John Connor',
-          username: username,
-          password: password,
-          isRemembered: true
-        }));
-      } else {
-        dispatch(loginAction({
-          id: '69420',
-          name: 'John Connor',
-          username: '',
-          password: '',
-          isRemembered: false
-        }));
-      }
-
-      history.replace(desiredPath);
-    } catch (e) {
-      console.log(password);
-      console.log(e);
-    }
-  };
-
-  const loginFailed = (errorInfo : any) => {
-    console.error('Login Failed:', errorInfo);
+    setLoading(true);
+    axios.post('/auth/login', { username, password })
+      .then((resp) => {
+        if (resp) {
+          const user : LoginRequest = resp.data;
+          user.isRemembered = remember;
+          dispatch(loginAction(user));
+          history.replace(desiredPath);
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        message.error('Invalid credentials were entered.')
+        setLoading(false);
+      })
   };
 
   return (
@@ -69,8 +59,7 @@ export const LoginForm = () => {
         username: user.username,
         password: user.password,
       }}
-      onFinish={login}
-      onFinishFailed={loginFailed}>
+      onFinish={login}>
       <Form.Item
         label='Username'
         name='username'
@@ -87,7 +76,11 @@ export const LoginForm = () => {
         <Checkbox onChange={handleChange} defaultChecked={user.isRemembered}>Remember me</Checkbox>
       </Form.Item>
       <Form.Item>
-        <Button type='primary' htmlType='submit' style={{ width: '100%' }}>
+        <Button
+          type='primary'
+          htmlType='submit'
+          loading={loading}
+          style={{ width: '100%' }}>
           Submit
         </Button>
       </Form.Item>

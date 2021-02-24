@@ -1,14 +1,12 @@
 import React from 'react';
 import { UserList } from '../components/Users/UserList';
-import { Button } from 'antd';
+import { AddUserModal } from '../components/Users/AddUserModal';
 
 export const Users = () => {
   return (
     <div>
       <UserList />
-      <Button type='primary' style={{ marginTop: 16 }}>
-        Add a new User
-      </Button>
+      <AddUserModal />
     </div>
   );
 };

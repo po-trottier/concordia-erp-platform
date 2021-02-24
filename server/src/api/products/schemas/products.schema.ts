@@ -3,38 +3,35 @@ import { Document } from 'mongoose';
 
 export type ProductDocument = Product & Document;
 
+export interface ProductPartInterface {
+  partId: string;
+  quantity: number;
+}
+
+export interface ProductPropertyInterface {
+  key: string;
+  value: string;
+}
+
+/**
+ * Product collection mongoose schema
+ */
 @Schema()
 export class Product {
-    @Prop({ required: true })
-    name: string;
+  @Prop({ required: true })
+  name: string;
 
-    @Prop()
-    description: string;
+  @Prop({ required: true })
+  price: number;
 
-    @Prop({ required: true })
-    price: number;
+  @Prop({ required: true, default: 0 })
+  quantity: number;
 
-    // Will become a parts object
-    @Prop({ required: true })
-    parts: string[];
-    
-    @Prop({ required: true })
-    frameSize: string;
-    
-    @Prop({ required: true })
-    color: string
-    
-    @Prop({ required: true })
-    finish: string;
+  @Prop()
+  parts: ProductPartInterface[];
 
-    @Prop({ required: true })
-    grade: string;
-
-    @Prop({ required: true, default: Date.now })
-    dateManufactured: Date;
-
-    @Prop()
-    dateSold?: Date;
+  @Prop()
+  properties: ProductPropertyInterface[];
 }
 
 export const ProductSchema = SchemaFactory.createForClass(Product);

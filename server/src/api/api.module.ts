@@ -5,6 +5,7 @@ import { RouterModule } from 'nest-router';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { ApiController } from './api.controller';
 import { PartsModule } from './parts/parts.module';
+import { MaterialsModule } from './materials/materials.module';
 import { FinanceModule } from './finance/finance.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
@@ -24,6 +25,7 @@ const mongoDbName = process.env.DB_NAME || 'ERP_db';
     }),
     EventEmitterModule.forRoot(),
     PartsModule,
+    MaterialsModule,
     AuthModule,
     UsersModule,
     FinanceModule,

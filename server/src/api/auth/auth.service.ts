@@ -12,7 +12,9 @@ export class AuthService {
   ) {}
 
   async validateUser(username: string, pass: string): Promise<any> {
-    const user = await this.usersService.findOneInternal(username);
+    const user = await this.usersService.findOneInternal(
+      username.trim().toLowerCase(),
+    );
     if (user && (await compare(pass, user.password))) {
       user.password = undefined;
       return user;
@@ -23,7 +25,7 @@ export class AuthService {
   async login(dto: LoginAuthDto) {
     const user = await this.validateUser(dto.username, dto.password);
     if (!user) {
-      return new UnauthorizedException();
+      throw new UnauthorizedException('Invalid login information.');
     }
     const payload = {
       username: user.username,
@@ -31,7 +33,8 @@ export class AuthService {
       roles: user.role,
     };
     return {
-      name: user.name,
+      firstName: user.firstName,
+      lastName: user.lastName,
       username: user.username,
       role: user.role,
       token: this.jwtService.sign(payload),
