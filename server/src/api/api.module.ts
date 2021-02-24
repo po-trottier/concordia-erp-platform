@@ -12,7 +12,6 @@ import { JwtAuthGuard } from './auth/guards/jwt.guard';
 import { RolesGuard } from './roles/roles.guard';
 import { routes } from '../routes';
 import { ProductsModule } from './products/products.module';
-import { EventEmitterModule } from '@nestjs/event-emitter';
 
 const mongoDbUrl = process.env.DB_URL || 'mongodb://localhost:27017';
 const mongoDbName = process.env.DB_NAME || 'ERP_db';
@@ -23,7 +22,6 @@ const mongoDbName = process.env.DB_NAME || 'ERP_db';
     MongooseModule.forRoot(`${mongoDbUrl}/${mongoDbName}`, {
       useFindAndModify: false,
     }),
-    EventEmitterModule.forRoot(),
     PartsModule,
     MaterialsModule,
     AuthModule,

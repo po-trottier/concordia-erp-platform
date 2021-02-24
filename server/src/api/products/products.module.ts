@@ -9,7 +9,6 @@ import {
   ProductLogSchema,
 } from './products-logs/schemas/product-log.schema';
 import { ProductLogsService } from './products-logs/product-logs.service';
-import { ProductQuantityUpdatedListener } from './products-logs/listeners/product-quantity-updated.listener';
 import { UpdateProductLogDto } from './products-logs/dto/update-product-log.dto';
 @Module({
   imports: [
@@ -23,6 +22,7 @@ import { UpdateProductLogDto } from './products-logs/dto/update-product-log.dto'
         imports: [ProductsModule],
         useFactory: (productLogsService: ProductLogsService) => {
           const schema = ProductSchema;
+
           schema.pre('save', function () {
             const updateProductLogDto: UpdateProductLogDto = {
               productId: this.id,
@@ -33,6 +33,7 @@ import { UpdateProductLogDto } from './products-logs/dto/update-product-log.dto'
             };
             productLogsService.update(updateProductLogDto);
           });
+
           schema.pre('findOneAndUpdate', async function () {
             const stockUpdate = this['_update']['$set'].quantity;
             if (!stockUpdate) return;
@@ -40,7 +41,6 @@ import { UpdateProductLogDto } from './products-logs/dto/update-product-log.dto'
             const productId = this['_conditions']._id;
             const oldStock = (await productLogsService.findOne(productId))
               .stock;
-            console.log(oldStock);
             const netChange = stockUpdate - oldStock;
             const builtAmount = netChange > 0 ? netChange : 0;
             const usedAmount = netChange < 0 ? -netChange : 0;
@@ -52,9 +52,9 @@ import { UpdateProductLogDto } from './products-logs/dto/update-product-log.dto'
               used: usedAmount,
               date: new Date(),
             };
-            console.log(updateProductLogDto);
             productLogsService.update(updateProductLogDto);
           });
+
           return schema;
         },
         inject: [ProductLogsService],
@@ -62,11 +62,7 @@ import { UpdateProductLogDto } from './products-logs/dto/update-product-log.dto'
     ]),
   ],
   controllers: [ProductLogsController, ProductsController],
-  providers: [
-    ProductsService,
-    ProductLogsService,
-    ProductQuantityUpdatedListener,
-  ],
+  providers: [ProductsService, ProductLogsService],
   exports: [ProductLogsService],
 })
 export class ProductsModule {}

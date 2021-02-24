@@ -4,8 +4,6 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { EventEmitter2 } from '@nestjs/event-emitter';
-import { ProductQuantityUpdatedEvent } from './events/product-quantity-updated.event';
 
 /**
  * Used by the ProductsController, handles product data storage and retrieval.
@@ -14,7 +12,6 @@ import { ProductQuantityUpdatedEvent } from './events/product-quantity-updated.e
 export class ProductsService {
   constructor(
     @InjectModel(Product.name) private productModel: Model<ProductDocument>,
-    private eventEmitter: EventEmitter2,
   ) {}
 
   /**
