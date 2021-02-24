@@ -6,7 +6,7 @@ import axios from '../../plugins/Axios';
 
 const { Option } = Select;
 
-interface Part {
+interface Material {
   partId : string,
   quantity : number
 }
@@ -41,17 +41,17 @@ export const CreatePartModal = () => {
       .finally(() => setUpdated(true));
   }, [updated]);
 
-  const hidePartsError = () => {
-    const partsError = document.getElementById('display-parts-error');
-    if (partsError) {
-      partsError.style.display = 'none';
+  const hideMaterialsError = () => {
+    const MaterialsError = document.getElementById('display-parts-error');
+    if (MaterialsError) {
+      MaterialsError.style.display = 'none';
     }
   };
 
-  const displayPartsError = () => {
-    const partsError = document.getElementById('display-parts-error');
-    if (partsError) {
-      partsError.style.display = 'block';
+  const displayMaterialsError = () => {
+    const materialsError = document.getElementById('display-materials-error');
+    if (materialsError) {
+      materialsError.style.display = 'block';
     }
   };
 
@@ -59,33 +59,33 @@ export const CreatePartModal = () => {
     let parts = values['list_parts'];
 
     if (!parts) {
-      displayPartsError();
+      displayMaterialsError();
       return;
     }
 
-    let hasDefinedPart = false;
-    parts.forEach((p : Part) => {
+    let hasDefinedMaterial = false;
+    parts.forEach((p : Material) => {
       if (p && p.partId) {
-        hasDefinedPart = true;
+        hasDefinedMaterial = true;
         return;
       }
     });
-    if (!hasDefinedPart) {
-      displayPartsError();
+    if (!hasDefinedMaterial) {
+      displayMaterialsError();
       return;
     }
 
-    let partsFiltered : Part[] = [];
+    let materialsFiltered : Material[] = [];
 
-    parts.forEach((p : Part) => {
+    parts.forEach((p : Material) => {
       if (p.partId) {
-        partsFiltered.push({ partId: p.partId, quantity: p.quantity ? p.quantity : 1 });
+        materialsFiltered.push({ partId: p.partId, quantity: p.quantity ? p.quantity : 1 });
       }
     });
 
     axios.post('parts', {
       name: values['part_name'],
-      parts: partsFiltered,
+      parts: materialsFiltered,
       price: values['part_price'],
       properties: values['list_properties']
     })
@@ -166,7 +166,7 @@ export const CreatePartModal = () => {
                           style={{ width: '100%', display: 'inline-table' }}
                           placeholder='Select a part'
                           optionFilterProp='children'
-                          onChange={hidePartsError}>
+                          onChange={hideMaterialsError}>
                           {materialsData.map((material) => (
                             <Option key={material.id} value={material.id}>
                               {material.name}
