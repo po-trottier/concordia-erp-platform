@@ -3,6 +3,7 @@ import {
   UnauthorizedException,
   NotFoundException,
   OnApplicationBootstrap,
+  ConflictException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -53,10 +54,14 @@ export class UsersService implements OnApplicationBootstrap {
   }
 
   async create(dto: CreateUserDto): Promise<User> | undefined {
-    if (await this.userModel.findOne({ username: dto.username })) {
-      return undefined;
+    const account = dto;
+    account.username = account.username.trim().toLowerCase();
+    if (await this.findOneInternal(account.username)) {
+      throw new ConflictException(
+        'A user with the same username already exists.',
+      );
     }
-    const createdUser = new this.userModel(dto);
+    const createdUser = new this.userModel(account);
     const user = await createdUser.save();
     return this.validateUserFound(user, user.username);
   }

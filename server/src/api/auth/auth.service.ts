@@ -12,7 +12,9 @@ export class AuthService {
   ) {}
 
   async validateUser(username: string, pass: string): Promise<any> {
-    const user = await this.usersService.findOneInternal(username);
+    const user = await this.usersService.findOneInternal(
+      username.trim().toLowerCase(),
+    );
     if (user && (await compare(pass, user.password))) {
       user.password = undefined;
       return user;
