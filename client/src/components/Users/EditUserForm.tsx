@@ -8,23 +8,25 @@ export const EditUserForm = (props : any) => {
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
   const { Option } = Select;
   const [form] = Form.useForm();
-
-  const [firstName, setFirstName] = useState(props.initialiName);
-  const [lastName, setLastName] = useState(props.initialiName);
+  const [firstName, setFirstName] = useState(props.initialFirstName);
+  const [lastName, setLastName] = useState(props.initialLastName);
   const [email, setEmail] = useState(props.initialEmail);
-  const [username, setUsername] = useState(props.initialiUsername);
+  const [username, setUsername] = useState(props.initialUsername);
   const [role, setRole] = useState(props.initialRole);
 
-  const handleFirstName = (e : React.FormEvent<HTMLInputElement>) =>{}
+  const handleFirstName = (e : React.FormEvent<HTMLInputElement>) =>
+	setFirstName(e.currentTarget.value);
 
-  const handleLastName = (e : React.FormEvent<HTMLInputElement>) =>{}
+  const handleLastName = (e : React.FormEvent<HTMLInputElement>) =>
+	setLastName(e.currentTarget.value);
 
-  const handleEmail = (e : React.FormEvent<HTMLInputElement>) =>{}
+  const handleEmail = (e : React.FormEvent<HTMLInputElement>) =>
+	setEmail(e.currentTarget.value);
 
   const handleUsername = (e : React.FormEvent<HTMLInputElement>) =>
 	setUsername(e.currentTarget.value);
 
-  const handleRole = (e : number) =>{}
+  const handleRole = (e : number) => setRole(e);
 
   return (
 		<Spin indicator={antIcon} spinning={props.editLoading}>
@@ -37,8 +39,7 @@ export const EditUserForm = (props : any) => {
 					firstName,
 					lastName,
 					email,
-					username,
-					role,
+					username
 				}}>
 				<Form.Item
 					label='First Name'
@@ -73,7 +74,14 @@ export const EditUserForm = (props : any) => {
 					<Select
 							placeholder="Select the user's role"
 							allowClear
-							onSelect={handleRole}
+							onSelect={() => handleRole}
+							defaultValue={
+								role == 0 ? 'Basic User' :
+								role == 1 ? 'Salesperson' :
+								role == 2 ? 'Accountant' :
+								role == 3 ? 'Inventory Manager' :
+								'System Administrator'
+							}
 					>
 						<Option value={0}>Basic User</Option>
 						<Option value={1}>Salesperson</Option>

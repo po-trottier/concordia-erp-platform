@@ -30,10 +30,13 @@ export const UserList = () => {
       console.log(data)
       if (searchValue.trim() !== '') {
         rows = rows.filter(
-           (r : UserEntry) => r.name.trim().toLowerCase().includes(searchValue.trim().toLowerCase()));
+           (r : UserEntry) => {
+             let name = r.firstName + ' ' + r.lastName;
+             name.trim().toLowerCase().includes(searchValue.trim().toLowerCase())
+            }
+        );
       }
       rows.forEach((user : UserEntry) => {
-
         user.email = user.email;
         user.roleString = getRoleString(user.role);
         user.actions = <UserListActions user={user} />;

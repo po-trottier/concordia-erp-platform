@@ -36,7 +36,8 @@ export const AddUserModal = () => {
   const addUser = () => {
     setAddLoading(true);
     axios.post('/users', {
-      name: firstName + ' ' + lastName,
+      firstName: firstName, 
+      lastName: lastName,
       username: username,
       email: email,
       password: 'Password1!',

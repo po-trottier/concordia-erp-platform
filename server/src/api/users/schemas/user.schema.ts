@@ -18,7 +18,10 @@ export class User {
   email: string;
 
   @Prop({ required: true })
-  name: string;
+  firstName: string;
+
+  @Prop({ required: true })
+  lastName: string;
 
   @Prop({ required: true })
   role: number;
