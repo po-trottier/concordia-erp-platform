@@ -1,8 +1,11 @@
-import { ReactElement } from 'react';
+import { ReactNode } from 'react';
 
 export interface MaterialsListEntry {
   name : string,
-  quantity : number,
+  stock : number,
+  density : string,
   price : number,
-  img : ReactElement,
+  vendor: string,
+  img : ReactNode,
+  actions?: ReactNode,
 }

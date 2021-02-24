@@ -6,9 +6,6 @@ import { MaterialsListEntry } from '../../interfaces/MaterialsListEntry';
 import MetalImg from '../../assets/metal.png';
 import PlasticImg from '../../assets/plastic.png';
 import WoodImg from '../../assets/wood.png';
-// TODO find a way to update the table on Modal submit with the gold image
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import GoldImg from '../../assets/gold.png';
 
 import { CreateMaterialModal } from './CreateMaterialModal';
 
@@ -18,39 +15,53 @@ export const MaterialsCatalog = () => {
   const cols = {
     img: 'Preview',
     name: 'Product',
-    quantity: 'Owned',
+    density: 'Density',
+    stock: 'Stock',
     price: 'Price',
+    vendor: 'Vendor',
+    actions: 'Actions',
     order: 'Order',
   };
 
-  const rows: MaterialsListEntry[] = [
+  const rows : MaterialsListEntry[] = [
     {
       img: <img src={MetalImg} alt='Metal Preview' width={32} />,
       name: 'Metal',
-      quantity: 30,
+      stock: 30,
       price: 5,
+      density: '2 kg/unit',
+      vendor: 'Some Vendor',
     },
     {
       img: <img src={PlasticImg} alt='Plastic Preview' width={32} />,
       name: 'Plastic',
-      quantity: 10,
+      stock: 10,
       price: 2,
+      density: '5 kg/unit',
+      vendor: 'Other Vendor',
     },
     {
       img: <img src={WoodImg} alt='Wood Preview' width={32} />,
       name: 'Wood',
-      quantity: 15,
+      stock: 15,
       price: 4,
+      density: '1.5 kg/unit',
+      vendor: 'Some Vendor',
     },
   ];
 
-  const data: any[] = rows;
+  const data : any[] = rows;
   data.forEach((row) => {
     row.order = <InputNumber
       placeholder='Input a quantity'
       min={0}
       style={{ width: '100%' }}
     />;
+    row.actions = (
+      <Button type='ghost' size='small' style={{ width: 64 }}>
+        Edit
+      </Button>
+    );
   });
 
   const [tableData, setTableData] = useState(data);
@@ -67,7 +78,7 @@ export const MaterialsCatalog = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchValue]);
 
-  const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onSearch = (e : React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
   };
 
