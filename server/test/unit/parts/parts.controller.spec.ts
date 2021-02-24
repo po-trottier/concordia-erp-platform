@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { PartsController } from '../../../src/api/parts/parts.controller';
-import { PartsService } from '../../../src/api/parts/parts.service';
+import { PartsController } from '../../../src/api/parts/parts/parts.controller';
+import { PartsService } from '../../../src/api/parts/parts/parts.service';
 
 describe('PartsController', () => {
   let controller: PartsController;
