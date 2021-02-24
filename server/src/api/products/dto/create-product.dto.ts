@@ -1,43 +1,31 @@
-import { IsInt, IsNotEmpty, IsOptional, isPositive, IsPositive, IsString, IsDecimal, IsDate } from "class-validator";
+import {
+  IsInt,
+  IsNotEmpty,
+  IsOptional,
+  IsPositive,
+  IsString, Min,
+} from 'class-validator';
+
+import { CreateProductPartDto } from './create-product-part.dto';
+import { CreateProductPropertyDto } from './create-product-property.dto';
 
 export class CreateProductDto {
-    @IsNotEmpty()
-    @IsString()
-    name: string;
+  @IsNotEmpty()
+  @IsString()
+  name: string;
 
-    @IsNotEmpty()
-    @IsString()
-    description: string;
+  @IsPositive()
+  @IsNotEmpty()
+  price: number;
 
-    @IsPositive()
-    @IsNotEmpty()
-    price: number;
+  @IsNotEmpty()
+  parts: CreateProductPartDto[];
 
-    // Will become a Parts object
-    @IsNotEmpty()
-    parts : string[];
+  @Min(0)
+  @IsInt()
+  @IsOptional()
+  quantity = 0;
 
-    @IsString()
-    @IsNotEmpty()
-    frameSize : string;
-
-    @IsString()
-    @IsNotEmpty()
-    color : string;
-
-    @IsString()
-    @IsNotEmpty()
-    finish : string;
-
-    @IsString()
-    @IsNotEmpty()
-    grade : string;
-
-    @IsDate()
-    @IsOptional()
-    dateManufactured: Date;
-
-    @IsDate()
-    @IsOptional()
-    dateSold?: Date;
+  @IsOptional()
+  properties: CreateProductPropertyDto[];
 }
