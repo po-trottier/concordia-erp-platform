@@ -26,6 +26,7 @@ export const AddUserModal = () => {
       firstName,
       lastName,
       username,
+      password: 'Password1!',
       email,
       role,
     };
