@@ -42,7 +42,8 @@ export class PartLogsService {
 
     const updatedPartLog = await this.partLogModel.findOneAndUpdate(
       { partId, date },
-      { stock, stockBuilt, stockUsed },
+      { $set: { stock }, $inc: { stockBuilt, stockUsed } },
+
       { new: true, upsert: true },
     );
 
