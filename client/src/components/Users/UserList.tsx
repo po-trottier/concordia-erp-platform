@@ -11,7 +11,8 @@ const { Search } = Input;
 export const UserList = () => {
 
   const getColumns = () => ({
-    name: 'Name',
+    firstName: 'First Name',
+    lastName: 'Last Name',
     username : 'Username',
     email: 'Email',
     roleString: 'Role',

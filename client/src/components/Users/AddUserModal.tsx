@@ -55,11 +55,6 @@ export const AddUserModal = () => {
         setAddLoading(false);
         form.resetFields();
         setIsModalVisible(false);
-        console.log(firstName);
-        console.log(lastName);
-        console.log(email);
-        console.log(username);
-        console.log(role);
       })
   }
 
