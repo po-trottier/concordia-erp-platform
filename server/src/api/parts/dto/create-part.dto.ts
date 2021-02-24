@@ -1,7 +1,6 @@
 import {
   IsInt,
   IsNotEmpty,
-  IsPositive,
   IsString,
   IsOptional,
   Min,
@@ -17,7 +16,7 @@ export class CreatePartDto {
   name: string;
 
   @IsNotEmpty()
-  parts: CreatePartMaterialDto[];
+  materials: CreatePartMaterialDto[];
 
   @Min(0)
   @IsInt()

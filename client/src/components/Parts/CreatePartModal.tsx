@@ -56,6 +56,7 @@ export const CreatePartModal = () => {
   };
 
   const handleSubmit = (values : any) => {
+    console.log(values);
     let materials = values['list_materials'];
     if (!materials) {
       displayMaterialsError();
@@ -80,7 +81,7 @@ export const CreatePartModal = () => {
         materialsFiltered.push({ materialId: m.materialId, quantity: m.quantity ? m.quantity : 1 });
       }
     });
-    axios.post('materials', {
+    axios.post('/parts', {
       name: values['part_name'],
       materials: materialsFiltered,
     })
@@ -199,7 +200,6 @@ export const CreatePartModal = () => {
               </div>
             )}
           </Form.List>
-
         </Form>
       </Modal>
     </div>

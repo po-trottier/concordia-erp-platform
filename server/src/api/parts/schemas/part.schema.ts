@@ -19,7 +19,7 @@ export class Part {
   @Prop({ required: true, default: 0 })
   stock: number;
 
-  @Prop()
+  @Prop({ required: true, default: [] })
   materials: ProductMaterialInterface[];
 }
 
