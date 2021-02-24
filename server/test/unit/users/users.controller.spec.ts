@@ -11,6 +11,15 @@ describe('UsersController', () => {
     let usersService: UsersService;
     let userDocumentModel: Model<UserDocument>;
 
+		const dummyUser: User = {
+			firstName: 'System',
+			lastName: 'Administrator',
+			username: 'admin',
+			password: 'Password1!',
+			email: 'test@gmail.com',
+			role: 4,
+		}
+
     beforeEach(() => {
 			usersService = new UsersService(userDocumentModel);
 			usersController = new UsersController(usersService);
@@ -19,14 +28,7 @@ describe('UsersController', () => {
     describe('findAll', () => {
 			it('Should return a list of all users', async () => {
 				const result: User[] = [
-					{
-						firstName: 'System',
-						lastName: 'Administrator',
-						username: 'admin',
-						password: 'Password1!',
-						email: 'test@gmail.com',
-						role: 4,
-					},
+					dummyUser,
 			];
 				jest.spyOn(usersService, 'findAll').mockImplementation(async () => await result);
 
@@ -35,15 +37,8 @@ describe('UsersController', () => {
     });
 
 		describe('findOne', () => {
-			it('Should return a user from their username', async () => {
-				const result: User = {
-					firstName: 'System',
-					lastName: 'Administrator',
-					username: 'admin',
-					password: 'Password1!',
-					email: 'test@gmail.com',
-					role: 4,
-				}
+			it('Should return a user by their username', async () => {
+				const result: User = dummyUser;
 
 				jest.spyOn(usersService, 'findOne').mockImplementation(async () => await result)
 
@@ -54,14 +49,7 @@ describe('UsersController', () => {
 
     describe('create', () => {
 			it('Should create a user', async () => {
-				const result: User = {
-					firstName: 'John',
-					lastName: 'Doe',
-					username: 'johnDoe69420',
-					password: 'Password1!',
-					email: 'jdoeSniper@noscope.com',
-					role: 4,
-				}
+				const result: User = dummyUser;
 
 				const newUser = new CreateUserDto();
 				newUser.firstName = result.firstName;
@@ -78,15 +66,8 @@ describe('UsersController', () => {
     });
 
 		describe('remove', () => {
-			it('Should delete a user from their username', async () => {
-				const result: User = {
-					firstName: 'John',
-					lastName: 'Doe',
-					username: 'johnDoe69420',
-					password: 'Password1!',
-					email: 'jdoeSniper@noscope.com',
-					role: 4,
-				}
+			it('Should delete a user by their username', async () => {
+				const result: User = dummyUser;
 
 				jest.spyOn(usersService, 'remove').mockImplementation(async () => await result)
 
@@ -97,14 +78,7 @@ describe('UsersController', () => {
 
 		describe('update', () => {
 			it('Should update user attribute values', async () => {
-				const result: User = {
-					firstName: 'EPIC System',
-					lastName: 'Admin',
-					username: 'admin',
-					password: 'Password1!',
-					email: 'admin@admin.com',
-					role: 4,
-				}
+				const result: User = dummyUser;
 
 				const updatedUser = new UpdateUserDto();
 				updatedUser.firstName = result.firstName;
@@ -114,7 +88,7 @@ describe('UsersController', () => {
 				updatedUser.email = result.email,
 				updatedUser.role = 4;
 				
-				jest.spyOn(usersService, 'create').mockImplementation(async () => await result)
+				jest.spyOn(usersService, 'update').mockImplementation(async () => await result)
 
 				expect(await usersController.update(result.username, updatedUser)).toBe(result);
 			});
