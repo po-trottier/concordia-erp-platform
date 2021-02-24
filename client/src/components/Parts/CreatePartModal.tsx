@@ -81,8 +81,8 @@ export const CreatePartModal = () => {
       }
     });
     axios.post('materials', {
-      name: values['material_name'],
-      parts: materialsFiltered,
+      name: values['part_name'],
+      materials: materialsFiltered,
     })
       .then(() => {
         setIsModalVisible(false);
@@ -122,23 +122,6 @@ export const CreatePartModal = () => {
               </Form.Item>
             </Col>
           </Row>
-          {/*<Row align='middle' style={{ marginBottom: 16 }}>*/}
-          {/*  <Col sm={6} span={9}>*/}
-          {/*    <span>Price:</span>*/}
-          {/*  </Col>*/}
-          {/*  <Col sm={18} span={15}>*/}
-          {/*    <Form.Item*/}
-          {/*      style={{ marginBottom: 0 }}*/}
-          {/*      name='part_price'*/}
-          {/*      rules={[{ required: true, message: 'Please enter a price.' }]}>*/}
-          {/*      <InputNumber*/}
-          {/*        style={{ width: '100%' }}*/}
-          {/*        defaultValue={0}*/}
-          {/*        formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}*/}
-          {/*      />*/}
-          {/*    </Form.Item>*/}
-          {/*  </Col>*/}
-          {/*</Row>*/}
           <h4 style={{ fontWeight: 'bold' }}>Part Materials</h4>
           <Form.List name='list_materials'>
             {(fields, { add, remove }, { errors }) => (
@@ -216,68 +199,7 @@ export const CreatePartModal = () => {
               </div>
             )}
           </Form.List>
-          {/*<h4 style={{ fontWeight: 'bold', marginTop: 16 }}>Part Properties</h4>*/}
-          {/*part Properties Fields*/}
-          {/*<Form.List name='list_properties'>*/}
-          {/*  {(fields, { add, remove }, { errors }) => (*/}
-          {/*    <div>*/}
-          {/*      {fields.map((field, index) => (*/}
-          {/*        // Single part Property Entry*/}
-          {/*        <Row key={index} align='middle' style={{ marginBottom: 8 }}>*/}
-          {/*          Property Name*/}
-          {/*          <Col sm={4} span={6} style={{ paddingRight: 8 }}>*/}
-          {/*            Property:*/}
-          {/*          </Col>*/}
-          {/*          <Col className='margin-bottom-mobile' sm={7} span={18}>*/}
-          {/*            <Form.Item*/}
-          {/*              {...field}*/}
-          {/*              name={[field.name, 'key']}*/}
-          {/*              fieldKey={[field.fieldKey, 'key']}*/}
-          {/*              validateTrigger={['onChange', 'onBlur']}*/}
-          {/*              noStyle>*/}
-          {/*              <Input placeholder='Property Name' />*/}
-          {/*            </Form.Item>*/}
-          {/*          </Col>*/}
-          {/*          Property Value*/}
-          {/*          <Col className='text-left-mobile' sm={4} span={6} style={{ textAlign: 'right', paddingRight: 8 }}>*/}
-          {/*            Value:*/}
-          {/*          </Col>*/}
-          {/*          <Col sm={7} span={14}>*/}
-          {/*            <Form.Item*/}
-          {/*              name={[field.name, 'value']}*/}
-          {/*              fieldKey={[field.fieldKey, 'value']}*/}
-          {/*              style={{ marginBottom: 0 }}>*/}
-          {/*              <Input placeholder='Property Value' />*/}
-          {/*            </Form.Item>*/}
-          {/*          </Col>*/}
-          {/*          Delete Button*/}
-          {/*          <Col sm={2} span={4} style={{ textAlign: 'right' }}>*/}
-          {/*            <MinusCircleTwoTone*/}
-          {/*              className='dynamic-delete-button'*/}
-          {/*              twoToneColor='red'*/}
-          {/*              onClick={() => remove(field.name)} />*/}
-          {/*          </Col>*/}
-          {/*        </Row>*/}
-          {/*      ))}*/}
-          {/*      Default error messages*/}
-          {/*      <Form.ErrorList errors={errors} />*/}
-          {/*      Add Property Button*/}
-          {/*      <Row>*/}
-          {/*        <Col span={24}>*/}
-          {/*          <Form.Item style={{ marginBottom: 0, marginTop: 16 }}>*/}
-          {/*            <Button*/}
-          {/*              type='dashed'*/}
-          {/*              onClick={() => add()}*/}
-          {/*              style={{ width: '100%' }}*/}
-          {/*              icon={<PlusOutlined />}>*/}
-          {/*              Add a Property*/}
-          {/*            </Button>*/}
-          {/*          </Form.Item>*/}
-          {/*        </Col>*/}
-          {/*      </Row>*/}
-          {/*    </div>*/}
-          {/*  )}*/}
-          {/*</Form.List>*/}
+
         </Form>
       </Modal>
     </div>

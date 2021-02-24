@@ -8,5 +8,5 @@ export class CreatePartMaterialDto {
   @IsInt()
   @IsNotEmpty()
   @IsPositive()
-  quantity: number;
+  stock: number;
 }
