@@ -1,4 +1,4 @@
-import { IsOptional, IsString, IsInt, IsPositive } from 'class-validator';
+import { IsOptional, IsString, IsInt, Min } from 'class-validator';
 
 /**
  * Part update DTO
@@ -13,7 +13,7 @@ export class UpdatePartDto {
   description: string;
 
   @IsInt()
-  @IsPositive()
+  @Min(0)
   @IsOptional()
   stock: number;
 }
