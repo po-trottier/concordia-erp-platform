@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Col, Form, Input, InputNumber, message, Modal, Row, Select } from 'antd';
 import { MinusCircleTwoTone, PlusOutlined } from '@ant-design/icons';
+
 import { PartDropdownEntry } from '../../interfaces/PartDropdownEntry';
+import { ProductEntry } from '../../interfaces/ProductEntry';
 import axios from '../../plugins/Axios';
 
 const { Option } = Select;
@@ -11,8 +13,7 @@ interface ProductPart {
   quantity : number
 }
 
-export const CreateProductModal = () => {
-
+export const EditProductModal = (props: { product: ProductEntry }) => {
   const [form] = Form.useForm();
 
   const emptyData : PartDropdownEntry[] = [];
@@ -55,7 +56,7 @@ export const CreateProductModal = () => {
     }
   };
 
-  const handleSubmit = (values : any) => {
+  const editProduct = (values : any) => {
     let parts = values['list_parts'];
 
     if (!parts) {
@@ -88,7 +89,7 @@ export const CreateProductModal = () => {
       }
     });
 
-    axios.post('/products', {
+    axios.patch('/products/' + props.product.id, {
       name: values['product_name'],
       parts: partsFiltered,
       price: values['product_price'],
@@ -98,27 +99,74 @@ export const CreateProductModal = () => {
         // TODO change the list of products in the catalog
         setIsModalVisible(false);
         form.resetFields();
-        message.success('The product was successfully created.');
+        message.success('The product was successfully edited.');
       })
       .catch(err => {
         console.error(err);
-        message.error('Something went wrong while creating the product.');
+        message.error('Something went wrong while editing the product.');
       });
   };
 
-  const handleCancel = () => {
-    setIsModalVisible(false);
-    form.resetFields();
-  };
+  const deleteProduct = () => {
+    Modal.confirm({
+      onOk() {
+        axios.delete('/products/' + props.product.id)
+          .then(() => {
+            // TODO Update the list of products
+            message.success('The product was removed successfully');
+            setIsModalVisible(false);
+          })
+          .catch((err) => {
+            console.error(err);
+            message.error('Something went wrong while removing the product.');
+          })
+          .finally(() => false);
+      },
+      cancelButtonProps: { disabled: false },
+      title: 'Remove a Product',
+      content: 'Are you sure you want to remove the selected product?'
+    })
+  }
 
   return (
     <div>
-      <Button type='primary' onClick={() => setIsModalVisible(true)} style={{ marginTop: 16 }}>
-        Add a New Product
+      <Button type='ghost' size='small' onClick={() => setIsModalVisible(true)} style={{ width: 60 }}>
+        Edit
       </Button>
 
-      <Modal title='Define a New Product' visible={isModalVisible} onOk={form.submit} onCancel={handleCancel}>
-        <Form form={form} onFinish={handleSubmit}>
+      <Modal
+        title='Edit a Product'
+        visible={isModalVisible}
+        footer={[
+          <Button
+            key='delete'
+            type='dashed'
+            style={{ float: 'left' }}
+            onClick={() => deleteProduct()}>
+            Remove
+          </Button>,
+          <Button
+            key='cancel'
+            type='ghost'
+            onClick={() => setIsModalVisible(false)}>
+            Cancel
+          </Button>,
+          <Button
+            key='submit'
+            type='primary'
+            onClick={() => form.submit()}>
+            OK
+          </Button>
+        ]}>
+        <Form
+          form={form}
+          onFinish={editProduct}
+          initialValues={{
+            'product_name': props.product.name,
+            'product_price': props.product.price,
+            'list_parts': props.product.parts,
+            'list_properties': props.product.properties,
+          }}>
           {/*Product Name Field*/}
           <Row align='middle' style={{ marginBottom: 16 }}>
             <Col sm={6} span={9}>
@@ -144,7 +192,6 @@ export const CreateProductModal = () => {
                 rules={[{ required: true, message: 'Please enter a price.' }]}>
                 <InputNumber
                   style={{ width: '100%' }}
-                  defaultValue={0}
                   formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                 />
               </Form.Item>
@@ -192,8 +239,7 @@ export const CreateProductModal = () => {
                         style={{ marginBottom: 0 }}>
                         <InputNumber
                           style={{ width: '100%' }}
-                          min={1}
-                          defaultValue={1} />
+                          min={1} />
                       </Form.Item>
                     </Col>
                     {/*Delete Button*/}
