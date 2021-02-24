@@ -14,15 +14,15 @@ export class UpdatePartLogDto {
   @IsNotEmpty()
   @IsInt()
   @Min(0)
-  stock: number;
+  stock: number = 0;
 
   @IsNotEmpty()
   @IsInt()
   @Min(0)
-  stockUsed: number;
+  stockUsed: number = 0;
 
   @IsNotEmpty()
   @IsInt()
   @Min(0)
-  stockBuilt: number;
+  stockBuilt: number = 0;
 }
