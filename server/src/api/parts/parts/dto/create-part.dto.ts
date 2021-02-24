@@ -1,5 +1,4 @@
-import { Min } from 'class-validator';
-import { IsInt, IsNotEmpty, IsString, IsOptional } from 'class-validator';
+import { IsInt, IsNotEmpty, IsString, IsOptional, Min } from 'class-validator';
 
 /**
  * Part creation DTO
