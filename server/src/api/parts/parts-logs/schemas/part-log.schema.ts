@@ -6,10 +6,10 @@ export type PartLogDocument = PartLog & Document;
 /**
  * PartLog collection mongoose schema
  */
-@Schema({ _id: false })
+@Schema()
 export class PartLog {
   @Prop({ required: true, index: true })
-  date: string;
+  date: Date;
 
   @Prop({
     type: mongooseSchema.Types.ObjectId,
@@ -21,6 +21,12 @@ export class PartLog {
 
   @Prop({ required: true })
   stock: number;
+
+  @Prop({ required: true })
+  stockBuilt: number;
+
+  @Prop({ required: true })
+  stockUsed: number;
 }
 
 export const PartLogSchema = SchemaFactory.createForClass(PartLog);

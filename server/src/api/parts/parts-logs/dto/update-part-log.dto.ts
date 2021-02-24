@@ -1,4 +1,4 @@
-import { IsInt, IsNotEmpty, IsPositive, IsString } from 'class-validator';
+import { IsInt, IsNotEmpty, IsString, Min } from 'class-validator';
 
 /**
  * PartLog creation DTO
@@ -9,11 +9,20 @@ export class UpdatePartLogDto {
   partId: string;
 
   @IsNotEmpty()
-  @IsString()
-  date: string;
+  date: Date;
 
   @IsNotEmpty()
   @IsInt()
-  @IsPositive()
+  @Min(0)
   stock: number;
+
+  @IsNotEmpty()
+  @IsInt()
+  @Min(0)
+  stockUsed: number;
+
+  @IsNotEmpty()
+  @IsInt()
+  @Min(0)
+  stockBuilt: number;
 }
