@@ -4,17 +4,15 @@ import 'antd/dist/antd.css';
 import { LoadingOutlined } from '@ant-design/icons';
 
 export const EditUserForm = (props : any) => {
-
-	console.log(props.user);
-
+	
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
   const { Option } = Select;
   const [form] = Form.useForm();
   const [firstName, setFirstName] = useState(props.user.firstName);
-  const [lastName, setLastName] = useState(props.initialLastName);
-  const [email, setEmail] = useState(props.initialEmail);
-  const [username, setUsername] = useState(props.initialUsername);
-  const [role, setRole] = useState(props.initialRole);
+  const [lastName, setLastName] = useState(props.user.lastName);
+  const [email, setEmail] = useState(props.user.email);
+  const [username, setUsername] = useState(props.user.username);
+  const [role, setRole] = useState(props.user.role);
 
   const handleFirstName = (e : React.FormEvent<HTMLInputElement>) =>
 	setFirstName(e.currentTarget.value);

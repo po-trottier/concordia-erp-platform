@@ -27,7 +27,6 @@ export const UserList = () => {
     let rows = [];
     axios.get('users').then(({data}) => {
       rows = data;
-      console.log(data)
       if (searchValue.trim() !== '') {
         rows = rows.filter(
            (r : UserEntry) => {
