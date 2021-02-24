@@ -66,6 +66,7 @@ export const UserListActions = (props : any) => {
 					onOk={editUser}
 					onCancel={() => setEditVisible(false)}>
 					<EditUserForm
+					user={props.user}
 					initialFirstName={props.user.firstName}
 					initialLastName={props.user.lastName}
 					initialUsername={props.user.username}

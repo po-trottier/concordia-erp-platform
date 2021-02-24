@@ -5,10 +5,12 @@ import { LoadingOutlined } from '@ant-design/icons';
 
 export const EditUserForm = (props : any) => {
 
+	console.log(props.user);
+
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
   const { Option } = Select;
   const [form] = Form.useForm();
-  const [firstName, setFirstName] = useState(props.initialFirstName);
+  const [firstName, setFirstName] = useState(props.user.firstName);
   const [lastName, setLastName] = useState(props.initialLastName);
   const [email, setEmail] = useState(props.initialEmail);
   const [username, setUsername] = useState(props.initialUsername);
@@ -43,7 +45,7 @@ export const EditUserForm = (props : any) => {
 				}}>
 				<Form.Item
 					label='First Name'
-					name='fistName'
+					name='firstName'
 					rules={[{ required: true, message: 'Please input first name!' }]}>
 					<Input onChange={handleFirstName} />
 				</Form.Item>
