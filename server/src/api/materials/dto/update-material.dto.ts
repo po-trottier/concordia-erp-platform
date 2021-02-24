@@ -1,4 +1,4 @@
-import {IsOptional, IsString, IsInt, IsPositive, IsNotEmpty} from 'class-validator';
+import {IsOptional, IsString, IsInt, IsPositive, IsNotEmpty, Min, IsNumber} from 'class-validator';
 
 /**
  * Material update DTO
@@ -8,15 +8,12 @@ export class UpdateMaterialDto {
   @IsOptional()
   name: string;
 
-  @IsString()
-  @IsOptional()
-  description: string;
-
   @IsInt()
-  @IsPositive()
+  @Min(0)
   @IsOptional()
   stock: number;
 
+  @IsNumber()
   @IsPositive()
   @IsOptional()
   density: number;
@@ -26,6 +23,11 @@ export class UpdateMaterialDto {
   @IsOptional()
   vendorName: string;
 
+  @IsNotEmpty()
+  @IsString()
+  image: string;
+
+  @IsNumber()
   @IsPositive()
   @IsOptional()
   price: number;

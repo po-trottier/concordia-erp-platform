@@ -11,9 +11,6 @@ export class Material {
   @Prop({ required: true })
   name: string;
 
-  @Prop()
-  description: string;
-
   @Prop({ required: true, default: 0 })
   stock: number;
 
@@ -22,6 +19,9 @@ export class Material {
 
   @Prop({ required: true})
   vendorName: string;
+
+  @Prop({ required: true})
+  image: string;
 
   @Prop({ required: true, default: 1 })
   price: number;
