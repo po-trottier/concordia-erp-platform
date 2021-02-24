@@ -55,7 +55,7 @@ export const CreateMaterialModal = () => {
         .then(() => {
           setIsModalVisible(false);
           message.success('The material was successfully added.')
-          dispatch(setSelected({ selectedFile: undefined }));
+          dispatch(setSelected(undefined));
           form.resetFields();
         })
         .catch((err) => {

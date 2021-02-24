@@ -36,7 +36,7 @@ export const MaterialImageUploader = () => {
           fileError.style.display = 'none';
         }
       }
-      dispatch(setSelected({ selectedFile: info.file }));
+      dispatch(setSelected(info.file));
     }
   };
 
