@@ -163,6 +163,26 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Get part log by id and date",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/parts/logs/6036cb1e24e36c32b387288d/1996-12-18T04:00:00.000Z",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"parts",
+								"logs",
+								"6036cb1e24e36c32b387288d",
+								"1996-12-18T04:00:00.000Z"
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"protocolProfileBehavior": {}
