@@ -15,8 +15,10 @@ export const userListSlice = createSlice({
     },
     updateEntry: (state, { payload } : PayloadAction<{ username: string, newUser: UserEntry }>) => {
       for(let i = 0; i < state.list.length; i++) {
-        if (state.list[i].username === payload.username)
+        if (state.list[i].username === payload.username) {
           state.list[i] = payload.newUser;
+          return;
+        }
       }
     },
     addEntry: (state, { payload } : PayloadAction<UserEntry>) => {

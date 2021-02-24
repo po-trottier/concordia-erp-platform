@@ -2,7 +2,8 @@ import React from 'react';
 import { Form, Input, Select } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { getRoleString } from '../../router/Roles';
+import { setEmail, setFirstName, setLastName, setRole, setUsername } from '../../store/slices/UserEditSlice';
+import { getRoleString, Role } from '../../router/Roles';
 import { RootState } from '../../store/Store';
 
 const { Option } = Select;
@@ -56,7 +57,7 @@ export const EditUserForm = () => {
         rules={[{ required: true, message: 'Please select a role!' }]}>
         <Select
           placeholder="Select the user's role"
-          onSelect={() => (e : number) => dispatch(setRole(e))}>
+          onSelect={() => (e : Role) => dispatch(setRole(e))}>
           <Option value={1}>Salesperson</Option>
           <Option value={2}>Accountant</Option>
           <Option value={3}>Inventory Manager</Option>

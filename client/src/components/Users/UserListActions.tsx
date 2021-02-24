@@ -4,12 +4,14 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { EditUserForm } from './EditUserForm';
 import { RootState } from '../../store/Store';
-import { updateUserEntry, removeUserEntry } from '../../store/slices/UserList';
+import { initializeSelectedUser } from '../../store/slices/UserEditSlice';
+import { removeUserEntry, updateUserEntry } from '../../store/slices/UserListSlice';
 import axios from '../../plugins/Axios';
 
 export const UserListActions = (props : any) => {
   const dispatch = useDispatch();
 
+  const loggedIn = useSelector((state : RootState) => state.user.user);
   const updatedUser = useSelector((state : RootState) => state.edit.selectedUser);
 
   const [editLoading, setEditLoading] = useState(false);
@@ -23,6 +25,10 @@ export const UserListActions = (props : any) => {
   };
 
   const editUser = () => {
+    if (!updatedUser) {
+      message.error('Something went wrong while editing the user.');
+      return;
+    }
     setEditLoading(true);
     axios.patch('/users/' + props.user.username, updatedUser)
       .then(() => {
@@ -34,7 +40,7 @@ export const UserListActions = (props : any) => {
         message.success('User was edited successfully.');
       })
       .catch((err) => {
-        message.error('Something went wrong while editing the user.');
+        message.error(err.response.data.message);
         console.error(err);
       })
       .finally(() => {
@@ -43,6 +49,10 @@ export const UserListActions = (props : any) => {
   };
 
   const deleteUser = () => {
+    if (loggedIn.username === props.user.username) {
+      message.error('You cannot delete your own account.');
+      return;
+    }
     setDeleteLoading(true);
     axios.delete('/users/' + props.user.username)
       .then(() => {
@@ -72,7 +82,6 @@ export const UserListActions = (props : any) => {
         title='Edit User'
         visible={editVisible}
         confirmLoading={editLoading}
-        onOk={editUser}
         onCancel={() => setEditVisible(false)}
         footer={[
           <Button

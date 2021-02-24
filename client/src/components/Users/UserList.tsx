@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ResponsiveTable } from '../ResponsiveTable';
 import { UserListActions } from './UserListActions';
 import { getRoleString } from '../../router/Roles';
-import { setUserList } from '../../store/slices/UserList'
+import { setUserList } from '../../store/slices/UserListSlice';
 import { RootState } from '../../store/Store';
 import { UserEntry } from '../../interfaces/UserEntry';
 import axios from '../../plugins/Axios';
@@ -31,14 +31,19 @@ export const UserList = () => {
           }
         );
       }
-      rows.forEach((user : UserEntry) => {
-        user.roleString = getRoleString(user.role);
-        user.actions = <UserListActions user={user} />;
-      });
       dispatch(setUserList(rows));
     });
-
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchValue]);
+
+  const getUserList = () => {
+    const rows = JSON.parse(JSON.stringify(userList));
+    rows.forEach((user : UserEntry) => {
+      user.roleString = getRoleString(user.role);
+      user.actions = <UserListActions user={user} />;
+    });
+    return rows;
+  }
 
   const onSearch = (e : React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
@@ -61,8 +66,8 @@ export const UserList = () => {
           onChange={onSearch}
           style={{ marginBottom: 18 }} />
         {
-          userList.length > 0 ?
-            <ResponsiveTable rows={userList} cols={getColumns()} /> :
+          getUserList().length > 0 ?
+            <ResponsiveTable rows={getUserList()} cols={getColumns()} /> :
             <span>No users were found.</span>
         }
       </Card>

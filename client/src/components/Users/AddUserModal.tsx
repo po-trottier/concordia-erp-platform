@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { Button, Form, Input, message, Modal, Select } from 'antd';
 import { useDispatch } from 'react-redux';
 
-import { addUserEntry } from '../../store/slices/UserList';
+import { addUserEntry } from '../../store/slices/UserListSlice';
+import { Role } from '../../router/Roles';
 import axios from '../../plugins/Axios';
 
 const { Option } = Select;
@@ -38,7 +39,7 @@ export const AddUserModal = () => {
         message.success('User was added successfully.');
       })
       .catch((err) => {
-        message.error('Something went wrong with adding the new user.');
+        message.error(err.response.data.message);
         console.error(err);
       })
       .finally(() => {
@@ -99,7 +100,7 @@ export const AddUserModal = () => {
             ]}>
             <Select
               placeholder="Select the user's role"
-              onSelect={(e : number) => setRole(e)}>
+              onSelect={(e : Role) => setRole(e)}>
               <Option value={1}>Salesperson</Option>
               <Option value={2}>Accountant</Option>
               <Option value={3}>Inventory Manager</Option>

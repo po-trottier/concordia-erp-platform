@@ -5,7 +5,8 @@ import storage from 'redux-persist/lib/storage';
 
 import { userSlice } from './slices/UserSlice';
 import { uploadSlice } from './slices/UploadSlice';
-import { userListSlice } from './slices/UserList';
+import { userListSlice } from './slices/UserListSlice';
+import { userEditSlice } from './slices/UserEditSlice';
 
 const persistConfig = {
   key: 'root',
@@ -25,6 +26,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
   user: userSlice.reducer,
   upload: uploadSlice.reducer,
+  edit: userEditSlice.reducer,
   userList: userListSlice.reducer,
 });
 
