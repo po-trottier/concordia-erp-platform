@@ -1,56 +1,48 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Card, Input, InputNumber, message, Modal } from 'antd';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { ResponsiveTable } from '../ResponsiveTable';
 import { CreateProductModal } from './CreateProductModal';
 import { EditProductModal } from './EditProductModal';
 import { ProductEntry } from '../../interfaces/ProductEntry';
+import { RootState } from '../../store/Store';
+import { setProductList } from '../../store/slices/ProductListSlice';
 import ProductDetails from './ProductDetails';
 import axios from '../../plugins/Axios';
 
 const { Search } = Input;
 
 export const ProductCatalog = () => {
+  const dispatch = useDispatch();
 
-  const emptyData : ProductEntry[] = []
-  const [tableData, setTableData] = useState(emptyData);
-  const [updated, setUpdated] = useState(false);
+  const products = useSelector((state : RootState) => state.productList.list);
+
   const [searchValue, setSearchValue] = useState('');
-  // TODO Replace this with redux
-  const [products, setProducts] = useState(emptyData);
 
   useEffect(() => {
-    getProducts()
-      .then((rows) => {
-        if (searchValue.trim() !== '') {
-          rows = rows.filter(
-            (r : ProductEntry) => r.name.trim().toLowerCase().includes(searchValue.trim().toLowerCase()));
-        }
-        setTableData(rows);
+    axios.get('/products')
+      .then(({ data }) => {
+        dispatch(setProductList(data));
       })
       .catch((err) => {
         message.error('Something went wrong while getting the products catalog.');
         console.error(err);
       });
-  }, [searchValue]);
+  }, [searchValue, products]);
 
   const onSearch = (e : React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
   };
 
-  const getProducts = async () => {
-    let res;
-    if (!updated) {
-      res = await axios.get('/products');
-      if (!res) {
-        message.error('Something went wrong while getting the products catalog.');
-        return [];
-      }
-    } else {
-      // TODO Replace this with redux
-      return products
+  const getProducts = () => {
+    let rows = JSON.parse(JSON.stringify(products));
+
+    if (searchValue.trim() !== '') {
+      rows = rows.filter(
+        (r : ProductEntry) => r.name.trim().toLowerCase().includes(searchValue.trim().toLowerCase()));
     }
-    const rows = res.data;
+
     rows.forEach((row : any) => {
       row.id = row['_id'];
       row.details = (
@@ -62,15 +54,17 @@ export const ProductCatalog = () => {
         <InputNumber
           placeholder='Input a quantity'
           min={0}
-          style={{ width: '100%' }}/>
+          style={{ width: '100%' }} />
       );
       row.actions = (
         <EditProductModal product={row} />
       );
     });
-    // TODO Replace this with redux
-    setProducts(rows);
-    setUpdated(true);
+
+    rows.sort((a : ProductEntry, b : ProductEntry) => {
+      return a.name < b.name ? -1 : 1;
+    });
+
     return rows;
   }
 
@@ -113,8 +107,8 @@ export const ProductCatalog = () => {
           onChange={onSearch}
           style={{ marginBottom: 18 }} />
         {
-          tableData.length > 0 ?
-          <ResponsiveTable rows={tableData} cols={columns} /> :
+          getProducts().length > 0 ?
+          <ResponsiveTable rows={getProducts()} cols={columns} /> :
             <span>No products were found.</span>
         }
       </Card>

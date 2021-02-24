@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Col, Form, Input, InputNumber, message, Modal, Row, Select } from 'antd';
 import { MinusCircleTwoTone, PlusOutlined } from '@ant-design/icons';
+import { useDispatch } from 'react-redux';
 
 import { PartDropdownEntry } from '../../interfaces/PartDropdownEntry';
 import { ProductEntry } from '../../interfaces/ProductEntry';
+import { updateProductEntry } from '../../store/slices/ProductListSlice';
 import axios from '../../plugins/Axios';
 
 const { Option } = Select;
@@ -14,6 +16,8 @@ interface ProductPart {
 }
 
 export const EditProductModal = (props: { product: ProductEntry }) => {
+  const dispatch = useDispatch();
+
   const [form] = Form.useForm();
 
   const emptyData : PartDropdownEntry[] = [];
@@ -88,15 +92,19 @@ export const EditProductModal = (props: { product: ProductEntry }) => {
           partsFiltered[i].quantity += p.quantity;
       }
     });
-
     axios.patch('/products/' + props.product.id, {
       name: values['product_name'],
       parts: partsFiltered,
       price: values['product_price'],
       properties: values['list_properties']
     })
-      .then(() => {
-        // TODO change the list of products in the catalog
+      .then((res) => {
+        const newProduct = res.data;
+        newProduct.id = res.data['_id'];
+        dispatch(updateProductEntry({
+          id: props.product.id,
+          newProduct: newProduct
+        }));
         setIsModalVisible(false);
         form.resetFields();
         message.success('The product was successfully edited.');
