@@ -8,7 +8,9 @@ const initialState =
     user: {
       username: '',
       email: '',
-      name: '',
+      firstName: '',
+      lastName: '',
+      token: '',
       authType: Role.ANY,
       isLoggedIn: false,
       isRemembered: false,
@@ -22,7 +24,9 @@ export const userSlice = createSlice({
     login: (state, { payload } : PayloadAction<LoginRequest>) => {
       state.user.username = payload.username;
       state.user.email = payload.email;
-      state.user.name = payload.name;
+      state.user.firstName = payload.firstName;
+      state.user.lastName = payload.lastName;
+      state.user.token = payload.token;
       state.user.authType = payload.role;
       state.user.isLoggedIn = true;
       state.user.isRemembered = payload.isRemembered;
@@ -32,7 +36,9 @@ export const userSlice = createSlice({
     logout: (state) => {
       state.user.username = state.user.isRemembered ? state.user.username : '';
       state.user.email = '';
-      state.user.name = '';
+      state.user.firstName = '';
+      state.user.lastName = '';
+      state.user.token = '';
       state.user.authType = Role.ANY;
       state.user.isLoggedIn = false;
 

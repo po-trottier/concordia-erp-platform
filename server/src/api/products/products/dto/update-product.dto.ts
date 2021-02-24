@@ -4,43 +4,32 @@ import {
   IsOptional,
   IsPositive,
   IsString,
+  Min,
 } from 'class-validator';
 
+import { CreateProductPartDto } from './create-product-part.dto';
+import { CreateProductPropertyDto } from './create-product-property.dto';
+
 export class UpdateProductDto {
-  @IsOptional()
+  @IsNotEmpty()
   @IsString()
+  @IsOptional()
   name: string;
 
-  @IsString()
-  @IsOptional()
-  description: string;
-
   @IsPositive()
+  @IsNotEmpty()
   @IsOptional()
   price: number;
 
-  // Will become a parts object
-  @IsOptional()
-  parts: string[];
-
-  @IsString()
-  @IsOptional()
-  frameSize: string;
-
-  @IsString()
-  @IsOptional()
-  color: string;
-
-  @IsString()
-  @IsOptional()
-  finish: string;
-
   @IsNotEmpty()
-  @IsPositive()
+  @IsOptional()
+  parts: CreateProductPartDto[];
+
+  @Min(0)
   @IsInt()
   @IsOptional()
-  quantity?: number;
+  quantity = 0;
 
   @IsOptional()
-  dynamic?: { key: string; value: string }[];
+  properties: CreateProductPropertyDto[];
 }

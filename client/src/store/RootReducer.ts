@@ -1,8 +1,12 @@
 import { combineReducers } from '@reduxjs/toolkit';
 import { persistReducer } from 'redux-persist';
 import { encryptTransform } from 'redux-persist-transform-encrypt';
-import { userSlice } from './slices/UserSlice';
 import storage from 'redux-persist/lib/storage';
+
+import { userSlice } from './slices/UserSlice';
+import { uploadSlice } from './slices/UploadSlice';
+import { userListSlice } from './slices/UserListSlice';
+import { userEditSlice } from './slices/UserEditSlice';
 
 const persistConfig = {
   key: 'root',
@@ -21,7 +25,9 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
   user: userSlice.reducer,
-  // TODO Add other reducers from the other slices of the store
+  upload: uploadSlice.reducer,
+  edit: userEditSlice.reducer,
+  userList: userListSlice.reducer,
 });
 
 export default persistReducer(persistConfig, rootReducer);

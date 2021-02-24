@@ -7,14 +7,19 @@ import MetalImg from '../../assets/metal.png';
 import PlasticImg from '../../assets/plastic.png';
 import WoodImg from '../../assets/wood.png';
 
+import { CreateMaterialModal } from './CreateMaterialModal';
+
 const { Search } = Input;
 
 export const MaterialsCatalog = () => {
   const cols = {
     img: 'Preview',
     name: 'Product',
-    quantity: 'Owned',
+    density: 'Density',
+    stock: 'Stock',
     price: 'Price',
+    vendor: 'Vendor',
+    actions: 'Actions',
     order: 'Order',
   };
 
@@ -22,20 +27,26 @@ export const MaterialsCatalog = () => {
     {
       img: <img src={MetalImg} alt='Metal Preview' width={32} />,
       name: 'Metal',
-      quantity: 30,
+      stock: 30,
       price: 5,
+      density: '2 kg/unit',
+      vendor: 'Some Vendor',
     },
     {
       img: <img src={PlasticImg} alt='Plastic Preview' width={32} />,
       name: 'Plastic',
-      quantity: 10,
+      stock: 10,
       price: 2,
+      density: '5 kg/unit',
+      vendor: 'Other Vendor',
     },
     {
       img: <img src={WoodImg} alt='Wood Preview' width={32} />,
       name: 'Wood',
-      quantity: 15,
+      stock: 15,
       price: 4,
+      density: '1.5 kg/unit',
+      vendor: 'Some Vendor',
     },
   ];
 
@@ -46,6 +57,11 @@ export const MaterialsCatalog = () => {
       min={0}
       style={{ width: '100%' }}
     />;
+    row.actions = (
+      <Button type='ghost' size='small' style={{ width: 64 }}>
+        Edit
+      </Button>
+    );
   });
 
   const [tableData, setTableData] = useState(data);
@@ -80,11 +96,7 @@ export const MaterialsCatalog = () => {
         style={{ marginTop: 16, float: 'right' }}>
         Order Materials
       </Button>
-      <Button
-        type='ghost'
-        style={{ marginTop: 16 }}>
-        Add a new Material
-      </Button>
+      <CreateMaterialModal />
     </div>
   );
 };
