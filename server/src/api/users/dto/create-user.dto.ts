@@ -21,7 +21,6 @@ export class CreateUserDto {
   @IsString()
   lastName: string;
 
-  @IsEmail()
   @IsNotEmpty()
   @IsString()
   email: string;
@@ -33,18 +32,6 @@ export class CreateUserDto {
       'The password needs to contain 1 uppercase character, 1 lowercase character, 1 number, 1 symbol, and be 8 characters long or more.',
   })
   password: string;
-
-  @IsNotEmpty()
-  @IsString()
-  email: string;
-
-  @IsNotEmpty()
-  @IsString()
-  firstName: string;
-  
-  @IsNotEmpty()
-  @IsString()
-  lastName: string;
 
   @IsDefined()
   @IsInt()
