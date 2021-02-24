@@ -82,5 +82,4 @@ describe('PartsController', () => {
       expect(await partsController.update(result.name, updatedPart)).toBe(result);
     });
   });
-
 });
