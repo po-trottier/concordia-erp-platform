@@ -34,9 +34,8 @@ const showModal = (row : any) => {
 
 const showDeleteConfirmModal = () => {
   Modal.confirm({
-    title: 'Are you sure delete this task?',
+    title: 'Are you sure delete this product?',
     icon: <ExclamationCircleOutlined />,
-    content: 'Some descriptions',
     okText: 'Yes',
     okType: 'danger',
     cancelText: 'No',
@@ -59,10 +58,6 @@ export const ProductCatalog = () => {
   const [tableData, setTableData] = useState(emptyData);
   const [searchValue, setSearchValue] = useState('');
 
-  const submitEditHandler = (values: any) => {
-    console.log(values);
-  }
-
   useEffect(() => {
     axios.get('products').then(({data}) => {
       data.forEach((row: any) => {
@@ -78,7 +73,7 @@ export const ProductCatalog = () => {
           style={{ width: '100%' }}
         />;
 
-        row.actions = 
+        row.actions =
       <>
         <ProductEditModal
           name={row.name}
@@ -87,9 +82,11 @@ export const ProductCatalog = () => {
           parts={row.parts.join(', ')}
           color={row.color}
           finish={row.finish}
-          grade={row.grade} 
-          submitEditHandler = {submitEditHandler}/>
-          <Button type='ghost' danger style={{marginLeft:10}} onClick={showDeleteConfirmModal}>Delete</Button>
+          grade={row.grade}
+          productId ={row.id} />
+          <Button type='ghost' danger style={{marginLeft:10}} onClick={() => {
+            showDeleteConfirmModal()
+          }}>Delete</Button>
       </>
       });
       if (searchValue.trim() !== '') {
