@@ -34,7 +34,8 @@ export class UsersService implements OnApplicationBootstrap {
       if (err.status == 404) {
         const user = new CreateUserDto();
         user.username = DEFAULT_USER;
-        user.name = 'Administrator';
+        user.firstName = 'Administrator';
+        user.lastName = 'Person';
         user.role = Role.SYSTEM_ADMINISTRATOR;
         user.password = await hash(process.env.DEFAULT_PASSWORD, 16);
         await this.create(user);
@@ -56,6 +57,7 @@ export class UsersService implements OnApplicationBootstrap {
   async create(dto: CreateUserDto): Promise<User> | undefined {
     const account = dto;
     account.username = account.username.trim().toLowerCase();
+    account.email = account.email.trim().toLowerCase();
     if (await this.findOneInternal(account.username)) {
       throw new ConflictException(
         'A user with the same username already exists.',
@@ -80,10 +82,15 @@ export class UsersService implements OnApplicationBootstrap {
   }
 
   async update(username: string, dto: UpdateUserDto): Promise<User> {
+    // Trim & Lowercase to make search not case-sensitive
+    const user = dto;
+    user.username = user.username.trim().toLowerCase();
+    user.email = user.email.trim().toLowerCase();
     // Cannot change the default user's username
     const isAdmin = username === DEFAULT_USER;
-    const adminChanged =
-      dto.username != username || dto.role != Role.SYSTEM_ADMINISTRATOR;
+    const usernameChanged = dto.username != username 
+    const roleChanged = dto.role != Role.SYSTEM_ADMINISTRATOR;
+    const adminChanged= usernameChanged || roleChanged;
     if (isAdmin && adminChanged) {
       throw new UnauthorizedException(
         "You cannot change the default user's username.",
@@ -91,10 +98,10 @@ export class UsersService implements OnApplicationBootstrap {
     }
     const updatedUser = await this.userModel.findOneAndUpdate(
       { username },
-      { $set: { ...dto } },
+      { ...user },
       { new: true },
     );
-    return this.validateUserFound(updatedUser, username);
+    return this.validateUserFound(updatedUser, user.username);
   }
 
   async remove(username: string): Promise<User> {

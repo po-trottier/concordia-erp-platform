@@ -1,10 +1,27 @@
-import { IsOptional, IsString, IsInt, Matches } from "class-validator";
+import { IsOptional, IsString, IsInt, Matches, IsEmail, IsNotEmpty } from "class-validator";
 import { Role } from '../../roles/roles.enum';
 
 export class UpdateUserDto {
   @IsOptional()
+  @IsNotEmpty()
   @IsString()
   username: string;
+
+  @IsOptional()
+  @IsNotEmpty()
+  @IsString()
+  firstName: string;
+  
+  @IsOptional()
+  @IsNotEmpty()
+  @IsString()
+  lastName: string;
+  
+  @IsOptional()
+  @IsEmail()
+  @IsNotEmpty()
+  @IsString()
+  email: string;
 
   @IsOptional()
   @IsString()
@@ -13,10 +30,6 @@ export class UpdateUserDto {
       'The password needs to contain 1 uppercase character, 1 lowercase character, 1 number, 1 symbol, and be 8 characters long or more.',
   })
   password: string;
-
-  @IsOptional()
-  @IsString()
-  name: string;
 
   @IsOptional()
   @IsInt()

@@ -24,6 +24,7 @@ export class UsersController {
   @Post()
   async create(@Body(ValidationPipe) dto: CreateUserDto) {
     const body = dto;
+    body.username = body.username.trim().toLowerCase();
     body.password = await hash(dto.password, 16);
     const user = await this.usersService.create(body);
     if (user === undefined) {
@@ -41,7 +42,7 @@ export class UsersController {
   @Roles(Role.SYSTEM_ADMINISTRATOR)
   @Get(':username')
   findOne(@Param('username') username: string) {
-    return this.usersService.findOne(username);
+    return this.usersService.findOne(username.trim().toLowerCase());
   }
 
   @Roles(Role.SYSTEM_ADMINISTRATOR)
@@ -51,16 +52,16 @@ export class UsersController {
     @Body(ValidationPipe) dto: UpdateUserDto,
   ) {
     if (!dto.password) {
-      return this.usersService.update(username, dto);
+      return this.usersService.update(username.trim().toLowerCase(), dto);
     }
     const body = dto;
     body.password = await hash(dto.password, 16);
-    return this.usersService.update(username, body);
+    return this.usersService.update(username.trim().toLowerCase(), body);
   }
 
   @Roles(Role.SYSTEM_ADMINISTRATOR)
   @Delete(':username')
   remove(@Param('username') username: string) {
-    return this.usersService.remove(username);
+    return this.usersService.remove(username.trim().toLowerCase());
   }
 }
