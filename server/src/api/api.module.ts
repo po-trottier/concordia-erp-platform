@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 import { MongooseModule } from '@nestjs/mongoose';
 import { RouterModule } from 'nest-router';
-import { EventEmitterModule } from '@nestjs/event-emitter';
 import { ApiController } from './api.controller';
 import { PartsModule } from './parts/parts.module';
 import { MaterialsModule } from './materials/materials.module';
@@ -23,7 +22,6 @@ const mongoDbName = process.env.DB_NAME || 'ERP_db';
     MongooseModule.forRoot(`${mongoDbUrl}/${mongoDbName}`, {
       useFindAndModify: false,
     }),
-    EventEmitterModule.forRoot(),
     PartsModule,
     MaterialsModule,
     AuthModule,
