@@ -61,7 +61,7 @@ export const EditProductModal = (props : { product : ProductEntry }) => {
   };
 
   const editProduct = (values : any) => {
-    let parts = values['list_parts'];
+    const parts = values['list_parts'];
 
     if (!parts) {
       displayPartsError();
@@ -94,6 +94,7 @@ export const EditProductModal = (props : { product : ProductEntry }) => {
         }
       }
     });
+
     axios.patch('/products/' + props.product.id, {
       name: values['product_name'],
       parts: partsFiltered,

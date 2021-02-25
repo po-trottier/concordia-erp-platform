@@ -13,8 +13,8 @@ export const userListSlice = createSlice({
     setList: (state, { payload } : PayloadAction<UserEntry[]>) => {
       state.list = payload;
     },
-    updateEntry: (state, { payload } : PayloadAction<{ username: string, newUser: UserEntry }>) => {
-      for(let i = 0; i < state.list.length; i++) {
+    updateEntry: (state, { payload } : PayloadAction<{ username : string, newUser : UserEntry }>) => {
+      for (let i = 0; i < state.list.length; i++) {
         if (state.list[i].username === payload.username) {
           state.list[i] = payload.newUser;
           return;
@@ -26,12 +26,14 @@ export const userListSlice = createSlice({
     },
     removeEntry: (state, { payload } : PayloadAction<string>) => {
       let i = 0;
-      for(i; i < state.list.length; i++) {
-        if (state.list[i].username === payload)
+      for (i; i < state.list.length; i++) {
+        if (state.list[i].username === payload) {
           break;
+        }
       }
-      if (i < state.list.length)
+      if (i < state.list.length) {
         state.list.splice(i, 1);
+      }
     },
   }
 });

@@ -17,12 +17,11 @@ export const ProductCatalog = () => {
   const dispatch = useDispatch();
 
   const products = useSelector((state : RootState) => state.productList.list);
+  const updated = useSelector((state : RootState) => state.productList.updated);
 
   const [searchValue, setSearchValue] = useState('');
-  const [updated, setUpdated] = useState(false);
 
   useEffect(() => {
-    setUpdated(true);
     axios.get('/products')
       .then(({ data }) => {
         dispatch(setProductList(data));

@@ -17,14 +17,13 @@ export const PartCatalog = () => {
   const dispatch = useDispatch();
 
   const parts = useSelector((state : RootState) => state.partList.list);
+  const updated = useSelector((state : RootState) => state.partList.updated);
 
   const emptyData : MaterialDropdownEntry[] = [];
   const [searchValue, setSearchValue] = useState('');
   const [materialsData, setMaterialsData] = useState(emptyData);
-  const [updated, setUpdated] = useState(false);
 
   useEffect(() => {
-    setUpdated(true);
     axios.get('/parts')
       .then(({ data }) => {
         data.forEach((d : any) => {

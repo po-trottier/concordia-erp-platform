@@ -59,7 +59,7 @@ export const CreateProductModal = () => {
   };
 
   const handleSubmit = (values : any) => {
-    let parts = values['list_parts'];
+    const parts = values['list_parts'];
 
     if (!parts) {
       displayPartsError();
