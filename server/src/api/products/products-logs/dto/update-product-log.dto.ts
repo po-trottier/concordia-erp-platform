@@ -1,10 +1,4 @@
-import {
-  IsDate,
-  IsInt,
-  IsNotEmpty,
-  IsPositive,
-  IsString,
-} from 'class-validator';
+import { IsDate, IsInt, IsNotEmpty, IsString, Min } from 'class-validator';
 
 /**
  * ProductLog creation DTO
@@ -20,16 +14,16 @@ export class UpdateProductLogDto {
 
   @IsNotEmpty()
   @IsInt()
-  @IsPositive()
+  @Min(0)
   stock: number;
 
   @IsNotEmpty()
   @IsInt()
-  @IsPositive()
-  built: number;
+  @Min(0)
+  stockBuilt: number;
 
   @IsNotEmpty()
   @IsInt()
-  @IsPositive()
-  used: number;
+  @Min(0)
+  stockUsed: number;
 }

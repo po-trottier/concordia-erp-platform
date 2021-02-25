@@ -22,27 +22,37 @@ export class ProductLogsService {
   }
 
   /**
+   * Retrieves a productLog by composite key using mongoose productLogModel
+   *
+   * @param productId the id of the corresponding product
+   * @param date the date in history
+   */
+  async findOne(productId: string, date: Date): Promise<ProductLog> {
+    const productLog = await this.productLogModel.findOne({productId, date});
+    return this.validateProductLogFound(productLog, productId, productLog.date);
+  }
+
+  /**
    * Updates productLog by id using mongoose productLogModel
    * If stock is product of the update, emits the product.quantity.updated event
    *
    * @param updateProductLogDto dto used to update product logs
    */
   async update(updateProductLogDto: UpdateProductLogDto): Promise<ProductLog> {
-    const { productId, date, stock, built, used } = updateProductLogDto;
+    const {
+      productId,
+      date,
+      stock,
+      stockBuilt,
+      stockUsed,
+    } = updateProductLogDto;
     const updatedProductLog = await this.productLogModel.findOneAndUpdate(
       { productId, date },
-      { stock, built, used },
+      { $set: { stock }, $inc: { stockBuilt, stockUsed } },
       { new: true, upsert: true },
     );
 
     return this.validateProductLogFound(updatedProductLog, productId, date);
-  }
-
-  async findOne(productId: string): Promise<ProductLog> {
-    const productLog = await this.productLogModel.findOne({
-      productId: productId,
-    });
-    return this.validateProductLogFound(productLog, productId, productLog.date);
   }
 
   /**
@@ -59,7 +69,7 @@ export class ProductLogsService {
   ) {
     if (!productLogResult) {
       throw new NotFoundException(
-        `ProductLog entry with productId ${productId} on ${date} not found`,
+        `ProductLog entry with productId ${productId} on ${date.toString()} not found`,
       );
     } else {
       return productLogResult;

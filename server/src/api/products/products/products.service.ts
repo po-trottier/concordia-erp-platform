@@ -4,6 +4,10 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { ProductLogsService } from '../products-logs/product-logs.service';
+import { UpdateProductLogDto } from '../products-logs/dto/update-product-log.dto';
+import { format, parse } from 'date-fns';
+import { UpdateProductStockDto } from '../products/dto/update-product-stock.dto';
 
 /**
  * Used by the ProductsController, handles product data storage and retrieval.
@@ -12,6 +16,7 @@ import { Model } from 'mongoose';
 export class ProductsService {
   constructor(
     @InjectModel(Product.name) private productModel: Model<ProductDocument>,
+    private readonly productLogsService: ProductLogsService,
   ) {}
 
   /**
@@ -21,7 +26,23 @@ export class ProductsService {
    */
   async create(createProductDto: CreateProductDto): Promise<Product> {
     const createdProduct = new this.productModel(createProductDto);
-    return createdProduct.save();
+    createdProduct.save();
+
+    const updateProductLogDto: UpdateProductLogDto = new UpdateProductLogDto();
+
+    updateProductLogDto.productId = createdProduct.id;
+    updateProductLogDto.stock = createdProduct.stock || 0;
+    updateProductLogDto.date = parse(
+      format(new Date(), 'd/M/y'),
+      'dd/MM/yyyy',
+      new Date(),
+    );
+    updateProductLogDto.stockBuilt = 0;
+    updateProductLogDto.stockUsed = 0;
+
+    await this.productLogsService.update(updateProductLogDto);
+
+    return createdProduct;
   }
 
   /**
@@ -38,7 +59,7 @@ export class ProductsService {
    */
   async findOne(id: string): Promise<Product> {
     const product = await this.productModel.findById(id);
-    return this.verifyProductFound(id, product);
+    return this.validateProductFound(product, id);
   }
 
   /**
@@ -57,7 +78,51 @@ export class ProductsService {
       { $set: { ...updateProductDto } },
       { new: true },
     );
-    return this.verifyProductFound(id, updatedProduct);
+    return this.validateProductFound(updatedProduct, id);
+  }
+
+  /**
+   * Updates product stock by id using mongoose productModel
+   * Emits the product.quantity.updated event
+   *
+   * @param id string of the product's objectId
+   * @param updateProductStockDto dto used to update product stock
+   */
+  async updateStock(
+    id: string,
+    updateProductStockDto: UpdateProductStockDto,
+  ): Promise<Product> {
+    const { stockBuilt, stockUsed } = updateProductStockDto;
+
+    const netStockChange = stockBuilt - stockUsed;
+
+    let updatedProduct = await this.productModel.findByIdAndUpdate(
+      id,
+      { $inc: { stock: netStockChange } },
+      { new: true },
+    );
+
+    if (updatedProduct.stock < 0) {
+      updatedProduct = await this.productModel.findByIdAndUpdate(
+        id,
+        { $set: { stock: 0 } },
+        { new: true },
+      );
+    }
+
+    if (updatedProduct) {
+      const updateProductLogDto: UpdateProductLogDto = {
+        productId: id,
+        stock: updatedProduct.stock,
+        stockBuilt,
+        stockUsed,
+        date: parse(format(new Date(), 'd/M/y'), 'dd/MM/yyyy', new Date()),
+      };
+
+      await this.productLogsService.update(updateProductLogDto);
+    }
+
+    return this.validateProductFound(updatedProduct, id);
   }
 
   /**
@@ -67,7 +132,7 @@ export class ProductsService {
    */
   async remove(id: string) {
     const deletedProduct = await this.productModel.findByIdAndDelete(id);
-    return this.verifyProductFound(id, deletedProduct);
+    return this.validateProductFound(deletedProduct, id);
   }
 
   /**
@@ -76,11 +141,11 @@ export class ProductsService {
    * @param productResult a retrieved product
    * @param id string of the product's objectId
    */
-  verifyProductFound(id: string, product: any) {
-    if (!product) {
+  validateProductFound(productResult: any, id: string) {
+    if (!productResult) {
       throw new NotFoundException(`Product with id ${id} not found`);
     } else {
-      return product;
+      return productResult;
     }
   }
 }

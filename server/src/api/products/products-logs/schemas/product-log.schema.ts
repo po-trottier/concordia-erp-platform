@@ -6,7 +6,7 @@ export type ProductLogDocument = ProductLog & Document;
 /**
  * ProductLog collection mongoose schema
  */
-@Schema({ _id: false })
+@Schema()
 export class ProductLog {
   @Prop({ required: true, index: true })
   date: Date;
@@ -23,10 +23,10 @@ export class ProductLog {
   stock: number;
 
   @Prop({ required: true })
-  built: number;
+  stockBuilt: number;
 
   @Prop({ required: true })
-  used: number;
+  stockUsed: number;
 }
 
 export const ProductLogSchema = SchemaFactory.createForClass(ProductLog);

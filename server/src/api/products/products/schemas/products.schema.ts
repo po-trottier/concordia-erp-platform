@@ -25,7 +25,7 @@ export class Product {
   price: number;
 
   @Prop({ required: true, default: 0 })
-  quantity: number;
+  stock: number;
 
   @Prop()
   parts: ProductPartInterface[];

@@ -3,7 +3,8 @@ import {
   IsNotEmpty,
   IsOptional,
   IsPositive,
-  IsString, Min,
+  IsString,
+  Min,
 } from 'class-validator';
 
 import { CreateProductPartDto } from './create-product-part.dto';
@@ -24,7 +25,7 @@ export class CreateProductDto {
   @Min(0)
   @IsInt()
   @IsOptional()
-  quantity = 0;
+  stock: number;
 
   @IsOptional()
   properties: CreateProductPropertyDto[];
