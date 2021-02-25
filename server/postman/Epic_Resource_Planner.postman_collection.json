@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "b9616ad3-857b-40aa-8567-0e8d4378918d",
+		"_postman_id": "1a89044b-ece2-4b25-88cc-8582f3d76459",
 		"name": "Epic Resource Planner",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -184,8 +184,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Finance",
@@ -296,8 +295,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Auth",
@@ -308,7 +306,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "91a2c466-489e-4a43-9f77-1747710d1a4d",
 								"exec": [
 									"if (pm.response.code === 201){",
 									"    pm.environment.set(\"JWT\", pm.response.json().token);",
@@ -343,8 +340,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Users",
@@ -466,8 +462,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Products",
@@ -589,8 +584,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Materials",
@@ -637,7 +631,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Titanium\",\r\n    \"description\": \"great for when the frame enters the atmosphere\",\r\n    \"stock\": 5,\r\n    \"density\": 10,\r\n    \"vendorName\": \"US Military\",\r\n    \"price\": 4500\r\n}",
+							"raw": "{\r\n    \"name\": \"Titanium\",\r\n    \"description\": \"great for when the frame enters the atmosphere\",\r\n    \"stock\": 5,\r\n    \"density\": 10,\r\n    \"vendorName\": \"US Military\",\r\n    \"price\": 4500,\r\n    \"image\": \"kk\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -663,7 +657,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"price\":420\r\n}",
+							"raw": "{\r\n    \"price\":421\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -671,13 +665,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}/materials/60345637fb095c1370323654",
+							"raw": "{{url}}/materials/60370af46eb5f44900b72081",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"materials",
-								"60345637fb095c1370323654"
+								"60370af46eb5f44900b72081"
 							]
 						}
 					},
@@ -700,9 +694,74 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Get materials logs",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/materials/logs",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"materials",
+								"logs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get material log by id and date",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/materials/logs/60370af46eb5f44900b72081/2021-02-24T05:00:00.000Z",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"materials",
+								"logs",
+								"60370af46eb5f44900b72081",
+								"2021-02-24T05:00:00.000Z"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update material stock by id",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"stockUsed\": 50,\n    \"stockBought\": 600\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/materials/60370af46eb5f44900b72081/stock",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"materials",
+								"60370af46eb5f44900b72081",
+								"stock"
+							]
+						}
+					},
+					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "API Status",
@@ -736,8 +795,7 @@
 				"type": "text/javascript",
 				"exec": [
 					""
-				],
-				"id": "1d63301c-7bcf-4089-a14b-fbcb6183cd3a"
+				]
 			}
 		},
 		{
@@ -746,10 +804,8 @@
 				"type": "text/javascript",
 				"exec": [
 					""
-				],
-				"id": "2b1938c3-7cc0-4e02-9333-7e21b002c30e"
+				]
 			}
 		}
-	],
-	"protocolProfileBehavior": {}
+	]
 }

@@ -31,6 +31,7 @@ export class UpdateMaterialDto {
   @IsOptional()
   vendorName: string;
 
+  @IsOptional()
   @IsNotEmpty()
   @IsString()
   image: string;
