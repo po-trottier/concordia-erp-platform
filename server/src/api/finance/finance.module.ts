@@ -9,7 +9,9 @@ import { FinanceEntrySchema, FinanceEntry } from './schemas/finance.schema';
  */
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: FinanceEntry.name, schema: FinanceEntrySchema }]),
+    MongooseModule.forFeature([
+      { name: FinanceEntry.name, schema: FinanceEntrySchema },
+    ]),
   ],
   controllers: [FinanceController],
   providers: [FinanceService],

@@ -1,4 +1,11 @@
-import { IsInt, IsNotEmpty, IsString, IsOptional, Min } from 'class-validator';
+import {
+  IsInt,
+  IsNotEmpty,
+  IsString,
+  IsOptional,
+  Min,
+} from 'class-validator';
+import { CreatePartMaterialDto } from './create-part-material.dto';
 
 /**
  * Part creation DTO
@@ -9,11 +16,10 @@ export class CreatePartDto {
   name: string;
 
   @IsNotEmpty()
-  @IsString()
-  description: string;
+  materials: CreatePartMaterialDto[];
 
-  @IsOptional()
-  @IsInt()
   @Min(0)
-  stock: number;
+  @IsInt()
+  @IsOptional()
+  stock = 0;
 }
