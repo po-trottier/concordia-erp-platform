@@ -14,7 +14,7 @@ import { materialListSlice } from './slices/MaterialListSlice';
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['user'],
+  whitelist: ['login'],
   // whitelist contains the name of reducers that we want to persist
   transforms: [
     encryptTransform({
