@@ -9,7 +9,9 @@ import { MaterialSchema, Material } from './schemas/material.schema';
  */
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: Material.name, schema: MaterialSchema }]),
+    MongooseModule.forFeature([
+      { name: Material.name, schema: MaterialSchema },
+    ]),
   ],
   controllers: [MaterialsController],
   providers: [MaterialsService],

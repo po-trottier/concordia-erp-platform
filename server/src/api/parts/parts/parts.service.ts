@@ -1,16 +1,23 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { format, parse } from 'date-fns';
 import { Model } from 'mongoose';
 import { CreatePartDto } from './dto/create-part.dto';
 import { UpdatePartDto } from './dto/update-part.dto';
 import { PartDocument, Part } from './schemas/part.schema';
+import { UpdatePartLogDto } from '../parts-logs/dto/update-part-log.dto';
+import { UpdatePartStockDto } from './dto/update-part-stock.dto';
+import { PartLogsService } from '../parts-logs/part-logs.service';
 
 /**
  * Used by the PartsController, handles part data storage and retrieval.
  */
 @Injectable()
 export class PartsService {
-  constructor(@InjectModel(Part.name) private partModel: Model<PartDocument>) {}
+  constructor(
+    @InjectModel(Part.name) private partModel: Model<PartDocument>,
+    private readonly partLogsService: PartLogsService,
+  ) {}
 
   /**
    * Creates part using mongoose partModel
@@ -19,7 +26,21 @@ export class PartsService {
    */
   async create(createPartDto: CreatePartDto): Promise<Part> {
     const createdPart = new this.partModel(createPartDto);
-    return createdPart.save();
+    createdPart.save();
+
+    const updatePartLogDto: UpdatePartLogDto = new UpdatePartLogDto();
+
+    updatePartLogDto.partId = createdPart.id;
+    updatePartLogDto.stock = createPartDto.stock || 0;
+    updatePartLogDto.date = parse(
+      format(new Date(), 'd/M/y'),
+      'dd/MM/yyyy',
+      new Date(),
+    );
+
+    await this.partLogsService.update(updatePartLogDto);
+
+    return createdPart;
   }
 
   /**
@@ -51,6 +72,51 @@ export class PartsService {
       { $set: { ...updatePartDto } },
       { new: true },
     );
+
+    return this.validatePartFound(updatedPart, id);
+  }
+
+  /**
+   * Updates part stock by id using mongoose partModel
+   * Emits the part.quantity.updated event
+   *
+   * @param id string of the part's objectId
+   * @param updatePartStockDto dto used to update part stock
+   */
+  async updateStock(
+    id: string,
+    updatePartStockDto: UpdatePartStockDto,
+  ): Promise<Part> {
+    const { stockBuilt, stockUsed } = updatePartStockDto;
+
+    const netStockChange = stockBuilt - stockUsed;
+
+    let updatedPart = await this.partModel.findByIdAndUpdate(
+      id,
+      { $inc: { stock: netStockChange } },
+      { new: true },
+    );
+
+    if (updatedPart.stock < 0) {
+      updatedPart = await this.partModel.findByIdAndUpdate(
+        id,
+        { $set: { stock: 0 } },
+        { new: true },
+      );
+    }
+
+    if (updatedPart) {
+      const updatePartLogDto: UpdatePartLogDto = {
+        partId: id,
+        stock: updatedPart.stock,
+        stockBuilt,
+        stockUsed,
+        date: parse(format(new Date(), 'd/M/y'), 'dd/MM/yyyy', new Date()),
+      };
+
+      await this.partLogsService.update(updatePartLogDto);
+    }
+
     return this.validatePartFound(updatedPart, id);
   }
 

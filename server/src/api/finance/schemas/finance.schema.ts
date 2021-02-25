@@ -8,7 +8,6 @@ export type FinanceEntryDocument = FinanceEntry & Document;
  */
 @Schema()
 export class FinanceEntry {
-
   @Prop({ required: true })
   dateEntered: Date;
 

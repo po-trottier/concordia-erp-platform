@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "11d56e46-d920-4e46-9319-c78aff1db2c8",
+		"_postman_id": "b9616ad3-857b-40aa-8567-0e8d4378918d",
 		"name": "Epic Resource Planner",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -97,6 +97,34 @@
 					"response": []
 				},
 				{
+					"name": "Update part stock by id",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"stockBuilt\": 50,\n    \"stockUsed\": 600\n\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/parts/6036cb1e24e36c32b387288d/stock",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"parts",
+								"6036cb1e24e36c32b387288d",
+								"stock"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Delete part by id",
 					"request": {
 						"method": "DELETE",
@@ -117,8 +145,47 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Get parts logs",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/parts/logs",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"parts",
+								"logs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get part log by id and date",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/parts/logs/6036cb1e24e36c32b387288d/1996-12-18T04:00:00.000Z",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"parts",
+								"logs",
+								"6036cb1e24e36c32b387288d",
+								"1996-12-18T04:00:00.000Z"
+							]
+						}
+					},
+					"response": []
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
 		},
 		{
 			"name": "Finance",
@@ -229,13 +296,28 @@
 					},
 					"response": []
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
 		},
 		{
 			"name": "Auth",
 			"item": [
 				{
 					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "91a2c466-489e-4a43-9f77-1747710d1a4d",
+								"exec": [
+									"if (pm.response.code === 201){",
+									"    pm.environment.set(\"JWT\", pm.response.json().token);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -261,7 +343,8 @@
 					},
 					"response": []
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
 		},
 		{
 			"name": "Users",
@@ -383,7 +466,8 @@
 					},
 					"response": []
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
 		},
 		{
 			"name": "Products",
@@ -505,7 +589,8 @@
 					},
 					"response": []
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
 		},
 		{
 			"name": "Materials",
@@ -616,7 +701,8 @@
 					},
 					"response": []
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
 		},
 		{
 			"name": "API Status",
@@ -650,7 +736,8 @@
 				"type": "text/javascript",
 				"exec": [
 					""
-				]
+				],
+				"id": "1d63301c-7bcf-4089-a14b-fbcb6183cd3a"
 			}
 		},
 		{
@@ -659,8 +746,10 @@
 				"type": "text/javascript",
 				"exec": [
 					""
-				]
+				],
+				"id": "2b1938c3-7cc0-4e02-9333-7e21b002c30e"
 			}
 		}
-	]
+	],
+	"protocolProfileBehavior": {}
 }
