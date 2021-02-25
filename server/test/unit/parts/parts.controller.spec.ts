@@ -17,8 +17,8 @@ describe('PartsController', () => {
 
   const dummyPart: Part = {
     name: 'Handlebar',
-    description: 'Handlebar for bike',
     stock: 1,
+    materials: [],
   };
 
   beforeEach(async () => {
@@ -55,7 +55,7 @@ describe('PartsController', () => {
 
       const newPart = new CreatePartDto();
       newPart.name = result.name;
-      newPart.description = result.description;
+      newPart.materials = result.materials;
       newPart.stock = result.stock;
 
       jest
@@ -84,7 +84,7 @@ describe('PartsController', () => {
 
       const updatedPart = new UpdatePartDto();
       updatedPart.name = result.name;
-      updatedPart.description = result.description;
+      updatedPart.materials = result.materials;
       updatedPart.stock = result.stock;
 
       jest
