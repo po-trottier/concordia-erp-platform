@@ -27,17 +27,15 @@ export class ProductsService {
    */
   async create(createProductDto: CreateProductDto): Promise<Product> {
     const createdProduct = new this.productModel(createProductDto);
-    createdProduct.save();
+    await createdProduct.save();
 
-    const updateProductLogDto: UpdateProductLogDto = new UpdateProductLogDto();
-
-    updateProductLogDto.productId = createdProduct.id;
-    updateProductLogDto.stock = createdProduct.stock || 0;
-    updateProductLogDto.date = parse(
-      format(new Date(), 'd/M/y'),
-      'dd/MM/yyyy',
-      new Date(),
-    );
+    const updateProductLogDto: UpdateProductLogDto = {
+      productId: createdProduct.id,
+      stock: createdProduct.stock || 0,
+      stockBuilt: 0,
+      stockUsed: 0,
+      date: parse(format(new Date(), 'd/M/y'), 'dd/MM/yyyy', new Date()),
+    };
 
     await this.productLogsService.update(updateProductLogDto);
 
@@ -113,8 +111,8 @@ export class ProductsService {
       const updateProductLogDto: UpdateProductLogDto = {
         productId: id,
         stock: updatedProduct.stock,
-        stockBuilt,
-        stockUsed,
+        stockBuilt: stockBuilt,
+        stockUsed: stockUsed,
         date: parse(format(new Date(), 'd/M/y'), 'dd/MM/yyyy', new Date()),
       };
 

@@ -34,6 +34,7 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
+          overwrite: true
           source: "./docker-compose.yml, ./server/.env"
           target: "/srv/nestjs"
       - name: Deploy to Digital Ocean

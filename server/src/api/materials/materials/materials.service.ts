@@ -29,15 +29,13 @@ export class MaterialsService {
     const createdMaterial = new this.materialModel(createMaterialDto);
     createdMaterial.save();
 
-    const updateMaterialLogDto: UpdateMaterialLogDto = new UpdateMaterialLogDto();
-
-    updateMaterialLogDto.materialId = createdMaterial.id;
-    updateMaterialLogDto.stock = createMaterialDto.stock || 0;
-    updateMaterialLogDto.date = parse(
-      format(new Date(), 'd/M/y'),
-      'dd/MM/yyyy',
-      new Date(),
-    );
+    const updateMaterialLogDto: UpdateMaterialLogDto = {
+      materialId: createdMaterial.id,
+      stock: createdMaterial.stock || 0,
+      stockBought: 0,
+      stockUsed: 0,
+      date: parse(format(new Date(), 'd/M/y'), 'dd/MM/yyyy', new Date()),
+    };
 
     await this.materialLogsService.update(updateMaterialLogDto);
 
