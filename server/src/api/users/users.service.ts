@@ -55,7 +55,17 @@ export class UsersService implements OnApplicationBootstrap {
         'A user with the same username already exists.',
       );
     }
+    if (await this.findOneInternal(account.email)) {
+      throw new ConflictException(
+        'A user with the same email already exists.',
+      );
+    }
+
     const createdUser = new this.userModel(account);
+    // TODO Generate a random password and send it to the email
+    if (!createdUser.password)
+      createdUser.password = await hash(process.env.DEFAULT_PASSWORD, 16);
+
     const user = await createdUser.save();
     return this.validateUserFound(user, user.username);
   }
