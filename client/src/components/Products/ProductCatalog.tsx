@@ -5,10 +5,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ResponsiveTable } from '../ResponsiveTable';
 import { CreateProductModal } from './CreateProductModal';
 import { EditProductModal } from './EditProductModal';
+import { ProductDetails } from './ProductDetails';
 import { ProductEntry } from '../../interfaces/ProductEntry';
 import { RootState } from '../../store/Store';
 import { setProductList } from '../../store/slices/ProductListSlice';
-import ProductDetails from './ProductDetails';
 import axios from '../../plugins/Axios';
 
 const { Search } = Input;
@@ -68,25 +68,10 @@ export const ProductCatalog = () => {
     return rows;
   }
 
-  const showModal = (row : any) => {
-    // TODO Fix this Modal
+  const showModal = (row : ProductEntry) => {
     Modal.info({
-      onOk() {
-      },
       title: 'Product Details',
-      width: 500,
-      content: (
-        <ProductDetails
-          name={row.name}
-          price={row.price}
-          quantity={row.quantity}
-          frameSize={row.frameSize}
-          parts={row.parts.join(', ')}
-          color={row.color}
-          finish={row.finish}
-          grade={row.grade}
-          description={row.description} />
-      )
+      content: <ProductDetails product={row} />
     });
   };
 

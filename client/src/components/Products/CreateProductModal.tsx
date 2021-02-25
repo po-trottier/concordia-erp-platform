@@ -12,7 +12,6 @@ interface ProductPart {
 }
 
 export const CreateProductModal = () => {
-
   const [form] = Form.useForm();
 
   const emptyData : PartDropdownEntry[] = [];
