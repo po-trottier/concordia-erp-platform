@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "1a89044b-ece2-4b25-88cc-8582f3d76459",
-		"name": "Epic Resource Planner",
+		"_postman_id": "93d4a1b1-ceed-47ee-b964-c4eabaef92b7",
+		"name": "Epic_Resource_Planner",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -76,21 +76,16 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"stock\": 4\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
+							"raw": "{\n    \"name\": \"Pink bike ASS\"\n}"
 						},
 						"url": {
-							"raw": "{{url}}/parts/6023033e12523415393afc0f",
+							"raw": "{{url}}/parts/6036fa7f0981691472cb1855",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"parts",
-								"6023033e12523415393afc0f"
+								"6036fa7f0981691472cb1855"
 							]
 						}
 					},
@@ -134,13 +129,13 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{url}}/parts/60245c2d2816ce3290065c38",
+							"raw": "{{url}}/parts/60220fd37d5a1f2c5a6d9778",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"parts",
-								"60245c2d2816ce3290065c38"
+								"60220fd37d5a1f2c5a6d9778"
 							]
 						}
 					},
@@ -231,12 +226,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Pink bike tassels\",\n    \"description\": \"makes it go faster\",\n    \"stock\": 70000\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
+							"raw": "{\n    \"name\": \"Pink bike tassels\",\n    \"description\": \"makes it go faster\",\n    \"stock\": 70000\n}"
 						},
 						"url": {
 							"raw": "{{url}}/finance",
@@ -257,12 +247,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"stock\": 4\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
+							"raw": "{\n    \"stock\": 4\n}"
 						},
 						"url": {
 							"raw": "{{url}}/finance/6023033e12523415393afc0f",
@@ -390,11 +375,21 @@
 				{
 					"name": "Create user",
 					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"inventory\",\r\n    \"password\": \"Password1!\",\r\n    \"name\": \"Inventory Manager\",\r\n    \"role\": 3\r\n}",
+							"raw": "{\r\n    \"username\": \"user\",\r\n    \"password\": \"Jr:6sh[3F}`^ns\",\r\n    \"name\": \"Tom Cruz\",\r\n    \"role\": 4\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -420,12 +415,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"password\": \"password\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
+							"raw": "{\r\n    \"password\": \"password\"\r\n}"
 						},
 						"url": {
 							"raw": "{{url}}/users/user",
@@ -441,7 +431,7 @@
 					"response": []
 				},
 				{
-					"name": "Delete user by id",
+					"name": "Delete part by id",
 					"request": {
 						"method": "DELETE",
 						"header": [],
@@ -490,13 +480,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{url}}/products/602fc1c35ec85b42243e6b1c",
+							"raw": "{{url}}/products/60367da1c6945e5fe2688ce3",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"products",
-								"602fc1c35ec85b42243e6b1c"
+								"60367da1c6945e5fe2688ce3"
 							]
 						}
 					},
@@ -516,7 +506,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"bike3\",\n    \"description\": \"amazing bike\",\n    \"price\": 299.99,\n    \"parts\": [\"seat\", \"tassels\"],\n    \"frameSize\": \"18in\",\n    \"color\": \"green\",\n    \"finish\": \"matte\",\n    \"grade\": \"steel\"    \n}",
+							"raw": "{\n    \"name\": \"Skooter of destiny\",\n    \"price\": 299.99,\n    \"stock\": 12,\n    \"parts\": [],\n    \"properties\": [\n        {\"key\": \"swag level\", \"value\": \"9000\"}\n    ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -542,7 +532,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"color\": \"black\"\n}",
+							"raw": "{\n    \"name\": \"Pick of destiny\",\n    \"stock\": 10221020120120120\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -550,13 +540,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}/products/6030880079bffd26ac1b4a16",
+							"raw": "{{url}}/products/6036f94e0981691472cb1853",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"products",
-								"6030880079bffd26ac1b4a16"
+								"6036f94e0981691472cb1853"
 							]
 						}
 					},
@@ -572,13 +562,59 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{url}}/products/602fc1ac5ec85b42243e6b1b",
+							"raw": "{{url}}/products/6036f7d91c27400fc938f304",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"products",
-								"602fc1ac5ec85b42243e6b1b"
+								"6036f7d91c27400fc938f304"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get product logs",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/products/logs",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"products",
+								"logs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update product stock by id",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"stockBuilt\": 60,\n    \"stockUsed\": 10\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/products/6036f94e0981691472cb1853/stock",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"products",
+								"6036f94e0981691472cb1853",
+								"stock"
 							]
 						}
 					},
