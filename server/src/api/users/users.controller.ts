@@ -22,15 +22,11 @@ export class UsersController {
 
   @Roles(Role.SYSTEM_ADMINISTRATOR)
   @Post()
-  async create(@Body(ValidationPipe) dto: CreateUserDto) {
+  create(@Body(ValidationPipe) dto: CreateUserDto) {
     const body = dto;
     body.username = body.username.trim().toLowerCase();
-    body.password = await hash(dto.password, 16);
-    const user = await this.usersService.create(body);
-    if (user === undefined) {
-      return new ConflictException('User already exists');
-    }
-    return user;
+    body.email = body.email.trim().toLowerCase();
+    return this.usersService.create(body);
   }
 
   @Roles(Role.SYSTEM_ADMINISTRATOR)
@@ -51,11 +47,10 @@ export class UsersController {
     @Param('username') username: string,
     @Body(ValidationPipe) dto: UpdateUserDto,
   ) {
-    if (!dto.password) {
-      return this.usersService.update(username.trim().toLowerCase(), dto);
-    }
     const body = dto;
-    body.password = await hash(dto.password, 16);
+    if (body.username) body.username = body.username.trim().toLowerCase();
+    if (body.email) body.email = body.email.trim().toLowerCase();
+    if (body.password) body.password = await hash(body.password, 16);
     return this.usersService.update(username.trim().toLowerCase(), body);
   }
 

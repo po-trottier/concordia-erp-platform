@@ -3,7 +3,8 @@ import {
   IsNotEmpty,
   IsOptional,
   IsPositive,
-  IsString, Min,
+  IsString,
+  Min,
 } from 'class-validator';
 
 import { CreateProductPartDto } from './create-product-part.dto';

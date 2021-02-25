@@ -1,4 +1,12 @@
-import {IsOptional, IsString, IsInt, IsPositive, IsNotEmpty, Min, IsNumber} from 'class-validator';
+import {
+  IsOptional,
+  IsString,
+  IsInt,
+  IsPositive,
+  IsNotEmpty,
+  Min,
+  IsNumber,
+} from 'class-validator';
 
 /**
  * Material update DTO

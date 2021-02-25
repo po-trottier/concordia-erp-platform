@@ -1,9 +1,9 @@
 import { IsInt, IsNotEmpty, IsPositive, IsString } from 'class-validator';
 
-export class CreateProductPartDto {
+export class CreatePartMaterialDto {
   @IsString()
   @IsNotEmpty()
-  partId: string;
+  materialId: string;
 
   @IsInt()
   @IsNotEmpty()

@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { CreateFinanceEntryDto } from './dto/create-fin-entry.dto';
-import { UpdateFinanceEntryDto } from './dto/update-fin-entry.dto';
+import { CreateFinanceEntryDto } from './dto/create-finance-entry.dto';
+import { UpdateFinanceEntryDto } from './dto/update-finance-entry.dto';
 import { FinanceEntryDocument, FinanceEntry } from './schemas/finance.schema';
 
 /**
@@ -10,15 +10,22 @@ import { FinanceEntryDocument, FinanceEntry } from './schemas/finance.schema';
  */
 @Injectable()
 export class FinanceService {
-  constructor(@InjectModel(FinanceEntry.name) private financeEntryModel: Model<FinanceEntryDocument>) {}
+  constructor(
+    @InjectModel(FinanceEntry.name)
+    private financeEntryModel: Model<FinanceEntryDocument>,
+  ) {}
 
   /**
    * Creates financeEntry using mongoose financeEntryModel
    *
    * @param createFinanceEntryDto dto used to create financeEntrys
    */
-  async create(createFinanceEntryDto: CreateFinanceEntryDto): Promise<FinanceEntry> {
-    const createdFinanceEntry = new this.financeEntryModel(createFinanceEntryDto);
+  async create(
+    createFinanceEntryDto: CreateFinanceEntryDto,
+  ): Promise<FinanceEntry> {
+    const createdFinanceEntry = new this.financeEntryModel(
+      createFinanceEntryDto,
+    );
     return createdFinanceEntry.save();
   }
 
@@ -46,7 +53,10 @@ export class FinanceService {
    * @param id string of the financeEntry's objectId
    * @param updateFinanceEntryDto dto used to update financeEntrys
    */
-  async update(id: string, updateFinanceEntryDto: UpdateFinanceEntryDto): Promise<FinanceEntry> {
+  async update(
+    id: string,
+    updateFinanceEntryDto: UpdateFinanceEntryDto,
+  ): Promise<FinanceEntry> {
     const updatedFinanceEntry = await this.financeEntryModel.findByIdAndUpdate(
       id,
       { $set: { ...updateFinanceEntryDto } },
@@ -62,7 +72,9 @@ export class FinanceService {
    * @param id string of the financeEntry's objectId
    */
   async remove(id: string): Promise<FinanceEntryDocument> {
-    const deletedFinanceEntry = await this.financeEntryModel.findByIdAndDelete(id);
+    const deletedFinanceEntry = await this.financeEntryModel.findByIdAndDelete(
+      id,
+    );
 
     return this.checkFinanceEntryFound(deletedFinanceEntry, id);
   }

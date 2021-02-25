@@ -82,7 +82,6 @@ export const UserListActions = (props : any) => {
         title='Edit User'
         visible={editVisible}
         confirmLoading={editLoading}
-        onCancel={() => setEditVisible(false)}
         footer={[
           <Button
             key='delete'

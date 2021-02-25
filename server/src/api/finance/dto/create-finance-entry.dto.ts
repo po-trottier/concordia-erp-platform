@@ -1,8 +1,4 @@
-import {
-  IsNotEmpty,
-  IsPositive,
-  IsString,
-} from 'class-validator';
+import { IsNotEmpty, IsPositive, IsString } from 'class-validator';
 
 /**
  * Finance Entry creation DTO
