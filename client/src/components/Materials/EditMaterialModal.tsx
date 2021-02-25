@@ -3,12 +3,13 @@ import { Button, Col, Form, Input, InputNumber, message, Modal, Row } from 'antd
 import { useDispatch, useSelector } from 'react-redux';
 
 import { MaterialImageUploader } from './MaterialImageUploader';
+import { MaterialEntry } from '../../interfaces/MaterialEntry';
 import { RootState } from '../../store/Store';
 import { setSelected } from '../../store/slices/UploadSlice';
-import { addMaterialEntry } from '../../store/slices/MaterialListSlice';
+import { removeMaterialEntry, updateMaterialEntry } from '../../store/slices/MaterialListSlice';
 import axios from '../../plugins/Axios';
 
-export const CreateMaterialModal = () => {
+export const EditMaterialModal = (props : { material: MaterialEntry }) => {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
 
@@ -52,14 +53,17 @@ export const CreateMaterialModal = () => {
         newMaterial.price = 1;
       }
 
-      axios.post('/materials', newMaterial)
+      axios.patch('/materials/' + props.material.id, newMaterial)
         .then(({ data }) => {
           const newMaterial = data;
-          newMaterial.id = newMaterial['_id'];
-          dispatch(addMaterialEntry(newMaterial));
+          newMaterial.id = data['_id'];
+          dispatch(updateMaterialEntry({
+            id: props.material.id,
+            newMaterial: newMaterial
+          }));
+          dispatch(setSelected(undefined));
           setIsModalVisible(false);
           message.success('The material was successfully added.')
-          dispatch(setSelected(undefined));
           form.resetFields();
         })
         .catch((err) => {
@@ -75,29 +79,71 @@ export const CreateMaterialModal = () => {
     };
   };
 
+  const deleteMaterial = () => {
+    Modal.confirm({
+      onOk() {
+        axios.delete('/materials/' + props.material.id)
+          .then(() => {
+            dispatch(removeMaterialEntry(props.material.id));
+            message.success('The material was removed successfully');
+            setIsModalVisible(false);
+          })
+          .catch((err) => {
+            console.error(err);
+            message.error('Something went wrong while removing the material.');
+          })
+          .finally(() => false);
+      },
+      title: 'Remove a Material',
+      content: 'Are you sure you want to remove the selected material?'
+    });
+  };
+
   const handleCancel = () => {
     setIsModalVisible(false);
     form.resetFields();
   };
 
-  const initialValues = {
-    'density': 1,
-    'price': 1
-  };
-
   return (
     <div>
-      <Button type='primary' onClick={() => setIsModalVisible(true)} style={{ marginTop: 16 }}>
-        Add a New Material
+      <Button type='ghost' size='small' onClick={() => setIsModalVisible(true)} style={{ width: 60 }}>
+        Edit
       </Button>
 
       <Modal
-        title='Add a New Material'
+        title='Edit a Material'
         visible={isModalVisible}
         confirmLoading={loading}
-        onOk={form.submit}
-        onCancel={handleCancel}>
-        <Form form={form} onFinish={handleSubmit} initialValues={initialValues}>
+        footer={[
+          <Button
+            key='delete'
+            type='dashed'
+            style={{ float: 'left' }}
+            onClick={() => deleteMaterial()}>
+            Remove
+          </Button>,
+          <Button
+            key='cancel'
+            type='ghost'
+            onClick={handleCancel}>
+            Cancel
+          </Button>,
+          <Button
+            key='submit'
+            type='primary'
+            onClick={() => form.submit()}>
+            OK
+          </Button>
+        ]}>
+        <Form
+          form={form}
+          onFinish={handleSubmit}
+          initialValues={{
+            'name': props.material.name,
+            'vendor': props.material.vendorName,
+            'density': props.material.density,
+            'price': props.material.price,
+          }}>
           {/*Material Name Field*/}
           <Row align='middle' style={{ marginBottom: 16 }}>
             <Col sm={6} span={9}>

@@ -1,85 +1,76 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Card, Input, InputNumber } from 'antd';
+import { Button, Card, Input, InputNumber, message } from 'antd';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { ResponsiveTable } from '../ResponsiveTable';
-import { MaterialsListEntry } from '../../interfaces/MaterialsListEntry';
-import MetalImg from '../../assets/metal.png';
-import PlasticImg from '../../assets/plastic.png';
-import WoodImg from '../../assets/wood.png';
-
 import { CreateMaterialModal } from './CreateMaterialModal';
+import { EditMaterialModal } from './EditMaterialModal';
+import { RootState } from '../../store/Store';
+import { MaterialEntry } from '../../interfaces/MaterialEntry';
+import { setMaterialList } from '../../store/slices/MaterialListSlice';
+import axios from '../../plugins/Axios';
 
 const { Search } = Input;
 
 export const MaterialsCatalog = () => {
-  const cols = {
-    img: 'Preview',
-    name: 'Product',
-    density: 'Density',
-    stock: 'Stock',
-    price: 'Price',
-    vendor: 'Vendor',
-    actions: 'Actions',
-    order: 'Order',
-  };
+  const dispatch = useDispatch();
 
-  const rows : MaterialsListEntry[] = [
-    {
-      img: <img src={MetalImg} alt='Metal Preview' width={32} />,
-      name: 'Metal',
-      stock: 30,
-      price: 5,
-      density: '2 kg/unit',
-      vendor: 'Some Vendor',
-    },
-    {
-      img: <img src={PlasticImg} alt='Plastic Preview' width={32} />,
-      name: 'Plastic',
-      stock: 10,
-      price: 2,
-      density: '5 kg/unit',
-      vendor: 'Other Vendor',
-    },
-    {
-      img: <img src={WoodImg} alt='Wood Preview' width={32} />,
-      name: 'Wood',
-      stock: 15,
-      price: 4,
-      density: '1.5 kg/unit',
-      vendor: 'Some Vendor',
-    },
-  ];
+  const materials = useSelector((state : RootState) => state.materialList.list);
+  const updated = useSelector((state : RootState) => state.materialList.updated);
 
-  const data : any[] = rows;
-  data.forEach((row) => {
-    row.order = <InputNumber
-      placeholder='Input a quantity'
-      min={0}
-      style={{ width: '100%' }}
-    />;
-    row.actions = (
-      <Button type='ghost' size='small' style={{ width: 64 }}>
-        Edit
-      </Button>
-    );
-  });
-
-  const [tableData, setTableData] = useState(data);
   const [searchValue, setSearchValue] = useState('');
 
   useEffect(() => {
-    let rows = data;
-    if (searchValue.trim() !== '') {
-      rows = rows.filter((m) =>
-        m.name.toLowerCase().includes(searchValue.trim().toLowerCase(),
-        ));
-    }
-    setTableData(rows);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchValue]);
+    axios.get('/materials')
+      .then(({ data }) => {
+        dispatch(setMaterialList(data));
+      })
+      .catch((err) => {
+        message.error('Something went wrong while getting the materials catalog.');
+        console.error(err);
+      });
+  }, [updated]);
 
   const onSearch = (e : React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
+  };
+
+  const getMaterials = () => {
+    let rows = JSON.parse(JSON.stringify(materials));
+
+    if (searchValue.trim() !== '') {
+      rows = rows.filter(
+        (r : MaterialEntry) => r.name.trim().toLowerCase().includes(searchValue.trim().toLowerCase()));
+    }
+
+    rows.forEach((row : any) => {
+      row.id = row['_id'];
+      row.actions = <EditMaterialModal material={row} />;
+      row.imageNode = <img src={row.image} height={32} />
+      row.order = (
+        <InputNumber
+          placeholder='Input a quantity'
+          min={0}
+          style={{ width: '100%' }} />
+      );
+    });
+
+    rows.sort((a : MaterialEntry, b : MaterialEntry) => {
+      return a.name < b.name ? -1 : 1;
+    });
+
+    return rows;
+  };
+
+  const columns = {
+    imageNode: 'Preview',
+    name: 'Material',
+    density: 'Density',
+    stock: 'Stock',
+    price: 'Price',
+    vendorName: 'Vendor',
+    actions: 'Actions',
+    order: 'Order',
   };
 
   return (
@@ -89,7 +80,11 @@ export const MaterialsCatalog = () => {
           placeholder='Search for a material'
           onChange={onSearch}
           style={{ marginBottom: 18 }} />
-        <ResponsiveTable cols={cols} rows={tableData} />
+          {
+            getMaterials().length > 0 ?
+              <ResponsiveTable cols={columns} rows={getMaterials()} />:
+              <span>No materials were found.</span>
+          }
       </Card>
       <Button
         type='primary'

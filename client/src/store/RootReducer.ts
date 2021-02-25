@@ -9,6 +9,7 @@ import { userEditSlice } from './slices/UserEditSlice';
 import { userListSlice } from './slices/UserListSlice';
 import { productListSlice } from './slices/ProductListSlice';
 import { partListSlice } from './slices/PartListSlice';
+import { materialListSlice } from './slices/MaterialListSlice';
 
 const persistConfig = {
   key: 'root',
@@ -32,6 +33,7 @@ const rootReducer = combineReducers({
   userList: userListSlice.reducer,
   productList: productListSlice.reducer,
   partList: partListSlice.reducer,
+  materialList: materialListSlice.reducer,
 });
 
 export default persistReducer(persistConfig, rootReducer);
