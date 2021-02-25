@@ -51,10 +51,11 @@ export const PartCatalog = () => {
 
   const getMaterials = (part : PartEntry) => {
     const mats = materialsData.filter((m) => part.materials.find((i) => i.materialId === m.id));
-    if (mats.length < 1)
+    if (mats.length < 1) {
       return <i>None</i>;
+    }
     return mats.map((m) => m.name).join(', ');
-  }
+  };
 
   const getParts = () => {
     let rows = JSON.parse(JSON.stringify(parts));
@@ -77,7 +78,7 @@ export const PartCatalog = () => {
     });
 
     return rows;
-  }
+  };
 
   const onSearch = (e : React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.trim().toLowerCase();

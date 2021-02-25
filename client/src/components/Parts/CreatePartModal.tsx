@@ -78,14 +78,16 @@ export const CreatePartModal = () => {
 
     let materialsFiltered : Material[] = [];
     materials.forEach((m : Material) => {
-      if (!m.materialId)
+      if (!m.materialId) {
         return;
-      if (!materialsFiltered.find((f) => f.materialId === m.materialId )) {
+      }
+      if (!materialsFiltered.find((f) => f.materialId === m.materialId)) {
         materialsFiltered.push({ materialId: m.materialId, quantity: m.quantity ? m.quantity : 1 });
       } else {
         const i = materialsFiltered.findIndex(f => f.materialId === m.materialId);
-        if (i >= 0)
+        if (i >= 0) {
           materialsFiltered[i].quantity += m.quantity;
+        }
       }
     });
 
@@ -96,7 +98,7 @@ export const CreatePartModal = () => {
       .then(({ data }) => {
         const newPart = data;
         newPart.id = newPart['_id'];
-        dispatch(addPartEntry(newPart))
+        dispatch(addPartEntry(newPart));
         setIsModalVisible(false);
         form.resetFields();
         message.success('The part was successfully created.');

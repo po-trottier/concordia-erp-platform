@@ -14,7 +14,7 @@ interface Material {
   quantity : number
 }
 
-export const EditPartModal = (props: { part: PartEntry }) => {
+export const EditPartModal = (props : { part : PartEntry }) => {
   const dispatch = useDispatch();
 
   const [form] = Form.useForm();
@@ -79,14 +79,16 @@ export const EditPartModal = (props: { part: PartEntry }) => {
 
     let materialsFiltered : Material[] = [];
     materials.forEach((m : Material) => {
-      if (!m.materialId)
+      if (!m.materialId) {
         return;
-      if (!materialsFiltered.find((f) => f.materialId === m.materialId )) {
+      }
+      if (!materialsFiltered.find((f) => f.materialId === m.materialId)) {
         materialsFiltered.push({ materialId: m.materialId, quantity: m.quantity ? m.quantity : 1 });
       } else {
         const i = materialsFiltered.findIndex(f => f.materialId === m.materialId);
-        if (i >= 0)
+        if (i >= 0) {
           materialsFiltered[i].quantity += m.quantity;
+        }
       }
     });
 
@@ -128,8 +130,8 @@ export const EditPartModal = (props: { part: PartEntry }) => {
       },
       title: 'Remove a Part',
       content: 'Are you sure you want to remove the selected part?'
-    })
-  }
+    });
+  };
 
   const handleCancel = () => {
     setIsModalVisible(false);
@@ -146,26 +148,26 @@ export const EditPartModal = (props: { part: PartEntry }) => {
         title='Define a New Part'
         visible={isModalVisible}
         footer={[
-        <Button
-          key='delete'
-          type='dashed'
-          style={{ float: 'left' }}
-          onClick={() => deletePart()}>
-          Remove
-        </Button>,
-        <Button
-          key='cancel'
-          type='ghost'
-          onClick={handleCancel}>
-          Cancel
-        </Button>,
-        <Button
-          key='submit'
-          type='primary'
-          onClick={() => form.submit()}>
-          OK
-        </Button>
-      ]}>
+          <Button
+            key='delete'
+            type='dashed'
+            style={{ float: 'left' }}
+            onClick={() => deletePart()}>
+            Remove
+          </Button>,
+          <Button
+            key='cancel'
+            type='ghost'
+            onClick={handleCancel}>
+            Cancel
+          </Button>,
+          <Button
+            key='submit'
+            type='primary'
+            onClick={() => form.submit()}>
+            OK
+          </Button>
+        ]}>
         <Form
           form={form}
           onFinish={handleSubmit}

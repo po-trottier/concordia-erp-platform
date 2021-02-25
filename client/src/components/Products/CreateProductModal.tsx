@@ -80,14 +80,16 @@ export const CreateProductModal = () => {
 
     const partsFiltered : ProductPart[] = [];
     parts.forEach((p : ProductPart) => {
-      if (!p.partId)
+      if (!p.partId) {
         return;
-      if (!partsFiltered.find((f) => f.partId === p.partId )) {
+      }
+      if (!partsFiltered.find((f) => f.partId === p.partId)) {
         partsFiltered.push({ partId: p.partId, quantity: p.quantity ? p.quantity : 1 });
       } else {
         const i = partsFiltered.findIndex(f => f.partId === p.partId);
-        if (i >= 0)
+        if (i >= 0) {
           partsFiltered[i].quantity += p.quantity;
+        }
       }
     });
 
@@ -100,7 +102,7 @@ export const CreateProductModal = () => {
       .then(({ data }) => {
         const newProduct = data;
         newProduct.id = newProduct['_id'];
-        dispatch(addProductEntry(newProduct))
+        dispatch(addProductEntry(newProduct));
         setIsModalVisible(false);
         form.resetFields();
         message.success('The product was successfully created.');

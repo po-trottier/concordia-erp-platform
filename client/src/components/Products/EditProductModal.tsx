@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 
 import { PartDropdownEntry } from '../../interfaces/PartDropdownEntry';
 import { ProductEntry } from '../../interfaces/ProductEntry';
-import { updateProductEntry, removeProductEntry } from '../../store/slices/ProductListSlice';
+import { removeProductEntry, updateProductEntry } from '../../store/slices/ProductListSlice';
 import axios from '../../plugins/Axios';
 
 const { Option } = Select;
@@ -15,7 +15,7 @@ interface ProductPart {
   quantity : number
 }
 
-export const EditProductModal = (props: { product: ProductEntry }) => {
+export const EditProductModal = (props : { product : ProductEntry }) => {
   const dispatch = useDispatch();
 
   const [form] = Form.useForm();
@@ -82,14 +82,16 @@ export const EditProductModal = (props: { product: ProductEntry }) => {
 
     const partsFiltered : ProductPart[] = [];
     parts.forEach((p : ProductPart) => {
-      if (!p.partId)
+      if (!p.partId) {
         return;
-      if (!partsFiltered.find((f) => f.partId === p.partId )) {
+      }
+      if (!partsFiltered.find((f) => f.partId === p.partId)) {
         partsFiltered.push({ partId: p.partId, quantity: p.quantity ? p.quantity : 1 });
       } else {
         const i = partsFiltered.findIndex(f => f.partId === p.partId);
-        if (i >= 0)
+        if (i >= 0) {
           partsFiltered[i].quantity += p.quantity;
+        }
       }
     });
     axios.patch('/products/' + props.product.id, {
@@ -132,8 +134,8 @@ export const EditProductModal = (props: { product: ProductEntry }) => {
       },
       title: 'Remove a Product',
       content: 'Are you sure you want to remove the selected product?'
-    })
-  }
+    });
+  };
 
   return (
     <div>

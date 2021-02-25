@@ -5,7 +5,7 @@ import { ProductEntry } from '../../interfaces/ProductEntry';
 import { PartDropdownEntry } from '../../interfaces/PartDropdownEntry';
 import axios from '../../plugins/Axios';
 
-export const ProductDetails = (props : { product: ProductEntry }) => {
+export const ProductDetails = (props : { product : ProductEntry }) => {
 
   const emptyData : PartDropdownEntry[] = [];
   const [partsData, setPartsData] = useState(emptyData);
