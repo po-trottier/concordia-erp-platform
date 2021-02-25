@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { CreateFinanceEntryDto } from './dto/create-fin-entry.dto';
-import { UpdateFinanceEntryDto } from './dto/update-fin-entry.dto';
+import { CreateFinanceEntryDto } from './dto/create-finance-entry.dto';
+import { UpdateFinanceEntryDto } from './dto/update-finance-entry.dto';
 import { FinanceEntryDocument, FinanceEntry } from './schemas/finance.schema';
 
 /**

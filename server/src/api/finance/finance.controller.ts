@@ -9,8 +9,8 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { FinanceService } from './finance.service';
-import { CreateFinanceEntryDto } from './dto/create-fin-entry.dto';
-import { UpdateFinanceEntryDto } from './dto/update-fin-entry.dto';
+import { CreateFinanceEntryDto } from './dto/create-finance-entry.dto';
+import { UpdateFinanceEntryDto } from './dto/update-finance-entry.dto';
 
 /**
  * Controller class of the finentry entity

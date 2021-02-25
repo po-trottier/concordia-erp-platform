@@ -1,6 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { ProductPartInterface } from '../../products/schemas/products.schema';
 
 export type PartDocument = Part & Document;
 
