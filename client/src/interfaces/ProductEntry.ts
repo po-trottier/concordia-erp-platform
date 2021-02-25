@@ -1,12 +1,11 @@
 export interface ProductEntry {
-  key : String,
-  name : String,
-  parts : String[],
-  description : String,
-  quantity : Number,
-  price : Number,
-  frameSize : String,
-  color : String,
-  finish : String,
-  grade : String
+  id: string,
+  name : string,
+  price: number,
+  quantity: number,
+  parts: { partId: string, quantity: number }[],
+  properties: { key: string, value: number }[],
+  build?: React.ReactNode
+  details?: React.ReactNode
+  actions?: React.ReactNode
 }

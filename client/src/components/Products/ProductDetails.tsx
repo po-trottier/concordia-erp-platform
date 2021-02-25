@@ -82,10 +82,4 @@ export const ProductDetails = (props : { product: ProductEntry }) => {
       </Descriptions.Item>
     </Descriptions>
   );
-<<<<<<< HEAD
 };
-
-export default productDetails;
-=======
-};
->>>>>>> main
