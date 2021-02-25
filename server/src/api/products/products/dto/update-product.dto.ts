@@ -28,7 +28,7 @@ export class UpdateProductDto {
   @Min(0)
   @IsInt()
   @IsOptional()
-  quantity = 0;
+  stock: number = 0;
 
   @IsOptional()
   properties: CreateProductPropertyDto[];
