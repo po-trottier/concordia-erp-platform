@@ -1,48 +1,96 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Card, Input, InputNumber } from 'antd';
+import { Button, Card, Input, InputNumber, message } from 'antd';
 
-import { dummyPartData } from './PartDummyData';
 import { ResponsiveTable } from '../ResponsiveTable';
 import { CreatePartModal } from './CreatePartModal';
+import { EditPartModal } from './EditPartModal';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../store/Store';
+import { PartEntry } from '../../interfaces/PartEntry';
+import { MaterialDropdownEntry } from '../../interfaces/MaterialDropdownEntry';
+import { setPartList } from '../../store/slices/PartListSlice';
+import axios from '../../plugins/Axios';
 
 const { Search } = Input;
 
 export const PartCatalog = () => {
-  const data : any[] = dummyPartData;
-  data.forEach((row) => {
-    row.build = <InputNumber
-      placeholder='Input a quantity'
-      min={0}
-      style={{ width: '100%' }}
-    />;
-  });
+  const dispatch = useDispatch();
 
-  const cols = {
-    name: 'Part Name',
-    materials: 'Materials',
-    quantity: 'Owned',
-    build: 'Build',
-  };
+  const parts = useSelector((state : RootState) => state.partList.list);
 
-  const [tableData, setTableData] = useState(data);
+  const emptyData : MaterialDropdownEntry[] = [];
   const [searchValue, setSearchValue] = useState('');
+  const [materialsData, setMaterialsData] = useState(emptyData);
+  const [updated, setUpdated] = useState(false);
 
   useEffect(() => {
-    let rows = data;
+    setUpdated(true);
+    axios.get('/parts')
+      .then(({ data }) => {
+        data.forEach((d : any) => {
+          d.id = d['_id'];
+        });
+        dispatch(setPartList(data));
+      })
+      .catch((err) => {
+        message.error('Something went wrong while getting the products catalog.');
+        console.error(err);
+      });
+    axios.get('/materials')
+      .then(({ data }) => {
+        data.forEach((d : any) => {
+          d.id = d['_id'];
+        });
+        setMaterialsData(data);
+      })
+      .catch(err => {
+        message.error('Something went wrong while fetching the list of materials.');
+        console.error(err);
+      });
+  }, [updated]);
+
+  const getMaterials = (part : PartEntry) => {
+    const mats = materialsData.filter((m) => part.materials.find((i) => i.materialId === m.id));
+    if (mats.length < 1) {
+      return <i>None</i>;
+    }
+    return mats.map((m) => m.name).join(', ');
+  };
+
+  const getParts = () => {
+    let rows = JSON.parse(JSON.stringify(parts));
+
     if (searchValue) {
       rows = rows.filter(
-        (part) =>
-          part.name.toLowerCase().includes(searchValue) ||
-          part.id.includes(searchValue),
+        (part : PartEntry) => part.name.toLowerCase().includes(searchValue)
       );
     }
-    setTableData(rows);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchValue]);
+
+    rows.forEach((row : PartEntry) => {
+      row.build = (
+        <InputNumber
+          placeholder='Input a quantity'
+          min={0}
+          style={{ width: '100%' }} />
+      );
+      row.actions = <EditPartModal part={row} />;
+      row.materialsString = getMaterials(row);
+    });
+
+    return rows;
+  };
 
   const onSearch = (e : React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.trim().toLowerCase();
     setSearchValue(value);
+  };
+
+  const columns = {
+    name: 'Part Name',
+    materialsString: 'Materials',
+    stock: 'Stock',
+    actions: 'Actions',
+    build: 'Build',
   };
 
   return (
@@ -52,7 +100,11 @@ export const PartCatalog = () => {
           placeholder='Search for a part'
           onChange={onSearch}
           style={{ marginBottom: 18 }} />
-        <ResponsiveTable cols={cols} rows={tableData} />
+        {
+          getParts().length > 0 ?
+            <ResponsiveTable rows={getParts()} cols={columns} /> :
+            <span>No parts were found.</span>
+        }
       </Card>
       <Button
         type='primary'

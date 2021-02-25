@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Col, Form, Input, InputNumber, message, Modal, Row, Select } from 'antd';
+import { useDispatch } from 'react-redux';
 import { MinusCircleTwoTone, PlusOutlined } from '@ant-design/icons';
 import { PartDropdownEntry } from '../../interfaces/PartDropdownEntry';
+import { addProductEntry } from '../../store/slices/ProductListSlice';
 import axios from '../../plugins/Axios';
 
 const { Option } = Select;
@@ -12,6 +14,8 @@ interface ProductPart {
 }
 
 export const CreateProductModal = () => {
+  const dispatch = useDispatch();
+
   const [form] = Form.useForm();
 
   const emptyData : PartDropdownEntry[] = [];
@@ -20,6 +24,7 @@ export const CreateProductModal = () => {
   const [updated, setUpdated] = useState(false);
 
   useEffect(() => {
+    setUpdated(true);
     axios.get('/parts')
       .then((res) => {
         if (res && res.data) {
@@ -36,8 +41,7 @@ export const CreateProductModal = () => {
       .catch(err => {
         message.error('Something went wrong while fetching the list of parts.');
         console.error(err);
-      })
-      .finally(() => setUpdated(true));
+      });
   }, [updated]);
 
   const hidePartsError = () => {
@@ -76,14 +80,16 @@ export const CreateProductModal = () => {
 
     const partsFiltered : ProductPart[] = [];
     parts.forEach((p : ProductPart) => {
-      if (!p.partId)
+      if (!p.partId) {
         return;
-      if (!partsFiltered.find((f) => f.partId === p.partId )) {
+      }
+      if (!partsFiltered.find((f) => f.partId === p.partId)) {
         partsFiltered.push({ partId: p.partId, quantity: p.quantity ? p.quantity : 1 });
       } else {
         const i = partsFiltered.findIndex(f => f.partId === p.partId);
-        if (i >= 0)
+        if (i >= 0) {
           partsFiltered[i].quantity += p.quantity;
+        }
       }
     });
 
@@ -93,8 +99,10 @@ export const CreateProductModal = () => {
       price: values['product_price'],
       properties: values['list_properties']
     })
-      .then(() => {
-        // TODO change the list of products in the catalog
+      .then(({ data }) => {
+        const newProduct = data;
+        newProduct.id = newProduct['_id'];
+        dispatch(addProductEntry(newProduct));
         setIsModalVisible(false);
         form.resetFields();
         message.success('The product was successfully created.');

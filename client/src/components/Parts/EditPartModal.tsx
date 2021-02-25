@@ -3,7 +3,8 @@ import { Button, Col, Form, Input, InputNumber, message, Modal, Row, Select } fr
 import { MinusCircleTwoTone, PlusOutlined } from '@ant-design/icons';
 import { useDispatch } from 'react-redux';
 import { MaterialDropdownEntry } from '../../interfaces/MaterialDropdownEntry';
-import { addPartEntry } from '../../store/slices/PartListSlice';
+import { PartEntry } from '../../interfaces/PartEntry';
+import { removePartEntry, updatePartEntry } from '../../store/slices/PartListSlice';
 import axios from '../../plugins/Axios';
 
 const { Option } = Select;
@@ -13,7 +14,7 @@ interface Material {
   quantity : number
 }
 
-export const CreatePartModal = () => {
+export const EditPartModal = (props : { part : PartEntry }) => {
   const dispatch = useDispatch();
 
   const [form] = Form.useForm();
@@ -91,22 +92,45 @@ export const CreatePartModal = () => {
       }
     });
 
-    axios.post('/parts', {
+    axios.patch('/parts/' + props.part.id, {
       name: values['part_name'],
       materials: materialsFiltered,
     })
       .then(({ data }) => {
         const newPart = data;
-        newPart.id = newPart['_id'];
-        dispatch(addPartEntry(newPart));
+        newPart.id = data['_id'];
+        dispatch(updatePartEntry({
+          id: props.part.id,
+          newPart: newPart
+        }));
         setIsModalVisible(false);
         form.resetFields();
-        message.success('The part was successfully created.');
+        message.success('The part was successfully modified.');
       })
       .catch(err => {
         console.error(err);
-        message.error('Something went wrong while creating the part.');
+        message.error('Something went wrong while modifying the part.');
       });
+  };
+
+  const deletePart = () => {
+    Modal.confirm({
+      onOk() {
+        axios.delete('/parts/' + props.part.id)
+          .then(() => {
+            dispatch(removePartEntry(props.part.id));
+            message.success('The part was removed successfully');
+            setIsModalVisible(false);
+          })
+          .catch((err) => {
+            console.error(err);
+            message.error('Something went wrong while removing the part.');
+          })
+          .finally(() => false);
+      },
+      title: 'Remove a Part',
+      content: 'Are you sure you want to remove the selected part?'
+    });
   };
 
   const handleCancel = () => {
@@ -116,12 +140,41 @@ export const CreatePartModal = () => {
 
   return (
     <div>
-      <Button type='primary' onClick={() => setIsModalVisible(true)} style={{ marginTop: 16 }}>
-        Add a New Part
+      <Button type='ghost' size='small' onClick={() => setIsModalVisible(true)} style={{ width: 60 }}>
+        Edit
       </Button>
 
-      <Modal title='Define a New Part' visible={isModalVisible} onOk={form.submit} onCancel={handleCancel}>
-        <Form form={form} onFinish={handleSubmit}>
+      <Modal
+        title='Define a New Part'
+        visible={isModalVisible}
+        footer={[
+          <Button
+            key='delete'
+            type='dashed'
+            style={{ float: 'left' }}
+            onClick={() => deletePart()}>
+            Remove
+          </Button>,
+          <Button
+            key='cancel'
+            type='ghost'
+            onClick={handleCancel}>
+            Cancel
+          </Button>,
+          <Button
+            key='submit'
+            type='primary'
+            onClick={() => form.submit()}>
+            OK
+          </Button>
+        ]}>
+        <Form
+          form={form}
+          onFinish={handleSubmit}
+          initialValues={{
+            'part_name': props.part.name,
+            'list_materials': props.part.materials,
+          }}>
           {/*part Name Field*/}
           <Row align='middle' style={{ marginBottom: 16 }}>
             <Col sm={6} span={9}>
