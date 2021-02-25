@@ -25,7 +25,7 @@ const GuardedRoute = ({ component: Component, auth, path, exact } :
     exact : boolean
   }) => {
 
-  const user = useSelector((state : RootState) => state.user.user);
+  const user = useSelector((state : RootState) => state.login.user);
 
   return (
     <Route path={path} exact={exact} render={(props) => (

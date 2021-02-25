@@ -13,7 +13,7 @@ export const AppHeader = () => {
   const history = useHistory();
   const dispatch = useDispatch();
 
-  const user = useSelector((state : RootState) => state.user.user);
+  const user = useSelector((state : RootState) => state.login.user);
 
   // Used to determine the page title. If not page is found, we create a
   // dummy page with a "Page Not Found" title

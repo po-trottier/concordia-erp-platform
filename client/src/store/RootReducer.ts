@@ -3,7 +3,7 @@ import { persistReducer } from 'redux-persist';
 import { encryptTransform } from 'redux-persist-transform-encrypt';
 import storage from 'redux-persist/lib/storage';
 
-import { userSlice } from './slices/UserSlice';
+import { loginSlice } from './slices/UserSlice';
 import { uploadSlice } from './slices/UploadSlice';
 import { userEditSlice } from './slices/UserEditSlice';
 import { userListSlice } from './slices/UserListSlice';
@@ -27,7 +27,7 @@ const persistConfig = {
 };
 
 const rootReducer = combineReducers({
-  user: userSlice.reducer,
+  login: loginSlice.reducer,
   upload: uploadSlice.reducer,
   edit: userEditSlice.reducer,
   userList: userListSlice.reducer,

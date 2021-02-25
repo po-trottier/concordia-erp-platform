@@ -13,21 +13,12 @@ export const LoginForm = () => {
   const history = useHistory();
   const dispatch = useDispatch();
 
-  const user = useSelector((state : RootState) => state.user.user);
+  const user = useSelector((state : RootState) => state.login.user);
 
   const [loading, setLoading] = useState(false);
   const [remember, setRemember] = useState(user.isRemembered);
   const [username, setUsername] = useState(user.username);
   const [password, setPassword] = useState(user.password);
-
-  const handleUsername = (e : React.FormEvent<HTMLInputElement>) =>
-    setUsername(e.currentTarget.value);
-
-  const handlePassword = (e : React.FormEvent<HTMLInputElement>) =>
-    setPassword(e.currentTarget.value);
-
-  const handleChange = () =>
-    setRemember(!remember);
 
   const desiredPath = location.search
     ? '/' + new URLSearchParams(location.search).get('redirect')
@@ -36,13 +27,11 @@ export const LoginForm = () => {
   const login = () => {
     setLoading(true);
     axios.post('/auth/login', { username, password })
-      .then((resp) => {
-        if (resp) {
-          const user : LoginRequest = resp.data;
-          user.isRemembered = remember;
-          dispatch(loginAction(user));
-          history.replace(desiredPath);
-        }
+      .then(({ data }) => {
+        const user : LoginRequest = data;
+        user.isRemembered = remember;
+        dispatch(loginAction(user));
+        history.replace(desiredPath);
       })
       .catch((err) => {
         console.error(err);
@@ -53,27 +42,27 @@ export const LoginForm = () => {
 
   return (
     <Form
-      name='basic'
       style={{ marginBottom: '-24px' }}
       initialValues={{
-        username: user.username,
-        password: user.password,
+        username: user.username
       }}
       onFinish={login}>
       <Form.Item
         label='Username'
         name='username'
         rules={[{ required: true, message: 'Please input your username!' }]}>
-        <Input onChange={(e) => handleUsername(e)} />
+        <Input onChange={(e) => setUsername(e.currentTarget.value)} />
       </Form.Item>
       <Form.Item
         label='Password'
         name='password'
         rules={[{ required: true, message: 'Please input your password!' }]}>
-        <Input.Password onChange={(e) => handlePassword(e)} />
+        <Input.Password onChange={(e) => setPassword(e.currentTarget.value)} />
       </Form.Item>
       <Form.Item name='remember'>
-        <Checkbox onChange={handleChange} defaultChecked={user.isRemembered}>Remember me</Checkbox>
+        <Checkbox onChange={(e) => setRemember(e.target.checked)} defaultChecked={user.isRemembered}>
+          Remember me
+        </Checkbox>
       </Form.Item>
       <Form.Item>
         <Button
