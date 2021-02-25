@@ -5,7 +5,7 @@ import {
   ProductLogSchema,
 } from './products-logs/schemas/product-log.schema';
 import { ProductLogsService } from './products-logs/product-logs.service';
-import { ProductsController } from './products.controller';
+import { ProductsController } from './products/products.controller';
 import { ProductLogsController } from './products-logs/product-logs.controller';
 import { ProductsService } from './products/products.service';
 import { Product, ProductSchema } from './products/schemas/products.schema';
