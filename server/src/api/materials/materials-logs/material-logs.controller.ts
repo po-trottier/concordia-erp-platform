@@ -1,4 +1,4 @@
-import { Get, Controller, Param } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { Roles } from '../../roles/roles.decorator';
 import { Role } from '../../roles/roles.enum';
 import { MaterialLogsService } from './material-logs.service';

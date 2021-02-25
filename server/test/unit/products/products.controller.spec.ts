@@ -24,7 +24,10 @@ describe('PartsController', () => {
   };
 
   beforeEach(async () => {
-    productsService = new ProductsService(partsDocumentModel, productLogsService);
+    productsService = new ProductsService(
+      partsDocumentModel,
+      productLogsService,
+    );
     productsController = new ProductsController(productsService);
   });
 

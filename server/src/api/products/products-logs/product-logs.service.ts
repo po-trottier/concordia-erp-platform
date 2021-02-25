@@ -2,7 +2,8 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { UpdateProductLogDto } from './dto/update-product-log.dto';
-import { ProductLogDocument, ProductLog } from './schemas/product-log.schema';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { ProductLog, ProductLogDocument } from './schemas/product-log.schema';
 
 /**
  * Handles productLog data storage and retrieval.
@@ -28,7 +29,7 @@ export class ProductLogsService {
    * @param date the date in history
    */
   async findOne(productId: string, date: Date): Promise<ProductLog> {
-    const productLog = await this.productLogModel.findOne({productId, date});
+    const productLog = await this.productLogModel.findOne({ productId, date });
     return this.validateProductLogFound(productLog, productId, productLog.date);
   }
 

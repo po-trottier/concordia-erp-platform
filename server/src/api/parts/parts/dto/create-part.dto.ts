@@ -1,10 +1,4 @@
-import {
-  IsInt,
-  IsNotEmpty,
-  IsString,
-  IsOptional,
-  Min,
-} from 'class-validator';
+import { IsInt, IsNotEmpty, IsOptional, IsString, Min } from 'class-validator';
 import { CreatePartMaterialDto } from './create-part-material.dto';
 
 /**

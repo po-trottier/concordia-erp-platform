@@ -4,10 +4,11 @@ import { format, parse } from 'date-fns';
 import { Model } from 'mongoose';
 import { CreatePartDto } from './dto/create-part.dto';
 import { UpdatePartDto } from './dto/update-part.dto';
-import { PartDocument, Part } from './schemas/part.schema';
 import { UpdatePartLogDto } from '../parts-logs/dto/update-part-log.dto';
 import { UpdatePartStockDto } from './dto/update-part-stock.dto';
 import { PartLogsService } from '../parts-logs/part-logs.service';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { Part, PartDocument } from './schemas/part.schema';
 
 /**
  * Used by the PartsController, handles part data storage and retrieval.

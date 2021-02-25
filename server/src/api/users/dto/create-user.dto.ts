@@ -1,11 +1,11 @@
 import {
-  IsInt,
-  IsNotEmpty,
-  IsString,
   IsDefined,
   IsEmail,
-  Matches,
+  IsInt,
+  IsNotEmpty,
   IsOptional,
+  IsString,
+  Matches,
 } from 'class-validator';
 import { Role } from '../../roles/roles.enum';
 

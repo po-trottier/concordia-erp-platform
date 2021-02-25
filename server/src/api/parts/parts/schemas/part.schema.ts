@@ -7,6 +7,7 @@ export interface ProductMaterialInterface {
   materialId: string;
   quantity: number;
 }
+
 /**
  * Part collection mongoose schema
  */

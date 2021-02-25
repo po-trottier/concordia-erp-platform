@@ -1,5 +1,4 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Product, ProductDocument } from './schemas/products.schema';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectModel } from '@nestjs/mongoose';
@@ -7,7 +6,9 @@ import { Model } from 'mongoose';
 import { format, parse } from 'date-fns';
 import { ProductLogsService } from '../products-logs/product-logs.service';
 import { UpdateProductLogDto } from '../products-logs/dto/update-product-log.dto';
-import { UpdateProductStockDto } from '../products/dto/update-product-stock.dto';
+import { UpdateProductStockDto } from './dto/update-product-stock.dto';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { Product, ProductDocument } from './schemas/products.schema';
 
 /**
  * Used by the ProductsController, handles product data storage and retrieval.

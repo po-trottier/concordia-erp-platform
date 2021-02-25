@@ -28,7 +28,10 @@ describe('PartsController', () => {
 
   beforeEach(async () => {
     materialLogsService = new MaterialLogsService(materialLogDocument);
-    materialService = new MaterialsService(materialDocumentModel, materialLogsService);
+    materialService = new MaterialsService(
+      materialDocumentModel,
+      materialLogsService,
+    );
     materialController = new MaterialsController(materialService);
   });
 

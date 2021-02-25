@@ -1,11 +1,11 @@
 import {
-  Get,
-  Post,
-  Patch,
-  Delete,
   Body,
   Controller,
+  Delete,
+  Get,
   Param,
+  Patch,
+  Post,
   ValidationPipe,
 } from '@nestjs/common';
 import { MaterialsService } from './materials.service';
@@ -13,7 +13,7 @@ import { CreateMaterialDto } from './dto/create-material.dto';
 import { UpdateMaterialDto } from './dto/update-material.dto';
 import { Roles } from '../../roles/roles.decorator';
 import { Role } from '../../roles/roles.enum';
-import {UpdateMaterialStockDto} from "./dto/update-material-stock.dto";
+import { UpdateMaterialStockDto } from './dto/update-material-stock.dto';
 
 @Controller()
 export class MaterialsController {

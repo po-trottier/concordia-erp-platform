@@ -1,13 +1,12 @@
 import {
-  Get,
-  Post,
-  Patch,
-  Delete,
   Body,
   Controller,
+  Delete,
+  Get,
   Param,
+  Patch,
+  Post,
   ValidationPipe,
-  ConflictException,
 } from '@nestjs/common';
 import { hash } from 'bcrypt';
 import { UsersService } from './users.service';
@@ -48,9 +47,15 @@ export class UsersController {
     @Body(ValidationPipe) dto: UpdateUserDto,
   ) {
     const body = dto;
-    if (body.username) body.username = body.username.trim().toLowerCase();
-    if (body.email) body.email = body.email.trim().toLowerCase();
-    if (body.password) body.password = await hash(body.password, 16);
+    if (body.username) {
+      body.username = body.username.trim().toLowerCase();
+    }
+    if (body.email) {
+      body.email = body.email.trim().toLowerCase();
+    }
+    if (body.password) {
+      body.password = await hash(body.password, 16);
+    }
     return this.usersService.update(username.trim().toLowerCase(), body);
   }
 

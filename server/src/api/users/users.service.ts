@@ -1,27 +1,27 @@
 import {
+  ConflictException,
   Injectable,
-  UnauthorizedException,
   NotFoundException,
   OnApplicationBootstrap,
-  ConflictException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { hash } from 'bcrypt';
-
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { User, UserDocument } from './schemas/user.schema';
 import { Role } from '../roles/roles.enum';
 import { DEFAULT_USER } from '../../shared/constants';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { User, UserDocument } from './schemas/user.schema';
 
 @Injectable()
 export class UsersService implements OnApplicationBootstrap {
+  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
+
   async onApplicationBootstrap(): Promise<void> {
     await this.createDefaultUser();
   }
-
-  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
   // Create default user if he doesn't exist
   async createDefaultUser(): Promise<void> {
@@ -61,8 +61,9 @@ export class UsersService implements OnApplicationBootstrap {
 
     const createdUser = new this.userModel(account);
     // TODO Generate a random password and send it to the email
-    if (!createdUser.password)
+    if (!createdUser.password) {
       createdUser.password = await hash(process.env.DEFAULT_PASSWORD, 16);
+    }
 
     const user = await createdUser.save();
     return this.validateUserFound(user, user.username);

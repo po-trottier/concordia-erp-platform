@@ -3,11 +3,13 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateMaterialDto } from './dto/create-material.dto';
 import { UpdateMaterialDto } from './dto/update-material.dto';
-import { MaterialDocument, Material } from './schemas/material.schema';
-import {MaterialLogsService} from "../materials-logs/material-logs.service";
+import { MaterialLogsService } from '../materials-logs/material-logs.service';
 import { format, parse } from 'date-fns';
-import {UpdateMaterialLogDto} from "../materials-logs/dto/update-material-log.dto";
-import {UpdateMaterialStockDto} from "./dto/update-material-stock.dto";
+import { UpdateMaterialLogDto } from '../materials-logs/dto/update-material-log.dto';
+import { UpdateMaterialStockDto } from './dto/update-material-stock.dto';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { Material, MaterialDocument } from './schemas/material.schema';
+
 /**
  * Used by the MaterialsController, handles material data storage and retrieval.
  */

@@ -1,11 +1,11 @@
 import {
-  IsOptional,
-  IsString,
   IsInt,
-  IsPositive,
   IsNotEmpty,
-  Min,
   IsNumber,
+  IsOptional,
+  IsPositive,
+  IsString,
+  Min,
 } from 'class-validator';
 
 /**

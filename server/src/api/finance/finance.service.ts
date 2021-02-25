@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateFinanceEntryDto } from './dto/create-finance-entry.dto';
 import { UpdateFinanceEntryDto } from './dto/update-finance-entry.dto';
-import { FinanceEntryDocument, FinanceEntry } from './schemas/finance.schema';
+import { FinanceEntry, FinanceEntryDocument } from './schemas/finance.schema';
 
 /**
  * Used by the FinanceEntrysController, handles financeEntry data storage and retrieval.
