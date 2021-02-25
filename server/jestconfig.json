@@ -1,0 +1,10 @@
+{
+	"reporters": [
+    "default",
+    ["./node_modules/jest-html-reporter", {
+        "pageTitle": "Unit Tests Report"
+    }]
+	],
+	"collectCoverage": true,
+	"coverageDirectory": "./coverage"
+}
