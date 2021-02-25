@@ -12,6 +12,7 @@ export const ProductDetails = (props : { product: ProductEntry }) => {
   const [updated, setUpdated] = useState(false);
 
   useEffect(() => {
+    setUpdated(true);
     axios.get('/parts')
       .then((res) => {
         if (res && res.data) {
@@ -28,8 +29,7 @@ export const ProductDetails = (props : { product: ProductEntry }) => {
       .catch(err => {
         message.error('Something went wrong while fetching the list of parts.');
         console.error(err);
-      })
-      .finally(() => setUpdated(true));
+      });
   }, [updated]);
 
   const getPartsList = () => {

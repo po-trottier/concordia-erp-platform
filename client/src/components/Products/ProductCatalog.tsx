@@ -19,8 +19,10 @@ export const ProductCatalog = () => {
   const products = useSelector((state : RootState) => state.productList.list);
 
   const [searchValue, setSearchValue] = useState('');
+  const [updated, setUpdated] = useState(false);
 
   useEffect(() => {
+    setUpdated(true);
     axios.get('/products')
       .then(({ data }) => {
         dispatch(setProductList(data));
@@ -29,7 +31,7 @@ export const ProductCatalog = () => {
         message.error('Something went wrong while getting the products catalog.');
         console.error(err);
       });
-  }, [searchValue, products]);
+  }, [updated]);
 
   const onSearch = (e : React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);

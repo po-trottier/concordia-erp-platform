@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 
 import { PartDropdownEntry } from '../../interfaces/PartDropdownEntry';
 import { ProductEntry } from '../../interfaces/ProductEntry';
-import { updateProductEntry } from '../../store/slices/ProductListSlice';
+import { updateProductEntry, removeProductEntry } from '../../store/slices/ProductListSlice';
 import axios from '../../plugins/Axios';
 
 const { Option } = Select;
@@ -26,6 +26,7 @@ export const EditProductModal = (props: { product: ProductEntry }) => {
   const [updated, setUpdated] = useState(false);
 
   useEffect(() => {
+    setUpdated(true);
     axios.get('/parts')
       .then((res) => {
         if (res && res.data) {
@@ -42,8 +43,7 @@ export const EditProductModal = (props: { product: ProductEntry }) => {
       .catch(err => {
         message.error('Something went wrong while fetching the list of parts.');
         console.error(err);
-      })
-      .finally(() => setUpdated(true));
+      });
   }, [updated]);
 
   const hidePartsError = () => {
@@ -98,9 +98,9 @@ export const EditProductModal = (props: { product: ProductEntry }) => {
       price: values['product_price'],
       properties: values['list_properties']
     })
-      .then((res) => {
-        const newProduct = res.data;
-        newProduct.id = res.data['_id'];
+      .then(({ data }) => {
+        const newProduct = data;
+        newProduct.id = data['_id'];
         dispatch(updateProductEntry({
           id: props.product.id,
           newProduct: newProduct
@@ -120,7 +120,7 @@ export const EditProductModal = (props: { product: ProductEntry }) => {
       onOk() {
         axios.delete('/products/' + props.product.id)
           .then(() => {
-            // TODO Update the list of products
+            dispatch(removeProductEntry(props.product.id));
             message.success('The product was removed successfully');
             setIsModalVisible(false);
           })
@@ -130,7 +130,6 @@ export const EditProductModal = (props: { product: ProductEntry }) => {
           })
           .finally(() => false);
       },
-      cancelButtonProps: { disabled: false },
       title: 'Remove a Product',
       content: 'Are you sure you want to remove the selected product?'
     })
