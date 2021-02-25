@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Card, Input } from "antd";
 import { Line } from "@ant-design/charts";
-import axios from "../../plugins/Axios";
 import { ResponsiveTable } from "../ResponsiveTable";
 import { ProductHistoryEntry } from "../../interfaces/ProductHistoryEntry";
+import axios from "../../plugins/Axios";
 
 const { Search } = Input;
 
@@ -60,18 +60,21 @@ export const ProductInventory = () => {
     <div>
       <Card style={{ margin: "24px 0" }}>
         <Search
-          placeholder="Search for a product"
+          placeholder="Search for a product transaction"
           onChange={onSearch}
           style={{ marginBottom: 18 }}
         />
-        <Line
-          data={tableData}
-          xField="date"
-          yField="stock"
-          seriesField="name"
-        />
+        {
+          tableData.length > 0 ?
+          <Line
+            data={tableData}
+            xField="date"
+            yField="stock"
+            seriesField="name" /> :
+          <span>No product transactions were found.</span>
+        }
       </Card>
-      <Card>
+      <Card style={{ display: tableData.length > 0 ? 'block' : 'none' }}>
         <ResponsiveTable rows={tableData} cols={inventoryColumns} />
       </Card>
     </div>
