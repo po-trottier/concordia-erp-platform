@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "b351d01f-1d6a-4555-8d61-718258c0847e",
+		"_postman_id": "93d4a1b1-ceed-47ee-b964-c4eabaef92b7",
 		"name": "Epic_Resource_Planner",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -76,16 +76,16 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"stock\": 4\n}"
+							"raw": "{\n    \"name\": \"Pink bike ASS\"\n}"
 						},
 						"url": {
-							"raw": "{{url}}/parts/6023033e12523415393afc0f",
+							"raw": "{{url}}/parts/6036fa7f0981691472cb1855",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"parts",
-								"6023033e12523415393afc0f"
+								"6036fa7f0981691472cb1855"
 							]
 						}
 					},
@@ -179,8 +179,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Finance",
@@ -281,8 +280,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Auth",
@@ -293,7 +291,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "91a2c466-489e-4a43-9f77-1747710d1a4d",
 								"exec": [
 									"if (pm.response.code === 201){",
 									"    pm.environment.set(\"JWT\", pm.response.json().token);",
@@ -328,8 +325,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Users",
@@ -456,8 +452,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Products",
@@ -511,7 +506,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"bike2\",\n    \"price\": 299.99,\n    \"quantity\": 12,\n    \"parts\": [],\n    \"properties\": [\n        {\"key\": \"swag level\", \"value\": \"9000\"}\n    ]\n}",
+							"raw": "{\n    \"name\": \"Skooter of destiny\",\n    \"price\": 299.99,\n    \"stock\": 12,\n    \"parts\": [],\n    \"properties\": [\n        {\"key\": \"swag level\", \"value\": \"9000\"}\n    ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -537,7 +532,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"quantity\": 160\n}",
+							"raw": "{\n    \"name\": \"Pick of destiny\",\n    \"stock\": 10221020120120120\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -545,13 +540,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}/products/60367da1c6945e5fe2688ce3",
+							"raw": "{{url}}/products/6036f94e0981691472cb1853",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"products",
-								"60367da1c6945e5fe2688ce3"
+								"6036f94e0981691472cb1853"
 							]
 						}
 					},
@@ -567,13 +562,13 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{url}}/products/603274de1b3538335387c8a8",
+							"raw": "{{url}}/products/6036f7d91c27400fc938f304",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"products",
-								"603274de1b3538335387c8a8"
+								"6036f7d91c27400fc938f304"
 							]
 						}
 					},
@@ -596,9 +591,36 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Update product stock by id",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"stockBuilt\": 60,\n    \"stockUsed\": 10\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/products/6036f94e0981691472cb1853/stock",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"products",
+								"6036f94e0981691472cb1853",
+								"stock"
+							]
+						}
+					},
+					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Materials",
@@ -709,8 +731,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "API Status",
@@ -744,8 +765,7 @@
 				"type": "text/javascript",
 				"exec": [
 					""
-				],
-				"id": "1d63301c-7bcf-4089-a14b-fbcb6183cd3a"
+				]
 			}
 		},
 		{
@@ -754,10 +774,8 @@
 				"type": "text/javascript",
 				"exec": [
 					""
-				],
-				"id": "2b1938c3-7cc0-4e02-9333-7e21b002c30e"
+				]
 			}
 		}
-	],
-	"protocolProfileBehavior": {}
+	]
 }
