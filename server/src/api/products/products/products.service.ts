@@ -4,9 +4,9 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { format, parse } from 'date-fns';
 import { ProductLogsService } from '../products-logs/product-logs.service';
 import { UpdateProductLogDto } from '../products-logs/dto/update-product-log.dto';
-import { format, parse } from 'date-fns';
 import { UpdateProductStockDto } from '../products/dto/update-product-stock.dto';
 
 /**
@@ -37,8 +37,6 @@ export class ProductsService {
       'dd/MM/yyyy',
       new Date(),
     );
-    updateProductLogDto.stockBuilt = 0;
-    updateProductLogDto.stockUsed = 0;
 
     await this.productLogsService.update(updateProductLogDto);
 

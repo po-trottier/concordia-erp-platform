@@ -25,7 +25,7 @@ export class CreateProductDto {
   @Min(0)
   @IsInt()
   @IsOptional()
-  stock: number;
+  stock: number = 0;
 
   @IsOptional()
   properties: CreateProductPropertyDto[];

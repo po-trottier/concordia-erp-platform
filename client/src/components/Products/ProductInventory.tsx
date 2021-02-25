@@ -1,79 +1,78 @@
-import React, { useEffect, useState } from 'react';
-import { Card, Input } from 'antd';
-import { Line } from '@ant-design/charts';
-import axios from '../../plugins/Axios'
-import { ResponsiveTable } from '../ResponsiveTable';
-import {ProductHistoryEntry} from "../../interfaces/ProductHistoryEntry";
+import React, { useEffect, useState } from "react";
+import { Card, Input } from "antd";
+import { Line } from "@ant-design/charts";
+import axios from "../../plugins/Axios";
+import { ResponsiveTable } from "../ResponsiveTable";
+import { ProductHistoryEntry } from "../../interfaces/ProductHistoryEntry";
 
 const { Search } = Input;
 
 const inventoryColumns = {
-  name: 'Name',
-  date: 'Date',
-  stockBuilt: 'Built',
-  stockUsed: 'Used',
-  stock: 'Stock',
+  name: "Name",
+  date: "Date",
+  stockBuilt: "Built",
+  stockUsed: "Used",
+  stock: "Stock",
 };
 
 export const ProductInventory = () => {
-  const emptyData : ProductHistoryEntry[] = [];
+  const emptyData: ProductHistoryEntry[] = [];
   const [tableData, setTableData] = useState(emptyData);
-  const [searchValue, setSearchValue] = useState('');
+  const [searchValue, setSearchValue] = useState("");
 
   useEffect(() => {
-    axios.get('products/logs').then(async ({data}) => {
-      console.log(data)
-      for (let i = 0 ; i < data.length ; i ++) {
-        let row = data[i];
-        row.date = new Date(row.date).toLocaleDateString(); 
-        // this is highly inefficient
-        row.name = await axios.get('products/'+ row.productId).then(({data}) => {
-          return data.name;
-        })
+    axios.get("products/logs").then(async ({ data }) => {
+      let rows = data;
+      const allProducts = await axios.get("products").then(({ data }) => data);
+
+      for (let i = 0; i < rows.length; i++) {
+        let row = rows[i];
+        row.date = new Date(row.date).toLocaleDateString();
+        row.name = allProducts.find(
+          (product: any)  => product._id === row.productId
+        ).name;
       }
 
-      data.sort((a: any, b: any) => {
+      rows.sort((a: any, b: any) => {
         const dateA = a.date;
         const dateB = b.date;
-        if (dateA < dateB) {
-          return -1;
-        } else if (dateA > dateB) {
-          return 1;
-        } else {
-          return 0;
-        }
+        return dateA < dateB ? -1 : 1;
       });
 
-      if (searchValue.trim() !== '') {
-        data = data.filter(
-           (row: any) => row.name.trim().toLowerCase().includes(searchValue.trim().toLowerCase()));
+      if (searchValue.trim() !== "") {
+        rows = rows.filter((row: any) =>
+          row.name
+            .trim()
+            .toLowerCase()
+            .includes(searchValue.trim().toLowerCase())
+        );
       }
 
-      setTableData(data);
+      setTableData(rows);
     });
   }, [searchValue]);
 
-  const onSearch = (e : React.ChangeEvent<HTMLInputElement>) => {
+  const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
   };
 
   return (
     <div>
-      <Card style={{ margin: '24px 0' }}>
+      <Card style={{ margin: "24px 0" }}>
         <Search
-          placeholder='Search for a product'
+          placeholder="Search for a product"
           onChange={onSearch}
-          style={{ marginBottom: 18 }} />
+          style={{ marginBottom: 18 }}
+        />
         <Line
           data={tableData}
-          xField='date'
-          yField='stock'
-          seriesField='name' />
+          xField="date"
+          yField="stock"
+          seriesField="name"
+        />
       </Card>
       <Card>
-        <ResponsiveTable
-          rows={tableData}
-          cols={inventoryColumns} />
+        <ResponsiveTable rows={tableData} cols={inventoryColumns} />
       </Card>
     </div>
   );
