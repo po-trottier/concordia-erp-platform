@@ -5,13 +5,14 @@ import { ProductEntry } from '../../interfaces/ProductEntry';
 import { PartDropdownEntry } from '../../interfaces/PartDropdownEntry';
 import axios from '../../plugins/Axios';
 
-export const ProductDetails = (props : { product: ProductEntry }) => {
+export const ProductDetails = (props : { product : ProductEntry }) => {
 
   const emptyData : PartDropdownEntry[] = [];
   const [partsData, setPartsData] = useState(emptyData);
   const [updated, setUpdated] = useState(false);
 
   useEffect(() => {
+    setUpdated(true);
     axios.get('/parts')
       .then((res) => {
         if (res && res.data) {
@@ -28,8 +29,7 @@ export const ProductDetails = (props : { product: ProductEntry }) => {
       .catch(err => {
         message.error('Something went wrong while fetching the list of parts.');
         console.error(err);
-      })
-      .finally(() => setUpdated(true));
+      });
   }, [updated]);
 
   const getPartsList = () => {

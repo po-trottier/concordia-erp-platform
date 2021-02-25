@@ -17,6 +17,7 @@ export const ProductCatalog = () => {
   const dispatch = useDispatch();
 
   const products = useSelector((state : RootState) => state.productList.list);
+  const updated = useSelector((state : RootState) => state.productList.updated);
 
   const [searchValue, setSearchValue] = useState('');
 
@@ -29,7 +30,7 @@ export const ProductCatalog = () => {
         message.error('Something went wrong while getting the products catalog.');
         console.error(err);
       });
-  }, [searchValue, products]);
+  }, [updated]);
 
   const onSearch = (e : React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
@@ -66,7 +67,7 @@ export const ProductCatalog = () => {
     });
 
     return rows;
-  }
+  };
 
   const showModal = (row : ProductEntry) => {
     Modal.info({
@@ -93,7 +94,7 @@ export const ProductCatalog = () => {
           style={{ marginBottom: 18 }} />
         {
           getProducts().length > 0 ?
-          <ResponsiveTable rows={getProducts()} cols={columns} /> :
+            <ResponsiveTable rows={getProducts()} cols={columns} /> :
             <span>No products were found.</span>
         }
       </Card>

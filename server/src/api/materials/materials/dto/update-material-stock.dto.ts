@@ -3,7 +3,7 @@ import { IsInt, IsNotEmpty, Min } from 'class-validator';
 /**
  * Part stock update DTO
  */
-export class UpdatePartStockDto {
+export class UpdateMaterialStockDto {
   @IsNotEmpty()
   @IsInt()
   @Min(0)
@@ -12,5 +12,5 @@ export class UpdatePartStockDto {
   @IsNotEmpty()
   @IsInt()
   @Min(0)
-  stockBuilt: number;
+  stockBought: number;
 }
