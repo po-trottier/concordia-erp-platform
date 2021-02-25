@@ -15,7 +15,7 @@ import { MaterialLogsService } from './materials-logs/material-logs.service';
     MongooseModule.forFeature([{ name: Material.name, schema: MaterialSchema }]),
     MongooseModule.forFeature([{ name: MaterialLog.name, schema: MaterialLogSchema }])
   ],
-  controllers: [MaterialsController, MaterialLogsController],
+  controllers: [MaterialLogsController, MaterialsController],
   providers: [MaterialsService, MaterialLogsService],
 })
 export class MaterialsModule {}
