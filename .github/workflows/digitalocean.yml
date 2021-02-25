@@ -9,11 +9,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Unlock ENV File
-      run: |
-        cd server
-        npm ci
-        npm run unlock ${{ secrets.ENV_PASSWORD }}
     - name: Build and Push Docker Image
       uses: docker/build-push-action@v1
       with:
@@ -28,13 +23,18 @@ jobs:
     needs: Build
     steps:
       - uses: actions/checkout@v2
-      - name: Copy Docker Compose Config
+      - name: Unlock ENV File
+        run: |
+          cd server
+          npm ci
+          npm run unlock ${{ secrets.ENV_PASSWORD }}
+      - name: Copy Docker Compose Config + ENV File
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
-          source: "./docker-compose.yml"
+          source: "./docker-compose.yml, ./server/.env"
           target: "/srv/nestjs"
       - name: Deploy to Digital Ocean
         uses: appleboy/ssh-action@v0.1.4

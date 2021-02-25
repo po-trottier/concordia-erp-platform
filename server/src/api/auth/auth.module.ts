@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
-import { ConfigModule } from '@nestjs/config';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { JwtStrategy } from './strategies/jwt.strategy';
@@ -12,8 +11,6 @@ import { JWT_SECRET } from '../../shared/constants';
   imports: [
     UsersModule,
     PassportModule,
-    // ENV Support
-    ConfigModule.forRoot(),
     // JWT Support
     JwtModule.register({
       secret: process.env.JWT_SECRET || JWT_SECRET,

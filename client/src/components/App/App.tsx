@@ -13,7 +13,7 @@ import axios from '../../plugins/Axios';
 
 export const App = () => {
   // Set axios header on app startup
-  const user = useSelector((state : RootState) => state.user.user);
+  const user = useSelector((state : RootState) => state.login.user);
   if (user.isLoggedIn) {
     axios.defaults.headers.common['Authorization'] = 'Bearer ' + user.token;
   }

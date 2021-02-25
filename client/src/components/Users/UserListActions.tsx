@@ -11,7 +11,7 @@ import axios from '../../plugins/Axios';
 export const UserListActions = (props : any) => {
   const dispatch = useDispatch();
 
-  const loggedIn = useSelector((state : RootState) => state.user.user);
+  const loggedIn = useSelector((state : RootState) => state.login.user);
   const updatedUser = useSelector((state : RootState) => state.edit.selectedUser);
 
   const [editLoading, setEditLoading] = useState(false);

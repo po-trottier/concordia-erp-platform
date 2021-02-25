@@ -17,8 +17,8 @@ const initialState =
     }
   };
 
-export const userSlice = createSlice({
-  name: 'user',
+export const loginSlice = createSlice({
+  name: 'login',
   initialState,
   reducers: {
     login: (state, { payload } : PayloadAction<LoginRequest>) => {
@@ -50,4 +50,4 @@ export const userSlice = createSlice({
 export const {
   login: loginAction,
   logout: logoutAction,
-} = userSlice.actions;
+} = loginSlice.actions;

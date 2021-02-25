@@ -11,7 +11,7 @@ import { Icon } from '@ant-design/compatible';
 const { Title } = Typography;
 
 export const HomeGreetings = () => {
-  const user = useSelector((state : RootState) => state.user.user);
+  const user = useSelector((state : RootState) => state.login.user);
 
   // Only get routes the user is allowed to see
   const routes = Routes.filter((route) => (

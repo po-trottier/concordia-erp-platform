@@ -8,6 +8,8 @@ services:
     container_name: nestjs
     ports:
       - '1337:1337'
+    env_file:
+      - .env
     environment:
       - PORT=1337
       - DB_URL=mongodb://db_mongo
