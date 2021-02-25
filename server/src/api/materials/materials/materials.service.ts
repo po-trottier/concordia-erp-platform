@@ -4,13 +4,19 @@ import { Model } from 'mongoose';
 import { CreateMaterialDto } from './dto/create-material.dto';
 import { UpdateMaterialDto } from './dto/update-material.dto';
 import { MaterialDocument, Material } from './schemas/material.schema';
-
+import {MaterialLogsService} from "../materials-logs/material-logs.service";
+import { format, parse } from 'date-fns';
+import {UpdateMaterialLogDto} from "../materials-logs/dto/update-material-log.dto";
+import {UpdateMaterialStockDto} from "./dto/update-material-stock.dto";
 /**
  * Used by the MaterialsController, handles material data storage and retrieval.
  */
 @Injectable()
 export class MaterialsService {
-  constructor(@InjectModel(Material.name) private materialModel: Model<MaterialDocument>) {}
+  constructor(
+    @InjectModel(Material.name) private materialModel: Model<MaterialDocument>,
+    private readonly materialLogsService: MaterialLogsService,
+  ) {}
 
   /**
    * Creates material using mongoose materialModel
@@ -19,7 +25,21 @@ export class MaterialsService {
    */
   async create(createMaterialDto: CreateMaterialDto): Promise<Material> {
     const createdMaterial = new this.materialModel(createMaterialDto);
-    return createdMaterial.save();
+    createdMaterial.save();
+
+    const updateMaterialLogDto: UpdateMaterialLogDto = new UpdateMaterialLogDto();
+
+    updateMaterialLogDto.materialId = createdMaterial.id;
+    updateMaterialLogDto.stock = createMaterialDto.stock || 0;
+    updateMaterialLogDto.date = parse(
+      format(new Date(), 'd/M/y'),
+      'dd/MM/yyyy',
+      new Date(),
+    );
+
+    await this.materialLogsService.update(updateMaterialLogDto);
+
+    return createdMaterial;
   }
 
   /**
@@ -35,8 +55,8 @@ export class MaterialsService {
    * @param id string of the material's objectId
    */
   async findOne(id: string): Promise<Material> {
-    const part = await this.materialModel.findById(id);
-    return this.validateMaterialFound(part, id);
+    const material = await this.materialModel.findById(id);
+    return this.validateMaterialFound(material, id);
   }
 
   /**
@@ -62,6 +82,50 @@ export class MaterialsService {
   async remove(id: string): Promise<Material> {
     const deletedMaterial = await this.materialModel.findByIdAndDelete(id);
     return this.validateMaterialFound(deletedMaterial, id);
+  }
+
+  /**
+   * Updates material stock by id using mongoose materialModel
+   * Emits the material.quantity.updated event
+   *
+   * @param id string of the material's objectId
+   * @param updateMaterialStockDto dto used to update material stock
+   */
+  async updateStock(
+    id: string,
+    updateMaterialStockDto: UpdateMaterialStockDto,
+  ): Promise<Material> {
+    const { stockBought, stockUsed } = updateMaterialStockDto;
+
+    const netStockChange = stockBought - stockUsed;
+
+    let updatedMaterial = await this.materialModel.findByIdAndUpdate(
+      id,
+      { $inc: { stock: netStockChange } },
+      { new: true },
+    );
+
+    if (updatedMaterial.stock < 0) {
+      updatedMaterial = await this.materialModel.findByIdAndUpdate(
+        id,
+        { $set: { stock: 0 } },
+        { new: true },
+      );
+    }
+
+    if (updatedMaterial) {
+      const updateMaterialLogDto: UpdateMaterialLogDto = {
+        materialId: id,
+        stock: updatedMaterial.stock,
+        stockBought,
+        stockUsed,
+        date: parse(format(new Date(), 'd/M/y'), 'dd/MM/yyyy', new Date()),
+      };
+
+      await this.materialLogsService.update(updateMaterialLogDto);
+    }
+
+    return this.validateMaterialFound(updatedMaterial, id);
   }
 
   /**
