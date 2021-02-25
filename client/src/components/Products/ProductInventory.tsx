@@ -10,8 +10,8 @@ const { Search } = Input;
 const inventoryColumns = {
   name: 'Name',
   date: 'Date',
-  built: 'Built',
-  sold: 'Sold',
+  stockBuilt: 'Built',
+  stockUsed: 'Used',
   stock: 'Stock',
 };
 
@@ -22,6 +22,7 @@ export const ProductInventory = () => {
 
   useEffect(() => {
     axios.get('products/logs').then(async ({data}) => {
+      console.log(data)
       for (let i = 0 ; i < data.length ; i ++) {
         let row = data[i];
         row.date = new Date(row.date).toLocaleDateString(); 

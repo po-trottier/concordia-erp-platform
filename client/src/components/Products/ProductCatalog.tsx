@@ -79,7 +79,7 @@ export const ProductCatalog = () => {
     name: 'Name',
     details: 'Details',
     price: 'Price',
-    quantity: 'Stock',
+    stock: 'Stock',
     actions: 'Actions',
     build: 'Build'
   };
