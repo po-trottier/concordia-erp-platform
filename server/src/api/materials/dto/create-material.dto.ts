@@ -19,7 +19,7 @@ export class CreateMaterialDto {
   @IsInt()
   @Min(0)
   @IsOptional()
-  stock: number = 0;
+  stock = 0;
 
   @IsNumber()
   @IsPositive()

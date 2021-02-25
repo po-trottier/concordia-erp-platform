@@ -1,10 +1,7 @@
-import { PartsController } from '../../../src/api/parts/parts/parts.controller';
 import { PartsService } from '../../../src/api/parts/parts/parts.service';
-import { PartLogsService } from '../../../src/api/parts/parts-logs/part-logs.service'
-import { CreatePartDto } from '../../../src/api/parts/parts/dto/create-part.dto';
-import { UpdatePartDto } from '../../../src/api/parts/parts/dto/update-part.dto';
+import { PartLogsService } from '../../../src/api/parts/parts-logs/part-logs.service';
 import { Model } from 'mongoose';
-import { Part, PartDocument } from '../../../src/api/parts/parts/schemas/part.schema';
+import { PartDocument } from '../../../src/api/parts/parts/schemas/part.schema';
 
 describe('PartsService', () => {
   let partsService: PartsService;

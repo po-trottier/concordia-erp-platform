@@ -7,36 +7,37 @@ import { Model } from 'mongoose';
 import { JwtService } from '@nestjs/jwt';
 
 describe('AuthController', () => {
-  
   let authController: AuthController;
   let authService: AuthService;
-	let usersService: UsersService;
+  let usersService: UsersService;
   let userDocumentModel: Model<UserDocument>;
-	let jwtService: JwtService;
+  let jwtService: JwtService;
 
   beforeEach(async () => {
-		usersService = new UsersService(userDocumentModel);
+    usersService = new UsersService(userDocumentModel);
     authService = new AuthService(usersService, jwtService);
     authController = new AuthController(authService);
   });
 
   describe('login', () => {
     it('Should return a list of all parts', async () => {
-			const result = {
-				firstName: 'System',
-				lastName: 'Administrator',
-				username: 'admin',
-				password: 'Password1!',
-				email: 'test@gmail.com',
-				role: null,
-				token: '123'
-			}
+      const result = {
+        firstName: 'System',
+        lastName: 'Administrator',
+        username: 'admin',
+        password: 'Password1!',
+        email: 'test@gmail.com',
+        role: null,
+        token: '123',
+      };
 
-			const loginAuthDto = new LoginAuthDto();
-			loginAuthDto.username = result.username;
-			loginAuthDto.password = result.password;
+      const loginAuthDto = new LoginAuthDto();
+      loginAuthDto.username = result.username;
+      loginAuthDto.password = result.password;
 
-      jest.spyOn(authService, 'login').mockImplementation(async () => await result);
+      jest
+        .spyOn(authService, 'login')
+        .mockImplementation(async () => await result);
 
       expect(await authController.login(loginAuthDto)).toBe(result);
     });

@@ -13,11 +13,11 @@ export class CreateUserDto {
   @IsNotEmpty()
   @IsString()
   username: string;
-  
+
   @IsNotEmpty()
   @IsString()
   firstName: string;
-  
+
   @IsNotEmpty()
   @IsString()
   lastName: string;
@@ -26,7 +26,7 @@ export class CreateUserDto {
   @IsNotEmpty()
   @IsString()
   email: string;
-  
+
   @IsDefined()
   @IsInt()
   role: Role;

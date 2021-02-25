@@ -10,7 +10,9 @@ import { MaterialDocument, Material } from './schemas/material.schema';
  */
 @Injectable()
 export class MaterialsService {
-  constructor(@InjectModel(Material.name) private materialModel: Model<MaterialDocument>) {}
+  constructor(
+    @InjectModel(Material.name) private materialModel: Model<MaterialDocument>,
+  ) {}
 
   /**
    * Creates material using mongoose materialModel
@@ -45,7 +47,10 @@ export class MaterialsService {
    * @param id string of the material's objectId
    * @param updateMaterialDto dto used to update materials
    */
-  async update(id: string, updateMaterialDto: UpdateMaterialDto): Promise<Material> {
+  async update(
+    id: string,
+    updateMaterialDto: UpdateMaterialDto,
+  ): Promise<Material> {
     const updatedMaterial = await this.materialModel.findByIdAndUpdate(
       id,
       { $set: { ...updateMaterialDto } },

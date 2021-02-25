@@ -6,9 +6,9 @@ import { JwtService } from '@nestjs/jwt';
 
 describe('AuthService', () => {
   let authService: AuthService;
-	let usersService: UsersService;
+  let usersService: UsersService;
   let userDocumentModel: Model<UserDocument>;
-	let jwtService: JwtService;
+  let jwtService: JwtService;
 
   beforeEach(async () => {
     usersService = new UsersService(userDocumentModel);

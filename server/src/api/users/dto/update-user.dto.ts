@@ -1,4 +1,11 @@
-import { IsOptional, IsString, IsInt, Matches, IsEmail, IsNotEmpty } from "class-validator";
+import {
+  IsOptional,
+  IsString,
+  IsInt,
+  Matches,
+  IsEmail,
+  IsNotEmpty,
+} from 'class-validator';
 import { Role } from '../../roles/roles.enum';
 
 export class UpdateUserDto {
@@ -11,12 +18,12 @@ export class UpdateUserDto {
   @IsNotEmpty()
   @IsString()
   firstName: string;
-  
+
   @IsOptional()
   @IsNotEmpty()
   @IsString()
   lastName: string;
-  
+
   @IsOptional()
   @IsEmail()
   @IsNotEmpty()

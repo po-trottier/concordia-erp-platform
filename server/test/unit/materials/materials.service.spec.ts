@@ -3,8 +3,8 @@ import { Model } from 'mongoose';
 import { MaterialDocument } from '../../../src/api/materials/schemas/material.schema';
 
 describe('UsersService', () => {
-	let materialService: MaterialsService;
-	let materialDocumentModel: Model<MaterialDocument>;
+  let materialService: MaterialsService;
+  let materialDocumentModel: Model<MaterialDocument>;
 
   beforeEach(async () => {
     materialService = new MaterialsService(materialDocumentModel);

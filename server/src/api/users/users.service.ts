@@ -25,20 +25,20 @@ export class UsersService implements OnApplicationBootstrap {
 
   // Create default user if he doesn't exist
   async createDefaultUser(): Promise<void> {
-      const admin = await this.findOneInternal(DEFAULT_USER);
-      if (!admin) {
-        const user = new CreateUserDto();
-        user.username = DEFAULT_USER;
-        user.firstName = 'Administrator';
-        user.lastName = 'Person';
-        user.email = 'admin@null.com';
-        user.role = Role.SYSTEM_ADMINISTRATOR;
-        user.password = await hash(process.env.DEFAULT_PASSWORD, 16);
-        await this.create(user);
-        console.log('Default user was created successfully.');
-      } else {
-        console.log('Default user already exits.');
-      } 
+    const admin = await this.findOneInternal(DEFAULT_USER);
+    if (!admin) {
+      const user = new CreateUserDto();
+      user.username = DEFAULT_USER;
+      user.firstName = 'Administrator';
+      user.lastName = 'Person';
+      user.email = 'admin@null.com';
+      user.role = Role.SYSTEM_ADMINISTRATOR;
+      user.password = await hash(process.env.DEFAULT_PASSWORD, 16);
+      await this.create(user);
+      console.log('Default user was created successfully.');
+    } else {
+      console.log('Default user already exits.');
+    }
   }
 
   // To be used internally only as it leaks the password hash!
@@ -56,9 +56,7 @@ export class UsersService implements OnApplicationBootstrap {
       );
     }
     if (await this.findOneInternal(account.email)) {
-      throw new ConflictException(
-        'A user with the same email already exists.',
-      );
+      throw new ConflictException('A user with the same email already exists.');
     }
 
     const createdUser = new this.userModel(account);
@@ -90,9 +88,9 @@ export class UsersService implements OnApplicationBootstrap {
     user.email = user.email.trim().toLowerCase();
     // Cannot change the default user's username
     const isAdmin = username === DEFAULT_USER;
-    const usernameChanged = dto.username != username 
+    const usernameChanged = dto.username != username;
     const roleChanged = dto.role != Role.SYSTEM_ADMINISTRATOR;
-    const adminChanged= usernameChanged || roleChanged;
+    const adminChanged = usernameChanged || roleChanged;
     if (isAdmin && adminChanged) {
       throw new UnauthorizedException(
         "You cannot change the default user's username.",
