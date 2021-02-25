@@ -30,6 +30,7 @@ export const ProductCatalog = () => {
         message.error('Something went wrong while getting the products catalog.');
         console.error(err);
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updated]);
 
   const onSearch = (e : React.ChangeEvent<HTMLInputElement>) => {

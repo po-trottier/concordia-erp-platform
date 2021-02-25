@@ -58,12 +58,12 @@ export const CreateMaterialModal = () => {
           newMaterial.id = newMaterial['_id'];
           dispatch(addMaterialEntry(newMaterial));
           setIsModalVisible(false);
-          message.success('The material was successfully added.')
+          message.success('The material was successfully added.');
           dispatch(setSelected(undefined));
           form.resetFields();
         })
         .catch((err) => {
-          message.error('Something went wrong while adding the material.')
+          message.error('Something went wrong while adding the material.');
           console.error(err);
         })
         .finally(() => setLoading(false));

@@ -46,9 +46,9 @@ export const LoginForm = () => {
       })
       .catch((err) => {
         console.error(err);
-        message.error('Invalid credentials were entered.')
+        message.error('Invalid credentials were entered.');
         setLoading(false);
-      })
+      });
   };
 
   return (

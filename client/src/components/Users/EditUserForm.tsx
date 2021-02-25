@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Input, Select, Row, Col } from 'antd';
+import { Col, Form, Input, Row, Select } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { setEmail, setFirstName, setLastName, setRole, setUsername } from '../../store/slices/UserEditSlice';
@@ -36,7 +36,8 @@ export const EditUserForm = () => {
             style={{ marginBottom: 0 }}
             name='firstName'
             rules={[{ required: true, message: 'Please input first name!' }]}>
-            <Input placeholder="Enter the user's first name" onChange={(e) => dispatch(setFirstName(e.currentTarget.value))} />
+            <Input placeholder="Enter the user's first name"
+                   onChange={(e) => dispatch(setFirstName(e.currentTarget.value))} />
           </Form.Item>
         </Col>
       </Row>
@@ -49,7 +50,8 @@ export const EditUserForm = () => {
             style={{ marginBottom: 0 }}
             name='lastName'
             rules={[{ required: true, message: 'Please input last name!' }]}>
-            <Input placeholder="Enter the user's last name" onChange={(e) => dispatch(setLastName(e.currentTarget.value))} />
+            <Input placeholder="Enter the user's last name"
+                   onChange={(e) => dispatch(setLastName(e.currentTarget.value))} />
           </Form.Item>
         </Col>
       </Row>
@@ -75,7 +77,8 @@ export const EditUserForm = () => {
             style={{ marginBottom: 0 }}
             name='username'
             rules={[{ required: true, message: 'Please input username!' }]}>
-            <Input placeholder="Enter the user's username" onChange={(e) => dispatch(setUsername(e.currentTarget.value))} />
+            <Input placeholder="Enter the user's username"
+                   onChange={(e) => dispatch(setUsername(e.currentTarget.value))} />
           </Form.Item>
         </Col>
       </Row>

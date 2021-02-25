@@ -29,6 +29,7 @@ export const MaterialsCatalog = () => {
         message.error('Something went wrong while getting the materials catalog.');
         console.error(err);
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updated]);
 
   const onSearch = (e : React.ChangeEvent<HTMLInputElement>) => {
@@ -46,7 +47,7 @@ export const MaterialsCatalog = () => {
     rows.forEach((row : any) => {
       row.id = row['_id'];
       row.actions = <EditMaterialModal material={row} />;
-      row.imageNode = <img src={row.image} height={32} />
+      row.imageNode = <img src={row.image} height={32} alt='Material Preview' />;
       row.order = (
         <InputNumber
           placeholder='Input a quantity'
@@ -80,11 +81,11 @@ export const MaterialsCatalog = () => {
           placeholder='Search for a material'
           onChange={onSearch}
           style={{ marginBottom: 18 }} />
-          {
-            getMaterials().length > 0 ?
-              <ResponsiveTable cols={columns} rows={getMaterials()} />:
-              <span>No materials were found.</span>
-          }
+        {
+          getMaterials().length > 0 ?
+            <ResponsiveTable cols={columns} rows={getMaterials()} /> :
+            <span>No materials were found.</span>
+        }
       </Card>
       <Button
         type='primary'

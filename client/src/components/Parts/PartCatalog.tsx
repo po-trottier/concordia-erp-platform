@@ -46,6 +46,7 @@ export const PartCatalog = () => {
         message.error('Something went wrong while fetching the list of materials.');
         console.error(err);
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updated]);
 
   const getMaterials = (part : PartEntry) => {

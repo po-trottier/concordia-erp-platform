@@ -14,8 +14,9 @@ import axios from '../../plugins/Axios';
 export const App = () => {
   // Set axios header on app startup
   const user = useSelector((state : RootState) => state.user.user);
-  if (user.isLoggedIn)
+  if (user.isLoggedIn) {
     axios.defaults.headers.common['Authorization'] = 'Bearer ' + user.token;
+  }
 
   const location = useLocation();
   return location.pathname === '/login' ?

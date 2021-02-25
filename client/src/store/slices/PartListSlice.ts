@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { PartEntry } from '../../interfaces/PartEntry';
 
-const initialState : { list : PartEntry[], updated: boolean } =
+const initialState : { list : PartEntry[], updated : boolean } =
   {
     list: [],
     updated: false,

@@ -23,7 +23,7 @@ export const UserList = () => {
     axios.get('users').then(({ data }) => {
       dispatch(setUserList(data));
     });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchValue]);
 
   const getUserList = () => {
@@ -50,7 +50,7 @@ export const UserList = () => {
     });
 
     return rows;
-  }
+  };
 
   const onSearch = (e : React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);

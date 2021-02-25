@@ -8,7 +8,7 @@ const { Title } = Typography;
 export const Audit = () => {
 
   const getNames = () => {
-    let names : { name: string }[] = [
+    let names : { name : string }[] = [
       { name: 'Mike' },
       { name: 'Alex' },
     ];

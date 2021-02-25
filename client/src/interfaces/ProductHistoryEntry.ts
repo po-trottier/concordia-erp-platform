@@ -1,5 +1,5 @@
 export interface ProductHistoryEntry {
-  id: string,
+  id : string,
   date : string,
   quantity : number,
   name : string,

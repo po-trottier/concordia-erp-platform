@@ -9,7 +9,7 @@ import { setSelected } from '../../store/slices/UploadSlice';
 import { removeMaterialEntry, updateMaterialEntry } from '../../store/slices/MaterialListSlice';
 import axios from '../../plugins/Axios';
 
-export const EditMaterialModal = (props : { material: MaterialEntry }) => {
+export const EditMaterialModal = (props : { material : MaterialEntry }) => {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
 
@@ -63,11 +63,11 @@ export const EditMaterialModal = (props : { material: MaterialEntry }) => {
           }));
           dispatch(setSelected(undefined));
           setIsModalVisible(false);
-          message.success('The material was successfully added.')
+          message.success('The material was successfully added.');
           form.resetFields();
         })
         .catch((err) => {
-          message.error('Something went wrong while adding the material.')
+          message.error('Something went wrong while adding the material.');
           console.error(err);
         })
         .finally(() => setLoading(false));
