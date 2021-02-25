@@ -29,7 +29,6 @@ WORKDIR /srv/webapp
 
 # Copy the production build from the builder step
 COPY --from=builder /srv/webapp/client/build/ ./client/build/
-COPY --from=builder /srv/webapp/server/.env ./server/.env
 COPY --from=builder /srv/webapp/server/dist/ ./server/dist/
 COPY --from=builder /srv/webapp/server/node_modules/ ./server/node_modules/
 
