@@ -1,16 +1,20 @@
-import { MaterialsController } from '../../../src/api/materials/materials.controller';
-import { MaterialsService } from '../../../src/api/materials/materials.service';
-import { CreateMaterialDto } from '../../../src/api/materials/dto/create-material.dto';
-import { UpdateMaterialDto } from '../../../src/api/materials/dto/update-material.dto';
+import { MaterialsController } from '../../../src/api/materials/materials/materials.controller';
+import { MaterialsService } from '../../../src/api/materials/materials/materials.service';
+import { CreateMaterialDto } from '../../../src/api/materials/materials/dto/create-material.dto';
+import { UpdateMaterialDto } from '../../../src/api/materials/materials/dto/update-material.dto';
+import { MaterialLogsService } from '../../../src/api/materials/materials-logs/material-logs.service';
+import { MaterialLogDocument } from '../../../src/api/materials/materials-logs/schemas/material-log.schema';
 import { Model } from 'mongoose';
 import {
   Material,
   MaterialDocument,
-} from '../../../src/api/materials/schemas/material.schema';
+} from '../../../src/api/materials/materials/schemas/material.schema';
 
 describe('PartsController', () => {
   let materialController: MaterialsController;
   let materialService: MaterialsService;
+  let materialLogsService: MaterialLogsService;
+  let materialLogDocument: Model<MaterialLogDocument>;
   let materialDocumentModel: Model<MaterialDocument>;
 
   const dummyMaterial: Material = {
@@ -23,7 +27,8 @@ describe('PartsController', () => {
   };
 
   beforeEach(async () => {
-    materialService = new MaterialsService(materialDocumentModel);
+    materialLogsService = new MaterialLogsService(materialLogDocument);
+    materialService = new MaterialsService(materialDocumentModel, materialLogsService);
     materialController = new MaterialsController(materialService);
   });
 

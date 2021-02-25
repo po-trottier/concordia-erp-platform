@@ -1,28 +1,30 @@
-import { ProductsController } from '../../../src/api/products/products.controller';
-import { ProductsService } from '../../../src/api/products/products.service';
-import { CreateProductDto } from '../../../src/api/products/dto/create-product.dto';
-import { UpdateProductDto } from '../../../src/api/products/dto/update-product.dto';
+import { ProductsController } from '../../../src/api/products/products/products.controller';
+import { ProductsService } from '../../../src/api/products/products/products.service';
+import { CreateProductDto } from '../../../src/api/products/products/dto/create-product.dto';
+import { UpdateProductDto } from '../../../src/api/products/products/dto/update-product.dto';
+import { ProductLogsService } from '../../../src/api/products/products-logs/product-logs.service';
 import { Model } from 'mongoose';
 import {
   Product,
   ProductDocument,
-} from '../../../src/api/products/schemas/products.schema';
+} from '../../../src/api/products/products/schemas/products.schema';
 
 describe('PartsController', () => {
   let productsController: ProductsController;
   let productsService: ProductsService;
+  let productLogsService: ProductLogsService;
   let partsDocumentModel: Model<ProductDocument>;
 
   const dummyProduct: Product = {
     name: 'Canondale Bike',
     price: 1000,
-    quantity: 20,
+    stock: 20,
     parts: [],
     properties: [],
   };
 
   beforeEach(async () => {
-    productsService = new ProductsService(partsDocumentModel);
+    productsService = new ProductsService(partsDocumentModel, productLogsService);
     productsController = new ProductsController(productsService);
   });
 
@@ -56,7 +58,7 @@ describe('PartsController', () => {
       const newProduct = new CreateProductDto();
       newProduct.name = result.name;
       newProduct.price = result.price;
-      newProduct.quantity = result.quantity;
+      newProduct.stock = result.stock;
       newProduct.properties = result.properties;
       newProduct.parts = result.parts;
 
@@ -87,7 +89,7 @@ describe('PartsController', () => {
       const updatedProduct = new UpdateProductDto();
       updatedProduct.name = result.name;
       updatedProduct.price = result.price;
-      updatedProduct.quantity = result.quantity;
+      updatedProduct.stock = result.stock;
       updatedProduct.properties = result.properties;
       updatedProduct.parts = result.parts;
 
