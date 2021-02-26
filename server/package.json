@@ -78,7 +78,7 @@
       "^.+\\.(t|j)s$": "ts-jest"
     },
     "collectCoverageFrom": [
-      "src/api/**/*.(controller|service|dto|schema).ts"
+      "src/api/**/*.controller.ts"
     ],
     "coverageDirectory": "coverage",
     "testEnvironment": "node"
