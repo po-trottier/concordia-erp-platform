@@ -80,7 +80,7 @@
     "collectCoverageFrom": [
       "src/api/**/*.(controller|service|dto|schema).ts"
     ],
-    "coverageDirectory": "../coverage",
+    "coverageDirectory": "coverage",
     "testEnvironment": "node"
   }
 }
