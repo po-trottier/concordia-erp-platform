@@ -57,8 +57,8 @@ describe('UsersController', () => {
       newUser.lastName = result.lastName;
       newUser.username = result.username;
       newUser.password = result.password;
-      (newUser.email = result.email),
-        (newUser.role = Role.SYSTEM_ADMINISTRATOR);
+      newUser.email = result.email,
+      newUser.role = Role.SYSTEM_ADMINISTRATOR;
 
       jest
         .spyOn(usersService, 'create')
@@ -89,7 +89,8 @@ describe('UsersController', () => {
       updatedUser.lastName = result.lastName;
       updatedUser.username = result.username;
       updatedUser.password = result.password;
-      (updatedUser.email = result.email), (updatedUser.role = 4);
+      updatedUser.email = result.email;
+      updatedUser.role = 4;
 
       jest
         .spyOn(usersService, 'update')

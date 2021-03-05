@@ -71,7 +71,7 @@ export class FinanceService {
    *
    * @param id string of the financeEntry's objectId
    */
-  async remove(id: string): Promise<FinanceEntryDocument> {
+  async remove(id: string): Promise<FinanceEntry> {
     const deletedFinanceEntry = await this.financeEntryModel.findByIdAndDelete(
       id,
     );
