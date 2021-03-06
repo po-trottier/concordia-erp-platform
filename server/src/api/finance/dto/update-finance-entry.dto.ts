@@ -7,6 +7,5 @@ export class UpdateFinanceEntryDto {
   @IsNotEmpty()
   dateDue: Date;
 
-  @IsPositive()
   paid: number;
 }

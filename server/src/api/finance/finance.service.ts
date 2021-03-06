@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateFinanceEntryDto } from './dto/create-finance-entry.dto';
@@ -79,6 +79,13 @@ export class FinanceService {
     return this.checkFinanceEntryFound(deletedFinanceEntry, id);
   }
 
+  async findAllReceivables(): Promise<FinanceEntry[]> {
+    return await this.financeEntryModel.find({ amount: { $gt: 0 } });
+  }
+  
+  async findAllPayables(): Promise<FinanceEntry[]> {
+    return await this.financeEntryModel.find({ amount: { $lt: 0 } });
+  }
   /**
    * Returns NotFoundException if financeEntry is null, otherwise returns financeEntry
    *

@@ -70,4 +70,14 @@ export class FinanceController {
   remove(@Param('id') id: string) {
     return this.financeService.remove(id);
   }
+
+  @Get('receivables')
+  findAllReceivables(){
+    return this.financeService.findAllReceivables();
+  }
+
+  @Get('payables')
+  findAllPayables(){
+    return this.financeService.findAllPayables();
+  }
 }
