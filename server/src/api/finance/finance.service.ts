@@ -79,13 +79,38 @@ export class FinanceService {
     return this.checkFinanceEntryFound(deletedFinanceEntry, id);
   }
 
+  /**
+   * Retrieves all receivable financeEntrys using mongoose financeEntryModel
+   */
   async findAllReceivables(): Promise<FinanceEntry[]> {
     return await this.financeEntryModel.find({ amount: { $gt: 0 } });
   }
   
+  /**
+   * Retrieves all payable financeEntrys using mongoose financeEntryModel
+   */
   async findAllPayables(): Promise<FinanceEntry[]> {
     return await this.financeEntryModel.find({ amount: { $lt: 0 } });
   }
+
+  /**
+   * Retrieves all active receivable financeEntrys using mongoose financeEntryModel
+   */
+  async findActiveReceivables(): Promise<FinanceEntry[]> {
+    return await this.financeEntryModel.find(
+      { $expr: { $and: [ { $gt: ["$amount", 0] } , {$gt: [ {$abs: "$amount"} , {$abs: "$paid"} ]}] } }
+    );
+  }
+  
+  /**
+   * Retrieves all active payable financeEntrys using mongoose financeEntryModel
+   */
+  async findActivePayables(): Promise<FinanceEntry[]> {
+    return await this.financeEntryModel.find(
+      { $expr: { $and: [ { $lt: ["$amount", 0] } , {$gt: [ {$abs: "$amount"} , {$abs: "$paid"} ]}] } }
+    );
+  }
+
   /**
    * Returns NotFoundException if financeEntry is null, otherwise returns financeEntry
    *

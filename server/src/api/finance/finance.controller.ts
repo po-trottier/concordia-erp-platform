@@ -13,16 +13,16 @@ import { CreateFinanceEntryDto } from './dto/create-finance-entry.dto';
 import { UpdateFinanceEntryDto } from './dto/update-finance-entry.dto';
 
 /**
- * Controller class of the finentry entity
+ * Controller class of the FinanceEntry entity
  */
 @Controller()
 export class FinanceController {
   constructor(private readonly financeService: FinanceService) {}
 
   /**
-   * Handles POST requests to create FinEntry
+   * Handles POST requests to create FinanceEntry
    *
-   * @param createFinanceEntryDto dto used to create finentry
+   * @param createFinanceEntryDto dto used to create a finance entry
    */
   @Post()
   create(@Body(ValidationPipe) createFinanceEntryDto: CreateFinanceEntryDto) {
@@ -30,11 +30,43 @@ export class FinanceController {
   }
 
   /**
-   * Handles GET requests to find all finentry
+   * Handles GET requests to find all finance entries
    */
   @Get()
   findAll() {
     return this.financeService.findAll();
+  }
+
+  /**
+   * Handles GET requests to find all receivable finance entries
+   */
+  @Get('receivables/all')
+  findAllReceivables(){
+    return this.financeService.findAllReceivables();
+  }
+
+  /**
+   * Handles GET requests to find all payable finance entries
+   */
+  @Get('payables/all')
+  findAllPayables(){
+    return this.financeService.findAllPayables();
+  }
+
+  /**
+   * Handles GET requests to find all active receivable finance entries
+   */
+  @Get('receivables/active')
+  findActiveReceivables(){
+    return this.financeService.findActiveReceivables();
+  }
+
+  /**
+   * Handles GET requests to find all active payable finance entries
+   */
+  @Get('payables/active')
+  findAactivePayables(){
+    return this.financeService.findActivePayables();
   }
 
   /**
@@ -69,15 +101,5 @@ export class FinanceController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.financeService.remove(id);
-  }
-
-  @Get('receivables')
-  findAllReceivables(){
-    return this.financeService.findAllReceivables();
-  }
-
-  @Get('payables')
-  findAllPayables(){
-    return this.financeService.findAllPayables();
   }
 }
