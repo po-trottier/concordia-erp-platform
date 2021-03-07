@@ -3,7 +3,10 @@ import { FinanceService } from '../../../src/api/finance/finance.service';
 import { CreateFinanceEntryDto } from '../../../src/api/finance/dto/create-finance-entry.dto';
 import { UpdateFinanceEntryDto } from '../../../src/api/finance/dto/update-finance-entry.dto';
 import { Model } from 'mongoose';
-import { FinanceEntry, FinanceEntryDocument } from '../../../src/api/finance/schemas/finance.schema';
+import {
+  FinanceEntry,
+  FinanceEntryDocument,
+} from '../../../src/api/finance/schemas/finance.schema';
 
 describe('FinanceController', () => {
   let financeController: FinanceController;
@@ -11,8 +14,8 @@ describe('FinanceController', () => {
   let financeEntryDocument: Model<FinanceEntryDocument>;
 
   const dummyFinanceEntry: FinanceEntry = {
-    dateEntered: new Date,
-    dateDue: new Date,
+    dateEntered: new Date(),
+    dateDue: new Date(),
     company_name: 'bank',
     amount: 10,
     paid: 1000,
@@ -84,7 +87,7 @@ describe('FinanceController', () => {
       const newFinanceEntry = new UpdateFinanceEntryDto();
       newFinanceEntry.dateDue = result.dateDue;
       newFinanceEntry.paid = result.paid;
-      
+
       jest
         .spyOn(financeService, 'update')
         .mockImplementation(async () => await result);

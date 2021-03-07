@@ -145,7 +145,7 @@ export const EditPartModal = (props : { part : PartEntry }) => {
       </Button>
 
       <Modal
-        title='Define a New Part'
+        title='Edit Part'
         visible={isModalVisible}
         footer={[
           <Button

@@ -1,4 +1,4 @@
-import { IsDateString, IsNotEmpty, IsPositive, IsString } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 /**
  * Finance Entry creation DTO
@@ -13,7 +13,7 @@ export class CreateFinanceEntryDto {
   @IsNotEmpty()
   @IsString()
   company_name: string;
-  
+
   amount: number;
 
   paid: number;

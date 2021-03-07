@@ -41,7 +41,7 @@ export class FinanceController {
    * Handles GET requests to find all receivable finance entries
    */
   @Get('receivables/all')
-  findAllReceivables(){
+  findAllReceivables() {
     return this.financeService.findAllReceivables();
   }
 
@@ -49,7 +49,7 @@ export class FinanceController {
    * Handles GET requests to find all payable finance entries
    */
   @Get('payables/all')
-  findAllPayables(){
+  findAllPayables() {
     return this.financeService.findAllPayables();
   }
 
@@ -57,7 +57,7 @@ export class FinanceController {
    * Handles GET requests to find all active receivable finance entries
    */
   @Get('receivables/active')
-  findActiveReceivables(){
+  findActiveReceivables() {
     return this.financeService.findActiveReceivables();
   }
 
@@ -65,7 +65,7 @@ export class FinanceController {
    * Handles GET requests to find all active payable finance entries
    */
   @Get('payables/active')
-  findAactivePayables(){
+  findAactivePayables() {
     return this.financeService.findActivePayables();
   }
 

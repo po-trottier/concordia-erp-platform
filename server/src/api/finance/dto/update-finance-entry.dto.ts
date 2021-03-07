@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsPositive } from 'class-validator';
+import { IsNotEmpty } from 'class-validator';
 
 /**
  * FinanceEntry update DTO

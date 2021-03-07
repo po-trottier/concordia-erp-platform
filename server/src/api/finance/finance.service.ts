@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, Logger } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateFinanceEntryDto } from './dto/create-finance-entry.dto';
@@ -85,7 +85,7 @@ export class FinanceService {
   async findAllReceivables(): Promise<FinanceEntry[]> {
     return await this.financeEntryModel.find({ amount: { $gt: 0 } });
   }
-  
+
   /**
    * Retrieves all payable financeEntrys using mongoose financeEntryModel
    */
@@ -97,18 +97,28 @@ export class FinanceService {
    * Retrieves all active receivable financeEntrys using mongoose financeEntryModel
    */
   async findActiveReceivables(): Promise<FinanceEntry[]> {
-    return await this.financeEntryModel.find(
-      { $expr: { $and: [ { $gt: ["$amount", 0] } , {$gt: [ {$abs: "$amount"} , {$abs: "$paid"} ]}] } }
-    );
+    return await this.financeEntryModel.find({
+      $expr: {
+        $and: [
+          { $gt: ['$amount', 0] },
+          { $gt: [{ $abs: '$amount' }, { $abs: '$paid' }] },
+        ],
+      },
+    });
   }
-  
+
   /**
    * Retrieves all active payable financeEntrys using mongoose financeEntryModel
    */
   async findActivePayables(): Promise<FinanceEntry[]> {
-    return await this.financeEntryModel.find(
-      { $expr: { $and: [ { $lt: ["$amount", 0] } , {$gt: [ {$abs: "$amount"} , {$abs: "$paid"} ]}] } }
-    );
+    return await this.financeEntryModel.find({
+      $expr: {
+        $and: [
+          { $lt: ['$amount', 0] },
+          { $gt: [{ $abs: '$amount' }, { $abs: '$paid' }] },
+        ],
+      },
+    });
   }
 
   /**
