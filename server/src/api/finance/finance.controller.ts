@@ -65,7 +65,7 @@ export class FinanceController {
    * Handles GET requests to find all active payable finance entries
    */
   @Get('payables/active')
-  findAactivePayables() {
+  findActivePayables() {
     return this.financeService.findActivePayables();
   }
 
