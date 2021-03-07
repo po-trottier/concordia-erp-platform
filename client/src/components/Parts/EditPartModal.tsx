@@ -146,6 +146,7 @@ export const EditPartModal = (props : { part : PartEntry }) => {
 
       <Modal
         title='Edit Part'
+        onCancel={handleCancel}
         visible={isModalVisible}
         footer={[
           <Button

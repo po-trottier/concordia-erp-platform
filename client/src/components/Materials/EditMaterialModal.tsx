@@ -112,6 +112,7 @@ export const EditMaterialModal = (props : { material : MaterialEntry }) => {
 
       <Modal
         title='Edit a Material'
+        onCancel={handleCancel}
         visible={isModalVisible}
         confirmLoading={loading}
         footer={[
