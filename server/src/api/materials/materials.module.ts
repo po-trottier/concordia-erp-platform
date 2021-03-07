@@ -9,6 +9,8 @@ import {
 } from './materials-logs/schemas/material-log.schema';
 import { MaterialLogsController } from './materials-logs/material-logs.controller';
 import { MaterialLogsService } from './materials-logs/material-logs.service';
+import { ConfigModule } from '@nestjs/config';
+import { validate } from '../../shared/env';
 
 /**
  * Contains all logic and files related to Materials
@@ -21,6 +23,8 @@ import { MaterialLogsService } from './materials-logs/material-logs.service';
     MongooseModule.forFeature([
       { name: MaterialLog.name, schema: MaterialLogSchema },
     ]),
+    // ENV Support
+    ConfigModule.forRoot({ validate, cache: true }),
   ],
   controllers: [MaterialLogsController, MaterialsController],
   providers: [MaterialsService, MaterialLogsService],
