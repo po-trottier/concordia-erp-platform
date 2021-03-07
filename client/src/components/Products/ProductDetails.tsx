@@ -58,7 +58,7 @@ export const ProductDetails = (props : { product : ProductEntry }) => {
         label='Stock'
         span={3}
         labelStyle={{ fontWeight: 'bold' }}>
-        {props.product.quantity}
+        {props.product.stock}
       </Descriptions.Item>
       <Descriptions.Item
         label='Parts'

@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ConfigModule } from '@nestjs/config';
 import { RouterModule } from 'nest-router';
 import { ApiController } from './api.controller';
 import { PartsModule } from './parts/parts.module';
@@ -12,16 +13,21 @@ import { JwtAuthGuard } from './auth/guards/jwt.guard';
 import { RolesGuard } from './roles/roles.guard';
 import { routes } from '../routes';
 import { ProductsModule } from './products/products.module';
+import { validate } from '../shared/env';
+import { DB_NAME, DB_URL } from '../shared/constants';
 
-const mongoDbUrl = process.env.DB_URL || 'mongodb://localhost:27017';
-const mongoDbName = process.env.DB_NAME || 'ERP_db';
+const mongoDbUrl = process.env.DB_URL || DB_URL;
+const mongoDbName = process.env.DB_NAME || DB_NAME;
 
 @Module({
   imports: [
-    RouterModule.forRoutes(routes),
     MongooseModule.forRoot(`${mongoDbUrl}/${mongoDbName}`, {
       useFindAndModify: false,
     }),
+    // ENV Support
+    ConfigModule.forRoot({ validate, cache: true }),
+    // Router Support
+    RouterModule.forRoutes(routes),
     PartsModule,
     MaterialsModule,
     AuthModule,

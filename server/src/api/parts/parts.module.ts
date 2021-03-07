@@ -6,6 +6,8 @@ import { Part, PartSchema } from './parts/schemas/part.schema';
 import { PartLog, PartLogSchema } from './parts-logs/schemas/part-log.schema';
 import { PartLogsController } from './parts-logs/part-logs.controller';
 import { PartLogsService } from './parts-logs/part-logs.service';
+import { ConfigModule } from '@nestjs/config';
+import { validate } from '../../shared/env';
 
 /**
  * Contains all logic and files related to parts
@@ -14,6 +16,8 @@ import { PartLogsService } from './parts-logs/part-logs.service';
   imports: [
     MongooseModule.forFeature([{ name: Part.name, schema: PartSchema }]),
     MongooseModule.forFeature([{ name: PartLog.name, schema: PartLogSchema }]),
+    // ENV Support
+    ConfigModule.forRoot({ validate, cache: true }),
   ],
   controllers: [PartLogsController, PartsController],
   providers: [PartsService, PartLogsService],

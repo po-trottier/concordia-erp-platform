@@ -6,11 +6,15 @@ import { AuthController } from './auth.controller';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { UsersModule } from '../users/users.module';
 import { JWT_SECRET } from '../../shared/constants';
+import { ConfigModule } from '@nestjs/config';
+import { validate } from '../../shared/env';
 
 @Module({
   imports: [
     UsersModule,
     PassportModule,
+    // ENV Support
+    ConfigModule.forRoot({ validate, cache: true }),
     // JWT Support
     JwtModule.register({
       secret: process.env.JWT_SECRET || JWT_SECRET,
