@@ -1,11 +1,9 @@
 import {
-  IsInt,
   IsNotEmpty,
   IsNumber,
   IsOptional,
   IsPositive,
   IsString,
-  Min,
 } from 'class-validator';
 
 /**
@@ -15,11 +13,6 @@ export class UpdateMaterialDto {
   @IsString()
   @IsOptional()
   name: string;
-
-  @IsInt()
-  @Min(0)
-  @IsOptional()
-  stock: number;
 
   @IsNumber()
   @IsPositive()

@@ -14,15 +14,25 @@ import { UpdateMaterialDto } from './dto/update-material.dto';
 import { Roles } from '../../roles/roles.decorator';
 import { Role } from '../../roles/roles.enum';
 import { UpdateMaterialStockDto } from './dto/update-material-stock.dto';
+import { MaterialLocationStockService } from './material-location-stock.service';
 
 @Controller()
 export class MaterialsController {
-  constructor(private readonly materialsService: MaterialsService) {}
+  constructor(
+    private readonly materialsService: MaterialsService,
+    private readonly materialLocationStockService: MaterialLocationStockService,
+  ) {}
 
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
   @Post()
   create(@Body(ValidationPipe) createMaterialDto: CreateMaterialDto) {
     return this.materialsService.create(createMaterialDto);
+  }
+
+  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
+  @Get('stock/:locationId')
+  findAllLocationStock(@Param('locationId') locationId: string) {
+    return this.materialLocationStockService.findAll(locationId);
   }
 
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
@@ -32,18 +42,32 @@ export class MaterialsController {
   }
 
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
+  @Get(':materialId/stock/:locationId')
+  findOneLocationStock(
+    @Param('materialId') materialId: string,
+    @Param('locationId') locationId: string,
+  ) {
+    return this.materialLocationStockService.findOne(materialId, locationId);
+  }
+
+  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.materialsService.findOne(id);
   }
 
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
-  @Patch(':id/stock')
+  @Patch(':materialId/stock/:locationId')
   updateStock(
-    @Param('id') id: string,
-    @Body(ValidationPipe) updatePartStockDto: UpdateMaterialStockDto,
+    @Param('materialId') materialId: string,
+    @Param('locationId') locationId: string,
+    @Body(ValidationPipe) updateMaterialStockDto: UpdateMaterialStockDto,
   ) {
-    return this.materialsService.updateStock(id, updatePartStockDto);
+    return this.materialLocationStockService.update(
+      materialId,
+      locationId,
+      updateMaterialStockDto,
+    );
   }
 
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
