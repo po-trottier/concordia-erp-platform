@@ -1,74 +1,53 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Statistic } from 'antd';
+import {Card, message, Statistic} from 'antd';
 
 import { FinanceEntry } from '../../interfaces/FinanceEntry';
 import { ResponsiveTable } from '../ResponsiveTable';
+import axios from "../../plugins/Axios";
 
 export const Income = () => {
   const [balance, setBalance] = useState(0);
-
+  const emptyData : FinanceEntry[] = [];
+  const [financeEntryData, setFinanceEntryData] = useState(emptyData);
+  const [updated, setUpdated] = useState(false);
   useEffect(() => {
-    let val = 0;
-    getRows().forEach((row : FinanceEntry) => {
-      if (row.balance) {
-        val += row.balance;
-      }
-    });
-    setBalance(val);
-  }, []);
+    setUpdated(true);
+    axios.get('/finance/receivables/active')
+      .then((res) => {
+        if (res && res.data) {
+          const data : FinanceEntry[] = [];
+          let balance : number = 0;
+          res.data.forEach((f : any) => {
+            let accountsReceivableBalance = (f.amount - f.paid);
+            data.push({
+              dateEntered: f.dateEntered,
+              dateDue: f.dateDue,
+              companyName : f.companyName,
+              balance : accountsReceivableBalance,
+              amount : f.amount,
+              paid : f.paid
+            });
+            balance += accountsReceivableBalance;
+          });
+          setBalance(balance);
+          setFinanceEntryData(data);
+        }
+      })
+      .catch(err => {
+        message.error('Something went wrong while fetching the list of accounts receivable.');
+        console.error(err);
+      });
+  }, [updated]);
 
   const getColumns = () => ({
-    companyName: 'Company',
+    companyName: 'Buyer',
     dateEntered: 'Date Processed',
     dateDue: 'Due Date',
-    amount: 'amount',
+    amount: 'Amount',
     paid: 'Paid',
-    balance: 'Balance'
+    balance: 'Balance',
   });
 
-  const getRows = () : FinanceEntry[] => {
-    const rows = [
-      {
-        dateEntered: (new Date('2021-01-22')).toLocaleDateString(),
-        amount: 30500,
-        paid: 10000,
-        companyName: 'Mark\'s Bike Store',
-        dateDue: (new Date('2021-02-22')).toLocaleDateString(),
-      },
-      {
-        dateEntered: (new Date('2021-01-25')).toLocaleDateString(),
-        amount: 4500,
-        paid: 3000,
-        companyName: 'Sports Experts',
-        dateDue: (new Date('2021-02-17')).toLocaleDateString(),
-      },
-      {
-        dateEntered: (new Date('2021-01-28')).toLocaleDateString(),
-        amount: 250500,
-        paid: 102500,
-        companyName: 'Walmart',
-        dateDue: (new Date('2021-03-03')).toLocaleDateString(),
-      },
-      {
-        dateEntered: (new Date('2021-01-30')).toLocaleDateString(),
-        amount: 25200,
-        paid: 12500,
-        companyName: 'Giant Montreal',
-        dateDue: (new Date('2021-02-21')).toLocaleDateString(),
-      },
-      {
-        dateEntered: (new Date('2021-01-21')).toLocaleDateString(),
-        amount: 36200,
-        paid: 14000,
-        companyName: 'Zellers',
-        dateDue: (new Date('2021-03-04')).toLocaleDateString(),
-      },
-    ];
-    rows.forEach((row : FinanceEntry) => {
-      return row.balance = row.amount - row.paid;
-    });
-    return rows;
-  };
 
   return (
     <div>
@@ -77,7 +56,7 @@ export const Income = () => {
         <Statistic title='Accounts Receivable Balance (CAD)' value={balance} precision={2} />
       </Card>
       <Card>
-        <ResponsiveTable cols={getColumns()} rows={getRows()} />
+        <ResponsiveTable cols={getColumns()} rows={financeEntryData} />
       </Card>
     </div>
   );
