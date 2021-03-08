@@ -15,7 +15,7 @@ export class FinanceEntry {
   dateDue: Date;
 
   @Prop({ required: true })
-  company_name: string;
+  companyName: string;
 
   @Prop({ required: true, default: 0 })
   amount: number;

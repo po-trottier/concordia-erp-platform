@@ -1,69 +1,53 @@
-import React, { useEffect, useState } from 'react';
-import { Card, Statistic } from 'antd';
+import React, {useEffect, useState} from 'react';
+import {Card, message, Statistic} from 'antd';
 
-import { FinanceEntry } from '../../interfaces/FinanceEntry';
-import { ResponsiveTable } from '../ResponsiveTable';
+import {FinanceEntry} from '../../interfaces/FinanceEntry';
+import {ResponsiveTable} from '../ResponsiveTable';
+import axios from "../../plugins/Axios";
 
 export const Expenses = () => {
   const [balance, setBalance] = useState(0);
-
+  const emptyData : FinanceEntry[] = [];
+  const [financeEntryData, setFinanceEntryData] = useState(emptyData);
+  const [updated, setUpdated] = useState(false);
   useEffect(() => {
-    let val = 0;
-    getRows().forEach((row : FinanceEntry) => {
-      if (row.balance) {
-        val += row.balance;
-      }
-    });
-    setBalance(val);
-  }, []);
+    setUpdated(true);
+    axios.get('/finance/payables/active')
+      .then((res) => {
+        if (res && res.data) {
+          const data : FinanceEntry[] = [];
+          let balance : number = 0;
+          res.data.forEach((f : any) => {
+            let accountPayableBalance = -(f.amount - f.paid);
+            data.push({
+              dateEntered: f.dateEntered,
+              dateDue: f.dateDue,
+              companyName : f.companyName,
+              balance : accountPayableBalance,
+              amount : -f.amount,
+              paid : -f.paid
+            });
+            balance += accountPayableBalance;
+          });
+          setBalance(balance);
+          setFinanceEntryData(data);
+        }
+      })
+      .catch(err => {
+        message.error('Something went wrong while fetching the list of accounts payables.');
+        console.error(err);
+      });
+  }, [updated]);
 
   const getColumns = () => ({
-    buyer: 'Vendor',
-    date: 'Date Processed',
+    companyName: 'Vendor',
+    dateEntered: 'Date Processed',
     dateDue: 'Due Date',
-    billed: 'Billed',
+    amount: 'Amount',
     paid: 'Paid',
     balance: 'Balance',
   });
 
-  const getRows = () : FinanceEntry[] => {
-    const data = [
-      {
-        date: (new Date('2021-01-20')).toLocaleDateString(),
-        billed: 72000,
-        paid: 66000,
-        buyer: 'Digikey',
-        dateDue: (new Date('2021-02-27')).toLocaleDateString(),
-      },
-      {
-        date: (new Date('2021-01-24')).toLocaleDateString(),
-        billed: 30000,
-        paid: 0,
-        buyer: 'The Bike Shop',
-        dateDue: (new Date('2021-02-22')).toLocaleDateString(),
-      },
-      {
-        date: (new Date('2021-01-20')).toLocaleDateString(),
-        billed: 92000,
-        paid: 89000,
-        buyer: 'Canada Bicycle Parts',
-        dateDue: (new Date('2021-02-27')).toLocaleDateString(),
-      },
-      {
-        date: (new Date('2021-01-29')).toLocaleDateString(),
-        billed: 105000,
-        paid: 42000,
-        buyer: 'Chain Reaction Cycles',
-        dateDue: (new Date('2021-03-03')).toLocaleDateString(),
-      },
-    ];
-
-    data.forEach((d : FinanceEntry) => {
-      d.balance = d.paid - d.billed;
-    });
-
-    return data;
-  };
 
   return (
     <div>
@@ -72,7 +56,7 @@ export const Expenses = () => {
         <Statistic title='Accounts Payable Balance (CAD)' value={balance} precision={2} />
       </Card>
       <Card>
-        <ResponsiveTable cols={getColumns()} rows={getRows()} />
+        <ResponsiveTable cols={getColumns()} rows={financeEntryData} />
       </Card>
     </div>
   );

@@ -1,8 +1,8 @@
 export interface FinanceEntry {
-  date : string,
+  dateEntered : string,
   dateDue : string,
-  billed : number,
+  amount : number,
   paid : number,
-  buyer : string,
+  companyName : string,
   balance? : number
 }

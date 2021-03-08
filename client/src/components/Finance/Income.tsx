@@ -18,10 +18,10 @@ export const Income = () => {
   }, []);
 
   const getColumns = () => ({
-    buyer: 'Buyer',
-    date: 'Date Processed',
+    companyName: 'Company',
+    dateEntered: 'Date Processed',
     dateDue: 'Due Date',
-    billed: 'Billed',
+    amount: 'amount',
     paid: 'Paid',
     balance: 'Balance'
   });
@@ -29,43 +29,43 @@ export const Income = () => {
   const getRows = () : FinanceEntry[] => {
     const rows = [
       {
-        date: (new Date('2021-01-22')).toLocaleDateString(),
-        billed: 30500,
+        dateEntered: (new Date('2021-01-22')).toLocaleDateString(),
+        amount: 30500,
         paid: 10000,
-        buyer: 'Mark\'s Bike Store',
+        companyName: 'Mark\'s Bike Store',
         dateDue: (new Date('2021-02-22')).toLocaleDateString(),
       },
       {
-        date: (new Date('2021-01-25')).toLocaleDateString(),
-        billed: 4500,
+        dateEntered: (new Date('2021-01-25')).toLocaleDateString(),
+        amount: 4500,
         paid: 3000,
-        buyer: 'Sports Experts',
+        companyName: 'Sports Experts',
         dateDue: (new Date('2021-02-17')).toLocaleDateString(),
       },
       {
-        date: (new Date('2021-01-28')).toLocaleDateString(),
-        billed: 250500,
+        dateEntered: (new Date('2021-01-28')).toLocaleDateString(),
+        amount: 250500,
         paid: 102500,
-        buyer: 'Walmart',
+        companyName: 'Walmart',
         dateDue: (new Date('2021-03-03')).toLocaleDateString(),
       },
       {
-        date: (new Date('2021-01-30')).toLocaleDateString(),
-        billed: 25200,
+        dateEntered: (new Date('2021-01-30')).toLocaleDateString(),
+        amount: 25200,
         paid: 12500,
-        buyer: 'Giant Montreal',
+        companyName: 'Giant Montreal',
         dateDue: (new Date('2021-02-21')).toLocaleDateString(),
       },
       {
-        date: (new Date('2021-01-21')).toLocaleDateString(),
-        billed: 36200,
+        dateEntered: (new Date('2021-01-21')).toLocaleDateString(),
+        amount: 36200,
         paid: 14000,
-        buyer: 'Zellers',
+        companyName: 'Zellers',
         dateDue: (new Date('2021-03-04')).toLocaleDateString(),
       },
     ];
     rows.forEach((row : FinanceEntry) => {
-      row.balance = row.billed - row.paid;
+      return row.balance = row.amount - row.paid;
     });
     return rows;
   };

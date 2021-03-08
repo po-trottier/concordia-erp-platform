@@ -12,7 +12,7 @@ export class CreateFinanceEntryDto {
 
   @IsNotEmpty()
   @IsString()
-  company_name: string;
+  companyName: string;
 
   amount: number;
 

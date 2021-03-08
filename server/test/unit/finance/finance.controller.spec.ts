@@ -16,7 +16,7 @@ describe('FinanceController', () => {
   const dummyFinanceEntry: FinanceEntry = {
     dateEntered: new Date(),
     dateDue: new Date(),
-    company_name: 'bank',
+    companyName: 'bank',
     amount: 10,
     paid: 1000,
   };
@@ -56,7 +56,7 @@ describe('FinanceController', () => {
       const newFinanceEntry = new CreateFinanceEntryDto();
       newFinanceEntry.dateEntered = result.dateEntered;
       newFinanceEntry.dateDue = result.dateDue;
-      newFinanceEntry.company_name = result.company_name;
+      newFinanceEntry.companyName = result.companyName;
       newFinanceEntry.amount = result.amount;
       newFinanceEntry.paid = result.paid;
 
