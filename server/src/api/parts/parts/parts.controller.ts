@@ -14,10 +14,14 @@ import { UpdatePartDto } from './dto/update-part.dto';
 import { Roles } from '../../roles/roles.decorator';
 import { Role } from '../../roles/roles.enum';
 import { UpdatePartStockDto } from './dto/update-part-stock.dto';
+import { PartLocationStockService } from './part-location-stock.service';
 
 @Controller()
 export class PartsController {
-  constructor(private readonly partsService: PartsService) {}
+  constructor(
+    private readonly partsService: PartsService,
+    private readonly partLocationStockService: PartLocationStockService,
+  ) {}
 
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
   @Post()
@@ -28,7 +32,7 @@ export class PartsController {
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
   @Get('stock/:locationId')
   findAllLocationStock(@Param('locationId') locationId: string) {
-    return this.partsService.findAllStock(locationId);
+    return this.partLocationStockService.findAll(locationId);
   }
 
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
@@ -43,7 +47,7 @@ export class PartsController {
     @Param('partId') partId: string,
     @Param('locationId') locationId: string,
   ) {
-    return this.partsService.findOneStock(partId, locationId);
+    return this.partLocationStockService.findOne(partId, locationId);
   }
 
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
@@ -59,7 +63,7 @@ export class PartsController {
     @Param('locationId') locationId: string,
     @Body(ValidationPipe) updatePartStockDto: UpdatePartStockDto,
   ) {
-    return this.partsService.updateStock(
+    return this.partLocationStockService.update(
       partId,
       locationId,
       updatePartStockDto,

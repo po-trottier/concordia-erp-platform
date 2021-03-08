@@ -13,6 +13,7 @@ import { PartLogsService } from './parts-logs/part-logs.service';
 import { ConfigModule } from '@nestjs/config';
 import { validate } from '../../shared/env';
 import { LocationsModule } from '../locations/locations.module';
+import { PartLocationStockService } from './parts/part-location-stock.service';
 
 /**
  * Contains all logic and files related to parts
@@ -29,6 +30,6 @@ import { LocationsModule } from '../locations/locations.module';
     ConfigModule.forRoot({ validate, cache: true }),
   ],
   controllers: [PartLogsController, PartsController],
-  providers: [PartsService, PartLogsService],
+  providers: [PartsService, PartLogsService, PartLocationStockService],
 })
 export class PartsModule {}
