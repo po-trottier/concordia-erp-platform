@@ -9,6 +9,13 @@ import { UpdatePartStockDto } from './dto/update-part-stock.dto';
 import { PartLogsService } from '../parts-logs/part-logs.service';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Part, PartDocument } from './schemas/part.schema';
+import { LocationsService } from '../../locations/locations.service';
+
+import {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  PartLocationStockDocument,
+  PartLocationStock,
+} from './schemas/part-location-stock.schema';
 
 /**
  * Used by the PartsController, handles part data storage and retrieval.
@@ -17,7 +24,10 @@ import { Part, PartDocument } from './schemas/part.schema';
 export class PartsService {
   constructor(
     @InjectModel(Part.name) private partModel: Model<PartDocument>,
+    @InjectModel(PartLocationStock.name)
+    private partLocationStockModel: Model<PartLocationStockDocument>,
     private readonly partLogsService: PartLogsService,
+    private readonly locationsService: LocationsService,
   ) {}
 
   /**
@@ -28,16 +38,6 @@ export class PartsService {
   async create(createPartDto: CreatePartDto): Promise<Part> {
     const createdPart = new this.partModel(createPartDto);
     createdPart.save();
-
-    const updatePartLogDto: UpdatePartLogDto = {
-      partId: createdPart.id,
-      stock: createdPart.stock || 0,
-      stockBuilt: 0,
-      stockUsed: 0,
-      date: parse(format(new Date(), 'd/M/y'), 'dd/MM/yyyy', new Date()),
-    };
-
-    await this.partLogsService.update(updatePartLogDto);
 
     return createdPart;
   }
@@ -50,6 +50,15 @@ export class PartsService {
   }
 
   /**
+   * Retrieves stock info for all parts at a certain location
+   *
+   * @param locationId the id of the location
+   */
+  async findAllStock(locationId: string): Promise<PartLocationStock[]> {
+    return this.partLocationStockModel.find({ locationId });
+  }
+
+  /**
    * Retrieves a part by id using mongoose partModel
    *
    * @param id string of the part's objectId
@@ -57,6 +66,46 @@ export class PartsService {
   async findOne(id: string): Promise<Part> {
     const part = await this.partModel.findById(id);
     return this.validatePartFound(part, id);
+  }
+
+  /**
+   * Retrieves the stock info of a certain part at a certain location
+   *
+   * @param partId the id of the part
+   * @param locationId the id of the location
+   */
+  async findOneStock(
+    partId: string,
+    locationId: string,
+  ): Promise<PartLocationStock> {
+    let partLocationStock = await this.partLocationStockModel.findOne({
+      partId,
+      locationId,
+    });
+
+    //if stock info is not found, check if part and location are valid
+    //and create new entry
+    if (!partLocationStock) {
+      const part = await this.partModel.findById(partId);
+      const location = await this.locationsService.findOne(locationId);
+
+      console.log(part, location);
+
+      if (part && location) {
+        partLocationStock = new this.partLocationStockModel({
+          partId,
+          locationId,
+          stock: 0,
+        });
+        partLocationStock.save();
+      }
+    }
+
+    return this.validatePartLocationStockFound(
+      partLocationStock,
+      partId,
+      locationId,
+    );
   }
 
   /**
@@ -79,35 +128,38 @@ export class PartsService {
    * Updates part stock by id using mongoose partModel
    * Emits the part.quantity.updated event
    *
-   * @param id string of the part's objectId
+   * @param partId string of the part's objectId
+   * @param locationId string of the location's objectId
    * @param updatePartStockDto dto used to update part stock
    */
   async updateStock(
-    id: string,
+    partId: string,
+    locationId: string,
     updatePartStockDto: UpdatePartStockDto,
   ): Promise<Part> {
     const { stockBuilt, stockUsed } = updatePartStockDto;
 
     const netStockChange = stockBuilt - stockUsed;
 
-    let updatedPart = await this.partModel.findByIdAndUpdate(
-      id,
+    let updatedPartLocationStock = await this.partLocationStockModel.findOneAndUpdate(
+      { partId, locationId },
       { $inc: { stock: netStockChange } },
-      { new: true },
+      { new: true, upsert: true },
     );
 
-    if (updatedPart.stock < 0) {
-      updatedPart = await this.partModel.findByIdAndUpdate(
-        id,
+    if (updatedPartLocationStock.stock < 0) {
+      updatedPartLocationStock = await this.partLocationStockModel.findOneAndUpdate(
+        { partId, locationId },
         { $set: { stock: 0 } },
         { new: true },
       );
     }
 
-    if (updatedPart) {
+    if (updatedPartLocationStock) {
       const updatePartLogDto: UpdatePartLogDto = {
-        partId: id,
-        stock: updatedPart.stock,
+        partId,
+        locationId,
+        stock: updatedPartLocationStock.stock,
         stockBuilt,
         stockUsed,
         date: parse(format(new Date(), 'd/M/y'), 'dd/MM/yyyy', new Date()),
@@ -116,7 +168,11 @@ export class PartsService {
       await this.partLogsService.update(updatePartLogDto);
     }
 
-    return this.validatePartFound(updatedPart, id);
+    return this.validatePartLocationStockFound(
+      updatedPartLocationStock,
+      partId,
+      locationId,
+    );
   }
 
   /**
@@ -140,6 +196,20 @@ export class PartsService {
       throw new NotFoundException(`Part with id ${id} not found`);
     } else {
       return partResult;
+    }
+  }
+
+  validatePartLocationStockFound(
+    partLocationStockResult: any,
+    partId: string,
+    locationId: string,
+  ) {
+    if (!partLocationStockResult) {
+      throw new NotFoundException(
+        `Part with id ${partId} not found or Location with id ${locationId} not found`,
+      );
+    } else {
+      return partLocationStockResult;
     }
   }
 }

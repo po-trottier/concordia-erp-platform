@@ -26,9 +26,24 @@ export class PartsController {
   }
 
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
+  @Get('stock/:locationId')
+  findAllLocationStock(@Param('locationId') locationId: string) {
+    return this.partsService.findAllStock(locationId);
+  }
+
+  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
   @Get()
   findAll() {
     return this.partsService.findAll();
+  }
+
+  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
+  @Get(':partId/stock/:locationId')
+  findOneLocationStock(
+    @Param('partId') partId: string,
+    @Param('locationId') locationId: string,
+  ) {
+    return this.partsService.findOneStock(partId, locationId);
   }
 
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
@@ -38,12 +53,17 @@ export class PartsController {
   }
 
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
-  @Patch(':id/stock')
+  @Patch(':partId/stock/:locationId')
   updateStock(
-    @Param('id') id: string,
+    @Param('partId') partId: string,
+    @Param('locationId') locationId: string,
     @Body(ValidationPipe) updatePartStockDto: UpdatePartStockDto,
   ) {
-    return this.partsService.updateStock(id, updatePartStockDto);
+    return this.partsService.updateStock(
+      partId,
+      locationId,
+      updatePartStockDto,
+    );
   }
 
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
