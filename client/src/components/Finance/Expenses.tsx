@@ -20,8 +20,8 @@ export const Expenses = () => {
           res.data.forEach((f : any) => {
             let accountPayableBalance = -(f.amount - f.paid);
             data.push({
-              dateEntered: f.dateEntered,
-              dateDue: f.dateDue,
+              dateEntered: f.dateEntered.split("T")[0],
+              dateDue: f.dateDue.split("T")[0],
               companyName : f.companyName,
               balance : accountPayableBalance,
               amount : -f.amount,
