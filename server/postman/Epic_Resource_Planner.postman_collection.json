@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "93d4a1b1-ceed-47ee-b964-c4eabaef92b7",
+		"_postman_id": "be5ee26a-10e3-4c39-bacf-c83a7f9d7618",
 		"name": "Epic_Resource_Planner",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -31,13 +31,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{url}}/parts/60245c2d2816ce3290065c38",
+							"raw": "{{url}}/parts/604583485eca8e26ab01107f",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"parts",
-								"60245c2d2816ce3290065c38"
+								"604583485eca8e26ab01107f"
 							]
 						}
 					},
@@ -76,7 +76,12 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Pink bike ASS\"\n}"
+							"raw": "{\n    \"name\": \"Pink bike ASS\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
 						"url": {
 							"raw": "{{url}}/parts/6036fa7f0981691472cb1855",
@@ -86,34 +91,6 @@
 							"path": [
 								"parts",
 								"6036fa7f0981691472cb1855"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update part stock by id",
-					"request": {
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"stockBuilt\": 50,\n    \"stockUsed\": 600\n\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{url}}/parts/6036cb1e24e36c32b387288d/stock",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"parts",
-								"6036cb1e24e36c32b387288d",
-								"stock"
 							]
 						}
 					},
@@ -178,8 +155,77 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Get part stock by part id and location id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/parts/6045b523a65c8c10cb12bee7/stock/604569e1a9aad81bc8accc07",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"parts",
+								"6045b523a65c8c10cb12bee7",
+								"stock",
+								"604569e1a9aad81bc8accc07"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update part stock by part id and location id",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"stockBuilt\": 1500,\n    \"stockUsed\": 600\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/parts/604583485eca8e26ab01107f/stock/604569e1a9aad81bc8accc07",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"parts",
+								"604583485eca8e26ab01107f",
+								"stock",
+								"604569e1a9aad81bc8accc07"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get part stocks at a location",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/parts/stock/604569e1a9aad81bc8accc07",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"parts",
+								"stock",
+								"604569e1a9aad81bc8accc07"
+							]
+						}
+					},
+					"response": []
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
 		},
 		{
 			"name": "Finance",
@@ -280,7 +326,8 @@
 					},
 					"response": []
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
 		},
 		{
 			"name": "Auth",
@@ -296,7 +343,8 @@
 									"    pm.environment.set(\"JWT\", pm.response.json().token);",
 									"}"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"id": "11934148-3120-4479-a84a-36e5b2260d90"
 							}
 						}
 					],
@@ -325,7 +373,8 @@
 					},
 					"response": []
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
 		},
 		{
 			"name": "Users",
@@ -452,7 +501,8 @@
 					},
 					"response": []
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
 		},
 		{
 			"name": "Products",
@@ -620,7 +670,8 @@
 					},
 					"response": []
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
 		},
 		{
 			"name": "Materials",
@@ -797,7 +848,124 @@
 					},
 					"response": []
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Locations",
+			"item": [
+				{
+					"name": "Get locations",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/locations",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"locations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get location by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/locations/60245c2d2816ce3290065c38",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"locations",
+								"60245c2d2816ce3290065c38"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create location",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Montreal\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/locations",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"locations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete location by id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/locations/60220fd37d5a1f2c5a6d9778",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"locations",
+								"60220fd37d5a1f2c5a6d9778"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update location by id",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Toronto\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/locations/6036fa7f0981691472cb1855",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"locations",
+								"6036fa7f0981691472cb1855"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
 		},
 		{
 			"name": "API Status",
@@ -831,7 +999,8 @@
 				"type": "text/javascript",
 				"exec": [
 					""
-				]
+				],
+				"id": "8b6a290f-a6ad-44e7-b7af-94d8b0cfa082"
 			}
 		},
 		{
@@ -840,8 +1009,10 @@
 				"type": "text/javascript",
 				"exec": [
 					""
-				]
+				],
+				"id": "625a2085-2b08-4d21-884c-697bb9399b89"
 			}
 		}
-	]
+	],
+	"protocolProfileBehavior": {}
 }
