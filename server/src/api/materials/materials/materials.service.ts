@@ -22,9 +22,7 @@ export class MaterialsService {
    */
   async create(createMaterialDto: CreateMaterialDto): Promise<Material> {
     const createdMaterial = new this.materialModel(createMaterialDto);
-    createdMaterial.save();
-
-    return createdMaterial;
+    return await createdMaterial.save();
   }
 
   /**

@@ -103,7 +103,7 @@ export class PartLocationStockService {
       }
     }
 
-    let updatedPartLocationStock = await this.partLocationStockModel.findOneAndUpdate(
+    const updatedPartLocationStock = await this.partLocationStockModel.findOneAndUpdate(
       { partId, locationId },
       { $inc: { stock: netStockChange } },
       { new: true, upsert: true },

@@ -31,7 +31,7 @@ export class ProductsService {
    * Retrieves all products using mongoose productModel
    */
   async findAll(): Promise<Product[]> {
-    return await this.productModel.find();
+    return this.productModel.find();
   }
 
   /**

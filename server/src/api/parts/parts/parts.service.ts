@@ -20,9 +20,7 @@ export class PartsService {
    */
   async create(createPartDto: CreatePartDto): Promise<Part> {
     const createdPart = new this.partModel(createPartDto);
-    createdPart.save();
-
-    return createdPart;
+    return await createdPart.save();
   }
 
   /**

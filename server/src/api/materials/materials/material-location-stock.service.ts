@@ -106,7 +106,7 @@ export class MaterialLocationStockService {
       }
     }
 
-    let updatedMaterialLocationStock = await this.materialLocationStockModel.findOneAndUpdate(
+    const updatedMaterialLocationStock = await this.materialLocationStockModel.findOneAndUpdate(
       { materialId, locationId },
       { $inc: { stock: netStockChange } },
       { new: true, upsert: true },

@@ -22,8 +22,7 @@ export class LocationsService {
    */
   async create(createLocationDto: CreateLocationDto): Promise<Location> {
     const createdLocation = new this.locationModel(createLocationDto);
-    createdLocation.save();
-    return createdLocation;
+    return await createdLocation.save();
   }
 
   /**
