@@ -11,7 +11,7 @@ export class Location {
   @Prop({ required: true, unique: true })
   name: string;
 
-  @Prop()
+  @Prop({ unique: true })
   address: string;
 }
 
