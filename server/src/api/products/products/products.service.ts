@@ -3,10 +3,6 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { format, parse } from 'date-fns';
-import { ProductLogsService } from '../products-logs/product-logs.service';
-import { UpdateProductLogDto } from '../products-logs/dto/update-product-log.dto';
-import { UpdateProductStockDto } from './dto/update-product-stock.dto';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Product, ProductDocument } from './schemas/products.schema';
 
@@ -17,7 +13,6 @@ import { Product, ProductDocument } from './schemas/products.schema';
 export class ProductsService {
   constructor(
     @InjectModel(Product.name) private productModel: Model<ProductDocument>,
-    private readonly productLogsService: ProductLogsService,
   ) {}
 
   /**
@@ -28,16 +23,6 @@ export class ProductsService {
   async create(createProductDto: CreateProductDto): Promise<Product> {
     const createdProduct = new this.productModel(createProductDto);
     await createdProduct.save();
-
-    const updateProductLogDto: UpdateProductLogDto = {
-      productId: createdProduct.id,
-      stock: createdProduct.stock || 0,
-      stockBuilt: 0,
-      stockUsed: 0,
-      date: parse(format(new Date(), 'd/M/y'), 'dd/MM/yyyy', new Date()),
-    };
-
-    await this.productLogsService.update(updateProductLogDto);
 
     return createdProduct;
   }
@@ -75,50 +60,6 @@ export class ProductsService {
       { $set: { ...updateProductDto } },
       { new: true },
     );
-    return this.validateProductFound(updatedProduct, id);
-  }
-
-  /**
-   * Updates product stock by id using mongoose productModel
-   * Emits the product.quantity.updated event
-   *
-   * @param id string of the product's objectId
-   * @param updateProductStockDto dto used to update product stock
-   */
-  async updateStock(
-    id: string,
-    updateProductStockDto: UpdateProductStockDto,
-  ): Promise<Product> {
-    const { stockBuilt, stockUsed } = updateProductStockDto;
-
-    const netStockChange = stockBuilt - stockUsed;
-
-    let updatedProduct = await this.productModel.findByIdAndUpdate(
-      id,
-      { $inc: { stock: netStockChange } },
-      { new: true },
-    );
-
-    if (updatedProduct.stock < 0) {
-      updatedProduct = await this.productModel.findByIdAndUpdate(
-        id,
-        { $set: { stock: 0 } },
-        { new: true },
-      );
-    }
-
-    if (updatedProduct) {
-      const updateProductLogDto: UpdateProductLogDto = {
-        productId: id,
-        stock: updatedProduct.stock,
-        stockBuilt: stockBuilt,
-        stockUsed: stockUsed,
-        date: parse(format(new Date(), 'd/M/y'), 'dd/MM/yyyy', new Date()),
-      };
-
-      await this.productLogsService.update(updateProductLogDto);
-    }
-
     return this.validateProductFound(updatedProduct, id);
   }
 

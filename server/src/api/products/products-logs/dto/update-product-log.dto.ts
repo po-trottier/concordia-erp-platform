@@ -9,6 +9,10 @@ export class UpdateProductLogDto {
   productId: string;
 
   @IsNotEmpty()
+  @IsString()
+  locationId: string;
+
+  @IsNotEmpty()
   @IsDate()
   date: Date;
 

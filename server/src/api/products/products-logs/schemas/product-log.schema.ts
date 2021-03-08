@@ -19,6 +19,14 @@ export class ProductLog {
   })
   productId: string;
 
+  @Prop({
+    type: mongooseSchema.Types.ObjectId,
+    ref: 'Product',
+    required: true,
+    index: true,
+  })
+  locationId: string;
+
   @Prop({ required: true })
   stock: number;
 
@@ -30,4 +38,7 @@ export class ProductLog {
 }
 
 export const ProductLogSchema = SchemaFactory.createForClass(ProductLog);
-ProductLogSchema.index({ date: 1, productId: 1 }, { unique: true });
+ProductLogSchema.index(
+  { date: 1, productId: 1, locationId: 1 },
+  { unique: true },
+);
