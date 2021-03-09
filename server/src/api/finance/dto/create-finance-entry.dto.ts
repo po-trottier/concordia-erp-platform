@@ -16,5 +16,5 @@ export class CreateFinanceEntryDto {
 
   amount: number;
 
-  paid: number;
+  isPaid: boolean;
 }
