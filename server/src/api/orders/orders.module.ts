@@ -4,7 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import { validate } from '../../shared/env';
 import { ProductOrder, OrderSchema } from './schemas/orders.schema';
 import { OrdersController } from './orders.controller';
-import { OrdersService } from './orders.service';
+import { MaterialOrdersService } from './material-orders.service';
 
 /**
  * Contains all logic and files related to finance
@@ -18,6 +18,6 @@ import { OrdersService } from './orders.service';
     ConfigModule.forRoot({ validate, cache: true }),
   ],
   controllers: [OrdersController],
-  providers: [OrdersService],
+  providers: [MaterialOrdersService],
 })
 export class OrdersModule {}

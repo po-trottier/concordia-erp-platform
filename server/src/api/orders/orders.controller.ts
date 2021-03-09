@@ -1,73 +1,33 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Patch,
-  Post,
-  ValidationPipe,
-} from '@nestjs/common';
-import { OrdersService } from './orders.service';
-import { CreateOrderDto } from './dto/create-order-entry.dto';
-import { UpdateOrderDto } from './dto/update-order.dto';
+import { Body, Controller, Delete, Get, Param, Post, ValidationPipe } from '@nestjs/common';
+import { MaterialOrdersService } from './material-orders.service';
+import { CreateMaterialOrderListDto } from './dto/create-material-order-list.dto';
 
 /**
  * Controller class of the Order entity
  */
 @Controller()
 export class OrdersController {
-  constructor(private readonly orderService: OrdersService) {}
+  constructor(private readonly materialOrderService: MaterialOrdersService) {}
 
-  /**
-   * Handles POST requests to create Order
-   *
-   * @param createOrderDto dto used to create a finance entry
-   */
-  @Post()
-  create(@Body(ValidationPipe) createOrderDto: CreateOrderDto) {
-    return this.orderService.create(createOrderDto);
+  @Post('materials')
+  createMaterial(@Body(ValidationPipe) createMaterialOrderListDto: CreateMaterialOrderListDto) {
+    return this.materialOrderService.createMaterialOrder(
+      createMaterialOrderListDto,
+    );
   }
 
-  /**
-   * Handles GET requests to find all finance entries
-   */
-  @Get()
-  findAll() {
-    return this.orderService.findAll();
+  @Get('materials/all')
+  findAllMaterials() {
+    return this.materialOrderService.findAll();
   }
 
-  /**
-   * Handles GET requests to find a finentry by id
-   *
-   * @param id string of the finentry's objectId
-   */
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.orderService.findOne(id);
+  @Get('materials/:id')
+  findOneMaterial(@Param('id') id: string) {
+    return this.materialOrderService.findOne(id);
   }
 
-  /**
-   * Handles PATCH requests to update a finentry by id
-   *
-   * @param id string of the finentry's objectId
-   * @param updateOrderDto dto used to update finentry
-   */
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body(ValidationPipe) updateOrderDto: UpdateOrderDto,
-  ) {
-    return this.orderService.update(id, updateOrderDto);
-  }
-
-  /**
-   * Handles DELETE requests to delete a finentry by id
-   *
-   * @param id string of the finentry's objectId
-   */
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.orderService.remove(id);
+  @Delete('materials/:id')
+  removeMaterial(@Param('id') id: string) {
+    return this.materialOrderService.remove(id);
   }
 }
