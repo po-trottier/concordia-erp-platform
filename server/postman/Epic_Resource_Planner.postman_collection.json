@@ -1,10 +1,170 @@
 {
 	"info": {
-		"_postman_id": "9e001b56-923d-4cc5-85cd-5a31baa9f004",
+		"_postman_id": "2c046874-f0eb-4de5-a488-fb5aa3acd927",
 		"name": "Epic_Resource_Planner",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
+		{
+			"name": "Orders",
+			"item": [
+				{
+					"name": "Materials",
+					"item": [
+						{
+							"name": "Get Material Orders",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/orders/materials",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"orders",
+										"materials"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Material Orders",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"orders\": [{\n        \"dateOrdered\": \"2021-03-06T18:25:43.511Z\",\n        \"dateDue\": \"2021-03-09T18:25:43.511Z\",\n        \"supplierName\": \"Minecraft Mining Corporation\",\n        \"amountDue\": 50000,\n        \"isPaid\": true,\n        \"quantity\": 5,\n        \"materialId\":\"6046d12356735d55b04ebd3b\"\n    }, {\n        \"dateOrdered\": \"2021-03-06T18:25:43.511Z\",\n        \"dateDue\": \"2021-03-11T18:25:43.511Z\",\n        \"supplierName\": \"Titanium Titans Co\",\n        \"amountDue\": 5000,\n        \"isPaid\": true,\n        \"quantity\": 2,\n        \"materialId\":\"6046d12356735d55b04ebd3b\"\n    }]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/orders/materials",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"orders",
+										"materials"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Products",
+					"item": []
+				},
+				{
+					"name": "Get Finance Entries",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/finance",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"finance"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Finance Entry by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/finance/60245c2d2816ce3290065c38",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"finance",
+								"60245c2d2816ce3290065c38"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Finance Entry",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"dateEntered\": \"2021-03-06T18:25:43.511Z\",\n    \"dateDue\": \"2021-03-09T18:25:43.511Z\",\n    \"company_name\": \"Sport Expert\",\n    \"amount\": -2000,\n    \"paid\": -2000\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/finance",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"finance"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Finance Entry by Id",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"stock\": 4\n}"
+						},
+						"url": {
+							"raw": "{{url}}/finance/6023033e12523415393afc0f",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"finance",
+								"6023033e12523415393afc0f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Finance Entry",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/finance/60440a18a38b812844bbc999",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"finance",
+								"60440a18a38b812844bbc999"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
 		{
 			"name": "Parts",
 			"item": [
@@ -174,188 +334,6 @@
 								"logs",
 								"6036cb1e24e36c32b387288d",
 								"1996-12-18T04:00:00.000Z"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Finance",
-			"item": [
-				{
-					"name": "Get Finance Entries",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/finance",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"finance"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Finance Entry by id",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/finance/60245c2d2816ce3290065c38",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"finance",
-								"60245c2d2816ce3290065c38"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Create Finance Entry",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"dateEntered\": \"2021-03-06T18:25:43.511Z\",\n    \"dateDue\": \"2021-03-09T18:25:43.511Z\",\n    \"company_name\": \"Sport Expert\",\n    \"amount\": -2000,\n    \"paid\": -2000\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{url}}/finance",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"finance"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update Finance Entry by Id",
-					"request": {
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"stock\": 4\n}"
-						},
-						"url": {
-							"raw": "{{url}}/finance/6023033e12523415393afc0f",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"finance",
-								"6023033e12523415393afc0f"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete Finance Entry",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/finance/60440a18a38b812844bbc999",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"finance",
-								"60440a18a38b812844bbc999"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get All Receivables",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/finance/receivables/all",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"finance",
-								"receivables",
-								"all"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get All Payables",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/finance/payables/all",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"finance",
-								"payables",
-								"all"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Active Payables",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/finance/payables/active",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"finance",
-								"payables",
-								"active"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Active Receivables",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/finance/receivables/active",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"finance",
-								"receivables",
-								"active"
 							]
 						}
 					},

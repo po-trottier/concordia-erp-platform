@@ -1,7 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { FinanceEntry } from '../../finance/schemas/finance.schema';
-import { IsInt, IsNotEmpty, IsPositive, IsString } from 'class-validator';
 
 export type MaterialOrderDocument = MaterialOrder & Document;
 
