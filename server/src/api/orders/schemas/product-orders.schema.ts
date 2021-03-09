@@ -25,6 +25,9 @@ export class ProductOrder {
 
   @Prop({ required: true })
   dateDue: Date;
+
+  @Prop({ required: true })
+  isPaid: boolean;
 }
 
 export const ProductOrderSchema = SchemaFactory.createForClass(ProductOrder);

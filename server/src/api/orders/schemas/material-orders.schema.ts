@@ -25,6 +25,9 @@ export class MaterialOrder {
 
   @Prop({ required: true })
   dateDue: Date;
+
+  @Prop({ required: true })
+  isPaid: boolean;
 }
 
 export const MaterialOrderSchema = SchemaFactory.createForClass(MaterialOrder);
