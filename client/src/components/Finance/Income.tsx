@@ -1,36 +1,36 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {Card, message, Statistic} from 'antd';
 
-import { FinanceEntry } from '../../interfaces/FinanceEntry';
-import { ResponsiveTable } from '../ResponsiveTable';
+import {FinanceEntry} from '../../interfaces/FinanceEntry';
+import {ResponsiveTable} from '../ResponsiveTable';
 import axios from "../../plugins/Axios";
+import {ProductOrder} from "../../interfaces/ProductOrder";
 
 export const Income = () => {
   const [balance, setBalance] = useState(0);
-  const emptyData : FinanceEntry[] = [];
-  const [financeEntryData, setFinanceEntryData] = useState(emptyData);
+  const emptyData : ProductOrder[] = [];
+  const [productOrderData, setProductOrderData] = useState(emptyData);
   const [updated, setUpdated] = useState(false);
   useEffect(() => {
     setUpdated(true);
-    axios.get('/finance/receivables/active')
+    axios.get('/orders/products/all')
       .then((res) => {
         if (res && res.data) {
-          const data : FinanceEntry[] = [];
-          let balance : number = 0;
+          const data : ProductOrder[] = [];
+          let balance = 0;
           res.data.forEach((f : any) => {
-            let accountsReceivableBalance = (f.amount - f.paid);
+            if(!f.isPaid)
+              balance += f.amountDue;
+
             data.push({
-              dateEntered: f.dateEntered.split("T")[0],
+              dateOrdered: f.dateOrdered.split("T")[0],
               dateDue: f.dateDue.split("T")[0],
-              companyName : f.companyName,
-              balance : accountsReceivableBalance,
-              amount : f.amount,
-              paid : f.paid
+              amountDue: f.amountDue,
+              isPaid: f.isPaid ? "true" : "false",
             });
-            balance += accountsReceivableBalance;
           });
           setBalance(balance);
-          setFinanceEntryData(data);
+          setProductOrderData(data);
         }
       })
       .catch(err => {
@@ -40,12 +40,10 @@ export const Income = () => {
   }, [updated]);
 
   const getColumns = () => ({
-    companyName: 'Buyer',
-    dateEntered: 'Date Processed',
+    dateOrdered: 'Date Ordered',
     dateDue: 'Due Date',
-    amount: 'Amount',
-    paid: 'Paid',
-    balance: 'Balance',
+    amountDue: 'Amount',
+    isPaid: "Paid?"
   });
 
 
@@ -56,7 +54,7 @@ export const Income = () => {
         <Statistic title='Accounts Receivable Balance (CAD)' value={balance} precision={2} />
       </Card>
       <Card>
-        <ResponsiveTable cols={getColumns()} rows={financeEntryData} />
+        <ResponsiveTable cols={getColumns()} rows={productOrderData} />
       </Card>
     </div>
   );

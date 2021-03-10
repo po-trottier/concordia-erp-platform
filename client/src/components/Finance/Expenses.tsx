@@ -1,36 +1,36 @@
 import React, {useEffect, useState} from 'react';
 import {Card, message, Statistic} from 'antd';
 
-import {FinanceEntry} from '../../interfaces/FinanceEntry';
 import {ResponsiveTable} from '../ResponsiveTable';
 import axios from "../../plugins/Axios";
+import {MaterialOrder} from "../../interfaces/MaterialOrder";
 
 export const Expenses = () => {
   const [balance, setBalance] = useState(0);
-  const emptyData : FinanceEntry[] = [];
-  const [financeEntryData, setFinanceEntryData] = useState(emptyData);
+  const emptyData : MaterialOrder[] = [];
+  const [materialOrderData, setMaterialOrderData] = useState(emptyData);
   const [updated, setUpdated] = useState(false);
   useEffect(() => {
     setUpdated(true);
-    axios.get('/finance/payables/active')
+    axios.get('/orders/materials/all')
       .then((res) => {
         if (res && res.data) {
-          const data : FinanceEntry[] = [];
-          let balance : number = 0;
+          const data : MaterialOrder[] = [];
+          let balance = 0;
           res.data.forEach((f : any) => {
-            let accountPayableBalance = -(f.amount - f.paid);
+            if(!f.isPaid)
+              balance += f.amountDue;
+
             data.push({
-              dateEntered: f.dateEntered.split("T")[0],
+              dateOrdered: f.dateOrdered.split("T")[0],
               dateDue: f.dateDue.split("T")[0],
-              companyName : f.companyName,
-              balance : accountPayableBalance,
-              amount : -f.amount,
-              paid : -f.paid
+              supplierName: f.supplierName,
+              amountDue: f.amountDue,
+              isPaid: f.isPaid ? "true" : "false",
             });
-            balance += accountPayableBalance;
           });
           setBalance(balance);
-          setFinanceEntryData(data);
+          setMaterialOrderData(data);
         }
       })
       .catch(err => {
@@ -40,12 +40,11 @@ export const Expenses = () => {
   }, [updated]);
 
   const getColumns = () => ({
-    companyName: 'Vendor',
-    dateEntered: 'Date Processed',
+    supplierName: 'Supplier',
+    dateOrdered: 'Date Ordered',
     dateDue: 'Due Date',
-    amount: 'Amount',
-    paid: 'Paid',
-    balance: 'Balance',
+    amountDue: 'Amount',
+    isPaid: "Paid?"
   });
 
 
@@ -56,7 +55,7 @@ export const Expenses = () => {
         <Statistic title='Accounts Payable Balance (CAD)' value={balance} precision={2} />
       </Card>
       <Card>
-        <ResponsiveTable cols={getColumns()} rows={financeEntryData} />
+        <ResponsiveTable cols={getColumns()} rows={materialOrderData} />
       </Card>
     </div>
   );
