@@ -8,16 +8,14 @@ import { RootState } from '../../store/Store';
 
 const { Option } = Select;
 
-export const EditUserForm = () => {
+export const EditUserForm = (props : any) => {
   const dispatch = useDispatch();
-
-  const [form] = Form.useForm();
 
   const selectedUser = useSelector((state : RootState) => state.edit.selectedUser);
 
   return (
     <Form
-      form={form}
+      form={props.form}
       name='basic'
       style={{ marginBottom: '-24px', width: '100%', maxWidth: '500px' }}
       initialValues={{
@@ -84,7 +82,7 @@ export const EditUserForm = () => {
       </Row>
       <Row align='middle' style={{ marginBottom: 24 }}>
         <Col sm={5} span={8}>
-          <span>Username:</span>
+          <span>Role:</span>
         </Col>
         <Col sm={19} span={16}>
           <Form.Item

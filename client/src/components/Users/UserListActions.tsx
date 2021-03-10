@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, message, Modal } from 'antd';
+import { Button, message, Modal, Form } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { EditUserForm } from './EditUserForm';
@@ -9,6 +9,7 @@ import { removeUserEntry, updateUserEntry } from '../../store/slices/UserListSli
 import axios from '../../plugins/Axios';
 
 export const UserListActions = (props : any) => {
+  const [form] = Form.useForm();
   const dispatch = useDispatch();
 
   const loggedIn = useSelector((state : RootState) => state.login.user);
@@ -58,6 +59,7 @@ export const UserListActions = (props : any) => {
       .then(() => {
         dispatch(removeUserEntry(props.user.username));
         setDeleteVisible(false);
+        setEditVisible(false);
         message.success('User was deleted successfully.');
       })
       .catch((err) => {
@@ -82,6 +84,7 @@ export const UserListActions = (props : any) => {
         title='Edit User'
         visible={editVisible}
         confirmLoading={editLoading}
+        onCancel={() => setEditVisible(false)}
         footer={[
           <Button
             key='delete'
@@ -103,7 +106,7 @@ export const UserListActions = (props : any) => {
             OK
           </Button>
         ]}>
-        <EditUserForm />
+        <EditUserForm form={form}/>
       </Modal>
       <Modal
         title='Delete User'
