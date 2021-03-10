@@ -1,7 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import {Card, message, Statistic} from 'antd';
-
-import {FinanceEntry} from '../../interfaces/FinanceEntry';
 import {ResponsiveTable} from '../ResponsiveTable';
 import axios from "../../plugins/Axios";
 import {ProductOrder} from "../../interfaces/ProductOrder";

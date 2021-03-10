@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {Card, message, Statistic, Typography} from 'antd';
-import { Line } from '@ant-design/charts';
+import {Line} from '@ant-design/charts';
 
-import { ResponsiveTable } from '../ResponsiveTable';
-import { SummaryEntry } from '../../interfaces/SummaryEntry';
-import {FinanceEntry} from "../../interfaces/FinanceEntry";
+import {ResponsiveTable} from '../ResponsiveTable';
 import axios from "../../plugins/Axios";
+import {SummaryEntry} from "../../interfaces/SummaryEntry";
 
 const { Title } = Typography;
 
@@ -17,23 +16,19 @@ export const Summary = () => {
   const [updated, setUpdated] = useState(false);
   useEffect(() => {
     setUpdated(true);
-    axios.get('/finance ')
+    axios.get('/orders/summary ')
       .then((res) => {
         if (res && res.data) {
           const data : SummaryEntry[] = [];
           let balance : number = 0;
           let expectedBalance : number = 0;
-          res.data.forEach((f : any) => {
-            // data.push({
-            //   dateEntered: f.dateEntered,
-            //   dateDue: f.dateDue,
-            //   companyName : f.companyName,
-            //   balance : accountsReceivableBalance,
-            //   amount : f.amount,
-            //   paid : f.paid
-            // });
-            balance += f.paid;
-            expectedBalance += f.amount;
+          res.data.forEach((s : any) => {
+            data.push({
+              date: s.date,
+              profit: s.profit,
+            });
+            balance += 0;
+            expectedBalance += s.profit;
           });
           setBalance(balance);
           setExpectedBalance(expectedBalance)
@@ -48,8 +43,6 @@ export const Summary = () => {
 
   const getColumns = () => ({
     date: 'Summary Date',
-    income: 'Income',
-    expenses: 'Expenses',
     profit: 'Profit'
   });
 
