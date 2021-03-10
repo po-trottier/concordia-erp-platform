@@ -11,6 +11,12 @@ import { ProductsService } from './products/products.service';
 import { Product, ProductSchema } from './products/schemas/products.schema';
 import { ConfigModule } from '@nestjs/config';
 import { validate } from '../../shared/env';
+import {
+  ProductLocationStock,
+  ProductLocationStockSchema,
+} from './products/schemas/product-location-stock.schema';
+import { LocationsModule } from '../locations/locations.module';
+import { ProductLocationStockService } from './products/product-location-stock.service';
 
 @Module({
   imports: [
@@ -18,10 +24,14 @@ import { validate } from '../../shared/env';
     MongooseModule.forFeature([
       { name: ProductLog.name, schema: ProductLogSchema },
     ]),
+    MongooseModule.forFeature([
+      { name: ProductLocationStock.name, schema: ProductLocationStockSchema },
+    ]),
+    LocationsModule,
     // ENV Support
     ConfigModule.forRoot({ validate, cache: true }),
   ],
   controllers: [ProductLogsController, ProductsController],
-  providers: [ProductsService, ProductLogsService],
+  providers: [ProductsService, ProductLogsService, ProductLocationStockService],
 })
 export class ProductsModule {}

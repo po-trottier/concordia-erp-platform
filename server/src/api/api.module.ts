@@ -15,6 +15,7 @@ import { routes } from '../routes';
 import { ProductsModule } from './products/products.module';
 import { validate } from '../shared/env';
 import { DB_NAME, DB_URL } from '../shared/constants';
+import { LocationsModule } from './locations/locations.module';
 
 const mongoDbUrl = process.env.DB_URL || DB_URL;
 const mongoDbName = process.env.DB_NAME || DB_NAME;
@@ -34,6 +35,7 @@ const mongoDbName = process.env.DB_NAME || DB_NAME;
     UsersModule,
     FinanceModule,
     ProductsModule,
+    LocationsModule,
   ],
   providers: [
     {

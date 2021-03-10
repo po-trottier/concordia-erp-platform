@@ -8,9 +8,13 @@ export class PartLogsController {
   constructor(private readonly partLogsService: PartLogsService) {}
 
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
-  @Get(':id/:date')
-  findOne(@Param('id') id: string, @Param('date') date: Date) {
-    return this.partLogsService.findOne(id, date);
+  @Get(':partId/:locationId/:date')
+  findOne(
+    @Param('partId') partId: string,
+    @Param('locationId') locationId: string,
+    @Param('date') date: Date,
+  ) {
+    return this.partLogsService.findOne(partId, locationId, date);
   }
 
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)

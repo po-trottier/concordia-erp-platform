@@ -19,6 +19,14 @@ export class PartLog {
   })
   partId: string;
 
+  @Prop({
+    type: mongooseSchema.Types.ObjectId,
+    ref: 'Location',
+    required: true,
+    index: true,
+  })
+  locationId: string;
+
   @Prop({ required: true })
   stock: number;
 
@@ -30,4 +38,4 @@ export class PartLog {
 }
 
 export const PartLogSchema = SchemaFactory.createForClass(PartLog);
-PartLogSchema.index({ date: 1, partId: 1 }, { unique: true });
+PartLogSchema.index({ date: 1, partId: 1, locationId: 1 }, { unique: true });
