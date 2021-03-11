@@ -3,10 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { MaterialsService } from './materials/materials.service';
 import { MaterialsController } from './materials/materials.controller';
 import { Material, MaterialSchema } from './materials/schemas/material.schema';
-import {
-  MaterialLog,
-  MaterialLogSchema,
-} from './materials-logs/schemas/material-log.schema';
+import { MaterialLog, MaterialLogSchema } from './materials-logs/schemas/material-log.schema';
 import { MaterialLogsController } from './materials-logs/material-logs.controller';
 import { MaterialLogsService } from './materials-logs/material-logs.service';
 import { ConfigModule } from '@nestjs/config';

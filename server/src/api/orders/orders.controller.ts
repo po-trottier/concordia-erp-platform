@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Post,
-  ValidationPipe,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, ValidationPipe } from '@nestjs/common';
 import { MaterialOrdersService } from './material-orders.service';
 import { CreateMaterialOrderListDto } from './dto/create-material-order-list.dto';
 import { ProductOrdersService } from './product-orders.service';

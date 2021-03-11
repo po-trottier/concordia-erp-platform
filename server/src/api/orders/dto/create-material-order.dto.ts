@@ -3,10 +3,6 @@ import { IsBoolean, IsInt, IsNotEmpty, IsPositive, IsString } from 'class-valida
 export class CreateMaterialOrderDto {
   @IsNotEmpty()
   @IsString()
-  supplierName: string;
-
-  @IsNotEmpty()
-  @IsString()
   materialId: string;
 
   @IsPositive()

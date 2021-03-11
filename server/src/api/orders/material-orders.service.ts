@@ -1,11 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { ProductOrder } from './schemas/product-orders.schema';
-import {
-  MaterialOrder,
-  MaterialOrderDocument,
-} from './schemas/material-orders.schema';
+import { MaterialOrder, MaterialOrderDocument } from './schemas/material-orders.schema';
 import { CreateMaterialOrderListDto } from './dto/create-material-order-list.dto';
 
 @Injectable()
