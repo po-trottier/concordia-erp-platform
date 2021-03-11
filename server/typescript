@@ -1,294 +1,0 @@
-Script started on 2021-02-24 21:50:25-0500
-
-> server@0.0.1 test
-> jest
-
-[1m[2mDetermining test suites to run...[22m[22m[999D[K
-
-[1mTest Suites: [22m0 of 12 total
-[1mTests:       [22m0 total
-[1mSnapshots:   [22m0 total
-[1mTime:[22m        0 s, estimated 8 s
-[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/users/[22m[1musers.controller.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/parts/[22m[1mparts.controller.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/auth/[22m[1mauth.service.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/auth/[22m[1mauth.controller.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/parts/[22m[1mparts.service.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/materials/[22m[1mmaterials.controller.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/products/[22m[1mproducts.controller.spec.ts[22m
-
-[1mTest Suites: [22m0 of 12 total
-[1mTests:       [22m0 total
-[1mSnapshots:   [22m0 total
-[1mTime:[22m        0 s, estimated 8 s
-[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/users/[22m[1musers.controller.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/parts/[22m[1mparts.controller.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/auth/[22m[1mauth.service.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/auth/[22m[1mauth.controller.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/parts/[22m[1mparts.service.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/materials/[22m[1mmaterials.controller.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/products/[22m[1mproducts.controller.spec.ts[22m
-
-[1mTest Suites: [22m0 of 12 total
-[1mTests:       [22m0 total
-[1mSnapshots:   [22m0 total
-[1mTime:[22m        1 s, estimated 8 s
-[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/users/[22m[1musers.controller.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/parts/[22m[1mparts.controller.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/auth/[22m[1mauth.service.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/auth/[22m[1mauth.controller.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/parts/[22m[1mparts.service.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/materials/[22m[1mmaterials.controller.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/products/[22m[1mproducts.controller.spec.ts[22m
-
-[1mTest Suites: [22m0 of 12 total
-[1mTests:       [22m0 total
-[1mSnapshots:   [22m0 total
-[1mTime:[22m        2 s, estimated 8 s
-[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[0m[7m[1m[32m PASS [39m[22m[27m[0m ]8;;file:///home/cedric/Programming/soen390-team04/server/test/unit/products/products.controller.spec.ts[2mtest/unit/products/[22m[1mproducts.controller.spec.ts[22m]8;;
-
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/users/[22m[1musers.controller.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/parts/[22m[1mparts.controller.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/auth/[22m[1mauth.service.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/auth/[22m[1mauth.controller.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/parts/[22m[1mparts.service.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/materials/[22m[1mmaterials.controller.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/products/[22m[1mproducts.controller.spec.ts[22m
-
-[1mTest Suites: [22m0 of 12 total
-[1mTests:       [22m0 total
-[1mSnapshots:   [22m0 total
-[1mTime:[22m        2 s, estimated 8 s
-[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/users/[22m[1musers.controller.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/parts/[22m[1mparts.controller.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/auth/[22m[1mauth.service.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/auth/[22m[1mauth.controller.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/parts/[22m[1mparts.service.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/materials/[22m[1mmaterials.controller.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/products/[22m[1mproducts.controller.spec.ts[22m
-
-[1mTest Suites: [22m0 of 12 total
-[1mTests:       [22m0 total
-[1mSnapshots:   [22m0 total
-[1mTime:[22m        2 s, estimated 8 s
-[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/users/[22m[1musers.controller.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/parts/[22m[1mparts.controller.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/auth/[22m[1mauth.service.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/auth/[22m[1mauth.controller.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/parts/[22m[1mparts.service.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/materials/[22m[1mmaterials.controller.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/users/[22m[1musers.service.spec.ts[22m
-
-[1mTest Suites: [22m[1m[32m1 passed[39m[22m, 1 of 12 total
-[1mTests:       [22m[1m[32m5 passed[39m[22m, 5 total
-[1mSnapshots:   [22m0 total
-[1mTime:[22m        2 s, estimated 8 s
-[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[0m[7m[1m[32m PASS [39m[22m[27m[0m ]8;;file:///home/cedric/Programming/soen390-team04/server/test/unit/materials/materials.controller.spec.ts[2mtest/unit/materials/[22m[1mmaterials.controller.spec.ts[22m]8;;
-
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/users/[22m[1musers.controller.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/parts/[22m[1mparts.controller.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/auth/[22m[1mauth.service.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/auth/[22m[1mauth.controller.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/parts/[22m[1mparts.service.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/materials/[22m[1mmaterials.controller.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/users/[22m[1musers.service.spec.ts[22m
-
-[1mTest Suites: [22m[1m[32m1 passed[39m[22m, 1 of 12 total
-[1mTests:       [22m[1m[32m5 passed[39m[22m, 5 total
-[1mSnapshots:   [22m0 total
-[1mTime:[22m        2 s, estimated 8 s
-[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/users/[22m[1musers.controller.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/parts/[22m[1mparts.controller.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/auth/[22m[1mauth.service.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/auth/[22m[1mauth.controller.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/parts/[22m[1mparts.service.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/finance/[22m[1mfinance.service.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/users/[22m[1musers.service.spec.ts[22m
-
-[1mTest Suites: [22m[1m[32m2 passed[39m[22m, 2 of 12 total
-[1mTests:       [22m[1m[32m10 passed[39m[22m, 10 total
-[1mSnapshots:   [22m0 total
-[1mTime:[22m        2 s, estimated 8 s
-[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[0m[7m[1m[32m PASS [39m[22m[27m[0m ]8;;file:///home/cedric/Programming/soen390-team04/server/test/unit/auth/auth.controller.spec.ts[2mtest/unit/auth/[22m[1mauth.controller.spec.ts[22m]8;;
-
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/users/[22m[1musers.controller.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/parts/[22m[1mparts.controller.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/auth/[22m[1mauth.service.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/auth/[22m[1mauth.controller.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/parts/[22m[1mparts.service.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/finance/[22m[1mfinance.service.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/users/[22m[1musers.service.spec.ts[22m
-
-[1mTest Suites: [22m[1m[32m2 passed[39m[22m, 2 of 12 total
-[1mTests:       [22m[1m[32m10 passed[39m[22m, 10 total
-[1mSnapshots:   [22m0 total
-[1mTime:[22m        2 s, estimated 8 s
-[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[0m[7m[1m[32m PASS [39m[22m[27m[0m ]8;;file:///home/cedric/Programming/soen390-team04/server/test/unit/parts/parts.service.spec.ts[2mtest/unit/parts/[22m[1mparts.service.spec.ts[22m]8;;
-
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/users/[22m[1musers.controller.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/parts/[22m[1mparts.controller.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/auth/[22m[1mauth.service.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/auth/[22m[1mauth.controller.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/parts/[22m[1mparts.service.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/finance/[22m[1mfinance.service.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/users/[22m[1musers.service.spec.ts[22m
-
-[1mTest Suites: [22m[1m[32m2 passed[39m[22m, 2 of 12 total
-[1mTests:       [22m[1m[32m10 passed[39m[22m, 10 total
-[1mSnapshots:   [22m0 total
-[1mTime:[22m        2 s, estimated 8 s
-[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[0m[7m[1m[32m PASS [39m[22m[27m[0m ]8;;file:///home/cedric/Programming/soen390-team04/server/test/unit/auth/auth.service.spec.ts[2mtest/unit/auth/[22m[1mauth.service.spec.ts[22m]8;;
-
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/users/[22m[1musers.controller.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/parts/[22m[1mparts.controller.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/auth/[22m[1mauth.service.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/auth/[22m[1mauth.controller.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/parts/[22m[1mparts.service.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/finance/[22m[1mfinance.service.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/users/[22m[1musers.service.spec.ts[22m
-
-[1mTest Suites: [22m[1m[32m2 passed[39m[22m, 2 of 12 total
-[1mTests:       [22m[1m[32m10 passed[39m[22m, 10 total
-[1mSnapshots:   [22m0 total
-[1mTime:[22m        2 s, estimated 8 s
-[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[0m[7m[1m[32m PASS [39m[22m[27m[0m ]8;;file:///home/cedric/Programming/soen390-team04/server/test/unit/parts/parts.controller.spec.ts[2mtest/unit/parts/[22m[1mparts.controller.spec.ts[22m]8;;
-
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/users/[22m[1musers.controller.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/parts/[22m[1mparts.controller.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/auth/[22m[1mauth.service.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/auth/[22m[1mauth.controller.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/parts/[22m[1mparts.service.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/finance/[22m[1mfinance.service.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/users/[22m[1musers.service.spec.ts[22m
-
-[1mTest Suites: [22m[1m[32m2 passed[39m[22m, 2 of 12 total
-[1mTests:       [22m[1m[32m10 passed[39m[22m, 10 total
-[1mSnapshots:   [22m0 total
-[1mTime:[22m        2 s, estimated 8 s
-[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/users/[22m[1musers.controller.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/products/[22m[1mproducts.service.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/[22m[1mapi.controller.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/materials/[22m[1mmaterials.service.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/finance/[22m[1mfinance.service.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/users/[22m[1musers.service.spec.ts[22m
-
-[1mTest Suites: [22m[1m[32m6 passed[39m[22m, 6 of 12 total
-[1mTests:       [22m[1m[32m18 passed[39m[22m, 18 total
-[1mSnapshots:   [22m0 total
-[1mTime:[22m        3 s, estimated 8 s
-[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[0m[7m[1m[32m PASS [39m[22m[27m[0m ]8;;file:///home/cedric/Programming/soen390-team04/server/test/unit/finance/finance.service.spec.ts[2mtest/unit/finance/[22m[1mfinance.service.spec.ts[22m]8;;
-
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/users/[22m[1musers.controller.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/products/[22m[1mproducts.service.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/[22m[1mapi.controller.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/materials/[22m[1mmaterials.service.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/finance/[22m[1mfinance.service.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/users/[22m[1musers.service.spec.ts[22m
-
-[1mTest Suites: [22m[1m[32m6 passed[39m[22m, 6 of 12 total
-[1mTests:       [22m[1m[32m18 passed[39m[22m, 18 total
-[1mSnapshots:   [22m0 total
-[1mTime:[22m        3 s, estimated 8 s
-[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[0m[7m[1m[32m PASS [39m[22m[27m[0m ]8;;file:///home/cedric/Programming/soen390-team04/server/test/unit/api.controller.spec.ts[2mtest/unit/[22m[1mapi.controller.spec.ts[22m]8;;
-
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/users/[22m[1musers.controller.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/products/[22m[1mproducts.service.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/[22m[1mapi.controller.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/materials/[22m[1mmaterials.service.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/finance/[22m[1mfinance.service.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/users/[22m[1musers.service.spec.ts[22m
-
-[1mTest Suites: [22m[1m[32m6 passed[39m[22m, 6 of 12 total
-[1mTests:       [22m[1m[32m18 passed[39m[22m, 18 total
-[1mSnapshots:   [22m0 total
-[1mTime:[22m        3 s, estimated 8 s
-[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[0m[7m[1m[32m PASS [39m[22m[27m[0m ]8;;file:///home/cedric/Programming/soen390-team04/server/test/unit/users/users.service.spec.ts[2mtest/unit/users/[22m[1musers.service.spec.ts[22m]8;;
-
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/users/[22m[1musers.controller.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/products/[22m[1mproducts.service.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/[22m[1mapi.controller.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/materials/[22m[1mmaterials.service.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/finance/[22m[1mfinance.service.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/users/[22m[1musers.service.spec.ts[22m
-
-[1mTest Suites: [22m[1m[32m6 passed[39m[22m, 6 of 12 total
-[1mTests:       [22m[1m[32m18 passed[39m[22m, 18 total
-[1mSnapshots:   [22m0 total
-[1mTime:[22m        3 s, estimated 8 s
-[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[0m[7m[1m[32m PASS [39m[22m[27m[0m ]8;;file:///home/cedric/Programming/soen390-team04/server/test/unit/materials/materials.service.spec.ts[2mtest/unit/materials/[22m[1mmaterials.service.spec.ts[22m]8;;
-
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/users/[22m[1musers.controller.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/products/[22m[1mproducts.service.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/[22m[1mapi.controller.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/materials/[22m[1mmaterials.service.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/finance/[22m[1mfinance.service.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/users/[22m[1musers.service.spec.ts[22m
-
-[1mTest Suites: [22m[1m[32m6 passed[39m[22m, 6 of 12 total
-[1mTests:       [22m[1m[32m18 passed[39m[22m, 18 total
-[1mSnapshots:   [22m0 total
-[1mTime:[22m        3 s, estimated 8 s
-[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[0m[7m[1m[32m PASS [39m[22m[27m[0m ]8;;file:///home/cedric/Programming/soen390-team04/server/test/unit/products/products.service.spec.ts[2mtest/unit/products/[22m[1mproducts.service.spec.ts[22m]8;;
-
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/users/[22m[1musers.controller.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/products/[22m[1mproducts.service.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/[22m[1mapi.controller.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/materials/[22m[1mmaterials.service.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/finance/[22m[1mfinance.service.spec.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/users/[22m[1musers.service.spec.ts[22m
-
-[1mTest Suites: [22m[1m[32m6 passed[39m[22m, 6 of 12 total
-[1mTests:       [22m[1m[32m18 passed[39m[22m, 18 total
-[1mSnapshots:   [22m0 total
-[1mTime:[22m        3 s, estimated 8 s
-[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/users/[22m[1musers.controller.spec.ts[22m
-
-[1mTest Suites: [22m[1m[32m11 passed[39m[22m, 11 of 12 total
-[1mTests:       [22m[1m[32m23 passed[39m[22m, 23 total
-[1mSnapshots:   [22m0 total
-[1mTime:[22m        3 s, estimated 8 s
-[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/users/[22m[1musers.controller.spec.ts[22m
-
-[1mTest Suites: [22m[1m[32m11 passed[39m[22m, 11 of 12 total
-[1mTests:       [22m[1m[32m23 passed[39m[22m, 23 total
-[1mSnapshots:   [22m0 total
-[1mTime:[22m        4 s, estimated 8 s
-[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/users/[22m[1musers.controller.spec.ts[22m
-
-[1mTest Suites: [22m[1m[32m11 passed[39m[22m, 11 of 12 total
-[1mTests:       [22m[1m[32m23 passed[39m[22m, 23 total
-[1mSnapshots:   [22m0 total
-[1mTime:[22m        5 s, estimated 8 s
-[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/users/[22m[1musers.controller.spec.ts[22m
-
-[1mTest Suites: [22m[1m[32m11 passed[39m[22m, 11 of 12 total
-[1mTests:       [22m[1m[32m23 passed[39m[22m, 23 total
-[1mSnapshots:   [22m0 total
-[1mTime:[22m        6 s, estimated 8 s
-[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[0m[7m[1m[32m PASS [39m[22m[27m[0m ]8;;file:///home/cedric/Programming/soen390-team04/server/test/unit/users/users.controller.spec.ts[2mtest/unit/users/[22m[1musers.controller.spec.ts[22m]8;; ([0m[1m[41m6.635 s[49m[22m[0m)
-
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtest/unit/users/[22m[1musers.controller.spec.ts[22m
-
-[1mTest Suites: [22m[1m[32m11 passed[39m[22m, 11 of 12 total
-[1mTests:       [22m[1m[32m23 passed[39m[22m, 23 total
-[1mSnapshots:   [22m0 total
-[1mTime:[22m        6 s, estimated 8 s
-[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[999D[K
-[1mTest Suites: [22m[1m[32m12 passed[39m[22m, 12 total
-[1mTests:       [22m[1m[32m28 passed[39m[22m, 28 total
-[1mSnapshots:   [22m0 total
-[1mTime:[22m        6.93 s, estimated 8 s
-[2mRan all test suites[22m[2m.[22m
-
-Script done on 2021-02-24 21:50:32-0500
