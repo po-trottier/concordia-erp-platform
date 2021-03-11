@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Button, Card, message, Statistic} from 'antd';
+import {Button, Card, message, Statistic, Switch} from 'antd';
 import {ResponsiveTable} from '../ResponsiveTable';
 import axios from "../../plugins/Axios";
 import {ProductOrder} from "../../interfaces/ProductOrder";
@@ -11,35 +11,7 @@ export const Income = () => {
   const [updated, setUpdated] = useState(false);
   useEffect(() => {
     setUpdated(true);
-    axios.get('/orders/products/all')
-      .then((res) => {
-        if (res && res.data) {
-          const data : ProductOrder[] = [];
-          let balance = 0;
-          res.data.forEach((f : any) => {
-            if(!f.isPaid)
-              balance += f.amountDue;
-
-            data.push({
-              dateOrdered: f.dateOrdered.split("T")[0],
-              dateDue: f.dateDue.split("T")[0],
-              amountDue: f.amountDue,
-              isPaid: f.isPaid ? "true" : "false",
-              details: (
-                <Button type='primary' size='small'>
-                  See Details
-                </Button>
-              ),
-            });
-          });
-          setBalance(balance);
-          setProductOrderData(data);
-        }
-      })
-      .catch(err => {
-        message.error('Something went wrong while fetching the list of accounts receivable.');
-        console.error(err);
-      });
+    getOrders(false);
   }, [updated]);
 
   const getColumns = () => ({
@@ -50,6 +22,43 @@ export const Income = () => {
     details: "Details",
   });
 
+  const getOrders = (showPaidOnes: boolean) => {
+    axios.get('/orders/products/all')
+      .then((res) => {
+        if (res && res.data) {
+          const data : ProductOrder[] = [];
+          let balance = 0;
+          res.data.forEach((p : any) => {
+            if(!p.isPaid)
+            {
+              balance += p.amountDue;
+            }
+
+            if(!p.isPaid || showPaidOnes) {
+              data.push({
+                dateOrdered: p.dateOrdered.split("T")[0],
+                dateDue: p.dateDue.split("T")[0],
+                amountDue: p.amountDue,
+                isPaid: p.isPaid ? "true" : "false",
+                details: (
+                  <Button type='primary' size='small'>
+                    See Details
+                  </Button>
+                ),
+              });
+            }
+          });
+          setBalance(balance);
+          setProductOrderData(data);
+        }
+      })
+      .catch(err => {
+        message.error('Something went wrong while fetching the list of accounts receivable.');
+        console.error(err);
+      });
+  }
+
+
 
   return (
     <div>
@@ -58,6 +67,9 @@ export const Income = () => {
         <Statistic title='Accounts Receivable Balance (CAD)' value={balance} precision={2} />
       </Card>
       <Card>
+        <div style={{ margin: '24px 0', textAlign:'right'}}>
+          Show Paid Orders : <Switch onChange={getOrders} />
+        </div>
         <ResponsiveTable cols={getColumns()} rows={productOrderData} />
       </Card>
     </div>
