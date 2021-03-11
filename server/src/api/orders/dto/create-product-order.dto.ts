@@ -1,4 +1,10 @@
-import { IsBoolean, IsInt, IsNotEmpty, IsPositive, IsString } from 'class-validator';
+import {
+  IsBoolean,
+  IsInt,
+  IsNotEmpty,
+  IsPositive,
+  IsString,
+} from 'class-validator';
 
 export class CreateProductOrderDto {
   @IsNotEmpty()
@@ -23,5 +29,5 @@ export class CreateProductOrderDto {
   dateDue: Date;
 
   @IsBoolean()
-  isPaid: boolean = false;
+  isPaid = false;
 }

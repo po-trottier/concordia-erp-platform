@@ -2,7 +2,10 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { UpdateMaterialLogDto } from './dto/update-material-log.dto';
-import { MaterialLog, MaterialLogDocument } from './schemas/material-log.schema';
+import {
+  MaterialLog,
+  MaterialLogDocument,
+} from './schemas/material-log.schema';
 
 /**
  * Handles materialLog data storage and retrieval.

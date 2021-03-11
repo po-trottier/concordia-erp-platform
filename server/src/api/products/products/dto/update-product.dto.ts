@@ -1,4 +1,11 @@
-import { IsInt, IsNotEmpty, IsOptional, IsPositive, IsString, Min } from 'class-validator';
+import {
+  IsInt,
+  IsNotEmpty,
+  IsOptional,
+  IsPositive,
+  IsString,
+  Min,
+} from 'class-validator';
 
 import { CreateProductPartDto } from './create-product-part.dto';
 import { CreateProductPropertyDto } from './create-product-property.dto';
