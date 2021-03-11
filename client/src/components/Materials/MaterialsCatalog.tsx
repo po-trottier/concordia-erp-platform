@@ -7,9 +7,9 @@ import { CreateMaterialModal } from './CreateMaterialModal';
 import { EditMaterialModal } from './EditMaterialModal';
 import { RootState } from '../../store/Store';
 import { MaterialEntry } from '../../interfaces/MaterialEntry';
+import { MaterialStockEntry } from '../../interfaces/MaterialStockEntry';
 import { setMaterialList } from '../../store/slices/MaterialListSlice';
 import axios from '../../plugins/Axios';
-import { MaterialStockEntry } from '../../interfaces/MaterialStockEntry';
 
 const { Search } = Input;
 

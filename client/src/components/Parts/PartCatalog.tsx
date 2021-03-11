@@ -7,6 +7,7 @@ import { EditPartModal } from './EditPartModal';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store/Store';
 import { PartEntry } from '../../interfaces/PartEntry';
+import { PartStockEntry } from '../../interfaces/PartStockEntry';
 import { MaterialDropdownEntry } from '../../interfaces/MaterialDropdownEntry';
 import { setPartList } from '../../store/slices/PartListSlice';
 import axios from '../../plugins/Axios';
@@ -18,6 +19,7 @@ export const PartCatalog = () => {
 
   const parts = useSelector((state : RootState) => state.partList.list);
   const updated = useSelector((state : RootState) => state.partList.updated);
+  const location = useSelector((state : RootState) => state.location.selected);
 
   const emptyData : MaterialDropdownEntry[] = [];
   const [searchValue, setSearchValue] = useState('');
@@ -29,10 +31,25 @@ export const PartCatalog = () => {
         data.forEach((d : any) => {
           d.id = d['_id'];
         });
-        dispatch(setPartList(data));
+        axios.get('/parts/stock/' + location)
+          .then((resp) => {
+            data.forEach((part : PartEntry) => {
+              const entry = resp.data.find((p : PartStockEntry) => p.partId === part.id);
+              if (entry) {
+                part.quantity = entry.stock;
+              } else {
+                part.quantity = 0;
+              }
+            });
+            dispatch(setPartList(data));
+          })
+          .catch((err) => {
+            message.error('Something went wrong while getting the parts stock.');
+            console.error(err);
+          });
       })
       .catch((err) => {
-        message.error('Something went wrong while getting the products catalog.');
+        message.error('Something went wrong while getting the part catalog.');
         console.error(err);
       });
     axios.get('/materials')
@@ -88,7 +105,7 @@ export const PartCatalog = () => {
   const columns = {
     name: 'Part Name',
     materialsString: 'Materials',
-    stock: 'Stock',
+    quantity: 'Stock',
     actions: 'Actions',
     build: 'Build',
   };
