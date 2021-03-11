@@ -35,6 +35,19 @@
   background-position: center;
 }
 
+.dark-button {
+  background-color: #292d4d !important;
+  border-color: #373c66;
+  color: white !important;
+}
+
+.dark-dropdown {
+  z-index: 99999 !important;
+  background-color: #292d4d !important;
+  border-color: #373c66 !important;
+  color: white !important;
+}
+
 @media only screen and (max-width: 576px) {
   .text-left-mobile {
     text-align: left !important;
