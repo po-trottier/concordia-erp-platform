@@ -20,7 +20,7 @@ export const AppLocationSelector = (props: HTMLProps<HTMLDivElement>) => {
   const user = useSelector((state : RootState) => state.login.user);
 
   const empty : LocationEntry[] = [];
-  const [locations, setLocations] = useState(empty);
+  const [locations, setLocationsInternal] = useState(empty);
   const [role, setRole] = useState(Role.ANY);
   const [showEdit, setShowEdit] = useState(false);
   const [editLoading, setEditLoading] = useState(false);
@@ -33,8 +33,7 @@ export const AppLocationSelector = (props: HTMLProps<HTMLDivElement>) => {
           message.error('Something went wrong while getting the locations.')
           return;
         }
-        if (!data.find((l : LocationEntry) => l._id === selected)) {
-          console.log('changing selected');
+        if (!data.find((l : LocationEntry) => l._id === selected) && locations.length > 0) {
           dispatch(setSelectedLocation(locations[0]._id));
         }
       })
@@ -45,6 +44,12 @@ export const AppLocationSelector = (props: HTMLProps<HTMLDivElement>) => {
     setRole(user.authType);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locations.length]);
+
+  const setLocations = (data : LocationEntry[]) => {
+    const sorted = data.sort((a : LocationEntry, b : LocationEntry) =>
+      a.name.toLowerCase().localeCompare(b.name.toLowerCase()))
+    setLocationsInternal(sorted);
+  }
 
   const onChange = (val: string) => {
     dispatch(setSelectedLocation(val))
@@ -93,15 +98,35 @@ export const AppLocationSelector = (props: HTMLProps<HTMLDivElement>) => {
   }
 
   const removeLocation = async (id: string) => {
-    console.log('Remove', id)
+    await axios.delete('/locations/' + id);
+    const clone = JSON.parse(JSON.stringify(locations));
+    const i = clone.findIndex((loc : LocationEntry) => loc._id === id);
+    if (i >= 0) {
+      clone.splice(i, 1);
+    }
+    setLocations(clone);
   }
 
-  const editLocation = async (loc: LocationEntry) => {
-    console.log('Edit', loc)
+  const editLocation = async (location: LocationEntry) => {
+    const loc = await axios.patch('/locations/' + location._id, {
+      name: location.name
+    });
+    const clone = JSON.parse(JSON.stringify(locations));
+    const i = clone.findIndex((l : LocationEntry) => l._id === loc.data._id);
+    if (i >= 0) {
+      clone[i] = loc.data;
+    }
+    setLocations(clone);
   }
 
   const addLocation = async (name: string) => {
-    console.log('Add', name)
+    const loc = await axios.post('/locations', { name });
+    const clone = JSON.parse(JSON.stringify(locations));
+    clone.push({
+      _id: loc.data._id,
+      name: loc.data.name,
+    });
+    setLocations(clone);
   }
 
   return (
@@ -124,6 +149,7 @@ export const AppLocationSelector = (props: HTMLProps<HTMLDivElement>) => {
             dropdownClassName="dark-dropdown"
             placeholder="Select a location"
             optionFilterProp="children"
+            disabled={showEdit}
             defaultValue={selected}
             onChange={onChange}>
             {

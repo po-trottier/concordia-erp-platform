@@ -24,7 +24,6 @@ export const AppContent = () => {
 
   useEffect(() => {
     forceUpdate();
-    console.log('update');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected]);
 
