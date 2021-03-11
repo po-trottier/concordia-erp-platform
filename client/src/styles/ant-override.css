@@ -1,3 +1,10 @@
+.ant-layout-sider {
+  position: fixed;
+  z-index: 10000;
+  bottom: 0;
+  top: 0;
+}
+
 .ant-menu-item {
   margin-top: 0 !important;
   margin-bottom: 0 !important;
@@ -84,12 +91,5 @@
 
   .ant-card-body {
     padding: 16px;
-  }
-
-  .ant-layout-sider {
-    position: absolute;
-    z-index: 10000;
-    bottom: 0;
-    top: 0;
   }
 }
