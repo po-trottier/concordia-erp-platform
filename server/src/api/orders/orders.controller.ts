@@ -120,7 +120,7 @@ export class OrdersController {
 
     const summaries: SummaryDto[] = [];
     dateMap.forEach((value: number, key: string) => {
-      summaries.push({ date: key, profit: value });
+      summaries.push({ date: key, balance: value });
     });
 
     return summaries;

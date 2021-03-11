@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Card, message, Statistic} from 'antd';
+import {Button, Card, message, Statistic} from 'antd';
 import {ResponsiveTable} from '../ResponsiveTable';
 import axios from "../../plugins/Axios";
 import {ProductOrder} from "../../interfaces/ProductOrder";
@@ -25,6 +25,11 @@ export const Income = () => {
               dateDue: f.dateDue.split("T")[0],
               amountDue: f.amountDue,
               isPaid: f.isPaid ? "true" : "false",
+              details: (
+                <Button type='primary' size='small'>
+                  See Details
+                </Button>
+              ),
             });
           });
           setBalance(balance);
@@ -41,7 +46,8 @@ export const Income = () => {
     dateOrdered: 'Date Ordered',
     dateDue: 'Due Date',
     amountDue: 'Amount',
-    isPaid: "Paid?"
+    isPaid: "Paid?",
+    details: "Details",
   });
 
 
