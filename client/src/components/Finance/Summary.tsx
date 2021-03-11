@@ -25,10 +25,10 @@ export const Summary = () => {
           res.data.forEach((s : any) => {
             data.push({
               date: s.date,
-              profit: s.profit,
+              balance: s.balance,
             });
             balance += 0;
-            expectedBalance += s.profit;
+            expectedBalance += s.balance;
           });
           setBalance(balance);
           setExpectedBalance(expectedBalance)
@@ -43,7 +43,7 @@ export const Summary = () => {
 
   const getColumns = () => ({
     date: 'Summary Date',
-    profit: 'Profit'
+    balance: 'Balance'
   });
 
   return (
@@ -55,7 +55,7 @@ export const Summary = () => {
         <Statistic title='Expected balance (CAD)' value={expectedBalance} precision={2} />
       </Card>
       <Card style={{ margin: '24px 0' }}>
-        <Line data={summaryEntryData} xField='date' yField='profit' />
+        <Line data={summaryEntryData} xField='date' yField='balance' />
       </Card>
       <Card>
         <Title level={4} style={{ marginBottom: '24px' }}>

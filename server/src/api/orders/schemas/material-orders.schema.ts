@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import mongoose, { Document } from 'mongoose';
+import { Document, Schema as mongooseSchema } from 'mongoose';
 
 export type MaterialOrderDocument = MaterialOrder & Document;
 
@@ -9,7 +9,7 @@ export type MaterialOrderDocument = MaterialOrder & Document;
 @Schema()
 export class MaterialOrder {
   @Prop({
-    type: mongoose.Types.ObjectId,
+    type: mongooseSchema.Types.ObjectId,
     ref: 'Material',
     required: true,
     index: true,
@@ -28,8 +28,8 @@ export class MaterialOrder {
   @Prop({ required: true })
   dateDue: Date;
 
-  @Prop({ required: true })
-  isPaid = false;
+  @Prop({ required: true, default: false })
+  isPaid: boolean;
 }
 
 export const MaterialOrderSchema = SchemaFactory.createForClass(MaterialOrder);

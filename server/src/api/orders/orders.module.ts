@@ -13,6 +13,13 @@ import {
   ProductOrderSchema,
 } from './schemas/product-orders.schema';
 import { ProductOrdersService } from './product-orders.service';
+import {
+  Material,
+  MaterialSchema,
+} from '../materials/materials/schemas/material.schema';
+import { MaterialsService } from '../materials/materials/materials.service';
+import { MaterialLog, MaterialLogSchema } from '../materials/materials-logs/schemas/material-log.schema';
+import { MaterialLogsService } from '../materials/materials-logs/material-logs.service';
 
 /**
  * Contains all logic and files related to finance
@@ -22,11 +29,18 @@ import { ProductOrdersService } from './product-orders.service';
     MongooseModule.forFeature([
       { name: MaterialOrder.name, schema: MaterialOrderSchema },
       { name: ProductOrder.name, schema: ProductOrderSchema },
+      { name: Material.name, schema: MaterialSchema },
+      { name: MaterialLog.name, schema: MaterialLogSchema },
     ]),
     // ENV Support
     ConfigModule.forRoot({ validate, cache: true }),
   ],
   controllers: [OrdersController],
-  providers: [MaterialOrdersService, ProductOrdersService],
+  providers: [
+    MaterialOrdersService,
+    ProductOrdersService,
+    MaterialsService,
+    MaterialLogsService,
+  ],
 })
 export class OrdersModule {}

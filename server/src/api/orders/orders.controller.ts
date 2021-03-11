@@ -14,6 +14,8 @@ import { CreateProductOrderListDto } from './dto/create-product-order-list.dto';
 import { CreateProductOrderDto } from './dto/create-product-order.dto';
 import { CreateMaterialOrderDto } from './dto/create-material-order.dto';
 import { SummaryDto } from './dto/summary.dto';
+import { MaterialsService } from '../materials/materials/materials.service';
+import { MaterialWithSupplierDto } from './dto/material-with-supplier.dto';
 
 /**
  * Controller class of the Order entity
@@ -23,6 +25,7 @@ export class OrdersController {
   constructor(
     private readonly materialOrderService: MaterialOrdersService,
     private readonly productOrderService: ProductOrdersService,
+    private readonly materialsService: MaterialsService,
   ) {}
 
   @Post('materials')
@@ -36,8 +39,24 @@ export class OrdersController {
   }
 
   @Get('materials/all')
-  findAllMaterials() {
-    return this.materialOrderService.findAll();
+  async findAllMaterials() {
+    const materialOrders: CreateMaterialOrderDto[] = await this.materialOrderService.findAll();
+    const materialOrdersWithSupplier: MaterialWithSupplierDto[] = [];
+    for (const materialOrder of materialOrders) {
+      materialOrdersWithSupplier.push({
+        amountDue: materialOrder.amountDue,
+        dateDue: materialOrder.dateDue,
+        dateOrdered: materialOrder.dateOrdered,
+        isPaid: materialOrder.isPaid,
+        quantity: materialOrder.quantity,
+        supplierName: (
+          await this.materialsService.findOne(materialOrder.materialId)
+        ).vendorName,
+        materialId: materialOrder.materialId,
+      });
+    }
+
+    return materialOrdersWithSupplier;
   }
 
   @Get('materials/:id')
