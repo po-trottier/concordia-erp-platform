@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "2c046874-f0eb-4de5-a488-fb5aa3acd927",
+		"_postman_id": "ef4593da-f2a1-49db-9693-a41bae2ad534",
 		"name": "Epic_Resource_Planner",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -17,13 +17,14 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{url}}/orders/materials",
+									"raw": "{{url}}/orders/materials/all",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
 										"orders",
-										"materials"
+										"materials",
+										"all"
 									]
 								}
 							},
@@ -36,7 +37,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"orders\": [{\n        \"dateOrdered\": \"2021-03-06T18:25:43.511Z\",\n        \"dateDue\": \"2021-03-09T18:25:43.511Z\",\n        \"supplierName\": \"Minecraft Mining Corporation\",\n        \"amountDue\": 50000,\n        \"isPaid\": true,\n        \"quantity\": 5,\n        \"materialId\":\"6046d12356735d55b04ebd3b\"\n    }, {\n        \"dateOrdered\": \"2021-03-06T18:25:43.511Z\",\n        \"dateDue\": \"2021-03-11T18:25:43.511Z\",\n        \"supplierName\": \"Titanium Titans Co\",\n        \"amountDue\": 5000,\n        \"isPaid\": true,\n        \"quantity\": 2,\n        \"materialId\":\"6046d12356735d55b04ebd3b\"\n    }]\n}",
+									"raw": "{\n    \"orders\": [{\n        \"dateOrdered\": \"2021-03-13T18:25:43.511Z\",\n        \"dateDue\": \"2021-03-17T18:25:43.511Z\",\n        \"supplierName\": \"Wood City\",\n        \"amountDue\": 50000,\n        \"isPaid\": true,\n        \"quantity\": 5,\n        \"materialId\":\"6046d12356735d55b04ebd3b\"\n    }, {\n        \"dateOrdered\": \"2021-03-11T18:25:43.511Z\",\n        \"dateDue\": \"2021-03-15T18:25:43.511Z\",\n        \"supplierName\": \"Booty Nation\",\n        \"amountDue\": 5000,\n        \"isPaid\": false,\n        \"quantity\": 2,\n        \"materialId\":\"6046d12356735d55b04ebd3b\"\n    }]\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -62,13 +63,14 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "{{url}}/finance/60440a18a38b812844bbc999",
+									"raw": "{{url}}/orders/materials/604805394ec0e95ac8252a00",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
-										"finance",
-										"60440a18a38b812844bbc999"
+										"orders",
+										"materials",
+										"604805394ec0e95ac8252a00"
 									]
 								}
 							},
@@ -80,13 +82,14 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{url}}/finance/60245c2d2816ce3290065c38",
+									"raw": "{{url}}/orders/materials/604805394ec0e95ac82529ff",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
-										"finance",
-										"60245c2d2816ce3290065c38"
+										"orders",
+										"materials",
+										"604805394ec0e95ac82529ff"
 									]
 								}
 							},
@@ -123,7 +126,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"orders\": [{\n        \"dateOrdered\": \"2021-03-06T18:25:43.511Z\",\n        \"dateDue\": \"2021-03-09T18:25:43.511Z\",\n        \"customerId\": \"PO's bike store\",\n        \"amountDue\": 1200000,\n        \"isPaid\": true,\n        \"quantity\": 5000,\n        \"productId\":\"6046d12356735d55b04ebd3b\"\n    }, {\n        \"dateOrdered\": \"2021-03-06T18:25:43.511Z\",\n        \"dateDue\": \"2021-03-11T18:25:43.511Z\",\n        \"customerId\": \"Bicher's Bike Store\",\n        \"amountDue\": 200,\n        \"isPaid\": true,\n        \"quantity\": 2,\n        \"productId\":\"6046d12356735d55b04ebd3b\"\n    }]\n}",
+									"raw": "{\n    \"orders\": [{\n        \"dateOrdered\": \"2021-03-06T18:25:43.511Z\",\n        \"dateDue\": \"2021-03-09T18:25:43.511Z\",\n        \"customerId\": \"PO's bike store\",\n        \"amountDue\": 500000,\n        \"isPaid\": true,\n        \"quantity\": 12000,\n        \"productId\":\"6046d12356735d55b04ebd3b\"\n    }, {\n        \"dateOrdered\": \"2021-03-06T18:25:43.511Z\",\n        \"dateDue\": \"2021-03-11T18:25:43.511Z\",\n        \"customerId\": \"Bicher's Bike Store\",\n        \"amountDue\": 100,\n        \"isPaid\": true,\n        \"quantity\": 1,\n        \"productId\":\"6046d12356735d55b04ebd3b\"\n    }]\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -149,13 +152,14 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "{{url}}/finance/60440a18a38b812844bbc999",
+									"raw": "{{url}}/orders/products/604a9910e82fbd09e4e1d1fa",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
-										"finance",
-										"60440a18a38b812844bbc999"
+										"orders",
+										"products",
+										"604a9910e82fbd09e4e1d1fa"
 									]
 								}
 							},
@@ -167,19 +171,38 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{url}}/finance/60245c2d2816ce3290065c38",
+									"raw": "{{url}}/orders/products/604802d74ec0e95ac82529f9",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
-										"finance",
-										"60245c2d2816ce3290065c38"
+										"orders",
+										"products",
+										"604802d74ec0e95ac82529f9"
 									]
 								}
 							},
 							"response": []
 						}
 					]
+				},
+				{
+					"name": "Get Summary of Orders",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/orders/summary",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"orders",
+								"summary"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
