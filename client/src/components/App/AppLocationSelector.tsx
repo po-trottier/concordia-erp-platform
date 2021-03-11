@@ -1,6 +1,6 @@
 import React, { HTMLProps, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { message, Select, Button, Modal, Form, Input } from 'antd';
+import { Button, Form, Input, message, Modal, Select } from 'antd';
 import { EditOutlined, MinusCircleTwoTone } from '@ant-design/icons';
 
 import axios from '../../plugins/Axios';
@@ -11,7 +11,7 @@ import { Role } from '../../router/Roles';
 
 const { Option } = Select;
 
-export const AppLocationSelector = (props: HTMLProps<HTMLDivElement>) => {
+export const AppLocationSelector = (props : HTMLProps<HTMLDivElement>) => {
   const [form] = Form.useForm();
 
   const dispatch = useDispatch();
@@ -30,7 +30,7 @@ export const AppLocationSelector = (props: HTMLProps<HTMLDivElement>) => {
       .then(({ data }) => {
         setLocations(data);
         if (data.length < 1) {
-          message.error('Something went wrong while getting the locations.')
+          message.error('Something went wrong while getting the locations.');
           return;
         }
         if (!data.find((l : LocationEntry) => l._id === selected) && locations.length > 0) {
@@ -47,31 +47,33 @@ export const AppLocationSelector = (props: HTMLProps<HTMLDivElement>) => {
 
   const setLocations = (data : LocationEntry[]) => {
     const sorted = data.sort((a : LocationEntry, b : LocationEntry) =>
-      a.name.toLowerCase().localeCompare(b.name.toLowerCase()))
+      a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
     setLocationsInternal(sorted);
-  }
+  };
 
-  const onChange = (val: string) => {
-    dispatch(setSelectedLocation(val))
-  }
+  const onChange = (val : string) => {
+    dispatch(setSelectedLocation(val));
+  };
 
   const handleCancel = () => {
     setShowEdit(false);
     form.resetFields();
-  }
+  };
 
-  const handleSubmit = async (values: any) => {
+  const handleSubmit = async (values : any) => {
     const trimmedLocations : LocationEntry[] = [];
-    values.locations.forEach((loc: LocationEntry) => {
-      if (!loc.name || loc.name.trim().length < 1)
+    values.locations.forEach((loc : LocationEntry) => {
+      if (!loc.name || loc.name.trim().length < 1) {
         return;
+      }
       trimmedLocations.push(loc);
     });
 
     if (trimmedLocations.length < 1) {
-      const error = document.getElementById('display-locations-error')
-      if (error)
+      const error = document.getElementById('display-locations-error');
+      if (error) {
         error.style.display = 'block';
+      }
       return;
     }
 
@@ -89,15 +91,16 @@ export const AppLocationSelector = (props: HTMLProps<HTMLDivElement>) => {
 
     for (let i = 0; i < trimmedLocations.length; i++) {
       const loc = trimmedLocations[i];
-      if (!loc._id && loc.name.trim().length > 0)
+      if (!loc._id && loc.name.trim().length > 0) {
         await addLocation(loc.name);
+      }
     }
 
     setEditLoading(false);
     handleCancel();
-  }
+  };
 
-  const removeLocation = async (id: string) => {
+  const removeLocation = async (id : string) => {
     await axios.delete('/locations/' + id);
     const clone = JSON.parse(JSON.stringify(locations));
     const i = clone.findIndex((loc : LocationEntry) => loc._id === id);
@@ -105,9 +108,9 @@ export const AppLocationSelector = (props: HTMLProps<HTMLDivElement>) => {
       clone.splice(i, 1);
     }
     setLocations(clone);
-  }
+  };
 
-  const editLocation = async (location: LocationEntry) => {
+  const editLocation = async (location : LocationEntry) => {
     const loc = await axios.patch('/locations/' + location._id, {
       name: location.name
     });
@@ -117,9 +120,9 @@ export const AppLocationSelector = (props: HTMLProps<HTMLDivElement>) => {
       clone[i] = loc.data;
     }
     setLocations(clone);
-  }
+  };
 
-  const addLocation = async (name: string) => {
+  const addLocation = async (name : string) => {
     const loc = await axios.post('/locations', { name });
     const clone = JSON.parse(JSON.stringify(locations));
     clone.push({
@@ -127,17 +130,17 @@ export const AppLocationSelector = (props: HTMLProps<HTMLDivElement>) => {
       name: loc.data.name,
     });
     setLocations(clone);
-  }
+  };
 
   return (
     <div>
       <div {...props}>
-        { role === Role.SYSTEM_ADMINISTRATOR ?
+        {role === Role.SYSTEM_ADMINISTRATOR ?
           <Button
             style={{ float: 'right' }}
-            className="dark-button"
-            type="ghost"
-            shape="circle"
+            className='dark-button'
+            type='ghost'
+            shape='circle'
             icon={<EditOutlined />}
             onClick={() => setShowEdit(true)} /> : <div />
         }
@@ -145,10 +148,10 @@ export const AppLocationSelector = (props: HTMLProps<HTMLDivElement>) => {
           <Select
             style={{ width: '100%' }}
             showSearch
-            className="dark"
-            dropdownClassName="dark-dropdown"
-            placeholder="Select a location"
-            optionFilterProp="children"
+            className='dark'
+            dropdownClassName='dark-dropdown'
+            placeholder='Select a location'
+            optionFilterProp='children'
             disabled={showEdit}
             defaultValue={selected}
             onChange={onChange}>
@@ -157,8 +160,8 @@ export const AppLocationSelector = (props: HTMLProps<HTMLDivElement>) => {
                 return <Option
                   key={location._id}
                   value={location._id}>
-                  { location.name }
-                </Option>
+                  {location.name}
+                </Option>;
               })
             }
           </Select>
@@ -176,14 +179,14 @@ export const AppLocationSelector = (props: HTMLProps<HTMLDivElement>) => {
           initialValues={{
             'locations': locations,
           }}>
-          <Form.List name="locations">
+          <Form.List name='locations'>
             {(fields, { add, remove }) => (
               <div>
                 {fields.map((field) => (
                   <div key={field.key} style={{ marginBottom: 16 }}>
                     {fields.length > 1 ? (
                       <MinusCircleTwoTone
-                        style={{ float: 'right', fontSize: 16, lineHeight: '32px'}}
+                        style={{ float: 'right', fontSize: 16, lineHeight: '32px' }}
                         twoToneColor='red'
                         onClick={() => remove(field.name)} />
                     ) : null}
@@ -192,9 +195,9 @@ export const AppLocationSelector = (props: HTMLProps<HTMLDivElement>) => {
                       key={'name_' + field.key}
                       name={[field.name, 'name']}
                       fieldKey={[field.fieldKey, 'name']}
-                      label="Location Name"
+                      label='Location Name'
                       style={{ marginBottom: 0, marginRight: fields.length > 1 ? 36 : 0 }}>
-                      <Input placeholder="Location Name" />
+                      <Input placeholder='Location Name' />
                     </Form.Item>
                     <Form.Item
                       {...field}
@@ -206,7 +209,7 @@ export const AppLocationSelector = (props: HTMLProps<HTMLDivElement>) => {
                 ))}
                 <Form.Item style={{ marginBottom: 0 }}>
                   <Button
-                    type="ghost"
+                    type='ghost'
                     onClick={() => add()}
                     style={{ width: '100%', marginTop: 16 }}>
                     Add a Location
