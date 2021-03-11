@@ -9,6 +9,7 @@ import { RootState } from '../../store/Store';
 import { MaterialEntry } from '../../interfaces/MaterialEntry';
 import { setMaterialList } from '../../store/slices/MaterialListSlice';
 import axios from '../../plugins/Axios';
+import { MaterialStockEntry } from '../../interfaces/MaterialStockEntry';
 
 const { Search } = Input;
 
@@ -17,20 +18,36 @@ export const MaterialsCatalog = () => {
 
   const materials = useSelector((state : RootState) => state.materialList.list);
   const updated = useSelector((state : RootState) => state.materialList.updated);
+  const location = useSelector((state : RootState) => state.location.selected);
 
   const [searchValue, setSearchValue] = useState('');
 
   useEffect(() => {
     axios.get('/materials')
       .then(({ data }) => {
-        dispatch(setMaterialList(data));
+        axios.get('/materials/stock/' + location)
+          .then((resp) => {
+            data.forEach((mat : MaterialEntry) => {
+              const entry = resp.data.find((m : MaterialStockEntry) => m.materialId === mat.id);
+              if (entry) {
+                mat.stock = entry.stock;
+              } else {
+                mat.stock = 0;
+              }
+            });
+            dispatch(setMaterialList(data));
+          })
+          .catch((err) => {
+            message.error('Something went wrong while getting the materials stock.');
+            console.error(err);
+          });
       })
       .catch((err) => {
         message.error('Something went wrong while getting the materials catalog.');
         console.error(err);
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [updated]);
+  }, [updated, location]);
 
   const onSearch = (e : React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
