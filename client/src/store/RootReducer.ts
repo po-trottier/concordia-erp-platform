@@ -10,11 +10,12 @@ import { userListSlice } from './slices/UserListSlice';
 import { productListSlice } from './slices/ProductListSlice';
 import { partListSlice } from './slices/PartListSlice';
 import { materialListSlice } from './slices/MaterialListSlice';
+import { locationSlice } from './slices/LocationSlice';
 
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['login'],
+  whitelist: ['login', 'location'],
   // whitelist contains the name of reducers that we want to persist
   transforms: [
     encryptTransform({
@@ -34,6 +35,7 @@ const rootReducer = combineReducers({
   productList: productListSlice.reducer,
   partList: partListSlice.reducer,
   materialList: materialListSlice.reducer,
+  location: locationSlice.reducer,
 });
 
 export default persistReducer(persistConfig, rootReducer);

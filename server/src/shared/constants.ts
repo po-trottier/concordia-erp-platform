@@ -1,4 +1,5 @@
 export const JWT_SECRET = 'mHL3CGuAH5gdTY7R';
 export const DEFAULT_USER = 'admin';
+export const DEFAULT_LOCATION = 'Default Location';
 export const DB_URL = 'mongodb://localhost:27017';
 export const DB_NAME = 'ERP_db';

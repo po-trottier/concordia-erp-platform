@@ -5,6 +5,7 @@ import { CreateLocationDto } from './dto/create-location.dto';
 import { UpdateLocationDto } from './dto/update-location.dto';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Location, LocationDocument } from './schemas/location.schema';
+import { DEFAULT_LOCATION } from '../../shared/constants';
 
 /**
  * Used by the LocationsController, handles location data storage and retrieval.
@@ -14,6 +15,22 @@ export class LocationsService {
   constructor(
     @InjectModel(Location.name) private locationModel: Model<LocationDocument>,
   ) {}
+
+  async onApplicationBootstrap(): Promise<void> {
+    await this.createDefaultUser();
+  }
+
+  async createDefaultUser(): Promise<void> {
+    const locations = await this.locationModel.find().limit(1);
+    if (!locations || locations.length < 1) {
+      const location = new CreateLocationDto();
+      location.name = DEFAULT_LOCATION;
+      await this.create(location);
+      console.log('Default location was created successfully.');
+    } else {
+      console.log('Default location already exits.');
+    }
+  }
 
   /**
    * Creates location using mongoose locationModel
