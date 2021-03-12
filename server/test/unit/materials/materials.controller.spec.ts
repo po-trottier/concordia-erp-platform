@@ -3,8 +3,10 @@ import { MaterialsService } from '../../../src/api/materials/materials/materials
 import { MaterialLocationStockService } from '../../../src/api/materials/materials/material-location-stock.service';
 import { CreateMaterialDto } from '../../../src/api/materials/materials/dto/create-material.dto';
 import { UpdateMaterialDto } from '../../../src/api/materials/materials/dto/update-material.dto';
+import { UpdateMaterialStockDto } from '../../../src/api/materials/materials/dto/update-material-stock.dto';
 import { MaterialLogsService } from '../../../src/api/materials/materials-logs/material-logs.service';
 import { MaterialLogDocument } from '../../../src/api/materials/materials-logs/schemas/material-log.schema';
+import { MaterialLocationStock } from '../../../src/api/materials/materials/schemas/material-location-stock.schema';
 import { Model } from 'mongoose';
 import {
   Material,
@@ -32,6 +34,12 @@ describe('MaterialsController', () => {
     image: 'image',
     price: 5,
   };
+
+  const dummyMaterialLocationStock: MaterialLocationStock = {
+    materialId: '123',
+    locationId: 'MTL123',
+    stock: 50
+  }
 
   beforeEach(async () => {
     materialLogsService = new MaterialLogsService(materialLogDocument);
@@ -113,6 +121,46 @@ describe('MaterialsController', () => {
       expect(
         await materialController.update(result.name, updatedMaterial),
       ).toBe(result);
+    });
+  });
+
+  describe('findAllLocationStock', () => {
+    it('Should find all materials location stock', async () => {
+      const result: MaterialLocationStock[] = [dummyMaterialLocationStock];
+
+      jest
+        .spyOn(materialLocationStockService, 'findAll')
+        .mockImplementation(async () => await result);
+
+      expect(await materialController.findAllLocationStock(dummyMaterialLocationStock.locationId)).toBe(result);
+    });
+  });
+
+  describe('findOneLocationStock', () => {
+    it('Should find one material\'s location stock', async () => {
+      const result: MaterialLocationStock = dummyMaterialLocationStock;
+
+      jest
+        .spyOn(materialLocationStockService, 'findOne')
+        .mockImplementation(async () => await result);
+
+      expect(await materialController.findOneLocationStock(dummyMaterialLocationStock.materialId, dummyMaterialLocationStock.locationId)).toBe(result);
+    });
+  });
+
+  describe('updateStock', () => {
+    it('Should update the stock of a material at a location', async () => {
+      const result: MaterialLocationStock = dummyMaterialLocationStock;
+
+      const updatedPartStock = new UpdateMaterialStockDto();
+      updatedPartStock.stockBought = 10;
+      updatedPartStock.stockUsed = 20;
+
+      jest
+        .spyOn(materialLocationStockService, 'update')
+        .mockImplementation(async () => await result);
+
+      expect(await materialController.updateStock(dummyMaterialLocationStock.materialId, dummyMaterialLocationStock.locationId, updatedPartStock)).toBe(result);
     });
   });
 });
