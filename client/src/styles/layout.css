@@ -1,3 +1,8 @@
+#app-content {
+  margin-left: 235px;
+  transition: all 0.2s ease;
+}
+
 .app-logo {
   height: 64px;
   width: 100%;
@@ -6,7 +11,8 @@
 }
 
 .app-layout {
-  margin: 0 32px;
+  padding: 0 32px;
+  margin-right: 0 !important;
 }
 
 .app-header {
@@ -33,6 +39,19 @@
   background: url("../assets/bicycle.svg");
   background-size: 200px;
   background-position: center;
+}
+
+.dark-button {
+  background-color: #292d4d !important;
+  border-color: #373c66;
+  color: white !important;
+}
+
+.dark-dropdown {
+  z-index: 99999 !important;
+  background-color: #292d4d !important;
+  border-color: #373c66 !important;
+  color: white !important;
 }
 
 @media only screen and (max-width: 576px) {

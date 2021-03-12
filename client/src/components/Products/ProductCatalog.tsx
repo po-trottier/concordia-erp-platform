@@ -6,8 +6,9 @@ import { ResponsiveTable } from '../ResponsiveTable';
 import { CreateProductModal } from './CreateProductModal';
 import { EditProductModal } from './EditProductModal';
 import { ProductDetails } from './ProductDetails';
-import { ProductEntry } from '../../interfaces/ProductEntry';
 import { RootState } from '../../store/Store';
+import { ProductEntry } from '../../interfaces/ProductEntry';
+import { ProductStockEntry } from '../../interfaces/ProductStockEntry';
 import { setProductList } from '../../store/slices/ProductListSlice';
 import axios from '../../plugins/Axios';
 
@@ -18,13 +19,29 @@ export const ProductCatalog = () => {
 
   const products = useSelector((state : RootState) => state.productList.list);
   const updated = useSelector((state : RootState) => state.productList.updated);
+  const location = useSelector((state : RootState) => state.location.selected);
 
   const [searchValue, setSearchValue] = useState('');
 
   useEffect(() => {
     axios.get('/products')
       .then(({ data }) => {
-        dispatch(setProductList(data));
+        axios.get('/products/stock/' + location)
+          .then((resp) => {
+            data.forEach((prod : ProductEntry) => {
+              const entry = resp.data.find((p : ProductStockEntry) => p.productId === prod.id);
+              if (entry) {
+                prod.stock = entry.stock;
+              } else {
+                prod.stock = 0;
+              }
+            });
+            dispatch(setProductList(data));
+          })
+          .catch((err) => {
+            message.error('Something went wrong while getting the products stock.');
+            console.error(err);
+          });
       })
       .catch((err) => {
         message.error('Something went wrong while getting the products catalog.');

@@ -106,7 +106,7 @@ export const UserListActions = (props : any) => {
             OK
           </Button>
         ]}>
-        <EditUserForm form={form}/>
+        <EditUserForm form={form} />
       </Modal>
       <Modal
         title='Delete User'

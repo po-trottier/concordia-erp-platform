@@ -24,13 +24,13 @@ export class LocationsController {
     return this.locationsService.create(createLocationDto);
   }
 
-  @Roles(Role.ANY, Role.SYSTEM_ADMINISTRATOR)
+  @Roles(Role.ANY)
   @Get()
   findAll() {
     return this.locationsService.findAll();
   }
 
-  @Roles(Role.SYSTEM_ADMINISTRATOR)
+  @Roles(Role.ANY)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.locationsService.findOne(id);
