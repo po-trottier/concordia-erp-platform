@@ -1,6 +1,8 @@
 import { PartsController } from '../../../src/api/parts/parts/parts.controller';
 import { PartsService } from '../../../src/api/parts/parts/parts.service';
 import { PartLogsService } from '../../../src/api/parts/parts-logs/part-logs.service';
+import { PartLocationStockService } from '../../../src/api/parts/parts/part-location-stock.service';
+import { LocationsService } from '../../../src/api/locations/locations.service';
 import { CreatePartDto } from '../../../src/api/parts/parts/dto/create-part.dto';
 import { UpdatePartDto } from '../../../src/api/parts/parts/dto/update-part.dto';
 import { Model } from 'mongoose';
@@ -8,22 +10,32 @@ import {
   Part,
   PartDocument,
 } from '../../../src/api/parts/parts/schemas/part.schema';
+import { PartLogDocument } from '../../../src/api/parts/parts-logs/schemas/part-log.schema';
+import { PartLocationStockDocument } from '../../../src/api/parts/parts/schemas/part-location-stock.schema';
+import { LocationDocument } from '../../../src/api/locations/schemas/location.schema';
 
 describe('PartsController', () => {
   let partsController: PartsController;
   let partsService: PartsService;
   let partLogsService: PartLogsService;
+  let locationsService: LocationsService;
+  let partLocationStockService: PartLocationStockService;
+  let partLogDocument: Model<PartLogDocument>;
+  let locationDocument: Model<LocationDocument>;
   let partsDocumentModel: Model<PartDocument>;
+  let partLocationStockDocument: Model<PartLocationStockDocument>
 
   const dummyPart: Part = {
     name: 'Handlebar',
-    stock: 1,
     materials: [],
   };
 
   beforeEach(async () => {
-    partsService = new PartsService(partsDocumentModel, partLogsService);
-    partsController = new PartsController(partsService);
+    partsService = new PartsService(partsDocumentModel);
+    partLogsService = new PartLogsService(partLogDocument);
+    locationsService = new LocationsService(locationDocument);
+    partLocationStockService = new PartLocationStockService(partLocationStockDocument, partsService, partLogsService, locationsService);
+    partsController = new PartsController(partsService, partLocationStockService);
   });
 
   describe('findAll', () => {
@@ -56,7 +68,6 @@ describe('PartsController', () => {
       const newPart = new CreatePartDto();
       newPart.name = result.name;
       newPart.materials = result.materials;
-      newPart.stock = result.stock;
 
       jest
         .spyOn(partsService, 'create')
@@ -85,7 +96,6 @@ describe('PartsController', () => {
       const updatedPart = new UpdatePartDto();
       updatedPart.name = result.name;
       updatedPart.materials = result.materials;
-      updatedPart.stock = result.stock;
 
       jest
         .spyOn(partsService, 'update')

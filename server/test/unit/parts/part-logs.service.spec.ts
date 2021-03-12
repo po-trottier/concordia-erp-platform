@@ -2,7 +2,7 @@ import { PartsService } from '../../../src/api/parts/parts/parts.service';
 import { Model } from 'mongoose';
 import { PartDocument } from '../../../src/api/parts/parts/schemas/part.schema';
 
-describe('PartsService', () => {
+describe('PartLogsService', () => {
   let partsService: PartsService;
   let partsDocumentModel: Model<PartDocument>;
 

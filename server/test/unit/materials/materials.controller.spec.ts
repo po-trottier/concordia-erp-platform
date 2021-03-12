@@ -10,14 +10,11 @@ import {
   Material,
   MaterialDocument,
 } from '../../../src/api/materials/materials/schemas/material.schema';
-import {
-  MaterialLocationStock,
-  MaterialLocationStockDocument,
-} from '../../../src/api/materials/materials/schemas/material-location-stock.schema';
+import { MaterialLocationStockDocument } from '../../../src/api/materials/materials/schemas/material-location-stock.schema';
 import { LocationDocument } from '../../../src/api/locations/schemas/location.schema';
 import { LocationsService } from '../../../src/api/locations/locations.service';
 
-describe('PartsController', () => {
+describe('MaterialsController', () => {
   let materialController: MaterialsController;
   let materialService: MaterialsService;
   let materialLogsService: MaterialLogsService;
@@ -45,7 +42,7 @@ describe('PartsController', () => {
   });
 
   describe('findAll', () => {
-    it('Should return a list of all parts', async () => {
+    it('Should return a list of all materials.', async () => {
       const result: Material[] = [dummyMaterial];
       jest
         .spyOn(materialService, 'findAll')
@@ -56,7 +53,7 @@ describe('PartsController', () => {
   });
 
   describe('findOne', () => {
-    it('Should return a from by its username', async () => {
+    it('Should return a material from by its username', async () => {
       const result: Material = dummyMaterial;
 
       jest
@@ -68,7 +65,7 @@ describe('PartsController', () => {
   });
 
   describe('create', () => {
-    it('Should create a new part', async () => {
+    it('Should create a new material', async () => {
       const result: Material = dummyMaterial;
 
       const newMaterial = new CreateMaterialDto();
@@ -87,7 +84,7 @@ describe('PartsController', () => {
   });
 
   describe('remove', () => {
-    it('Should remove a part by its name', async () => {
+    it('Should remove a material by its name', async () => {
       const result: Material = dummyMaterial;
 
       jest
