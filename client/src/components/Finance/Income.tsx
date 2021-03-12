@@ -29,8 +29,7 @@ export const Income = () => {
           const data : ProductOrder[] = [];
           let balance = 0;
           res.data.forEach((p : any) => {
-            if(!p.isPaid)
-            {
+            if(!p.isPaid) {
               balance += p.amountDue;
             }
 

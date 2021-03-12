@@ -18,7 +18,10 @@ import {
   MaterialSchema,
 } from '../materials/materials/schemas/material.schema';
 import { MaterialsService } from '../materials/materials/materials.service';
-import { MaterialLog, MaterialLogSchema } from '../materials/materials-logs/schemas/material-log.schema';
+import {
+  MaterialLog,
+  MaterialLogSchema,
+} from '../materials/materials-logs/schemas/material-log.schema';
 import { MaterialLogsService } from '../materials/materials-logs/material-logs.service';
 
 /**

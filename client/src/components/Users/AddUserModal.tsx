@@ -137,7 +137,9 @@ export const AddUserModal = () => {
                 rules={[{ required: true, message: 'Please select a role!' }]}>
                 <Select
                   placeholder="Select the user's role"
-                  onSelect={(e : Role) => {setRole(e)}}>
+                  onSelect={(e : Role) => {
+setRole(e)
+}}>
                   <Option value={1}>Salesperson</Option>
                   <Option value={2}>Accountant</Option>
                   <Option value={3}>Inventory Manager</Option>

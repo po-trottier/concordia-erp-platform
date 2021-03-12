@@ -144,6 +144,10 @@ export class OrdersController {
       summaries.push({ date: key, balance: value });
     });
 
+    summaries.sort(function (a, b) {
+      return new Date(a.date).getTime() - new Date(b.date).getTime();
+    });
+
     return summaries;
   }
 }
