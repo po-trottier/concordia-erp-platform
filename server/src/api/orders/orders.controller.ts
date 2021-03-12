@@ -93,6 +93,27 @@ export class OrdersController {
     return this.productOrderService.remove(id);
   }
 
+  @Get('balance')
+  async balance() {
+    const productOrders: CreateProductOrderDto[] = await this.productOrderService.findAll();
+    const materialOrders: CreateMaterialOrderDto[] = await this.materialOrderService.findAll();
+
+    let balance = 0;
+    productOrders.forEach((p: CreateProductOrderDto) => {
+      if (p.isPaid) {
+        balance += p.amountDue;
+      }
+    });
+
+    materialOrders.forEach((m: CreateMaterialOrderDto) => {
+      if (m.isPaid) {
+        balance -= m.amountDue;
+      }
+    });
+
+    return { balance: balance };
+  }
+
   @Get('summary')
   async summary() {
     const productOrders: CreateProductOrderDto[] = await this.productOrderService.findAll();

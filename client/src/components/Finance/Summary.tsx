@@ -20,19 +20,27 @@ export const Summary = () => {
       .then((res) => {
         if (res && res.data) {
           const data : SummaryEntry[] = [];
-          let balance : number = 0;
           let expectedBalance : number = 0;
           res.data.forEach((s : any) => {
             data.push({
               date: s.date,
               balance: s.balance,
             });
-            balance += 0;
             expectedBalance += s.balance;
           });
-          setBalance(balance);
           setExpectedBalance(expectedBalance)
           setSummaryEntryData(data);
+        }
+      })
+      .catch(err => {
+        message.error('Something went wrong while fetching the list of accounts receivable.');
+        console.error(err);
+      });
+
+    axios.get('/orders/balance ')
+      .then((res) => {
+        if (res && res.data) {
+          setBalance(res.data.balance);
         }
       })
       .catch(err => {
