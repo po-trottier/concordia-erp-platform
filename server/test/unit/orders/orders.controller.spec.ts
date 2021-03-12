@@ -7,8 +7,7 @@ import { CreateProductOrderListDto } from '../../../src/api/orders/dto/create-pr
 import { CreateProductOrderDto } from '../../../src/api/orders/dto/create-product-order.dto';
 import { CreateMaterialOrderDto } from '../../../src/api/orders/dto/create-material-order.dto';
 import { CreateMaterialOrderListDto } from '../../../src/api/orders/dto/create-material-order-list.dto';
-import { MaterialLogsService } from '../../../src/api/materials/materials-logs/material-logs.service';
-import { MaterialLogDocument } from '../../../src/api/materials/materials-logs/schemas/material-log.schema';
+import { MaterialWithSupplierDto } from '../../../src/api/orders/dto/material-with-supplier.dto';
 import {
   MaterialOrder,
   MaterialOrderDocument,
@@ -21,6 +20,7 @@ import {
   MaterialDocument,
 } from '../../../src/api/materials/materials/schemas/material.schema';
 import { Model } from 'mongoose';
+import { SummaryDto } from 'src/api/orders/dto/summary.dto';
 
 describe('OrdersController', () => {
   let ordersController: OrdersController;
@@ -28,10 +28,8 @@ describe('OrdersController', () => {
   let productOrdersService: ProductOrdersService;
   let orderDetailsService: OrderDetailsService;
   let materialService: MaterialsService;
-  let materialLogsService: MaterialLogsService;
 	let productOrderDocument: Model<ProductOrderDocument>;
 	let materialOrderDocument: Model<MaterialOrderDocument>;
-  let materialLogDocument: Model<MaterialLogDocument>;
   let materialDocumentModel: Model<MaterialDocument>;
 
 	const dummyMaterialOrder: MaterialOrder = {
@@ -54,12 +52,9 @@ describe('OrdersController', () => {
 	}
 
   beforeEach(async () => {
-    materialLogsService = new MaterialLogsService(materialLogDocument);
-    materialService = new MaterialsService(
-      materialDocumentModel,
-      materialLogsService,
-    );
+    materialService = new MaterialsService(materialDocumentModel);
 		materialOrdersService = new MaterialOrdersService(materialOrderDocument);
+    orderDetailsService = new OrderDetailsService();
 		productOrdersService = new ProductOrdersService(productOrderDocument);
     ordersController = new OrdersController(materialOrdersService, productOrdersService, materialService, orderDetailsService);
   });
@@ -78,6 +73,26 @@ describe('OrdersController', () => {
         .mockImplementation(async () => await result);
 
       expect(await ordersController.createMaterial(newMaterialOrderList)).toBe(result);
+    });
+  });
+
+  describe('findAllMaterials', () => {
+    it('Should find all material orders with supplier.', async () => {
+      const result: MaterialWithSupplierDto[] = [{
+        amountDue: 5000,
+        dateDue: new Date,
+        dateOrdered: new Date,
+        quantity: 100,
+        isPaid: false,
+        materialId: '1234',
+        supplierName: 'Material Dealer'
+      }];
+
+      jest
+        .spyOn(materialOrdersService, 'findAll')
+        .mockImplementation(async () => await result);
+
+      expect(await ordersController.findAllMaterials()).toBe(result);
     });
   });
 
@@ -127,7 +142,7 @@ describe('OrdersController', () => {
   });
 
 	describe('findAllProducts', () => {
-    it('Should find one product order by id.', async () => {
+    it('Should find all product orders.', async () => {
       const result: ProductOrder[] = [dummyProductOrder];
 
       jest
@@ -163,6 +178,35 @@ describe('OrdersController', () => {
         .mockImplementation(async () => await result);
 
       expect(await ordersController.removeProduct(newProductOrder.customerId)).toBe(result);
+    });
+  });
+
+  describe('balance', () => {
+    it('Should get the balance.', async () => {
+      const result = {
+        balance: 50000
+      }
+
+      jest
+        .spyOn(orderDetailsService, 'getBalance')
+        .mockImplementation(async () => await result);
+
+      expect(await ordersController.balance()).toBe(result);
+    });
+  });
+
+  describe('summary', () => {
+    it('Should get the balance.', async () => {
+      const result: SummaryDto[] = [{
+        date: 'Today',
+        balance: 1000000,
+      }];
+
+      jest
+        .spyOn(orderDetailsService, 'getSummary')
+        .mockImplementation(async () => await result);
+
+      expect(await ordersController.summary()).toBe(result);
     });
   });
 });
