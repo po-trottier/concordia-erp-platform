@@ -1,13 +1,12 @@
 import { OrdersController } from '../../../src/api/orders/orders.controller';
 import { MaterialOrdersService } from '../../../src/api/orders/material-orders.service';
 import { ProductOrdersService } from '../../../src/api/orders/product-orders.service';
+import { OrderDetailsService } from '../../../src/api/orders/order-details.service';
 import { MaterialsService } from '../../../src/api/materials/materials/materials.service';
 import { CreateProductOrderListDto } from '../../../src/api/orders/dto/create-product-order-list.dto';
 import { CreateProductOrderDto } from '../../../src/api/orders/dto/create-product-order.dto';
 import { CreateMaterialOrderDto } from '../../../src/api/orders/dto/create-material-order.dto';
 import { CreateMaterialOrderListDto } from '../../../src/api/orders/dto/create-material-order-list.dto';
-import { SummaryDto } from '../../../src/api/orders/dto/summary.dto';
-import { MaterialWithSupplierDto } from '../../../src/api/orders/dto/material-with-supplier.dto';
 import { MaterialLogsService } from '../../../src/api/materials/materials-logs/material-logs.service';
 import { MaterialLogDocument } from '../../../src/api/materials/materials-logs/schemas/material-log.schema';
 import {
@@ -19,7 +18,6 @@ import {
   ProductOrderDocument,
 } from '../../../src/api/orders/schemas/product-orders.schema';
 import {
-  Material,
   MaterialDocument,
 } from '../../../src/api/materials/materials/schemas/material.schema';
 import { Model } from 'mongoose';
@@ -28,6 +26,7 @@ describe('OrdersController', () => {
   let ordersController: OrdersController;
   let materialOrdersService: MaterialOrdersService;
   let productOrdersService: ProductOrdersService;
+  let orderDetailsService: OrderDetailsService;
   let materialService: MaterialsService;
   let materialLogsService: MaterialLogsService;
 	let productOrderDocument: Model<ProductOrderDocument>;
@@ -62,7 +61,7 @@ describe('OrdersController', () => {
     );
 		materialOrdersService = new MaterialOrdersService(materialOrderDocument);
 		productOrdersService = new ProductOrdersService(productOrderDocument);
-    ordersController = new OrdersController(materialOrdersService, productOrdersService, materialService);
+    ordersController = new OrdersController(materialOrdersService, productOrdersService, materialService, orderDetailsService);
   });
 
 	describe('createMaterial', () => {

@@ -11,11 +11,9 @@ import { MaterialOrdersService } from './material-orders.service';
 import { CreateMaterialOrderListDto } from './dto/create-material-order-list.dto';
 import { ProductOrdersService } from './product-orders.service';
 import { CreateProductOrderListDto } from './dto/create-product-order-list.dto';
-import { CreateProductOrderDto } from './dto/create-product-order.dto';
-import { CreateMaterialOrderDto } from './dto/create-material-order.dto';
-import { SummaryDto } from './dto/summary.dto';
 import { MaterialsService } from '../materials/materials/materials.service';
-import { MaterialWithSupplierDto } from './dto/material-with-supplier.dto';
+import { OrderDetailsService } from './order-details.service';
+
 
 /**
  * Controller class of the Order entity
@@ -26,6 +24,7 @@ export class OrdersController {
     private readonly materialOrderService: MaterialOrdersService,
     private readonly productOrderService: ProductOrdersService,
     private readonly materialsService: MaterialsService,
+    private readonly orderDetailsService: OrderDetailsService,
   ) {}
 
   @Post('materials')
@@ -40,23 +39,7 @@ export class OrdersController {
 
   @Get('materials/all')
   async findAllMaterials() {
-    const materialOrders: CreateMaterialOrderDto[] = await this.materialOrderService.findAll();
-    const materialOrdersWithSupplier: MaterialWithSupplierDto[] = [];
-    for (const materialOrder of materialOrders) {
-      materialOrdersWithSupplier.push({
-        amountDue: materialOrder.amountDue,
-        dateDue: materialOrder.dateDue,
-        dateOrdered: materialOrder.dateOrdered,
-        isPaid: materialOrder.isPaid,
-        quantity: materialOrder.quantity,
-        supplierName: (
-          await this.materialsService.findOne(materialOrder.materialId)
-        ).vendorName,
-        materialId: materialOrder.materialId,
-      });
-    }
-
-    return materialOrdersWithSupplier;
+    return this.materialOrderService.findAll(this.materialsService);
   }
 
   @Get('materials/:id')
@@ -94,60 +77,12 @@ export class OrdersController {
   }
 
   @Get('balance')
-  async balance() {
-    const productOrders: CreateProductOrderDto[] = await this.productOrderService.findAll();
-    const materialOrders: CreateMaterialOrderDto[] = await this.materialOrderService.findAll();
-
-    let balance = 0;
-    productOrders.forEach((p: CreateProductOrderDto) => {
-      if (p.isPaid) {
-        balance += p.amountDue;
-      }
-    });
-
-    materialOrders.forEach((m: CreateMaterialOrderDto) => {
-      if (m.isPaid) {
-        balance -= m.amountDue;
-      }
-    });
-
-    return { balance: balance };
+  balance() {
+    return this.orderDetailsService.getBalance(this.productOrderService, this.materialOrderService);
   }
 
   @Get('summary')
-  async summary() {
-    const productOrders: CreateProductOrderDto[] = await this.productOrderService.findAll();
-    const materialOrders: CreateMaterialOrderDto[] = await this.materialOrderService.findAll();
-
-    const dateMap = new Map<string, number>();
-
-    productOrders.forEach((p) => {
-      const dateOrdered: string = p.dateOrdered.toISOString().split('T')[0];
-      let currentValue: number = dateMap.get(dateOrdered);
-      if (currentValue == null) {
-        currentValue = 0;
-      }
-      dateMap.set(dateOrdered, currentValue + p.amountDue);
-    });
-
-    materialOrders.forEach((m: CreateMaterialOrderDto) => {
-      const dateOrdered: string = m.dateOrdered.toISOString().split('T')[0];
-      let currentValue: number = dateMap.get(dateOrdered);
-      if (currentValue == null) {
-        currentValue = 0;
-      }
-      dateMap.set(dateOrdered, currentValue - m.amountDue);
-    });
-
-    const summaries: SummaryDto[] = [];
-    dateMap.forEach((value: number, key: string) => {
-      summaries.push({ date: key, balance: value });
-    });
-
-    summaries.sort(function (a, b) {
-      return new Date(a.date).getTime() - new Date(b.date).getTime();
-    });
-
-    return summaries;
+  summary() {
+    return this.orderDetailsService.getSummary(this.productOrderService, this.materialOrderService);
   }
 }
