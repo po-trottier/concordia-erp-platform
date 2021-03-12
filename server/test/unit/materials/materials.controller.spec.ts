@@ -1,5 +1,6 @@
 import { MaterialsController } from '../../../src/api/materials/materials/materials.controller';
 import { MaterialsService } from '../../../src/api/materials/materials/materials.service';
+import { MaterialLocationStockService } from '../../../src/api/materials/materials/material-location-stock.service';
 import { CreateMaterialDto } from '../../../src/api/materials/materials/dto/create-material.dto';
 import { UpdateMaterialDto } from '../../../src/api/materials/materials/dto/update-material.dto';
 import { MaterialLogsService } from '../../../src/api/materials/materials-logs/material-logs.service';
@@ -9,17 +10,26 @@ import {
   Material,
   MaterialDocument,
 } from '../../../src/api/materials/materials/schemas/material.schema';
+import {
+  MaterialLocationStock,
+  MaterialLocationStockDocument,
+} from '../../../src/api/materials/materials/schemas/material-location-stock.schema';
+import { LocationDocument } from '../../../src/api/locations/schemas/location.schema';
+import { LocationsService } from '../../../src/api/locations/locations.service';
 
 describe('PartsController', () => {
   let materialController: MaterialsController;
   let materialService: MaterialsService;
   let materialLogsService: MaterialLogsService;
+  let materialLocationStockService: MaterialLocationStockService;
+  let locationsService: LocationsService;
+  let locationDocument: Model<LocationDocument>;
+  let materialLocationStockDocument: Model<MaterialLocationStockDocument>;
   let materialLogDocument: Model<MaterialLogDocument>;
   let materialDocumentModel: Model<MaterialDocument>;
 
   const dummyMaterial: Material = {
     name: 'Steel',
-    stock: 1,
     density: 2,
     vendorName: 'Steelseries',
     image: 'image',
@@ -28,11 +38,10 @@ describe('PartsController', () => {
 
   beforeEach(async () => {
     materialLogsService = new MaterialLogsService(materialLogDocument);
-    materialService = new MaterialsService(
-      materialDocumentModel,
-      materialLogsService,
-    );
-    materialController = new MaterialsController(materialService);
+    materialService = new MaterialsService(materialDocumentModel);
+    locationsService = new LocationsService(locationDocument);
+    materialLocationStockService = new MaterialLocationStockService(materialLocationStockDocument, materialService, materialLogsService, locationsService);
+    materialController = new MaterialsController(materialService, materialLocationStockService);
   });
 
   describe('findAll', () => {
@@ -64,7 +73,6 @@ describe('PartsController', () => {
 
       const newMaterial = new CreateMaterialDto();
       newMaterial.name = result.name;
-      newMaterial.stock = result.stock;
       newMaterial.density = result.density;
       newMaterial.vendorName = result.vendorName;
       newMaterial.image = result.image;
@@ -96,7 +104,6 @@ describe('PartsController', () => {
 
       const updatedMaterial = new UpdateMaterialDto();
       updatedMaterial.name = result.name;
-      updatedMaterial.stock = result.stock;
       updatedMaterial.density = result.density;
       updatedMaterial.vendorName = result.vendorName;
       updatedMaterial.image = result.image;

@@ -12,7 +12,6 @@ describe('FinanceController', () => {
 
   const dummyLocation: Location = {
     name: 'Montreal Warehouse',
-    address: '123 Street, Montreal'
   };
 
   beforeEach(() => {
@@ -49,7 +48,6 @@ describe('FinanceController', () => {
 
       const newLocation = new CreateLocationDto();
       newLocation.name = result.name;
-      newLocation.address = result.address;
 
       jest
         .spyOn(locationsService, 'create')
@@ -77,7 +75,6 @@ describe('FinanceController', () => {
 
       const newLocation = new UpdateLocationDto();
       newLocation.name = result.name;
-      newLocation.address = result.address;
       
       jest
         .spyOn(locationsService, 'update')
