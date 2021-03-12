@@ -1,4 +1,4 @@
-import { IsInt, IsOptional, IsString, Min } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 import { ProductMaterialInterface } from '../schemas/part.schema';
 
 /**
@@ -11,9 +11,4 @@ export class UpdatePartDto {
 
   @IsOptional()
   materials: ProductMaterialInterface[];
-
-  @IsInt()
-  @Min(0)
-  @IsOptional()
-  stock: number;
 }

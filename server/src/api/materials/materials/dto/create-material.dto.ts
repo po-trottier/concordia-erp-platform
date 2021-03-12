@@ -1,12 +1,4 @@
-import {
-  IsInt,
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
-  IsPositive,
-  IsString,
-  Min,
-} from 'class-validator';
+import { IsNotEmpty, IsNumber, IsPositive, IsString } from 'class-validator';
 
 /**
  * Material creation DTO
@@ -15,11 +7,6 @@ export class CreateMaterialDto {
   @IsNotEmpty()
   @IsString()
   name: string;
-
-  @IsInt()
-  @Min(0)
-  @IsOptional()
-  stock = 0;
 
   @IsNumber()
   @IsPositive()

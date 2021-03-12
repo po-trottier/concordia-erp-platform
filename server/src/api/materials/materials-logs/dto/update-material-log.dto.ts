@@ -9,6 +9,10 @@ export class UpdateMaterialLogDto {
   materialId: string;
 
   @IsNotEmpty()
+  @IsString()
+  locationId: string;
+
+  @IsNotEmpty()
   date: Date;
 
   @IsNotEmpty()

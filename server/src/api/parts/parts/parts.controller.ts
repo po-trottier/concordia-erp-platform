@@ -14,15 +14,25 @@ import { UpdatePartDto } from './dto/update-part.dto';
 import { Roles } from '../../roles/roles.decorator';
 import { Role } from '../../roles/roles.enum';
 import { UpdatePartStockDto } from './dto/update-part-stock.dto';
+import { PartLocationStockService } from './part-location-stock.service';
 
 @Controller()
 export class PartsController {
-  constructor(private readonly partsService: PartsService) {}
+  constructor(
+    private readonly partsService: PartsService,
+    private readonly partLocationStockService: PartLocationStockService,
+  ) {}
 
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
   @Post()
   create(@Body(ValidationPipe) createPartDto: CreatePartDto) {
     return this.partsService.create(createPartDto);
+  }
+
+  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
+  @Get('stock/:locationId')
+  findAllLocationStock(@Param('locationId') locationId: string) {
+    return this.partLocationStockService.findAll(locationId);
   }
 
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
@@ -32,18 +42,32 @@ export class PartsController {
   }
 
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
+  @Get(':partId/stock/:locationId')
+  findOneLocationStock(
+    @Param('partId') partId: string,
+    @Param('locationId') locationId: string,
+  ) {
+    return this.partLocationStockService.findOne(partId, locationId);
+  }
+
+  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.partsService.findOne(id);
   }
 
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
-  @Patch(':id/stock')
+  @Patch(':partId/stock/:locationId')
   updateStock(
-    @Param('id') id: string,
+    @Param('partId') partId: string,
+    @Param('locationId') locationId: string,
     @Body(ValidationPipe) updatePartStockDto: UpdatePartStockDto,
   ) {
-    return this.partsService.updateStock(id, updatePartStockDto);
+    return this.partLocationStockService.update(
+      partId,
+      locationId,
+      updatePartStockDto,
+    );
   }
 
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)

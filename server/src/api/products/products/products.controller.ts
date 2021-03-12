@@ -14,13 +14,17 @@ import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { UpdateProductStockDto } from './dto/update-product-stock.dto';
+import { ProductLocationStockService } from './product-location-stock.service';
 
 /**
  * Controller class for the products
  */
 @Controller()
 export class ProductsController {
-  constructor(private readonly productsService: ProductsService) {}
+  constructor(
+    private readonly productsService: ProductsService,
+    private readonly productLocationStockService: ProductLocationStockService,
+  ) {}
 
   /**
    * Handles POST requests to create products
@@ -32,6 +36,12 @@ export class ProductsController {
     return this.productsService.create(createProductDto);
   }
 
+  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
+  @Get('stock/:locationId')
+  findAllLocationStock(@Param('locationId') locationId: string) {
+    return this.productLocationStockService.findAll(locationId);
+  }
+
   /**
    * Handles GET requests to retrieve all products
    */
@@ -39,6 +49,15 @@ export class ProductsController {
   @Get()
   findAll() {
     return this.productsService.findAll();
+  }
+
+  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
+  @Get(':productId/stock/:locationId')
+  findOneLocationStock(
+    @Param('productId') productId: string,
+    @Param('locationId') locationId: string,
+  ) {
+    return this.productLocationStockService.findOne(productId, locationId);
   }
 
   /**
@@ -54,16 +73,22 @@ export class ProductsController {
   /**
    * Handles PATCH request to update an existing product by id
    * HANDLES UPDATES FOR STOCK
-   * @param id
+   * @param productId id of the product
+   * @param locationId id of the location
    * @param updateProductStockDto
    */
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
-  @Patch(':id/stock')
+  @Patch(':productId/stock/:locationId')
   updateStock(
-    @Param('id') id: string,
+    @Param('productId') productId: string,
+    @Param('locationId') locationId: string,
     @Body(ValidationPipe) updateProductStockDto: UpdateProductStockDto,
   ) {
-    return this.productsService.updateStock(id, updateProductStockDto);
+    return this.productLocationStockService.update(
+      productId,
+      locationId,
+      updateProductStockDto,
+    );
   }
 
   /**

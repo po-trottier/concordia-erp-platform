@@ -3,10 +3,6 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateMaterialDto } from './dto/create-material.dto';
 import { UpdateMaterialDto } from './dto/update-material.dto';
-import { MaterialLogsService } from '../materials-logs/material-logs.service';
-import { format, parse } from 'date-fns';
-import { UpdateMaterialLogDto } from '../materials-logs/dto/update-material-log.dto';
-import { UpdateMaterialStockDto } from './dto/update-material-stock.dto';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Material, MaterialDocument } from './schemas/material.schema';
 
@@ -17,7 +13,6 @@ import { Material, MaterialDocument } from './schemas/material.schema';
 export class MaterialsService {
   constructor(
     @InjectModel(Material.name) private materialModel: Model<MaterialDocument>,
-    private readonly materialLogsService: MaterialLogsService,
   ) {}
 
   /**
@@ -27,19 +22,7 @@ export class MaterialsService {
    */
   async create(createMaterialDto: CreateMaterialDto): Promise<Material> {
     const createdMaterial = new this.materialModel(createMaterialDto);
-    createdMaterial.save();
-
-    const updateMaterialLogDto: UpdateMaterialLogDto = {
-      materialId: createdMaterial.id,
-      stock: createdMaterial.stock || 0,
-      stockBought: 0,
-      stockUsed: 0,
-      date: parse(format(new Date(), 'd/M/y'), 'dd/MM/yyyy', new Date()),
-    };
-
-    await this.materialLogsService.update(updateMaterialLogDto);
-
-    return createdMaterial;
+    return await createdMaterial.save();
   }
 
   /**
@@ -85,50 +68,6 @@ export class MaterialsService {
   async remove(id: string): Promise<Material> {
     const deletedMaterial = await this.materialModel.findByIdAndDelete(id);
     return this.validateMaterialFound(deletedMaterial, id);
-  }
-
-  /**
-   * Updates material stock by id using mongoose materialModel
-   * Emits the material.quantity.updated event
-   *
-   * @param id string of the material's objectId
-   * @param updateMaterialStockDto dto used to update material stock
-   */
-  async updateStock(
-    id: string,
-    updateMaterialStockDto: UpdateMaterialStockDto,
-  ): Promise<Material> {
-    const { stockBought, stockUsed } = updateMaterialStockDto;
-
-    const netStockChange = stockBought - stockUsed;
-
-    let updatedMaterial = await this.materialModel.findByIdAndUpdate(
-      id,
-      { $inc: { stock: netStockChange } },
-      { new: true },
-    );
-
-    if (updatedMaterial.stock < 0) {
-      updatedMaterial = await this.materialModel.findByIdAndUpdate(
-        id,
-        { $set: { stock: 0 } },
-        { new: true },
-      );
-    }
-
-    if (updatedMaterial) {
-      const updateMaterialLogDto: UpdateMaterialLogDto = {
-        materialId: id,
-        stock: updatedMaterial.stock,
-        stockBought,
-        stockUsed,
-        date: parse(format(new Date(), 'd/M/y'), 'dd/MM/yyyy', new Date()),
-      };
-
-      await this.materialLogsService.update(updateMaterialLogDto);
-    }
-
-    return this.validateMaterialFound(updatedMaterial, id);
   }
 
   /**

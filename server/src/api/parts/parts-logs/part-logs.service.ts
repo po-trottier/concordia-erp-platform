@@ -26,11 +26,20 @@ export class PartLogsService {
    * Retrieves a partLog by composite key using mongoose partLogModel
    *
    * @param partId the id of the corresponding part
+   * @param locationId the id of the location
    * @param date the date in history
    */
-  async findOne(partId: string, date: Date): Promise<PartLog> {
-    const partLog = await this.partLogModel.findOne({ partId, date });
-    return this.validatePartLogFound(partLog, partId, date);
+  async findOne(
+    partId: string,
+    locationId: string,
+    date: Date,
+  ): Promise<PartLog> {
+    const partLog = await this.partLogModel.findOne({
+      partId,
+      locationId,
+      date,
+    });
+    return this.validatePartLogFound(partLog, partId, locationId, date);
   }
 
   /**
@@ -39,15 +48,22 @@ export class PartLogsService {
    * @param updatePartLogDto dto used to update part logs
    */
   async update(updatePartLogDto: UpdatePartLogDto): Promise<PartLog> {
-    const { partId, date, stock, stockBuilt, stockUsed } = updatePartLogDto;
+    const {
+      partId,
+      locationId,
+      date,
+      stock,
+      stockBuilt,
+      stockUsed,
+    } = updatePartLogDto;
 
     const updatedPartLog = await this.partLogModel.findOneAndUpdate(
-      { partId, date },
+      { partId, locationId, date },
       { $set: { stock }, $inc: { stockBuilt, stockUsed } },
       { new: true, upsert: true },
     );
 
-    return this.validatePartLogFound(updatedPartLog, partId, date);
+    return this.validatePartLogFound(updatedPartLog, partId, locationId, date);
   }
 
   /**
@@ -55,12 +71,18 @@ export class PartLogsService {
    *
    * @param partLogResult a retrieved part
    * @param partId the id of the corresponding part
+   * @param locationId the id of the location
    * @param date the date in history
    */
-  validatePartLogFound(partLogResult: any, partId: string, date: Date) {
+  validatePartLogFound(
+    partLogResult: any,
+    partId: string,
+    locationId: string,
+    date: Date,
+  ) {
     if (!partLogResult) {
       throw new NotFoundException(
-        `PartLog entry with partId ${partId} on ${date.toString()} not found`,
+        `PartLog entry with partId ${partId} and locationId ${locationId} on ${date.toString()} not found`,
       );
     } else {
       return partLogResult;

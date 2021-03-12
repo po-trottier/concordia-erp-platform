@@ -28,14 +28,25 @@ export class MaterialLogsService {
    * Retrieves a materialLog by composite key using mongoose materialLogModel
    *
    * @param materialId the id of the corresponding material
+   * @param locationId the id of the location
    * @param date the date in history
    */
-  async findOne(materialId: string, date: Date): Promise<MaterialLog> {
+  async findOne(
+    materialId: string,
+    locationId: string,
+    date: Date,
+  ): Promise<MaterialLog> {
     const materialLog = await this.materialLogModel.findOne({
       materialId,
+      locationId,
       date,
     });
-    return this.validateMaterialLogFound(materialLog, materialId, date);
+    return this.validateMaterialLogFound(
+      materialLog,
+      materialId,
+      locationId,
+      date,
+    );
   }
 
   /**
@@ -48,6 +59,7 @@ export class MaterialLogsService {
   ): Promise<MaterialLog> {
     const {
       materialId,
+      locationId,
       date,
       stock,
       stockBought,
@@ -55,13 +67,18 @@ export class MaterialLogsService {
     } = updateMaterialLogDto;
 
     const updatedMaterialLog = await this.materialLogModel.findOneAndUpdate(
-      { materialId, date },
+      { materialId, locationId, date },
       { $set: { stock }, $inc: { stockBought, stockUsed } },
 
       { new: true, upsert: true },
     );
 
-    return this.validateMaterialLogFound(updatedMaterialLog, materialId, date);
+    return this.validateMaterialLogFound(
+      updatedMaterialLog,
+      materialId,
+      locationId,
+      date,
+    );
   }
 
   /**
@@ -69,16 +86,18 @@ export class MaterialLogsService {
    *
    * @param materialLogResult a retrieved material
    * @param materialId the id of the corresponding material
+   * @param locationId the id the location
    * @param date the date in history
    */
   validateMaterialLogFound(
     materialLogResult: any,
     materialId: string,
+    locationId: string,
     date: Date,
   ) {
     if (!materialLogResult) {
       throw new NotFoundException(
-        `MaterialLog entry with materialId ${materialId} on ${date.toString()} not found`,
+        `MaterialLog entry with materialId ${materialId} and locationId ${locationId} on ${date.toString()} not found`,
       );
     } else {
       return materialLogResult;

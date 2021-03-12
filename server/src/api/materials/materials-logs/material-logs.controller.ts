@@ -8,9 +8,13 @@ export class MaterialLogsController {
   constructor(private readonly materialLogsService: MaterialLogsService) {}
 
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
-  @Get(':id/:date')
-  findOne(@Param('id') id: string, @Param('date') date: Date) {
-    return this.materialLogsService.findOne(id, date);
+  @Get(':materialId/:locationId/:date')
+  findOne(
+    @Param('materialId') materialId: string,
+    @Param('locationId') locationId: string,
+    @Param('date') date: Date,
+  ) {
+    return this.materialLogsService.findOne(materialId, locationId, date);
   }
 
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)

@@ -9,6 +9,10 @@ export class UpdatePartLogDto {
   partId: string;
 
   @IsNotEmpty()
+  @IsString()
+  locationId: string;
+
+  @IsNotEmpty()
   date: Date;
 
   @IsNotEmpty()

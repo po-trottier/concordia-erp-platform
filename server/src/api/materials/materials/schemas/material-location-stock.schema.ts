@@ -1,16 +1,13 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema as mongooseSchema } from 'mongoose';
 
-export type MaterialLogDocument = MaterialLog & Document;
+export type MaterialLocationStockDocument = MaterialLocationStock & Document;
 
 /**
- * MaterialLog collection mongoose schema
+ * MaterialLocationStock collection mongoose schema
  */
 @Schema()
-export class MaterialLog {
-  @Prop({ required: true, index: true })
-  date: Date;
-
+export class MaterialLocationStock {
   @Prop({
     type: mongooseSchema.Types.ObjectId,
     ref: 'Material',
@@ -27,18 +24,14 @@ export class MaterialLog {
   })
   locationId: string;
 
-  @Prop({ required: true })
+  @Prop({ required: true, default: 0 })
   stock: number;
-
-  @Prop({ required: true })
-  stockBought: number;
-
-  @Prop({ required: true })
-  stockUsed: number;
 }
 
-export const MaterialLogSchema = SchemaFactory.createForClass(MaterialLog);
-MaterialLogSchema.index(
-  { date: 1, materialId: 1, locationId: 1 },
+export const MaterialLocationStockSchema = SchemaFactory.createForClass(
+  MaterialLocationStock,
+);
+MaterialLocationStockSchema.index(
+  { materialId: 1, locationId: 1 },
   { unique: true },
 );
