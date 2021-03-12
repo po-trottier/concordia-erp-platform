@@ -23,6 +23,7 @@ import {
   MaterialLogSchema,
 } from '../materials/materials-logs/schemas/material-log.schema';
 import { MaterialLogsService } from '../materials/materials-logs/material-logs.service';
+import { OrderDetailsService } from './order-details.service';
 
 /**
  * Contains all logic and files related to finance
@@ -44,6 +45,7 @@ import { MaterialLogsService } from '../materials/materials-logs/material-logs.s
     ProductOrdersService,
     MaterialsService,
     MaterialLogsService,
+    OrderDetailsService
   ],
 })
 export class OrdersModule {}

@@ -1,5 +1,5 @@
 export interface SummaryEntry
 {
   date: string,
-  balance: number
+  profit: number
 }
