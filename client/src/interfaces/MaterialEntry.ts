@@ -7,7 +7,8 @@ export interface MaterialEntry {
   density : number,
   vendorName : string,
   image : string,
-  price : number
+  price : number,
+  quantity : number,
   imageNode? : React.ReactNode,
   order? : React.ReactNode,
   actions? : React.ReactNode,

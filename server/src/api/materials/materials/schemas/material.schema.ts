@@ -22,6 +22,9 @@ export class Material {
 
   @Prop({ required: true, default: 1 })
   price: number;
+
+  @Prop({ required: true, default: 0 })
+  quantity: number;
 }
 
 export const MaterialSchema = SchemaFactory.createForClass(Material);

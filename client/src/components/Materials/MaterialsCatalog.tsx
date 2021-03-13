@@ -5,9 +5,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ResponsiveTable } from '../ResponsiveTable';
 import { CreateMaterialModal } from './CreateMaterialModal';
 import { EditMaterialModal } from './EditMaterialModal';
+import { OrderMaterialButtons } from './OrderMaterialButtons';
 import { RootState } from '../../store/Store';
 import { MaterialEntry } from '../../interfaces/MaterialEntry';
-import { setMaterialList } from '../../store/slices/MaterialListSlice';
+import { setMaterialList, updateMaterialEntry } from '../../store/slices/MaterialListSlice';
 import axios from '../../plugins/Axios';
 
 const { Search } = Input;
@@ -50,9 +51,11 @@ export const MaterialsCatalog = () => {
       row.imageNode = <img src={row.image} height={32} alt='Material Preview' />;
       row.order = (
         <InputNumber
+          defaultValue={row.quantity == 0 ? undefined : row.quantity}
           placeholder='Input a quantity'
           min={0}
-          style={{ width: '100%' }} />
+          style={{ width: '100%' }}
+          onChange={(value : any) => updateMaterialQuantity(row.id, value)} />
       );
     });
 
@@ -63,6 +66,31 @@ export const MaterialsCatalog = () => {
     return rows;
   };
 
+  const updateMaterialQuantity = (id : string, quantity : number) => {
+    const oldMaterial : MaterialEntry = materials.find((material : any) => {
+      return material._id === id;
+    });
+
+    const newMaterial : MaterialEntry = {
+      ...oldMaterial,
+      quantity
+    }
+
+    axios.patch('/materials/' + id, newMaterial)
+    .then(({ data }) => {
+      const newMaterial = data;
+      newMaterial.id = data['_id'];
+      dispatch(updateMaterialEntry({
+        id,
+        newMaterial
+      }));
+    })
+    .catch((err) => {
+      message.error('Something went wrong while updating the order.');
+      console.error(err);
+    })
+  }
+
   const columns = {
     imageNode: 'Preview',
     name: 'Material',
@@ -71,7 +99,7 @@ export const MaterialsCatalog = () => {
     price: 'Price',
     vendorName: 'Vendor',
     actions: 'Actions',
-    order: 'Order',
+    order: 'Order Quantity',
   };
 
   return (
@@ -87,11 +115,7 @@ export const MaterialsCatalog = () => {
             <span>No materials were found.</span>
         }
       </Card>
-      <Button
-        type='primary'
-        style={{ marginTop: 16, float: 'right' }}>
-        Order Materials
-      </Button>
+      <OrderMaterialButtons />
       <CreateMaterialModal />
     </div>
   );
