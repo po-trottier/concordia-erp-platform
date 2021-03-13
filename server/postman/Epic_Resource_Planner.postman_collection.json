@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "be5ee26a-10e3-4c39-bacf-c83a7f9d7618",
+		"_postman_id": "ceb0c11e-b51c-4fa5-a997-335f2c0164c0",
 		"name": "Epic_Resource_Planner",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -121,9 +121,7 @@
 							},
 							"response": []
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Part Logs",
@@ -167,9 +165,7 @@
 							},
 							"response": []
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Part Stock",
@@ -189,15 +185,15 @@
 									}
 								},
 								"url": {
-									"raw": "{{url}}/parts/604583485eca8e26ab01107f/stock/604569e1a9aad81bc8accc07",
+									"raw": "{{url}}/parts/604cee7c1ba2430c10eeee6e/stock/604cee081ba2430c10eeee6b",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
 										"parts",
-										"604583485eca8e26ab01107f",
+										"604cee7c1ba2430c10eeee6e",
 										"stock",
-										"604569e1a9aad81bc8accc07"
+										"604cee081ba2430c10eeee6b"
 									]
 								}
 							},
@@ -209,14 +205,14 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{url}}/parts/stock/604569e1a9aad81bc8accc07",
+									"raw": "{{url}}/parts/stock/604cee081ba2430c10eeee6b",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
 										"parts",
 										"stock",
-										"604569e1a9aad81bc8accc07"
+										"604cee081ba2430c10eeee6b"
 									]
 								}
 							},
@@ -228,26 +224,23 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{url}}/parts/6045b523a65c8c10cb12bee7/stock/604569e1a9aad81bc8accc07",
+									"raw": "{{url}}/parts/604ccba5c4242f1795b48a6f/stock/604cc797c4242f1795b48a6c",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
 										"parts",
-										"6045b523a65c8c10cb12bee7",
+										"604ccba5c4242f1795b48a6f",
 										"stock",
-										"604569e1a9aad81bc8accc07"
+										"604cc797c4242f1795b48a6c"
 									]
 								}
 							},
 							"response": []
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Finance",
@@ -348,8 +341,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Auth",
@@ -365,8 +357,7 @@
 									"    pm.environment.set(\"JWT\", pm.response.json().token);",
 									"}"
 								],
-								"type": "text/javascript",
-								"id": "11934148-3120-4479-a84a-36e5b2260d90"
+								"type": "text/javascript"
 							}
 						}
 					],
@@ -395,8 +386,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Users",
@@ -523,8 +513,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Products",
@@ -601,13 +590,13 @@
 							"response": []
 						},
 						{
-							"name": "Update product by id",
+							"name": "Build product",
 							"request": {
 								"method": "PATCH",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"name\": \"Pick of destiny\",\n    \"stock\": 10221020120120120\n}",
+									"raw": "{\n    \"stockBuilt\" : 1\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -615,13 +604,42 @@
 									}
 								},
 								"url": {
-									"raw": "{{url}}/products/6036f94e0981691472cb1853",
+									"raw": "{{url}}/products/build/604cee921ba2430c10eeee6f/604cee081ba2430c10eeee6b",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
 										"products",
-										"6036f94e0981691472cb1853"
+										"build",
+										"604cee921ba2430c10eeee6f",
+										"604cee081ba2430c10eeee6b"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update product by id",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Pick of destiny\",\n    \"stock\": 6969\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/products/604ccbbdc4242f1795b48a70",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"products",
+										"604ccbbdc4242f1795b48a70"
 									]
 								}
 							},
@@ -649,9 +667,7 @@
 							},
 							"response": []
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Product Logs",
@@ -695,9 +711,7 @@
 							},
 							"response": []
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Product Stock",
@@ -709,7 +723,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"stockBuilt\": 60,\n    \"stockUsed\": 10\n}",
+									"raw": "{\n    \"stockBuilt\": 50,\n    \"stockUsed\": 0\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -717,15 +731,15 @@
 									}
 								},
 								"url": {
-									"raw": "{{url}}/products/6046ab9ff88d1e216516a7b7/stock/604569e1a9aad81bc8accc07",
+									"raw": "{{url}}/products/604cee921ba2430c10eeee6f/stock/604cee081ba2430c10eeee6b",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
 										"products",
-										"6046ab9ff88d1e216516a7b7",
+										"604cee921ba2430c10eeee6f",
 										"stock",
-										"604569e1a9aad81bc8accc07"
+										"604cee081ba2430c10eeee6b"
 									]
 								}
 							},
@@ -737,14 +751,13 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{url}}/products/6046ab9ff88d1e216516a7b7/stock/604569e1a9aad81bc8accc07",
+									"raw": "{{url}}/products/604ccbbdc4242f1795b48a70/604569e1a9aad81bc8accc07",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
 										"products",
-										"6046ab9ff88d1e216516a7b7",
-										"stock",
+										"604ccbbdc4242f1795b48a70",
 										"604569e1a9aad81bc8accc07"
 									]
 								}
@@ -770,12 +783,9 @@
 							},
 							"response": []
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Materials",
@@ -889,9 +899,7 @@
 							},
 							"response": []
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Material Logs",
@@ -935,9 +943,7 @@
 							},
 							"response": []
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Material Stock",
@@ -1010,12 +1016,9 @@
 							},
 							"response": []
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Locations",
@@ -1130,8 +1133,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "API Status",
@@ -1165,8 +1167,7 @@
 				"type": "text/javascript",
 				"exec": [
 					""
-				],
-				"id": "8b6a290f-a6ad-44e7-b7af-94d8b0cfa082"
+				]
 			}
 		},
 		{
@@ -1175,10 +1176,8 @@
 				"type": "text/javascript",
 				"exec": [
 					""
-				],
-				"id": "625a2085-2b08-4d21-884c-697bb9399b89"
+				]
 			}
 		}
-	],
-	"protocolProfileBehavior": {}
+	]
 }
