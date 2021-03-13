@@ -130,10 +130,13 @@ export class ProductsController {
     // checking if we can do the operation
     let canBuild = true;
     const product = await this.productsService.findOne(productId);
-    for (let i = 0 ; i < product.parts.length ; i++) {
+    for (let i = 0; i < product.parts.length; i++) {
       const part = product.parts[i];
       const totalPartsCount = part.quantity * stockBuilt;
-      const partLocationStock = await this.partLocationStockService.findOne(part.partId, locationId);
+      const partLocationStock = await this.partLocationStockService.findOne(
+        part.partId,
+        locationId,
+      );
       if (partLocationStock.stock < totalPartsCount) {
         canBuild = false;
       }
@@ -141,36 +144,40 @@ export class ProductsController {
 
     let message = null;
     if (!canBuild) {
-      throw new HttpException({
-        error: "stock of parts is not sufficient"
-      }, HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        {
+          error: 'stock of parts is not sufficient',
+        },
+        HttpStatus.BAD_REQUEST,
+      );
     }
     // update product stock
     let updateProductStockDto: UpdateProductStockDto = new UpdateProductStockDto();
     updateProductStockDto.stockBuilt = stockBuilt;
     updateProductStockDto.stockUsed = 0;
 
-    this.productLocationStockService.update(
+    const updatedProductLocationStock = await this.productLocationStockService.update(
       productId,
       locationId,
       updateProductStockDto,
     );
 
     // update parts stock
+    let updatedPartLocationStocks = [];
     let updatePartStockDto: UpdatePartStockDto = new UpdatePartStockDto();
     updatePartStockDto.stockBuilt = 0;
 
-    for (let i = 0 ; i < product.parts.length ; i ++) {
+    for (let i = 0; i < product.parts.length; i++) {
       const part = product.parts[i];
       updatePartStockDto.stockUsed = part.quantity * stockBuilt;
-      this.partLocationStockService.update(
+      let updatedPartLocationStock = await this.partLocationStockService.update(
         part.partId,
         locationId,
         updatePartStockDto,
       );
+      updatedPartLocationStocks.push(updatedPartLocationStock)
     }
-    message = 'products built successfully';
-    return { message };
+    return { updatedProductLocationStock, updatedPartLocationStocks };
   }
 
   /**
