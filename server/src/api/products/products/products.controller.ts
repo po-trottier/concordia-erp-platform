@@ -111,45 +111,66 @@ export class ProductsController {
 
   /**
    * Route for building products from parts
-  *
+   *
    * @param productId id of the product
    * @param locationId id of the location
    * @param buildProductDto
    */
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
   @Patch('build/:productId/:locationId')
-  build(
+  async build(
     @Param('productId') productId: string,
     @Param('locationId') locationId: string,
     @Body(ValidationPipe) buildProductDto: BuildProductDto,
   ) {
     const { stockBuilt } = buildProductDto;
 
-    // update product stock
-    let updateProductStockDto: UpdateProductStockDto = new UpdateProductStockDto();
-    updateProductStockDto.stockBuilt = stockBuilt;
-    updateProductStockDto.stockUsed = 0;
+    // checking if we can do the operation
+    let canBuild = true;
+    const product = await this.productsService.findOne(productId);
+    for (let i = 0 ; i < product.parts.length ; i++) {
+      const part = product.parts[i];
+      const totalPartsCount = part.quantity * stockBuilt;
+      const partLocationStock = await this.partLocationStockService.findOne(part.partId, locationId);
+      if (partLocationStock.stock < totalPartsCount) {
+        canBuild = false;
+      }
+    }
 
-    this.productLocationStockService.update(
-      productId,
-      locationId,
-      updateProductStockDto,
-    );
+    let message = null;
+    if (canBuild) {
+      // update product stock
+      let updateProductStockDto: UpdateProductStockDto = new UpdateProductStockDto();
+      updateProductStockDto.stockBuilt = stockBuilt;
+      updateProductStockDto.stockUsed = 0;
 
-    // update parts stock
-    this.productsService.findOne(productId).then(product => {
+      this.productLocationStockService.update(
+        productId,
+        locationId,
+        updateProductStockDto,
+      );
+
+      // update parts stock
+      const product = await this.productsService.findOne(productId);
       let updatePartStockDto: UpdatePartStockDto = new UpdatePartStockDto();
       updatePartStockDto.stockBuilt = 0;
 
-      product.parts.forEach(part => {
-        updatePartStockDto.stockUsed = part.quantity;
+      for (let i = 0 ; i < product.parts.length ; i ++) {
+        const part = product.parts[i];
+        updatePartStockDto.stockUsed = part.quantity * stockBuilt;
         this.partLocationStockService.update(
           part.partId,
           locationId,
-          updatePartStockDto
+          updatePartStockDto,
         );
-      })
-    });
+      }
+      message = 'products built successfully';
+    } else {
+      message = 'stock of parts is not sufficient';
+      // TODO: throw exception
+    }
+
+    return { message };
   }
 
   /**
