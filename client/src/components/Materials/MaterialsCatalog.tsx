@@ -47,11 +47,12 @@ export const MaterialsCatalog = () => {
 
     rows.forEach((row : any) => {
       row.id = row['_id'];
+      const index = materials.findIndex((material : any) => material._id === row.id);
       row.actions = <EditMaterialModal material={row} />;
       row.imageNode = <img src={row.image} height={32} alt='Material Preview' />;
       row.order = (
         <InputNumber
-          defaultValue={row.quantity == 0 ? undefined : row.quantity}
+          value={materials[index].quantity == 0 ? undefined : materials[index].quantity}
           placeholder='Input a quantity'
           min={0}
           style={{ width: '100%' }}
