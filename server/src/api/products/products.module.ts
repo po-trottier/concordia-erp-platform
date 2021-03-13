@@ -16,6 +16,7 @@ import {
   ProductLocationStockSchema,
 } from './products/schemas/product-location-stock.schema';
 import { LocationsModule } from '../locations/locations.module';
+import { PartsModule } from '../parts/parts.module';
 import { ProductLocationStockService } from './products/product-location-stock.service';
 
 @Module({
@@ -28,6 +29,7 @@ import { ProductLocationStockService } from './products/product-location-stock.s
       { name: ProductLocationStock.name, schema: ProductLocationStockSchema },
     ]),
     LocationsModule,
+    PartsModule,
     // ENV Support
     ConfigModule.forRoot({ validate, cache: true }),
   ],

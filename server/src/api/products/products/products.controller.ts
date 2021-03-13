@@ -14,8 +14,10 @@ import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { UpdateProductStockDto } from './dto/update-product-stock.dto';
-import { ProductLocationStockService } from './product-location-stock.service';
+import { UpdatePartStockDto } from '../../parts/parts/dto/update-part-stock.dto';
 import { BuildProductDto } from './dto/build-product.dto';
+import { ProductLocationStockService } from './product-location-stock.service';
+import { PartLocationStockService } from '../../parts/parts/part-location-stock.service';
 
 /**
  * Controller class for the products
@@ -25,6 +27,7 @@ export class ProductsController {
   constructor(
     private readonly productsService: ProductsService,
     private readonly productLocationStockService: ProductLocationStockService,
+    private readonly partLocationStockService: PartLocationStockService,
   ) {}
 
   /**
@@ -108,6 +111,10 @@ export class ProductsController {
 
   /**
    * Route for building products from parts
+  *
+   * @param productId id of the product
+   * @param locationId id of the location
+   * @param buildProductDto
    */
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
   @Patch('build/:productId/:locationId')
@@ -117,6 +124,7 @@ export class ProductsController {
     @Body(ValidationPipe) buildProductDto: BuildProductDto,
   ) {
     const { stockBuilt } = buildProductDto;
+
     // update product stock
     let updateProductStockDto: UpdateProductStockDto = new UpdateProductStockDto();
     updateProductStockDto.stockBuilt = stockBuilt;
@@ -130,7 +138,17 @@ export class ProductsController {
 
     // update parts stock
     this.productsService.findOne(productId).then(product => {
-      console.log(product.parts);
+      let updatePartStockDto: UpdatePartStockDto = new UpdatePartStockDto();
+      updatePartStockDto.stockBuilt = 0;
+
+      product.parts.forEach(part => {
+        updatePartStockDto.stockUsed = part.quantity;
+        this.partLocationStockService.update(
+          part.partId,
+          locationId,
+          updatePartStockDto
+        );
+      })
     });
   }
 

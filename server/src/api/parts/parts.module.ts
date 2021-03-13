@@ -31,5 +31,6 @@ import { PartLocationStockService } from './parts/part-location-stock.service';
   ],
   controllers: [PartLogsController, PartsController],
   providers: [PartsService, PartLogsService, PartLocationStockService],
+  exports: [PartLocationStockService],
 })
 export class PartsModule {}
