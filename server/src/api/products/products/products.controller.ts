@@ -3,6 +3,8 @@ import {
   Controller,
   Delete,
   Get,
+  HttpException,
+  HttpStatus,
   Param,
   Patch,
   Post,
@@ -138,38 +140,36 @@ export class ProductsController {
     }
 
     let message = null;
-    if (canBuild) {
-      // update product stock
-      let updateProductStockDto: UpdateProductStockDto = new UpdateProductStockDto();
-      updateProductStockDto.stockBuilt = stockBuilt;
-      updateProductStockDto.stockUsed = 0;
-
-      this.productLocationStockService.update(
-        productId,
-        locationId,
-        updateProductStockDto,
-      );
-
-      // update parts stock
-      const product = await this.productsService.findOne(productId);
-      let updatePartStockDto: UpdatePartStockDto = new UpdatePartStockDto();
-      updatePartStockDto.stockBuilt = 0;
-
-      for (let i = 0 ; i < product.parts.length ; i ++) {
-        const part = product.parts[i];
-        updatePartStockDto.stockUsed = part.quantity * stockBuilt;
-        this.partLocationStockService.update(
-          part.partId,
-          locationId,
-          updatePartStockDto,
-        );
-      }
-      message = 'products built successfully';
-    } else {
-      message = 'stock of parts is not sufficient';
-      // TODO: throw exception
+    if (!canBuild) {
+      throw new HttpException({
+        error: "stock of parts is not sufficient"
+      }, HttpStatus.BAD_REQUEST);
     }
+    // update product stock
+    let updateProductStockDto: UpdateProductStockDto = new UpdateProductStockDto();
+    updateProductStockDto.stockBuilt = stockBuilt;
+    updateProductStockDto.stockUsed = 0;
 
+    this.productLocationStockService.update(
+      productId,
+      locationId,
+      updateProductStockDto,
+    );
+
+    // update parts stock
+    let updatePartStockDto: UpdatePartStockDto = new UpdatePartStockDto();
+    updatePartStockDto.stockBuilt = 0;
+
+    for (let i = 0 ; i < product.parts.length ; i ++) {
+      const part = product.parts[i];
+      updatePartStockDto.stockUsed = part.quantity * stockBuilt;
+      this.partLocationStockService.update(
+        part.partId,
+        locationId,
+        updatePartStockDto,
+      );
+    }
+    message = 'products built successfully';
     return { message };
   }
 
