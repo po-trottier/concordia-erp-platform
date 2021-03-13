@@ -6,57 +6,90 @@ import { MaterialEntry } from '../../interfaces/MaterialEntry';
 import { updateMaterialEntry } from '../../store/slices/MaterialListSlice';
 import axios from '../../plugins/Axios';
 
-export const OrderMaterialButtons = (props : any) => {
+export const OrderMaterialButtons = () => {
 	const dispatch = useDispatch();
 	const materials = useSelector((state : RootState) => state.materialList.list);
 
 	const [resetLoading, setResetLoading] = useState(false);
 	const [orderLoading, setOrderLoading] = useState(false);
 
+	const getIncrement = (day : number) => {
+		let increment = 0;
+		switch(day){
+			case 0:
+				increment = 5;
+				break;
+			case 1:
+				increment = 4;
+				break;
+			case 2:
+				increment = 3;
+				break;
+			case 3:
+				increment = 2;
+				break;
+			case 4:
+				increment = 8;
+				break;
+			case 5:
+				increment = 7;
+				break;
+			case 6:
+				increment = 6;
+				break;
+		}
+
+		return increment;
+	}
+
 	const createOrder = () => {
     let order : any[] = [];
 
     materials.forEach((material : any) => {
-		const dateOrdered = new Date;
-		const dateDue = new Date; 
+			if(material.quantity){
+				const dateOrdered = new Date();
+				const dateDue = new Date();
+				dateDue.setDate(dateDue.getDate() + getIncrement(dateDue.getDay()));
+				const amountDue = material.quantity * material.price;
 
-		if(material.quantity)
-			order.push({
-				materialId: material._id,
-				quantity: material.quantity,
-				amountDue: material.price,
-				dateOrdered,
-				dateDue,
-				isPaid: false,
-			})
+				order.push({
+					materialId: material._id,
+					quantity: material.quantity,
+					amountDue,
+					dateOrdered,
+					dateDue,
+					isPaid: false,
+				})
+			}
 		});
 
-    if (order.length > 0) {
+    if (order.length > 0)
 			placeOrder(order);
-    }
-    else {
+    else 
 			message.error('You order is empty.');
-      return;
-		}
   }
 
   const placeOrder = (order : any[]) => {
 		setOrderLoading(true);
-		console.log(order);
 		axios.post('/orders/materials', order)
-			.then(({ data }) => {
-				console.log(data);
+			.then(() => {
+				//resetOrder(true); should go here after
 				message.success('Order was successfully placed.');
 			})
 			.catch((err) => {
 				message.error('Something went wrong while placing order.');
 				console.log(err);
 			})
-			.finally(() => setOrderLoading(false));
+			.finally(() => {
+				resetOrder(true);
+				setOrderLoading(false)
+			});
   }
 
-	const resetOrder = () => {
-		setResetLoading(true);
+	const resetOrder = (isOrder : boolean) => {
+		if(!isOrder)
+			setResetLoading(true);
+
 		const success = true;
 
 		materials.forEach((material : any) => {
@@ -80,10 +113,13 @@ export const OrderMaterialButtons = (props : any) => {
 			})
 		});
 
-		if(success)
-			message.success('Order was successfully reset.');
-		else
-			message.error('Something went wrong while updating the order.');
+		if(!isOrder){
+			console.log(orderLoading);
+			if(success)
+				message.success('Order was successfully reset.');
+			else
+				message.error('Something went wrong while updating the order.');
+		}
 
 		setResetLoading(false);
 	}
@@ -101,7 +137,7 @@ export const OrderMaterialButtons = (props : any) => {
 				type='primary'
 				style={{ marginTop: 16, marginRight: 15, float: 'right' }}
 				loading={resetLoading}
-				onClick={() => resetOrder()}>
+				onClick={() => resetOrder(false)}>
 						Reset Order
 				</Button>
 			</div>
