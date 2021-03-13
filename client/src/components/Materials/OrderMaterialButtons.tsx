@@ -55,6 +55,7 @@ export const OrderMaterialButtons = () => {
 				order.push({
 					materialId: material._id,
 					quantity: material.quantity,
+					supplierName: material.vendorName,
 					amountDue,
 					dateOrdered,
 					dateDue,
@@ -71,19 +72,16 @@ export const OrderMaterialButtons = () => {
 
   const placeOrder = (order : any[]) => {
 		setOrderLoading(true);
-		axios.post('/orders/materials', order)
+		axios.post('/orders/materials', { "orders": order })
 			.then(() => {
-				//resetOrder(true); should go here after
+				resetOrder(true);
 				message.success('Order was successfully placed.');
 			})
 			.catch((err) => {
 				message.error('Something went wrong while placing order.');
 				console.log(err);
 			})
-			.finally(() => {
-				resetOrder(true);
-				setOrderLoading(false)
-			});
+			.finally(() => setOrderLoading(false));
   }
 
 	const resetOrder = (isOrder : boolean) => {
