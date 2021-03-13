@@ -1,11 +1,8 @@
-import { IsNotEmpty, IsOptional, IsPositive, IsString } from 'class-validator';
+import { IsNotEmpty, IsInt, Min} from 'class-validator';
 
 export class BuildProductDto {
   @IsNotEmpty()
-  @IsString()
-  productId: string;
-
-  @IsPositive()
-  @IsNotEmpty()
-  amount: number;
+  @IsInt()
+  @Min(0)
+  stockBuilt: number;
 }

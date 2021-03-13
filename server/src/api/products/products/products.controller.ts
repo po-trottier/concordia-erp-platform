@@ -15,7 +15,7 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { UpdateProductStockDto } from './dto/update-product-stock.dto';
 import { ProductLocationStockService } from './product-location-stock.service';
-import {BuildProductDto} from "./dto/build-product.dto";
+import { BuildProductDto } from './dto/build-product.dto';
 
 /**
  * Controller class for the products
@@ -107,12 +107,29 @@ export class ProductsController {
   }
 
   /**
-  * Route for building products from parts
-  */
+   * Route for building products from parts
+   */
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
-  @Post('build')
-  build(@Body(ValidationPipe) buildProductDto: BuildProductDto) {
-    return this.productsService.build(buildProductDto);
+  @Patch('build/:productId/:locationId')
+  build(
+    @Param('productId') productId: string,
+    @Param('locationId') locationId: string,
+    @Body(ValidationPipe) buildProductDto: BuildProductDto,
+  ) {
+    const { stockBuilt } = buildProductDto;
+    // update product stock
+    let updateProductStockDto: UpdateProductStockDto = new UpdateProductStockDto();
+    updateProductStockDto.stockBuilt = stockBuilt;
+    updateProductStockDto.stockUsed = 0;
+
+    this.productLocationStockService.update(
+      productId,
+      locationId,
+      updateProductStockDto,
+    );
+
+    // update parts stock
+    // TODO
   }
 
   /**
