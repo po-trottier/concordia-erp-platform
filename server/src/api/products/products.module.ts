@@ -18,6 +18,7 @@ import {
 import { LocationsModule } from '../locations/locations.module';
 import { PartsModule } from '../parts/parts.module';
 import { ProductLocationStockService } from './products/product-location-stock.service';
+import { ProductBuilderService } from './products/product-builder.service';
 
 @Module({
   imports: [
@@ -34,6 +35,11 @@ import { ProductLocationStockService } from './products/product-location-stock.s
     ConfigModule.forRoot({ validate, cache: true }),
   ],
   controllers: [ProductLogsController, ProductsController],
-  providers: [ProductsService, ProductLogsService, ProductLocationStockService],
+  providers: [
+    ProductsService,
+    ProductLogsService,
+    ProductLocationStockService,
+    ProductBuilderService,
+  ],
 })
 export class ProductsModule {}
