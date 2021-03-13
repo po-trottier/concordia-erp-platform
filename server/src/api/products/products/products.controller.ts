@@ -129,7 +129,9 @@ export class ProductsController {
     );
 
     // update parts stock
-    // TODO
+    this.productsService.findOne(productId).then(product => {
+      console.log(product.parts);
+    });
   }
 
   /**
