@@ -15,6 +15,7 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { UpdateProductStockDto } from './dto/update-product-stock.dto';
 import { ProductLocationStockService } from './product-location-stock.service';
+import {BuildProductDto} from "./dto/build-product.dto";
 
 /**
  * Controller class for the products
@@ -103,6 +104,15 @@ export class ProductsController {
     @Body(ValidationPipe) updateProductDto: UpdateProductDto,
   ) {
     return this.productsService.update(id, updateProductDto);
+  }
+
+  /**
+  * Route for building products from parts
+  */
+  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
+  @Post('build')
+  build(@Body(ValidationPipe) buildProductDto: BuildProductDto) {
+    return this.productsService.build(buildProductDto);
   }
 
   /**

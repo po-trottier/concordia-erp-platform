@@ -1,10 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { BuildProductDto } from "./dto/build-product.dto";
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Product, ProductDocument } from './schemas/products.schema';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 
 /**
  * Used by the ProductsController, handles product data storage and retrieval.
@@ -71,6 +72,15 @@ export class ProductsService {
   async remove(id: string) {
     const deletedProduct = await this.productModel.findByIdAndDelete(id);
     return this.validateProductFound(deletedProduct, id);
+  }
+
+  /**
+   * Creates product using mongoose productModel
+   *
+   * @param createProductDto dto used to create products
+   */
+  async build(buildProductDto: BuildProductDto) {
+    console.log("Build service called!");
   }
 
   /**
