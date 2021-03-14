@@ -21,7 +21,7 @@ export const ProductCatalog = () => {
   const updated = useSelector((state: RootState) => state.productList.updated);
   const location = useSelector((state: RootState) => state.location.selected);
 
-  const emptyData: { partId: string; quantity: number }[] = [];
+  const emptyData: { productId: string; buildAmount: number }[] = [];
   const [searchValue, setSearchValue] = useState("");
   const [orders, setOrders] = useState(emptyData);
 
@@ -64,13 +64,13 @@ export const ProductCatalog = () => {
     setSearchValue(e.target.value);
   };
 
-  const changeBuildAmount = (partId: string, quantity: number) => {
-    const foundOrder = orders.find((order: { partId: string; quantity: number })=> order.partId === partId);
+  const changeBuildAmount = (productId: string, buildAmount: number) => {
+    const foundOrder = orders.find((order: { productId: string; buildAmount: number })=> order.productId === productId);
     if (foundOrder) {
-      foundOrder.quantity = quantity;
+      foundOrder.buildAmount = buildAmount;
       setOrders(orders);
     } else {
-      setOrders(orders.concat({ partId, quantity }));
+      setOrders(orders.concat({ productId, buildAmount }));
     }
     console.log(orders);
   };
@@ -94,7 +94,7 @@ export const ProductCatalog = () => {
       row.build = (
         <InputNumber
           onChange={(value: any) => changeBuildAmount(row.id, value)}
-          placeholder="Input a quantity"
+          placeholder="Input a buildAmount"
           min={0}
           style={{ width: "100%" }}
         />
