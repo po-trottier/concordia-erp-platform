@@ -9,7 +9,7 @@ import { OrderMaterialButtons } from './OrderMaterialButtons';
 import { RootState } from '../../store/Store';
 import { MaterialEntry } from '../../interfaces/MaterialEntry';
 import { MaterialStockEntry } from '../../interfaces/MaterialStockEntry';
-import { setMaterialList } from '../../store/slices/MaterialListSlice';
+import { setMaterialList, updateMaterialEntry } from '../../store/slices/MaterialListSlice';
 import axios from '../../plugins/Axios';
 
 const { Search } = Input;

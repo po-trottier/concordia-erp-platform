@@ -9,6 +9,7 @@ import axios from '../../plugins/Axios';
 export const OrderMaterialButtons = () => {
 	const dispatch = useDispatch();
 	const materials = useSelector((state : RootState) => state.materialList.list);
+	const locationId = useSelector((state : RootState) => state.location.selected);
 
 	const [resetLoading, setResetLoading] = useState(false);
 	const [orderLoading, setOrderLoading] = useState(false);
@@ -75,6 +76,7 @@ export const OrderMaterialButtons = () => {
 		axios.post('/orders/materials', { "orders": order })
 			.then(() => {
 				resetOrder(true);
+				updateStock(order);
 				message.success('Order was successfully placed.');
 			})
 			.catch((err) => {
@@ -120,6 +122,22 @@ export const OrderMaterialButtons = () => {
 		}
 
 		setResetLoading(false);
+	}
+
+	const updateStock = (order : any[]) => {
+
+		order.forEach(material => {
+
+			const matrerialStock = {
+				stockUsed: 0,
+				stockBought: material.quantity,
+			}
+			axios.patch('/materials/' + material.materialId + '/stock/' + locationId, matrerialStock)
+				.then(() => {})
+				.catch((err) => {
+					console.log(err);
+				});
+		});
 	}
 
     return(
