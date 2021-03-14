@@ -14,6 +14,11 @@ import axios from "../../plugins/Axios";
 
 const { Search } = Input;
 
+interface orderItem{
+  productId: string;
+  buildAmount: number;
+}
+
 export const ProductCatalog = () => {
   const dispatch = useDispatch();
 
@@ -21,7 +26,7 @@ export const ProductCatalog = () => {
   const updated = useSelector((state: RootState) => state.productList.updated);
   const location = useSelector((state: RootState) => state.location.selected);
 
-  const emptyData: { productId: string; buildAmount: number }[] = [];
+  const emptyData: orderItem[] = [];
   const [searchValue, setSearchValue] = useState("");
   const [orders, setOrders] = useState(emptyData);
 
@@ -65,7 +70,7 @@ export const ProductCatalog = () => {
   };
 
   const changeBuildAmount = (productId: string, buildAmount: number) => {
-    const foundOrder = orders.find((order: { productId: string; buildAmount: number })=> order.productId === productId);
+    const foundOrder = orders.find((order: orderItem)=> order.productId === productId);
     if (foundOrder) {
       foundOrder.buildAmount = buildAmount;
       setOrders(orders);
