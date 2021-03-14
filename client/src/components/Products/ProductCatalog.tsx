@@ -55,10 +55,7 @@ export const ProductCatalog = () => {
     setSearchValue(e.target.value);
   };
 
-  const changeBuildAmount = (id: number, buildAmount: number) => {
-    console.log(id);
-    console.log(buildAmount);
-    //  setOrders(Object.assign({}));
+  const changeBuildAmount = (id: any, buildAmount: number) => {
   }
 
   const getProducts = () => {
@@ -90,6 +87,7 @@ export const ProductCatalog = () => {
     rows.sort((a : ProductEntry, b : ProductEntry) => {
       return a.name < b.name ? -1 : 1;
     });
+    console.log(rows);
     return rows;
   };
 
