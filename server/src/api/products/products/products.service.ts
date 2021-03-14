@@ -4,7 +4,6 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Product, ProductDocument } from './schemas/products.schema';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 
 /**
  * Used by the ProductsController, handles product data storage and retrieval.

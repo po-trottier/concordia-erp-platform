@@ -1,13 +1,10 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Product } from './schemas/products.schema';
 import { UpdatePartStockDto } from '../../parts/parts/dto/update-part-stock.dto';
 import { UpdateProductStockDto } from "./dto/update-product-stock.dto";
 import { BuildProductDto } from './dto/build-product.dto';
 import { ProductsService } from './products.service';
 import { PartLocationStockService } from '../../parts/parts/part-location-stock.service';
 import {ProductLocationStockService} from './product-location-stock.service';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 
 /**
  * Used by the ProductsController, handles product data storage and retrieval.
@@ -35,7 +32,6 @@ export class ProductBuilderService {
     const { stockBuilt } = buildProductDto;
 
     // checking if we can do the operation
-    let canBuild = true;
     const product = await this.productsService.findOne(productId);
     for (let i = 0; i < product.parts.length; i++) {
       const part = product.parts[i];
@@ -45,19 +41,15 @@ export class ProductBuilderService {
         locationId,
       );
       if (partLocationStock.stock < totalPartsCount) {
-        canBuild = false;
+        throw new HttpException(
+          {
+            error: 'stock of parts is not sufficient',
+          },
+          HttpStatus.BAD_REQUEST,
+        );
       }
     }
 
-    let message = null;
-    if (!canBuild) {
-      throw new HttpException(
-        {
-          error: 'stock of parts is not sufficient',
-        },
-        HttpStatus.BAD_REQUEST,
-      );
-    }
     // update product stock
     let updateProductStockDto: UpdateProductStockDto = new UpdateProductStockDto();
     updateProductStockDto.stockBuilt = stockBuilt;
