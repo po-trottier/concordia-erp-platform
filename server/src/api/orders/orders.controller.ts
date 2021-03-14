@@ -28,7 +28,7 @@ export class OrdersController {
   ) {}
 
   @Post('materials')
-  createMaterial(
+  createMaterialOrder(
     @Body(ValidationPipe)
     createMaterialOrderListDto: CreateMaterialOrderListDto,
   ) {
@@ -38,22 +38,22 @@ export class OrdersController {
   }
 
   @Get('materials/all')
-  async findAllMaterials() {
+  async findAllMaterialsOrder() {
     return this.materialOrderService.findAll(this.materialsService);
   }
 
   @Get('materials/:id')
-  findOneMaterial(@Param('id') id: string) {
+  findOneMaterialOrder(@Param('id') id: string) {
     return this.materialOrderService.findOne(id);
   }
 
   @Delete('materials/:id')
-  removeMaterial(@Param('id') id: string) {
+  removeMaterialOrder(@Param('id') id: string) {
     return this.materialOrderService.remove(id);
   }
 
   @Post('products')
-  createProduct(
+  createProductOrder(
     @Body(ValidationPipe) createProductOrderListDto: CreateProductOrderListDto,
   ) {
     return this.productOrderService.createProductOrder(
@@ -62,27 +62,33 @@ export class OrdersController {
   }
 
   @Get('products/all')
-  findAllProducts() {
+  findAllProductsOrder() {
     return this.productOrderService.findAll();
   }
 
   @Get('products/:id')
-  findOneProduct(@Param('id') id: string) {
+  findOneProductOrder(@Param('id') id: string) {
     return this.productOrderService.findOne(id);
   }
 
   @Delete('products/:id')
-  removeProduct(@Param('id') id: string) {
+  removeProductOrder(@Param('id') id: string) {
     return this.productOrderService.remove(id);
   }
 
   @Get('balance')
   balance() {
-    return this.orderDetailsService.getBalance(this.productOrderService, this.materialOrderService);
+    return this.orderDetailsService.getBalance(
+      this.productOrderService,
+      this.materialOrderService,
+    );
   }
 
   @Get('summary')
   summary() {
-    return this.orderDetailsService.getSummary(this.productOrderService, this.materialOrderService);
+    return this.orderDetailsService.getSummary(
+      this.productOrderService,
+      this.materialOrderService,
+    );
   }
 }
