@@ -238,7 +238,6 @@ export const EditPartModal = (props : { part : PartEntry }) => {
                     {/*Delete Button*/}
                     <Col sm={2} span={4} style={{ textAlign: 'right' }}>
                       <MinusCircleTwoTone
-                        className='dynamic-delete-button'
                         twoToneColor='red'
                         onClick={() => remove(field.name)} />
                     </Col>
