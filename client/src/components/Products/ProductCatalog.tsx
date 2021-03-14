@@ -21,8 +21,9 @@ export const ProductCatalog = () => {
   const updated = useSelector((state : RootState) => state.productList.updated);
   const location = useSelector((state : RootState) => state.location.selected);
 
+  const emptyData : {partId: string, quantity: number}[] = [];
   const [searchValue, setSearchValue] = useState('');
-  const [orders, setOrders] = useState({});
+  const [orders, setOrders] = useState(emptyData);
 
   useEffect(() => {
     axios.get('/products')
@@ -55,7 +56,9 @@ export const ProductCatalog = () => {
     setSearchValue(e.target.value);
   };
 
-  const changeBuildAmount = (id: any, buildAmount: number) => {
+  const changeBuildAmount = (partId: string, quantity: number) => {
+    setOrders(orders.concat({partId, quantity}));
+    console.log(orders);
   }
 
   const getProducts = () => {
@@ -87,7 +90,6 @@ export const ProductCatalog = () => {
     rows.sort((a : ProductEntry, b : ProductEntry) => {
       return a.name < b.name ? -1 : 1;
     });
-    console.log(rows);
     return rows;
   };
 
