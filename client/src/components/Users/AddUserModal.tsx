@@ -138,8 +138,8 @@ export const AddUserModal = () => {
                 <Select
                   placeholder="Select the user's role"
                   onSelect={(e : Role) => {
-setRole(e)
-}}>
+                    setRole(e);
+                  }}>
                   <Option value={1}>Salesperson</Option>
                   <Option value={2}>Accountant</Option>
                   <Option value={3}>Inventory Manager</Option>

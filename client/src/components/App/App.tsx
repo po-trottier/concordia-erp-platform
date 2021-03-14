@@ -23,7 +23,7 @@ export const App = () => {
     <Login /> : (
       <Layout style={{ minHeight: '100vh' }}>
         <AppMenu />
-        <Layout className='site-layout app-layout'>
+        <Layout id='app-content' className='site-layout app-layout'>
           <AppHeader />
           <AppContent />
           <AppFooter />

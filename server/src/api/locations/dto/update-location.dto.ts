@@ -7,8 +7,4 @@ export class UpdateLocationDto {
   @IsOptional()
   @IsString()
   name: string;
-
-  @IsString()
-  @IsOptional()
-  address: string;
 }
