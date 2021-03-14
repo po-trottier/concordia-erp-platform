@@ -8,7 +8,7 @@ import axios from '../../plugins/Axios';
 const { Search } = Input;
 
 const inventoryColumns = {
-  material: 'material',
+  name: 'material',
   date: 'Date',
   stockBought: 'Bought',
   stockUsed: 'Used',
