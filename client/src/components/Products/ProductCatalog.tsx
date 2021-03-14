@@ -14,7 +14,7 @@ import axios from "../../plugins/Axios";
 
 const { Search } = Input;
 
-interface orderItem{
+interface orderItem {
   productId: string;
   buildAmount: number;
 }
@@ -70,14 +70,15 @@ export const ProductCatalog = () => {
   };
 
   const changeBuildAmount = (productId: string, buildAmount: number) => {
-    const foundOrder = orders.find((order: orderItem)=> order.productId === productId);
+    const foundOrder = orders.find(
+      (order: orderItem) => order.productId === productId
+    );
     if (foundOrder) {
       foundOrder.buildAmount = buildAmount;
       setOrders(orders);
     } else {
       setOrders(orders.concat({ productId, buildAmount }));
     }
-    console.log(orders);
   };
 
   const getProducts = () => {
@@ -130,7 +131,15 @@ export const ProductCatalog = () => {
   };
 
   const buildProducts = () => {
-    console.log(products);
+    orders.forEach((order) => {
+      axios
+        .patch("products/build/" + order.productId + "/" + location, {
+          stockBuilt: order.buildAmount,
+        })
+        .then((data) => {
+          console.log(data);
+        });
+    });
   };
 
   return (
