@@ -40,7 +40,6 @@ export const CreateProductModal = () => {
       })
       .catch(err => {
         message.error('Something went wrong while fetching the list of parts.');
-        console.error(err);
       });
   }, [updated]);
 
@@ -108,7 +107,6 @@ export const CreateProductModal = () => {
         message.success('The product was successfully created.');
       })
       .catch(err => {
-        console.error(err);
         message.error('Something went wrong while creating the product.');
       });
   };

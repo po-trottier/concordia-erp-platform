@@ -138,6 +138,9 @@ export const ProductCatalog = () => {
         })
         .then((data) => {
           console.log(data);
+          message.success("product built successfully!");
+        }).catch((err) => {
+          message.error("not enough parts to build product");
         });
     });
   };
