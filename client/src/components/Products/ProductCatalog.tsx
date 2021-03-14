@@ -22,6 +22,7 @@ export const ProductCatalog = () => {
   const location = useSelector((state : RootState) => state.location.selected);
 
   const [searchValue, setSearchValue] = useState('');
+  const [orders, setOrders] = useState({});
 
   useEffect(() => {
     axios.get('/products')
@@ -54,6 +55,10 @@ export const ProductCatalog = () => {
     setSearchValue(e.target.value);
   };
 
+  const changeBuildAmount = (id: number, buildAmount: number) => {
+    setOrders(Object.assign({}));
+  }
+
   const getProducts = () => {
     let rows = JSON.parse(JSON.stringify(products));
 
@@ -61,8 +66,8 @@ export const ProductCatalog = () => {
       rows = rows.filter(
         (r : ProductEntry) => r.name.trim().toLowerCase().includes(searchValue.trim().toLowerCase()));
     }
-
-    rows.forEach((row : any) => {
+    for (let i =0; i < rows.length(); i++){
+      let row = rows[i];
       row.id = row['_id'];
       row.details = (
         <Button type='primary' size='small' onClick={() => showModal(row)}>
@@ -70,7 +75,7 @@ export const ProductCatalog = () => {
         </Button>
       );
       row.build = (
-        <InputNumber
+        <InputNumber onChange={(e : number) => changeBuildAmount(row.id, e)}
           placeholder='Input a quantity'
           min={0}
           style={{ width: '100%' }} />
@@ -78,12 +83,11 @@ export const ProductCatalog = () => {
       row.actions = (
         <EditProductModal product={row} />
       );
-    });
+    }
 
     rows.sort((a : ProductEntry, b : ProductEntry) => {
       return a.name < b.name ? -1 : 1;
     });
-
     return rows;
   };
 
@@ -103,6 +107,10 @@ export const ProductCatalog = () => {
     build: 'Build'
   };
 
+  const buildProducts = () => {
+    console.log(products);
+  }
+
   return (
     <div>
       <Card style={{ margin: '24px 0' }}>
@@ -116,7 +124,7 @@ export const ProductCatalog = () => {
             <span>No products were found.</span>
         }
       </Card>
-      <Button type='primary' style={{ marginTop: 16, float: 'right' }}>
+      <Button onClick={buildProducts} type='primary' style={{ marginTop: 16, float: 'right' }}>
         Build Products
       </Button>
       <CreateProductModal />
