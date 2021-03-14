@@ -56,7 +56,9 @@ export const ProductCatalog = () => {
   };
 
   const changeBuildAmount = (id: number, buildAmount: number) => {
-    setOrders(Object.assign({}));
+    console.log(id);
+    console.log(buildAmount);
+    //  setOrders(Object.assign({}));
   }
 
   const getProducts = () => {
@@ -66,7 +68,7 @@ export const ProductCatalog = () => {
       rows = rows.filter(
         (r : ProductEntry) => r.name.trim().toLowerCase().includes(searchValue.trim().toLowerCase()));
     }
-    for (let i =0; i < rows.length(); i++){
+    for (let i =0; i < rows.length; i++){
       let row = rows[i];
       row.id = row['_id'];
       row.details = (
@@ -75,7 +77,7 @@ export const ProductCatalog = () => {
         </Button>
       );
       row.build = (
-        <InputNumber onChange={(e : number) => changeBuildAmount(row.id, e)}
+        <InputNumber onChange={(value: any)=> changeBuildAmount(row.id, value)}
           placeholder='Input a quantity'
           min={0}
           style={{ width: '100%' }} />
