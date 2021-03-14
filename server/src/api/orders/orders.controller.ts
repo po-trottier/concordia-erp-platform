@@ -14,7 +14,6 @@ import { CreateProductOrderListDto } from './dto/create-product-order-list.dto';
 import { MaterialsService } from '../materials/materials/materials.service';
 import { OrderDetailsService } from './order-details.service';
 
-
 /**
  * Controller class of the Order entity
  */
