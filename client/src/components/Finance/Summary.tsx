@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Card, message, Statistic, Typography} from 'antd';
+import {Card, message, Statistic, Typography, Row, Col} from 'antd';
 import {Line} from '@ant-design/charts';
 
 import {ResponsiveTable} from '../ResponsiveTable';
@@ -54,23 +54,36 @@ export const Summary = () => {
     profit: 'Daily Profit'
   });
 
+
+
   return (
     <div>
       <Card style={{ margin: '24px 0' }}>
-        <Statistic title='Account Balance (CAD)' value={balance} precision={2} />
+        <Row>
+          <Col span={12}>
+            <Statistic title='Account Balance (CAD)' value={balance} precision={2} />
+          </Col>
+          <Col span={12}>
+            <Statistic title='Expected Balance (CAD)' value={expectedBalance} precision={2} />
+          </Col>
+        </Row>
       </Card>
-      <Card style={{ margin: '24px 0' }}>
-        <Statistic title='Expected balance (CAD)' value={expectedBalance} precision={2} />
-      </Card>
-      <Card style={{ margin: '24px 0' }}>
-        <Line data={summaryEntryData} xField='date' yField='profit' isStack={true} />
-      </Card>
-      <Card>
-        <Title level={4} style={{ marginBottom: '24px' }}>
-          Daily Financial Summary
-        </Title>
-        <ResponsiveTable rows={summaryEntryData} cols={getColumns()} />
-      </Card>
+
+      {summaryEntryData.length > 0 ?
+        <div>
+          <Card style={{ margin: '24px 0' }}>
+            <Line data={summaryEntryData} xField='date' yField='profit' isStack={true} />
+          </Card>
+          <Card>
+            <Title level={4} style={{ marginBottom: '24px' }}>
+              Daily Financial Summary
+            </Title>
+            <ResponsiveTable rows={summaryEntryData} cols={getColumns()} />
+          </Card>
+        </div>
+        :
+        <div>No orders were found.</div>}
+
     </div>
   );
 };
