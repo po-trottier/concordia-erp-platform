@@ -11,7 +11,6 @@ export const OrderMaterialButtons = () => {
 	const materials = useSelector((state : RootState) => state.materialList.list);
 	const locationId = useSelector((state : RootState) => state.location.selected);
 
-	const [resetLoading, setResetLoading] = useState(false);
 	const [orderLoading, setOrderLoading] = useState(false);
 
 	const getIncrement = (day : number) => {
@@ -82,16 +81,10 @@ export const OrderMaterialButtons = () => {
 				message.error('Something went wrong while placing order.');
 				console.log(err);
 			})
-			.finally(() => {
-				console.log(materials);
-				setOrderLoading(false);
-			});
+			.finally(() => setOrderLoading(false));
   }
 
 	const resetOrder = () => {
-		setResetLoading(true);
-		const success = true;
-
 		materials.forEach((material : any) => {
 			if (material.quantity){
 				const newMaterial : MaterialEntry= {
@@ -113,17 +106,20 @@ export const OrderMaterialButtons = () => {
 				});
 			}
 		});
-
-		if(success)
-			message.success('Order was successfully reset.');
-		else
-			message.error('Something went wrong while updating the order.');
-
-		setResetLoading(false);
 	}
 
 	const updateStock = (order : any[]) => {
+
+		const materialStocks : any[] = [];
+
 		order.forEach(material => {
+
+			materialStocks.push({
+				stockUsed: 0,
+				stockBought: material.quantity,
+				materialId: material.materialId
+			});
+
 			const matrerialStock = {
 				stockUsed: 0,
 				stockBought: material.quantity,
@@ -139,8 +135,6 @@ export const OrderMaterialButtons = () => {
 						quantity: 0,
 						stock: data.stock
 					}
-					console.log(data.materialId);
-					console.log(newMaterial);
 					dispatch(updateMaterialEntry({
 						id: data.materialId,
 						newMaterial
@@ -150,6 +144,7 @@ export const OrderMaterialButtons = () => {
 					console.log(err);
 				});
 		});
+		console.log(materialStocks);
 	}
 
     return(
@@ -161,13 +156,6 @@ export const OrderMaterialButtons = () => {
         onClick={() => createOrder()}>
             Place Order
         </Button>
-				<Button
-				type='primary'
-				style={{ marginTop: 16, marginRight: 15, float: 'right' }}
-				loading={resetLoading}
-				onClick={() => resetOrder()}>
-						Reset Order
-				</Button>
 			</div>
     );
 }
