@@ -7,6 +7,7 @@ import {
   ProductOrderDocument,
 } from './schemas/product-orders.schema';
 import { CreateProductOrderListDto } from './dto/create-product-order-list.dto';
+import { CreateProductOrderDto } from './dto/create-product-order.dto';
 
 @Injectable()
 export class ProductOrdersService {
@@ -28,12 +29,12 @@ export class ProductOrdersService {
   }
 
   async findAll(): Promise<ProductOrder[]> {
-    return await this.ProductOrderModel.find().exec();
+    const productOrders: CreateProductOrderDto[] = await this.ProductOrderModel.find().populate('productId').exec();
+    return productOrders;
   }
 
   async findOne(id: string): Promise<ProductOrder> {
-    const order = await this.ProductOrderModel.findById(id);
-
+    const order = await this.ProductOrderModel.findById(id).populate('productId');
     return this.checkOrderFound(order, id);
   }
 

@@ -16,11 +16,11 @@ export const Income = () => {
   }, [updated]);
 
   const getColumns = () => ({
+    customerName: 'Customer',
     dateOrdered: 'Date Ordered',
     dateDue: 'Due Date',
     amountDue: 'Amount',
     isPaid: "Paid",
-    details: "Details",
   });
 
   const getOrders = (showPaidOnes: boolean) => {
@@ -40,11 +40,7 @@ export const Income = () => {
                 dateDue: p.dateDue.split("T")[0],
                 amountDue: p.amountDue,
                 isPaid: p.isPaid ? "true" : "false",
-                details: (
-                  <Button type='primary' size='small'>
-                    See Details
-                  </Button>
-                ),
+                customerName: p.customerId,
               });
             }
           });

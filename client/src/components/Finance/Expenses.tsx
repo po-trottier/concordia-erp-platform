@@ -17,12 +17,11 @@ export const Expenses = () => {
   }, [updated]);
 
   const getColumns = () => ({
-    supplierName: 'Supplier',
+    vendorName: 'Supplier',
     dateOrdered: 'Date Ordered',
     dateDue: 'Due Date',
     amountDue: 'Amount',
     isPaid: "Paid",
-    details: "Details",
   });
 
   const getOrders = (showPaidOnes: boolean) => {
@@ -39,14 +38,9 @@ export const Expenses = () => {
               data.push({
                 dateOrdered: m.dateOrdered.split("T")[0],
                 dateDue: m.dateDue.split("T")[0],
-                supplierName: m.supplierName,
+                vendorName: m.materialId.vendorName,
                 amountDue: m.amountDue,
                 isPaid: m.isPaid ? "true" : "false",
-                details: (
-                  <Button type='primary' size='small'>
-                    See Details
-                  </Button>
-                ),
               });
             }
           });

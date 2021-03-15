@@ -9,7 +9,6 @@ import {
 } from '@nestjs/common';
 import { MaterialOrdersService } from './material-orders.service';
 import { ProductOrdersService } from './product-orders.service';
-import { MaterialsService } from '../materials/materials/materials.service';
 import { OrderDetailsService } from './order-details.service';
 import { CreateMaterialOrderListDto } from './dto/create-material-order-list.dto';
 import { CreateProductOrderListDto } from './dto/create-product-order-list.dto';
@@ -24,7 +23,6 @@ export class OrdersController {
   constructor(
     private readonly materialOrderService: MaterialOrdersService,
     private readonly productOrderService: ProductOrdersService,
-    private readonly materialsService: MaterialsService,
     private readonly orderDetailsService: OrderDetailsService,
   ) {}
 
@@ -42,7 +40,7 @@ export class OrdersController {
   @Roles(Role.ACCOUNTANT, Role.SYSTEM_ADMINISTRATOR)
   @Get('materials/all')
   async findAllMaterialsOrder() {
-    return this.materialOrderService.findAll(this.materialsService);
+    return this.materialOrderService.findAll();
   }
 
   @Roles(Role.ACCOUNTANT, Role.SYSTEM_ADMINISTRATOR)
