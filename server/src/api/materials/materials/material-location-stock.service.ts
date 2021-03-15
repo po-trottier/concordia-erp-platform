@@ -36,7 +36,10 @@ export class MaterialLocationStockService {
    * @param locationId the id of the location
    */
   async findAll(locationId: string): Promise<MaterialLocationStock[]> {
-    return this.materialLocationStockModel.find({ locationId });
+    return await this.materialLocationStockModel
+      .find({ locationId })
+      .populate('materialId')
+      .exec();
   }
 
   /**
@@ -49,10 +52,10 @@ export class MaterialLocationStockService {
     materialId: string,
     locationId: string,
   ): Promise<MaterialLocationStock> {
-    let materialLocationStock = await this.materialLocationStockModel.findOne({
-      materialId,
-      locationId,
-    });
+    let materialLocationStock = await this.materialLocationStockModel
+      .findOne({ materialId, locationId })
+      .populate('materialId')
+      .exec();
 
     //if stock info is not found, check if material and location are valid
     //and create new entry
@@ -62,11 +65,11 @@ export class MaterialLocationStockService {
 
       if (material && location) {
         materialLocationStock = new this.materialLocationStockModel({
-          materialId,
+          material,
           locationId,
           stock: 0,
         });
-        materialLocationStock.save();
+        await materialLocationStock.save();
       }
     }
 
