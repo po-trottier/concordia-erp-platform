@@ -24,34 +24,37 @@ export const MaterialsCatalog = () => {
 
   const emtpyQuantities : MaterialQuantity[] = [];
   const [quantities, setQuantities] = useState(emtpyQuantities);
+  const [rows, setRows] = useState([]);
   const [searchValue, setSearchValue] = useState('');
 
-  useEffect(() => {
+  useEffect(() => { setMaterialListState() }, [updated, location]);
+
+  const setMaterialListState = () => {
     axios.get('/materials')
-      .then(({ data }) => {
-        axios.get('/materials/stock/' + location)
-          .then((resp) => {
-            data.forEach((mat : MaterialEntry) => {
-              const entry = resp.data.find((m : MaterialStockEntry) => m.materialId ? m.materialId._id === mat._id : false);
-              if (entry) {
-                mat.stock = entry.stock;
-              } else {
-                mat.stock = 0;
-              }
-            });
-            dispatch(setMaterialList(data));
-          })
-          .catch((err) => {
-            message.error('Something went wrong while getting the materials stock.');
-            console.error(err);
+    .then(({ data }) => {
+      axios.get('/materials/stock/' + location)
+        .then((resp) => {
+          data.forEach((mat : MaterialEntry) => {
+            const entry = resp.data.find((m : MaterialStockEntry) => m.materialId ? m.materialId._id === mat._id : false);
+            if (entry) {
+              mat.stock = entry.stock;
+            } else {
+              mat.stock = 0;
+            }
           });
-      })
-      .catch((err) => {
-        message.error('Something went wrong while getting the materials catalog.');
-        console.error(err);
-      });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [updated, location]);
+          dispatch(setMaterialList(data));
+        })
+        .catch((err) => {
+          message.error('Something went wrong while getting the materials stock.');
+          console.error(err);
+        });
+    })
+    .catch((err) => {
+      message.error('Something went wrong while getting the materials catalog.');
+      console.error(err);
+    });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }
 
   const onSearch = (e : React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
@@ -129,7 +132,7 @@ export const MaterialsCatalog = () => {
             <span>No materials were found.</span>
         }
       </Card>
-      <OrderMaterialButtons quantities={quantities} />
+      <OrderMaterialButtons quantities={quantities} setMaterialListState={setMaterialListState} />
       <CreateMaterialModal />
     </div>
   );

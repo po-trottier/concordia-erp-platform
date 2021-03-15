@@ -96,6 +96,7 @@ export const OrderMaterialButtons = (props : any) => {
 		});
 
 		axios.patch('/materials/stock/' + locationId, materialStocks)
+			.then(() => props.setMaterialListState())
 			.catch((err) => {
 				console.log(err);
 				message.error('Error updating the materrial stock.');
