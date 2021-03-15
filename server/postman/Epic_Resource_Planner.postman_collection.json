@@ -177,7 +177,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"stockBuilt\": 1500,\n    \"stockUsed\": 600\n}",
+									"raw": "{\n    \"stockBuilt\": 1000,\n    \"stockUsed\": 0\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -185,13 +185,13 @@
 									}
 								},
 								"url": {
-									"raw": "{{url}}/parts/604cee7c1ba2430c10eeee6e/stock/604cee081ba2430c10eeee6b",
+									"raw": "{{url}}/parts/604cee6e1ba2430c10eeee6d/stock/604cee081ba2430c10eeee6b",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
 										"parts",
-										"604cee7c1ba2430c10eeee6e",
+										"604cee6e1ba2430c10eeee6d",
 										"stock",
 										"604cee081ba2430c10eeee6b"
 									]
@@ -596,7 +596,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"stockBuilt\" : 1\n}",
+									"raw": "{\n    \"stockBuilt\" : 2\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -604,14 +604,14 @@
 									}
 								},
 								"url": {
-									"raw": "{{url}}/products/build/604cee921ba2430c10eeee6f/604cee081ba2430c10eeee6b",
+									"raw": "{{url}}/products/604cee921ba2430c10eeee6f/build/604cee081ba2430c10eeee6b",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
 										"products",
-										"build",
 										"604cee921ba2430c10eeee6f",
+										"build",
 										"604cee081ba2430c10eeee6b"
 									]
 								}
@@ -770,14 +770,14 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{url}}/products/stock/604569e1a9aad81bc8accc07",
+									"raw": "{{url}}/products/stock/604cee081ba2430c10eeee6b",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
 										"products",
 										"stock",
-										"604569e1a9aad81bc8accc07"
+										"604cee081ba2430c10eeee6b"
 									]
 								}
 							},

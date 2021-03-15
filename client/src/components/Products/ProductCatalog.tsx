@@ -115,7 +115,7 @@ export const ProductCatalog = () => {
 
   const buildProducts = () => {
     orders.forEach((order) => {
-      axios.patch('products/build/' + order.productId + '/' + location, {
+      axios.patch('products/' + order.productId + '/build/' + location, {
           stockBuilt: order.buildAmount,
         })
         .then((data) => {

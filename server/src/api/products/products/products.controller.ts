@@ -116,7 +116,7 @@ export class ProductsController {
    * @param buildProductDto
    */
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
-  @Patch('build/:productId/:locationId')
+  @Patch(':productId/build/:locationId')
   build(
     @Param('productId') productId: string,
     @Param('locationId') locationId: string,
