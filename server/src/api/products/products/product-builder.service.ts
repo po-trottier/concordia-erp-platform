@@ -1,4 +1,4 @@
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { Injectable, HttpStatus, BadRequestException } from '@nestjs/common';
 import { UpdatePartStockDto } from '../../parts/parts/dto/update-part-stock.dto';
 import { UpdateProductStockDto } from "./dto/update-product-stock.dto";
 import { BuildProductDto } from './dto/build-product.dto';
@@ -41,19 +41,15 @@ export class ProductBuilderService {
         locationId,
       );
       if (partLocationStock.stock < totalPartsCount) {
-        throw new HttpException(
-          {
-            error: 'stock of parts is not sufficient',
-          },
-          HttpStatus.BAD_REQUEST,
-        );
+        throw new BadRequestException({error: 'stock of parts is not sufficient'});
       }
     }
 
     // update product stock
-    let updateProductStockDto: UpdateProductStockDto = new UpdateProductStockDto();
-    updateProductStockDto.stockBuilt = stockBuilt;
-    updateProductStockDto.stockUsed = 0;
+    const updateProductStockDto: UpdateProductStockDto = {
+      stockBuilt: stockBuilt,
+      stockUsed: 0
+    };
 
     const updatedProductLocationStock = await this.productLocationStockService.update(
       productId,
@@ -62,14 +58,15 @@ export class ProductBuilderService {
     );
 
     // update parts stock
-    let updatedPartLocationStocks = [];
-    let updatePartStockDto: UpdatePartStockDto = new UpdatePartStockDto();
-    updatePartStockDto.stockBuilt = 0;
+    const updatedPartLocationStocks = [];
+    const updatePartStockDto: UpdatePartStockDto = {
+      stockBuilt: 0
+    };
 
     for (let i = 0; i < product.parts.length; i++) {
       const part = product.parts[i];
       updatePartStockDto.stockUsed = part.quantity * stockBuilt;
-      let updatedPartLocationStock = await this.partLocationStockService.update(
+      const updatedPartLocationStock = await this.partLocationStockService.update(
         part.partId,
         locationId,
         updatePartStockDto,

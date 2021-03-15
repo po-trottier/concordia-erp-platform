@@ -1,8 +1,8 @@
-import { IsNotEmpty, IsInt, Min} from 'class-validator';
+import { IsNotEmpty, IsInt, IsPositive} from 'class-validator';
 
 export class BuildProductDto {
   @IsNotEmpty()
   @IsInt()
-  @Min(1)
+  @IsPositive()
   stockBuilt: number;
 }
