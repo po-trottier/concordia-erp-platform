@@ -29,7 +29,7 @@ export const MaterialsCatalog = () => {
         axios.get('/materials/stock/' + location)
           .then((resp) => {
             data.forEach((mat : MaterialEntry) => {
-              const entry = getMaterialStockEntry(resp, mat);
+              const entry = resp.data.find((m : MaterialStockEntry) => m.materialId._id === mat._id);
               if (entry) {
                 mat.stock = entry.stock;
               } else {
@@ -53,15 +53,6 @@ export const MaterialsCatalog = () => {
   const onSearch = (e : React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
   };
-
-  const getMaterialStockEntry : any = (resp : any, mat : MaterialEntry) => {
-    let entry;
-    resp.data.forEach((element : any) => {
-      if (element.materialId._id === mat._id)
-        entry = element;
-    });
-    return entry;
-  }
 
   const getMaterials = () => {
     let rows = JSON.parse(JSON.stringify(materials));
