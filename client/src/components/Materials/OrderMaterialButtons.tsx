@@ -75,7 +75,6 @@ export const OrderMaterialButtons = () => {
 		setOrderLoading(true);
 		axios.post('/orders/materials', { "orders": order })
 			.then(() => {
-				resetOrder(true);
 				updateStock(order);
 				message.success('Order was successfully placed.');
 			})
@@ -83,57 +82,70 @@ export const OrderMaterialButtons = () => {
 				message.error('Something went wrong while placing order.');
 				console.log(err);
 			})
-			.finally(() => setOrderLoading(false));
+			.finally(() => {
+				console.log(materials);
+				setOrderLoading(false);
+			});
   }
 
-	const resetOrder = (isOrder : boolean) => {
-		if(!isOrder)
-			setResetLoading(true);
-
+	const resetOrder = () => {
+		setResetLoading(true);
 		const success = true;
 
 		materials.forEach((material : any) => {
-
-			const newMaterial : MaterialEntry= {
-				...material,
-				quantity: 0
+			if (material.quantity){
+				const newMaterial : MaterialEntry= {
+					...material,
+					quantity: 0
+				}
+	
+				axios.patch('/materials/' + material._id, newMaterial)
+				.then(({ data }) => {
+					const newMaterial = data;
+					newMaterial.id = data['_id'];
+					dispatch(updateMaterialEntry({
+						id: material._id,
+						newMaterial
+					}));
+				})
+				.catch((err) => {
+					console.error(err);
+				});
 			}
-
-			axios.patch('/materials/' + material._id, newMaterial)
-			.then(({ data }) => {
-				const newMaterial = data;
-				newMaterial.id = data['_id'];
-				dispatch(updateMaterialEntry({
-					id: material._id,
-					newMaterial
-				}));
-			})
-			.catch((err) => {
-				console.error(err);
-			})
 		});
 
-		if(!isOrder){
-			console.log(orderLoading);
-			if(success)
-				message.success('Order was successfully reset.');
-			else
-				message.error('Something went wrong while updating the order.');
-		}
+		if(success)
+			message.success('Order was successfully reset.');
+		else
+			message.error('Something went wrong while updating the order.');
 
 		setResetLoading(false);
 	}
 
 	const updateStock = (order : any[]) => {
-
 		order.forEach(material => {
-
 			const matrerialStock = {
 				stockUsed: 0,
 				stockBought: material.quantity,
 			}
+
 			axios.patch('/materials/' + material.materialId + '/stock/' + locationId, matrerialStock)
-				.then(() => {})
+				.then(({data}) => {
+					const oldMaterial : MaterialEntry = materials.find((material : any) => {
+						return material._id === data.materialId;
+					});
+					const newMaterial : MaterialEntry = {
+						...oldMaterial,
+						quantity: 0,
+						stock: data.stock
+					}
+					console.log(data.materialId);
+					console.log(newMaterial);
+					dispatch(updateMaterialEntry({
+						id: data.materialId,
+						newMaterial
+					}));	
+				})
 				.catch((err) => {
 					console.log(err);
 				});
@@ -153,7 +165,7 @@ export const OrderMaterialButtons = () => {
 				type='primary'
 				style={{ marginTop: 16, marginRight: 15, float: 'right' }}
 				loading={resetLoading}
-				onClick={() => resetOrder(false)}>
+				onClick={() => resetOrder()}>
 						Reset Order
 				</Button>
 			</div>
