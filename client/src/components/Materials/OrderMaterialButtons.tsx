@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store/Store';
 import { updateMaterialQuantities } from '../../store/slices/MaterialQuantitiesSlice';
 import { MaterialEntry } from '../../interfaces/MaterialEntry';
+import { MaterialOrderItem } from '../../interfaces/MaterialOrderItem';
 import { MaterialQuantity } from '../../interfaces/MaterialQuantity';
 import axios from '../../plugins/Axios';
 
@@ -45,7 +46,7 @@ export const OrderMaterialButtons = (props : any) => {
 	}
 
 	const createOrder = () => {
-    let order : any[] = [];
+    let order : MaterialOrderItem[] = [];
     quantities.forEach((materialQuantity : MaterialQuantity) => {
 			if(materialQuantity.quantity){
 				const material = materials.find((m : MaterialEntry) => materialQuantity.materialId === m._id);
@@ -75,7 +76,7 @@ export const OrderMaterialButtons = (props : any) => {
 		message.error('You order is empty.');
   }
 
-  const placeOrder = (order : any[]) => {
+  const placeOrder = (order : MaterialOrderItem[]) => {
 		setOrderLoading(true);
 		axios.post('/orders/materials', { "orders": order })
 			.then(() => {
@@ -89,7 +90,7 @@ export const OrderMaterialButtons = (props : any) => {
 			.finally(() => setOrderLoading(false));
   }
 
-	const updateStock = (order : any[]) => {
+	const updateStock = (order : MaterialOrderItem[]) => {
 		const materialStocks : any[] = [];
 
 		order.forEach(orderItem => {
