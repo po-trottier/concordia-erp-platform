@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store/Store';
 import { PartEntry } from '../../interfaces/PartEntry';
 import { PartStockEntry } from '../../interfaces/PartStockEntry';
+import { PartOrderItem } from '../../interfaces/PartOrderItem';
 import { MaterialDropdownEntry } from '../../interfaces/MaterialDropdownEntry';
 import { setPartList } from '../../store/slices/PartListSlice';
 import axios from '../../plugins/Axios';
@@ -24,6 +25,9 @@ export const PartCatalog = () => {
   const emptyData : MaterialDropdownEntry[] = [];
   const [searchValue, setSearchValue] = useState('');
   const [materialsData, setMaterialsData] = useState(emptyData);
+
+  const emptyPartOrder: PartOrderItem[] = [];
+  const [partOrders, setPartOrders] = useState(emptyPartOrder);
 
   useEffect(() => {
     axios.get('/parts')
@@ -74,6 +78,33 @@ export const PartCatalog = () => {
     return mats.map((m) => m.name).join(', ');
   };
 
+  const changeBuildAmount = (partId: string, buildAmount: number) => {
+    const foundOrder = partOrders.find(
+      (order: PartOrderItem) => order.partId === partId
+    );
+    if (foundOrder) {
+      foundOrder.buildAmount = buildAmount;
+      setPartOrders(partOrders);
+    } else {
+      setPartOrders(partOrders.concat({ partId, buildAmount }));
+    }
+  };
+
+  const buildProducts = () => {
+    partOrders.forEach((order) => {
+      axios.patch('products/' + order.partId + '/build/' + location, {
+        stockBuilt: order.buildAmount,
+      })
+        .then((data) => {
+          console.log(data);
+          message.success('part built successfully!');
+        }).catch((err) => {
+        message.error('not enough materials to build part');
+        console.log(err);
+      });
+    });
+  };
+
   const getParts = () => {
     let rows = JSON.parse(JSON.stringify(parts));
 
@@ -85,7 +116,7 @@ export const PartCatalog = () => {
 
     rows.forEach((row : PartEntry) => {
       row.build = (
-        <InputNumber
+        <InputNumber onChange={(value: any) => changeBuildAmount(row.id, value)}
           placeholder='Input a quantity'
           min={0}
           style={{ width: '100%' }} />
@@ -124,6 +155,7 @@ export const PartCatalog = () => {
         }
       </Card>
       <Button
+        onClick={buildProducts}
         type='primary'
         style={{ marginTop: 16, float: 'right' }}>
         Build Parts
