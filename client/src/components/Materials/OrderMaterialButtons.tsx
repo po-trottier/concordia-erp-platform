@@ -63,7 +63,6 @@ export const OrderMaterialButtons = () => {
 				})
 			}
 		});
-
     if (order.length > 0)
 			placeOrder(order);
     else 
@@ -112,39 +111,19 @@ export const OrderMaterialButtons = () => {
 
 		const materialStocks : any[] = [];
 
-		order.forEach(material => {
-
+		order.forEach(orderItem => {
 			materialStocks.push({
 				stockUsed: 0,
-				stockBought: material.quantity,
-				materialId: material.materialId
+				stockBought: orderItem.quantity,
+				materialId: orderItem.materialId
 			});
-
-			const matrerialStock = {
-				stockUsed: 0,
-				stockBought: material.quantity,
-			}
-
-			axios.patch('/materials/' + material.materialId + '/stock/' + locationId, matrerialStock)
-				.then(({data}) => {
-					const oldMaterial : MaterialEntry = materials.find((material : any) => {
-						return material._id === data.materialId;
-					});
-					const newMaterial : MaterialEntry = {
-						...oldMaterial,
-						quantity: 0,
-						stock: data.stock
-					}
-					dispatch(updateMaterialEntry({
-						id: data.materialId,
-						newMaterial
-					}));	
-				})
-				.catch((err) => {
-					console.log(err);
-				});
 		});
-		console.log(materialStocks);
+
+		axios.patch('/materials/stock/' + locationId, materialStocks)
+			.then(() => resetOrder())
+			.catch((err) => {
+				console.log(err);
+			})
 	}
 
     return(

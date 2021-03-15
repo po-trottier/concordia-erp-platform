@@ -29,7 +29,7 @@ export const MaterialsCatalog = () => {
         axios.get('/materials/stock/' + location)
           .then((resp) => {
             data.forEach((mat : MaterialEntry) => {
-              const entry = resp.data.find((m : MaterialStockEntry) => m.materialId === mat.id);
+              const entry = getMaterialStockEntry(resp, mat);
               if (entry) {
                 mat.stock = entry.stock;
               } else {
@@ -53,6 +53,15 @@ export const MaterialsCatalog = () => {
   const onSearch = (e : React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
   };
+
+  const getMaterialStockEntry : any = (resp : any, mat : any) => {
+    let entry;
+    resp.data.forEach((element : any) => {
+      if (element.materialId._id === mat._id)
+        entry = element;
+    });
+    return entry;
+  }
 
   const getMaterials = () => {
     let rows = JSON.parse(JSON.stringify(materials));
@@ -84,7 +93,7 @@ export const MaterialsCatalog = () => {
     return rows;
   };
 
-  const updateMaterialQuantity = (id : string, quantity : number) => {
+  const updateMaterialQuantity = async(id : string, quantity : number) => {
     const oldMaterial : MaterialEntry = materials.find((material : any) => {
       return material._id === id;
     });
@@ -94,17 +103,19 @@ export const MaterialsCatalog = () => {
       quantity
     }
 
+    // dispatch(updateMaterialEntry({
+    //   id,
+    //   newMaterial
+    // }));
+
     axios.patch('/materials/' + id, newMaterial)
-    .then(({ data }) => {
-      const newMaterial = data;
-      newMaterial.id = data['_id'];
+    .then(() => {
       dispatch(updateMaterialEntry({
         id,
         newMaterial
       }));
     })
     .catch((err) => {
-      message.error('Something went wrong while updating the order.');
       console.error(err);
     })
   }
