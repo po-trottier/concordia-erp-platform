@@ -28,10 +28,10 @@ export const ProductCatalog = () => {
   useEffect(() => {
     axios.get('/products')
       .then(({ data }) => {
-        axios
-          .get('/products/stock/' + location)
+        axios.get('/products/stock/' + location)
           .then((resp) => {
-            data.forEach((prod: ProductEntry) => {const entry = resp.data.find((p: ProductStockEntry) => p.productId === prod.id);
+            data.forEach((prod : ProductEntry) => {
+              const entry = resp.data.find((p : ProductStockEntry) => p.productId === prod.id);
               if (entry) {
                 prod.stock = entry.stock;
               } else {
@@ -42,12 +42,12 @@ export const ProductCatalog = () => {
           })
           .catch((err) => {
             message.error('Something went wrong while getting the products stock.');
-            console.log(err);
+            console.error(err);
           });
       })
       .catch((err) => {
         message.error('Something went wrong while getting the products catalog.');
-        console.log(err);
+        console.error(err);
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updated]);

@@ -60,7 +60,8 @@ export class ProductBuilderService {
     // update parts stock
     const updatedPartLocationStocks = [];
     const updatePartStockDto: UpdatePartStockDto = {
-      stockBuilt: 0
+      stockBuilt: 0,
+      stockUsed: null
     };
 
     for (let i = 0; i < product.parts.length; i++) {

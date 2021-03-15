@@ -40,6 +40,7 @@ export const CreateProductModal = () => {
       })
       .catch(err => {
         message.error('Something went wrong while fetching the list of parts.');
+        console.log(err);
       });
   }, [updated]);
 
@@ -108,6 +109,7 @@ export const CreateProductModal = () => {
       })
       .catch(err => {
         message.error('Something went wrong while creating the product.');
+        console.log(err);
       });
   };
 
