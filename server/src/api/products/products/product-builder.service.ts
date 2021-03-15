@@ -33,8 +33,7 @@ export class ProductBuilderService {
 
     // checking if we can do the operation
     const product = await this.productsService.findOne(productId);
-    for (let i = 0; i < product.parts.length; i++) {
-      const part = product.parts[i];
+    for (const part of product.parts) {
       const totalPartsCount = part.quantity * stockBuilt;
       const partLocationStock = await this.partLocationStockService.findOne(
         part.partId,
@@ -64,8 +63,7 @@ export class ProductBuilderService {
       stockUsed: null
     };
 
-    for (let i = 0; i < product.parts.length; i++) {
-      const part = product.parts[i];
+    for (const part of product.parts) {
       updatePartStockDto.stockUsed = part.quantity * stockBuilt;
       const updatedPartLocationStock = await this.partLocationStockService.update(
         part.partId,
