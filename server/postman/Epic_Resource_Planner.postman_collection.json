@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "ef4593da-f2a1-49db-9693-a41bae2ad534",
-		"name": "Epic_Resource_Planner",
+		"_postman_id": "27a7b65b-a29d-44bd-b6c6-b99067300ad5",
+		"name": "Epic Resource Planner",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -322,9 +322,7 @@
 							},
 							"response": []
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Part Logs",
@@ -368,9 +366,7 @@
 							},
 							"response": []
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Part Stock",
@@ -443,9 +439,108 @@
 							},
 							"response": []
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
+				}
+			]
+		},
+		{
+			"name": "Finance",
+			"item": [
+				{
+					"name": "Get Finance Entries",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/finance",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"finance"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Finance Entry by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/finance/60245c2d2816ce3290065c38",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"finance",
+								"60245c2d2816ce3290065c38"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Finance Entry",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Pink bike tassels\",\n    \"description\": \"makes it go faster\",\n    \"stock\": 70000\n}"
+						},
+						"url": {
+							"raw": "{{url}}/finance",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"finance"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Finance Entry by Id",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"stock\": 4\n}"
+						},
+						"url": {
+							"raw": "{{url}}/finance/6023033e12523415393afc0f",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"finance",
+								"6023033e12523415393afc0f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Finance Entry",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/finance/60220fd37d5a1f2c5a6d9778",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"finance",
+								"60220fd37d5a1f2c5a6d9778"
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"protocolProfileBehavior": {}
@@ -464,8 +559,7 @@
 									"    pm.environment.set(\"JWT\", pm.response.json().token);",
 									"}"
 								],
-								"type": "text/javascript",
-								"id": "11934148-3120-4479-a84a-36e5b2260d90"
+								"type": "text/javascript"
 							}
 						}
 					],
@@ -494,8 +588,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Users",
@@ -622,8 +715,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Products",
@@ -748,9 +840,7 @@
 							},
 							"response": []
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Product Logs",
@@ -794,9 +884,7 @@
 							},
 							"response": []
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Product Stock",
@@ -869,12 +957,9 @@
 							},
 							"response": []
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Materials",
@@ -988,9 +1073,7 @@
 							},
 							"response": []
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Material Logs",
@@ -1034,9 +1117,7 @@
 							},
 							"response": []
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Material Stock",
@@ -1048,7 +1129,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"stockUsed\": 50,\n    \"stockBought\": 325\n}",
+									"raw": "[\n    {\n        \"materialId\": \"604eaa8a4be3294198d036d3\",\n        \"stockUsed\": 50,\n        \"stockBought\": 325\n    }\n]",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1056,15 +1137,14 @@
 									}
 								},
 								"url": {
-									"raw": "{{url}}/materials/60469de1e84e51169f6d5622/stock/604569e1a9aad81bc8accc07",
+									"raw": "{{url}}/materials/stock/604eaa804be3294198d036d2",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
 										"materials",
-										"60469de1e84e51169f6d5622",
 										"stock",
-										"604569e1a9aad81bc8accc07"
+										"604eaa804be3294198d036d2"
 									]
 								}
 							},
@@ -1076,15 +1156,15 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{url}}/materials/60469de1e84e51169f6d5622/stock/604569e1a9aad81bc8accc07",
+									"raw": "{{url}}/materials/stock/604eaa804be3294198d036d2/604eaa8a4be3294198d036d3",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
 										"materials",
-										"60469de1e84e51169f6d5622",
 										"stock",
-										"604569e1a9aad81bc8accc07"
+										"604eaa804be3294198d036d2",
+										"604eaa8a4be3294198d036d3"
 									]
 								}
 							},
@@ -1096,25 +1176,22 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{url}}/materials/stock/604569e1a9aad81bc8accc07",
+									"raw": "{{url}}/materials/stock/604eaa804be3294198d036d2",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
 										"materials",
 										"stock",
-										"604569e1a9aad81bc8accc07"
+										"604eaa804be3294198d036d2"
 									]
 								}
 							},
 							"response": []
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Locations",
@@ -1229,8 +1306,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "API Status",
@@ -1264,8 +1340,7 @@
 				"type": "text/javascript",
 				"exec": [
 					""
-				],
-				"id": "8b6a290f-a6ad-44e7-b7af-94d8b0cfa082"
+				]
 			}
 		},
 		{
@@ -1274,10 +1349,8 @@
 				"type": "text/javascript",
 				"exec": [
 					""
-				],
-				"id": "625a2085-2b08-4d21-884c-697bb9399b89"
+				]
 			}
 		}
-	],
-	"protocolProfileBehavior": {}
+	]
 }
