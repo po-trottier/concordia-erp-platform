@@ -21,7 +21,7 @@ export const Expenses = () => {
     dateOrdered: 'Date Ordered',
     dateDue: 'Due Date',
     amountDue: 'Amount',
-    isPaid: "Paid?",
+    isPaid: "Paid",
     details: "Details",
   });
 
@@ -66,14 +66,15 @@ export const Expenses = () => {
       <Card style={{ margin: '24px 0' }}>
         <Statistic title='Accounts Payable Balance (CAD)' value={balance} precision={2} />
       </Card>
-        <Card>
-          <div style={{ margin: '24px 0', textAlign:'right'}}>
-            Show Paid Orders : <Switch onChange={getOrders} />
-          </div>
-          {materialOrderData.length > 0 ?
-            <ResponsiveTable cols={getColumns()} rows={materialOrderData} />
-          : <div>No orders were found.</div>}
-        </Card>
+      <Card>
+        <div style={{ margin: '24px 0', textAlign:'right'}}>
+          <span>Show Paid Orders</span>
+          <Switch onChange={getOrders} style={{ marginLeft: 10 }}/>
+        </div>
+        {materialOrderData.length > 0 ?
+          <ResponsiveTable cols={getColumns()} rows={materialOrderData} />
+        : <div>No orders were found.</div>}
+      </Card>
     </div>
   );
 };

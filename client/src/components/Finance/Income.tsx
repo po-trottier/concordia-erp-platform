@@ -19,7 +19,7 @@ export const Income = () => {
     dateOrdered: 'Date Ordered',
     dateDue: 'Due Date',
     amountDue: 'Amount',
-    isPaid: "Paid?",
+    isPaid: "Paid",
     details: "Details",
   });
 
@@ -58,22 +58,21 @@ export const Income = () => {
       });
   }
 
-
-
   return (
     <div>
       <h2>Accounts Receivable</h2>
       <Card style={{ margin: '24px 0' }}>
         <Statistic title='Accounts Receivable Balance (CAD)' value={balance} precision={2} />
       </Card>
-        <Card>
-          <div style={{ margin: '24px 0', textAlign:'right'}}>
-            Show Paid Orders : <Switch onChange={getOrders} />
-          </div>
-          {productOrderData.length > 0 ? 
-            <ResponsiveTable cols={getColumns()} rows={productOrderData} />
-          : <div>No orders were found.</div>}  
-        </Card>
+      <Card>
+        <div style={{ margin: '24px 0', textAlign:'right'}}>
+          <span>Show Paid Orders</span>
+          <Switch onChange={getOrders} style={{ marginLeft: 10 }}/>
+        </div>
+        {productOrderData.length > 0 ? 
+          <ResponsiveTable cols={getColumns()} rows={productOrderData} />
+        : <div>No orders were found.</div>}  
+      </Card>
     </div>
   );
 };

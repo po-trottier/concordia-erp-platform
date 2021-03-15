@@ -14,18 +14,18 @@ export const Summary = () => {
   const [expectedBalance, setExpectedBalance] = useState(0);
   const [summaryEntryData, setSummaryEntryData] = useState(emptyData);
   const [updated, setUpdated] = useState(false);
-  
+
   useEffect(() => {
     setUpdated(true);
     axios.get('/orders/summary ')
       .then((res) => {
         if (res && res.data) {
           const data : SummaryEntry[] = [];
-          let expectedBalance : number = 0;
+          let expectedBalance = 0;
           res.data.forEach((s : any) => {
             data.push({
               date: s.date,
-              profit: s.balance,
+              balance: s.balance,
             });
             expectedBalance += s.balance;
           });
@@ -52,10 +52,8 @@ export const Summary = () => {
 
   const getColumns = () => ({
     date: 'Summary Date',
-    profit: 'Daily Profit'
+    balance: 'Daily Profit'
   });
-
-
 
   return (
     <div>
@@ -73,7 +71,7 @@ export const Summary = () => {
       {summaryEntryData.length > 0 ?
         <div>
           <Card style={{ margin: '24px 0' }}>
-            <Line data={summaryEntryData} xField='date' yField='profit' isStack={true} />
+            <Line data={summaryEntryData} xField='date' yField='balance' isStack={true} />
           </Card>
           <Card>
             <Title level={4} style={{ marginBottom: '24px' }}>
@@ -84,7 +82,6 @@ export const Summary = () => {
         </div>
         :
         <div>No orders were found.</div>}
-
     </div>
   );
 };
