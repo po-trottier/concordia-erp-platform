@@ -29,5 +29,5 @@ export class CreateProductOrderDto {
   dateDue: Date;
 
   @IsBoolean()
-  isPaid = false;
+  isPaid: boolean;
 }

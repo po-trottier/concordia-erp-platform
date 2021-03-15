@@ -25,5 +25,5 @@ export class CreateMaterialOrderDto {
   dateDue: Date;
 
   @IsBoolean()
-  isPaid = false;
+  isPaid: boolean;
 }
