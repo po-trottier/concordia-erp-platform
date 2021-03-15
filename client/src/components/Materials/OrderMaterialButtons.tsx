@@ -5,8 +5,9 @@ import { RootState } from '../../store/Store';
 import { MaterialEntry } from '../../interfaces/MaterialEntry';
 import { updateMaterialEntry } from '../../store/slices/MaterialListSlice';
 import axios from '../../plugins/Axios';
+import { MaterialQuantity } from '../../interfaces/MaterialQuantity';
 
-export const OrderMaterialButtons = () => {
+export const OrderMaterialButtons = (props : any) => {
 	const dispatch = useDispatch();
 	const materials = useSelector((state : RootState) => state.materialList.list);
 	const locationId = useSelector((state : RootState) => state.location.selected);
@@ -44,9 +45,9 @@ export const OrderMaterialButtons = () => {
 
 	const createOrder = () => {
     let order : any[] = [];
-
-    materials.forEach((material : MaterialEntry) => {
-			if(material.quantity){
+    props.quantities.forEach((materialQuantity : MaterialQuantity) => {
+			if(materialQuantity.quantity){
+				const material = materials.find((m : MaterialEntry) => materialQuantity.materialId === m._id);
 				const dateOrdered = new Date();
 				const dateDue = new Date();
 				dateDue.setDate(dateDue.getDate() + getIncrement(dateDue.getDay()));
@@ -54,7 +55,7 @@ export const OrderMaterialButtons = () => {
 
 				order.push({
 					materialId: material._id,
-					quantity: material.quantity,
+					quantity: materialQuantity.quantity,
 					supplierName: material.vendorName,
 					amountDue,
 					dateOrdered,
@@ -83,32 +84,7 @@ export const OrderMaterialButtons = () => {
 			.finally(() => setOrderLoading(false));
   }
 
-	const resetOrder = () => {
-		materials.forEach((material : MaterialEntry) => {
-			if (material.quantity){
-				const newMaterial : MaterialEntry= {
-					...material,
-					quantity: 0
-				}
-	
-				axios.patch('/materials/' + material._id, newMaterial)
-				.then(({ data }) => {
-					const newMaterial = data;
-					newMaterial.id = data['_id'];
-					dispatch(updateMaterialEntry({
-						id: material._id,
-						newMaterial
-					}));
-				})
-				.catch((err) => {
-					console.error(err);
-				});
-			}
-		});
-	}
-
 	const updateStock = (order : any[]) => {
-
 		const materialStocks : any[] = [];
 
 		order.forEach(orderItem => {
@@ -120,9 +96,9 @@ export const OrderMaterialButtons = () => {
 		});
 
 		axios.patch('/materials/stock/' + locationId, materialStocks)
-			.then(() => resetOrder())
 			.catch((err) => {
 				console.log(err);
+				message.error('Error updating the materrial stock.');
 			})
 	}
 

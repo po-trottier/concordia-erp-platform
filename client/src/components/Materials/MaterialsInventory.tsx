@@ -28,6 +28,8 @@ export const MaterialsInventory = () => {
         for (let i = 0; i < rows.length; i++) {
           let row = rows[i];
           row.date = new Date(row.date).toLocaleDateString();
+          if (!row.name)
+            continue;
           row.name = allMaterials.find(
             (material : any) => material._id === row.materialId
           ).name;

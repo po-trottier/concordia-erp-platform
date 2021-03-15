@@ -8,6 +8,7 @@ import { EditMaterialModal } from './EditMaterialModal';
 import { OrderMaterialButtons } from './OrderMaterialButtons';
 import { RootState } from '../../store/Store';
 import { MaterialEntry } from '../../interfaces/MaterialEntry';
+import { MaterialQuantity } from '../../interfaces/MaterialQuantity'
 import { MaterialStockEntry } from '../../interfaces/MaterialStockEntry';
 import { setMaterialList, updateMaterialEntry } from '../../store/slices/MaterialListSlice';
 import axios from '../../plugins/Axios';
@@ -21,6 +22,8 @@ export const MaterialsCatalog = () => {
   const updated = useSelector((state : RootState) => state.materialList.updated);
   const location = useSelector((state : RootState) => state.location.selected);
 
+  const emtpyQuantities : MaterialQuantity[] = [];
+  const [quantities, setQuantities] = useState(emtpyQuantities);
   const [searchValue, setSearchValue] = useState('');
 
   useEffect(() => {
@@ -29,7 +32,7 @@ export const MaterialsCatalog = () => {
         axios.get('/materials/stock/' + location)
           .then((resp) => {
             data.forEach((mat : MaterialEntry) => {
-              const entry = resp.data.find((m : MaterialStockEntry) => m.materialId._id === mat._id);
+              const entry = resp.data.find((m : MaterialStockEntry) => m.materialId ? m.materialId._id === mat._id : false);
               if (entry) {
                 mat.stock = entry.stock;
               } else {
@@ -64,12 +67,10 @@ export const MaterialsCatalog = () => {
 
     rows.forEach((row : any) => {
       row.id = row['_id'];
-      const index = materials.findIndex((material : any) => material._id === row.id);
       row.actions = <EditMaterialModal material={row} />;
       row.imageNode = <img src={row.image} height={32} alt='Material Preview' />;
       row.order = (
         <InputNumber
-          value={materials[index].quantity == 0 ? undefined : materials[index].quantity}
           placeholder='Input a quantity'
           min={0}
           style={{ width: '100%' }}
@@ -84,22 +85,24 @@ export const MaterialsCatalog = () => {
     return rows;
   };
 
-  const updateMaterialQuantity = async(id : string, quantity : number) => {
-    const oldMaterial : MaterialEntry = materials.find((material : MaterialEntry) => material._id === id);
-    const newMaterial : MaterialEntry = {
-      ...oldMaterial,
-      quantity
+  const updateMaterialQuantity = (id : string, quantity : number) => {
+    const index = quantities.findIndex((materialQuantity : MaterialQuantity) => materialQuantity.materialId === id);
+    let tempQuantities = quantities;
+
+    if (index < 0) {
+      tempQuantities.push({
+        materialId: id,
+        quantity
+      });
+      setQuantities(tempQuantities);
     }
-    axios.patch('/materials/' + id, newMaterial)
-    .then(() => {
-      dispatch(updateMaterialEntry({
-        id,
-        newMaterial
-      }));
-    })
-    .catch((err) => {
-      console.error(err);
-    })
+    else {
+      tempQuantities[index] = {
+        materialId: id,
+        quantity
+      }
+      setQuantities(tempQuantities);
+    }
   }
 
   const columns = {
@@ -126,7 +129,7 @@ export const MaterialsCatalog = () => {
             <span>No materials were found.</span>
         }
       </Card>
-      <OrderMaterialButtons />
+      <OrderMaterialButtons quantities={quantities} />
       <CreateMaterialModal />
     </div>
   );
