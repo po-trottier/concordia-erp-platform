@@ -24,7 +24,6 @@ export const MaterialsInventory = () => {
       axios.get('materials/logs').then(async ({ data }) => {
         let rows = data;
         const allMaterials = await axios.get('materials').then(({ data }) => data);
-  
         for (let i = 0; i < rows.length; i++) {
           let row = rows[i];
           row.date = new Date(row.date).toLocaleDateString();
@@ -34,13 +33,11 @@ export const MaterialsInventory = () => {
             (material : any) => material._id === row.materialId
           ).name;
         }
-  
         rows.sort((a : any, b : any) => {
           const dateA = a.date;
           const dateB = b.date;
           return dateA < dateB ? -1 : 1;
         });
-  
         if (searchValue.trim() !== '') {
           rows = rows.filter((row : any) =>
             row.name
@@ -49,7 +46,6 @@ export const MaterialsInventory = () => {
               .includes(searchValue.trim().toLowerCase())
           );
         }
-  
         setTableData(rows);
       });
     }, [searchValue]);
@@ -64,8 +60,7 @@ export const MaterialsInventory = () => {
         <Search
           placeholder='Search for a material'
           onChange={onSearch}
-          style={{ marginBottom: 18 }} 
-        />
+          style={{ marginBottom: 18 }} />
         { tableData.length > 0 ?
         <Line
           data={tableData}

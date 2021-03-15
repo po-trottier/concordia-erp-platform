@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
 import { Button, message } from 'antd';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { RootState } from '../../store/Store';
 import { MaterialEntry } from '../../interfaces/MaterialEntry';
-import { updateMaterialEntry } from '../../store/slices/MaterialListSlice';
 import axios from '../../plugins/Axios';
 import { MaterialQuantity } from '../../interfaces/MaterialQuantity';
 
 export const OrderMaterialButtons = (props : any) => {
-	const dispatch = useDispatch();
 	const materials = useSelector((state : RootState) => state.materialList.list);
 	const locationId = useSelector((state : RootState) => state.location.selected);
 
@@ -65,9 +63,9 @@ export const OrderMaterialButtons = (props : any) => {
 			}
 		});
     if (order.length > 0)
-			placeOrder(order);
-    else 
-			message.error('You order is empty.');
+		placeOrder(order);
+	else
+		message.error('You order is empty.');
   }
 
   const placeOrder = (order : any[]) => {

@@ -10,7 +10,7 @@ import { RootState } from '../../store/Store';
 import { MaterialEntry } from '../../interfaces/MaterialEntry';
 import { MaterialQuantity } from '../../interfaces/MaterialQuantity'
 import { MaterialStockEntry } from '../../interfaces/MaterialStockEntry';
-import { setMaterialList, updateMaterialEntry } from '../../store/slices/MaterialListSlice';
+import { setMaterialList } from '../../store/slices/MaterialListSlice';
 import axios from '../../plugins/Axios';
 
 const { Search } = Input;
@@ -24,10 +24,12 @@ export const MaterialsCatalog = () => {
 
   const emtpyQuantities : MaterialQuantity[] = [];
   const [quantities, setQuantities] = useState(emtpyQuantities);
-  const [rows, setRows] = useState([]);
   const [searchValue, setSearchValue] = useState('');
 
-  useEffect(() => { setMaterialListState() }, [updated, location]);
+  useEffect(() => {
+    setMaterialListState()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [updated, location]);
 
   const setMaterialListState = () => {
     axios.get('/materials')
@@ -53,7 +55,6 @@ export const MaterialsCatalog = () => {
       message.error('Something went wrong while getting the materials catalog.');
       console.error(err);
     });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }
 
   const onSearch = (e : React.ChangeEvent<HTMLInputElement>) => {
@@ -98,12 +99,11 @@ export const MaterialsCatalog = () => {
         quantity
       });
       setQuantities(tempQuantities);
-    }
-    else {
+    } else {
       tempQuantities[index] = {
         materialId: id,
         quantity
-      }
+      };
       setQuantities(tempQuantities);
     }
   }
