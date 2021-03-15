@@ -53,7 +53,7 @@ export const OrderMaterialButtons = (props : any) => {
 				const dateOrdered = new Date();
 				const dateDue = new Date();
 				dateDue.setDate(dateDue.getDate() + getIncrement(dateDue.getDay()));
-				const amountDue = material.quantity * material.price;
+				const amountDue = materialQuantity.quantity * material.price;
 
 				order.push({
 					materialId: material._id,
@@ -71,9 +71,9 @@ export const OrderMaterialButtons = (props : any) => {
 			}));
 		});
     if (order.length > 0)
-		placeOrder(order);
-	else
-		message.error('You order is empty.');
+			placeOrder(order);
+		else
+			message.error('You order is empty.');
   }
 
   const placeOrder = (order : MaterialOrderItem[]) => {
