@@ -927,7 +927,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"stockUsed\": 50,\n    \"stockBought\": 325\n}",
+									"raw": "[\n    {\n        \"materialId\": \"604eaa8a4be3294198d036d3\",\n        \"stockUsed\": 50,\n        \"stockBought\": 325\n    }\n]",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -935,15 +935,14 @@
 									}
 								},
 								"url": {
-									"raw": "{{url}}/materials/stock/604eaa804be3294198d036d2/604eaa8a4be3294198d036d3",
+									"raw": "{{url}}/materials/stock/604eaa804be3294198d036d2",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
 										"materials",
 										"stock",
-										"604eaa804be3294198d036d2",
-										"604eaa8a4be3294198d036d3"
+										"604eaa804be3294198d036d2"
 									]
 								}
 							},

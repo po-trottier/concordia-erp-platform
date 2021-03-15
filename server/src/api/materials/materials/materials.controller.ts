@@ -74,14 +74,12 @@ export class MaterialsController {
   }
 
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
-  @Patch('stock/:locationId/:materialId')
+  @Patch('stock/:locationId')
   updateStock(
-    @Param('materialId') materialId: string,
     @Param('locationId') locationId: string,
-    @Body(ValidationPipe) updateMaterialStockDto: UpdateMaterialStockDto,
+    @Body(ValidationPipe) updateMaterialStockDto: UpdateMaterialStockDto[],
   ) {
     return this.materialLocationStockService.update(
-      materialId,
       locationId,
       updateMaterialStockDto,
     );
