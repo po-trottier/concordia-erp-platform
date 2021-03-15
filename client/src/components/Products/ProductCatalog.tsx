@@ -83,7 +83,7 @@ export const ProductCatalog = () => {
       );
       row.build = (
         <InputNumber
-          onChange={(value: any) => changeBuildAmount(row.id, value)}
+          onChange={(value: number) => changeBuildAmount(row.id, value)}
           placeholder='Input a quantity'
           min={0}
           style={{ width: '100%' }} />
