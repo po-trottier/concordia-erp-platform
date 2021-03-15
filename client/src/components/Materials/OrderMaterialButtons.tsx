@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 import { Button, message } from 'antd';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store/Store';
+import { updateMaterialQuantities } from '../../store/slices/MaterialQuantitiesSlice';
 import { MaterialEntry } from '../../interfaces/MaterialEntry';
-import axios from '../../plugins/Axios';
 import { MaterialQuantity } from '../../interfaces/MaterialQuantity';
+import axios from '../../plugins/Axios';
 
 export const OrderMaterialButtons = (props : any) => {
+	const dispatch = useDispatch();
 	const materials = useSelector((state : RootState) => state.materialList.list);
+	const quantities = useSelector((state : RootState) => state.materialQuantities.quantities);
 	const locationId = useSelector((state : RootState) => state.location.selected);
 
 	const [orderLoading, setOrderLoading] = useState(false);
@@ -43,7 +46,7 @@ export const OrderMaterialButtons = (props : any) => {
 
 	const createOrder = () => {
     let order : any[] = [];
-    props.quantities.forEach((materialQuantity : MaterialQuantity) => {
+    quantities.forEach((materialQuantity : MaterialQuantity) => {
 			if(materialQuantity.quantity){
 				const material = materials.find((m : MaterialEntry) => materialQuantity.materialId === m._id);
 				const dateOrdered = new Date();
@@ -61,6 +64,10 @@ export const OrderMaterialButtons = (props : any) => {
 					isPaid: false,
 				})
 			}
+			dispatch(updateMaterialQuantities({
+				...materialQuantity,
+				quantity: 0,
+			}));
 		});
     if (order.length > 0)
 		placeOrder(order);

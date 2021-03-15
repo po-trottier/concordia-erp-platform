@@ -10,6 +10,7 @@ import { userListSlice } from './slices/UserListSlice';
 import { productListSlice } from './slices/ProductListSlice';
 import { partListSlice } from './slices/PartListSlice';
 import { materialListSlice } from './slices/MaterialListSlice';
+import { materialQuantitiesSlice } from './slices/MaterialQuantitiesSlice'
 import { locationSlice } from './slices/LocationSlice';
 
 const persistConfig = {
@@ -35,6 +36,7 @@ const rootReducer = combineReducers({
   productList: productListSlice.reducer,
   partList: partListSlice.reducer,
   materialList: materialListSlice.reducer,
+  materialQuantities: materialQuantitiesSlice.reducer,
   location: locationSlice.reducer,
 });
 

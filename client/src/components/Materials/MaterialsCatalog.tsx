@@ -8,9 +8,10 @@ import { EditMaterialModal } from './EditMaterialModal';
 import { OrderMaterialButtons } from './OrderMaterialButtons';
 import { RootState } from '../../store/Store';
 import { MaterialEntry } from '../../interfaces/MaterialEntry';
-import { MaterialQuantity } from '../../interfaces/MaterialQuantity'
+import { MaterialQuantity } from '../../interfaces/MaterialQuantity';
 import { MaterialStockEntry } from '../../interfaces/MaterialStockEntry';
 import { setMaterialList } from '../../store/slices/MaterialListSlice';
+import { setMaterialQuantities, updateMaterialQuantities } from '../../store/slices/MaterialQuantitiesSlice';
 import axios from '../../plugins/Axios';
 
 const { Search } = Input;
@@ -19,24 +20,27 @@ export const MaterialsCatalog = () => {
   const dispatch = useDispatch();
 
   const materials = useSelector((state : RootState) => state.materialList.list);
+  const quantities = useSelector((state : RootState) => state.materialQuantities.quantities);
   const updated = useSelector((state : RootState) => state.materialList.updated);
   const location = useSelector((state : RootState) => state.location.selected);
-
-  const emtpyQuantities : MaterialQuantity[] = [];
-  const [quantities, setQuantities] = useState(emtpyQuantities);
   const [searchValue, setSearchValue] = useState('');
 
   useEffect(() => {
-    setMaterialListState()
+    setMaterialListState();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updated, location]);
 
   const setMaterialListState = () => {
+    let tempQuantities : MaterialQuantity[] = [];
     axios.get('/materials')
     .then(({ data }) => {
       axios.get('/materials/stock/' + location)
         .then((resp) => {
           data.forEach((mat : MaterialEntry) => {
+            tempQuantities.push({
+              materialId: mat._id,
+              quantity: 0,
+            });
             const entry = resp.data.find((m : MaterialStockEntry) => m.materialId ? m.materialId._id === mat._id : false);
             if (entry) {
               mat.stock = entry.stock;
@@ -45,6 +49,7 @@ export const MaterialsCatalog = () => {
             }
           });
           dispatch(setMaterialList(data));
+          dispatch(setMaterialQuantities(tempQuantities));
         })
         .catch((err) => {
           message.error('Something went wrong while getting the materials stock.');
@@ -73,12 +78,14 @@ export const MaterialsCatalog = () => {
       row.id = row['_id'];
       row.actions = <EditMaterialModal material={row} />;
       row.imageNode = <img src={row.image} height={32} alt='Material Preview' />;
+      const index = quantities.findIndex((mq : MaterialQuantity) => mq.materialId === row.id);
       row.order = (
         <InputNumber
+          value={index >= 0 ? quantities[index].quantity : 0}
           placeholder='Input a quantity'
           min={0}
           style={{ width: '100%' }}
-          onChange={(value : any) => updateMaterialQuantity(row.id, value)} />
+          onChange={(value : any) => dispatch(updateMaterialQuantities({materialId: row.id, quantity: value}))} />
       );
     });
 
@@ -88,25 +95,6 @@ export const MaterialsCatalog = () => {
 
     return rows;
   };
-
-  const updateMaterialQuantity = (id : string, quantity : number) => {
-    const index = quantities.findIndex((materialQuantity : MaterialQuantity) => materialQuantity.materialId === id);
-    let tempQuantities = quantities;
-
-    if (index < 0) {
-      tempQuantities.push({
-        materialId: id,
-        quantity
-      });
-      setQuantities(tempQuantities);
-    } else {
-      tempQuantities[index] = {
-        materialId: id,
-        quantity
-      };
-      setQuantities(tempQuantities);
-    }
-  }
 
   const columns = {
     imageNode: 'Preview',
