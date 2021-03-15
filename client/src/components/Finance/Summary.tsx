@@ -14,6 +14,7 @@ export const Summary = () => {
   const [expectedBalance, setExpectedBalance] = useState(0);
   const [summaryEntryData, setSummaryEntryData] = useState(emptyData);
   const [updated, setUpdated] = useState(false);
+  
 
   useEffect(() => {
     setUpdated(true);
