@@ -18,32 +18,32 @@ export class ProductLogsService {
   /**
    * Retrieves all productLog entries using mongoose productLogModel
    */
-  async findAll(): Promise<ProductLog[]> {
-    return this.productLogModel.find();
+  async findAll(locationId: string): Promise<ProductLog[]> {
+    return await this.productLogModel
+      .find({ locationId })
+      .populate('productId')
+      .exec();
   }
 
   /**
    * Retrieves a productLog by composite key using mongoose productLogModel
    *
-   * @param productId the id of the corresponding product
    * @param locationId the id of the location
-   * @param date the date in history
+   * @param productId the id of the corresponding product
    */
-  async findOne(
-    productId: string,
-    locationId: string,
-    date: Date,
-  ): Promise<ProductLog> {
-    const productLog = await this.productLogModel.findOne({
-      productId,
-      locationId,
-      date,
-    });
+  async findOneId(locationId: string, productId: string): Promise<ProductLog> {
+    const productLog = await this.productLogModel
+      .find({
+        productId,
+        locationId,
+      })
+      .populate('productId')
+      .exec();
     return this.validateProductLogFound(
       productLog,
       productId,
       locationId,
-      date,
+      'any',
     );
   }
 
@@ -74,7 +74,7 @@ export class ProductLogsService {
       updatedProductLog,
       productId,
       locationId,
-      date,
+      date.toString(),
     );
   }
 
@@ -90,11 +90,11 @@ export class ProductLogsService {
     productLogResult: any,
     productId: string,
     locationId: string,
-    date: Date,
+    date: string,
   ) {
     if (!productLogResult) {
       throw new NotFoundException(
-        `ProductLog entry with productId ${productId} and locationId ${locationId} on ${date.toString()} not found`,
+        `ProductLog entry with productId ${productId} and locationId ${locationId} on ${date} not found`,
       );
     } else {
       return productLogResult;
