@@ -54,7 +54,7 @@ export const MaterialsCatalog = () => {
     setSearchValue(e.target.value);
   };
 
-  const getMaterialStockEntry : any = (resp : any, mat : any) => {
+  const getMaterialStockEntry : any = (resp : any, mat : MaterialEntry) => {
     let entry;
     resp.data.forEach((element : any) => {
       if (element.materialId._id === mat._id)
@@ -94,20 +94,11 @@ export const MaterialsCatalog = () => {
   };
 
   const updateMaterialQuantity = async(id : string, quantity : number) => {
-    const oldMaterial : MaterialEntry = materials.find((material : any) => {
-      return material._id === id;
-    });
-
+    const oldMaterial : MaterialEntry = materials.find((material : MaterialEntry) => material._id === id);
     const newMaterial : MaterialEntry = {
       ...oldMaterial,
       quantity
     }
-
-    // dispatch(updateMaterialEntry({
-    //   id,
-    //   newMaterial
-    // }));
-
     axios.patch('/materials/' + id, newMaterial)
     .then(() => {
       dispatch(updateMaterialEntry({

@@ -1,7 +1,7 @@
 import React from 'react';
 
 export interface MaterialEntry {
-  id : string,
+  _id : string,
   name : string,
   stock : number,
   density : number,

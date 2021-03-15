@@ -45,7 +45,7 @@ export const OrderMaterialButtons = () => {
 	const createOrder = () => {
     let order : any[] = [];
 
-    materials.forEach((material : any) => {
+    materials.forEach((material : MaterialEntry) => {
 			if(material.quantity){
 				const dateOrdered = new Date();
 				const dateDue = new Date();
@@ -84,7 +84,7 @@ export const OrderMaterialButtons = () => {
   }
 
 	const resetOrder = () => {
-		materials.forEach((material : any) => {
+		materials.forEach((material : MaterialEntry) => {
 			if (material.quantity){
 				const newMaterial : MaterialEntry= {
 					...material,
