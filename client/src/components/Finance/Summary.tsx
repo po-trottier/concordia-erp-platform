@@ -9,11 +9,12 @@ import {SummaryEntry} from "../../interfaces/SummaryEntry";
 const { Title } = Typography;
 
 export const Summary = () => {
+  const emptyData : SummaryEntry[] = [];
   const [balance, setBalance] = useState(0);
   const [expectedBalance, setExpectedBalance] = useState(0);
-  const emptyData : SummaryEntry[] = [];
   const [summaryEntryData, setSummaryEntryData] = useState(emptyData);
   const [updated, setUpdated] = useState(false);
+  
   useEffect(() => {
     setUpdated(true);
     axios.get('/orders/summary ')

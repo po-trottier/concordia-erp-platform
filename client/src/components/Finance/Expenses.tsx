@@ -6,10 +6,11 @@ import axios from "../../plugins/Axios";
 import {MaterialOrder} from "../../interfaces/MaterialOrder";
 
 export const Expenses = () => {
-  const [balance, setBalance] = useState(0);
   const emptyData : MaterialOrder[] = [];
+  const [balance, setBalance] = useState(0);
   const [materialOrderData, setMaterialOrderData] = useState(emptyData);
   const [updated, setUpdated] = useState(false);
+  
   useEffect(() => {
     setUpdated(true);
     getOrders(false);
@@ -65,12 +66,14 @@ export const Expenses = () => {
       <Card style={{ margin: '24px 0' }}>
         <Statistic title='Accounts Payable Balance (CAD)' value={balance} precision={2} />
       </Card>
-      <Card>
-        <div style={{ margin: '24px 0', textAlign:'right'}}>
-          Show Paid Orders : <Switch onChange={getOrders} />
-        </div>
-        <ResponsiveTable cols={getColumns()} rows={materialOrderData} />
-      </Card>
+        <Card>
+          <div style={{ margin: '24px 0', textAlign:'right'}}>
+            Show Paid Orders : <Switch onChange={getOrders} />
+          </div>
+          {materialOrderData.length > 0 ?
+            <ResponsiveTable cols={getColumns()} rows={materialOrderData} />
+          : <div>No orders were found.</div>}
+        </Card>
     </div>
   );
 };
