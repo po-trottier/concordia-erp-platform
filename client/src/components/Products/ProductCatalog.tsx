@@ -17,25 +17,21 @@ const { Search } = Input;
 export const ProductCatalog = () => {
   const dispatch = useDispatch();
 
-  const products = useSelector((state: RootState) => state.productList.list);
-  const updated = useSelector((state: RootState) => state.productList.updated);
-  const location = useSelector((state: RootState) => state.location.selected);
+  const products = useSelector((state : RootState) => state.productList.list);
+  const updated = useSelector((state : RootState) => state.productList.updated);
+  const location = useSelector((state : RootState) => state.location.selected);
 
   const emptyData: OrderItem[] = [];
   const [searchValue, setSearchValue] = useState('');
   const [orders, setOrders] = useState(emptyData);
 
   useEffect(() => {
-    axios
-      .get('/products')
+    axios.get('/products')
       .then(({ data }) => {
         axios
           .get('/products/stock/' + location)
           .then((resp) => {
-            data.forEach((prod: ProductEntry) => {
-              const entry = resp.data.find(
-                (p: ProductStockEntry) => p.productId === prod.id
-              );
+            data.forEach((prod: ProductEntry) => {const entry = resp.data.find((p: ProductStockEntry) => p.productId === prod.id);
               if (entry) {
                 prod.stock = entry.stock;
               } else {
@@ -45,20 +41,18 @@ export const ProductCatalog = () => {
             dispatch(setProductList(data));
           })
           .catch((err) => {
-            message.error(
-              'Something went wrong while getting the products stock.'
-            );
+            message.error('Something went wrong while getting the products stock.');
+            console.log(err);
           });
       })
       .catch((err) => {
-        message.error(
-          'Something went wrong while getting the products catalog.'
-        );
+        message.error('Something went wrong while getting the products catalog.');
+        console.log(err);
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updated]);
 
-  const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onSearch = (e : React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
   };
 
@@ -78,11 +72,9 @@ export const ProductCatalog = () => {
     let rows = JSON.parse(JSON.stringify(products));
 
     if (searchValue.trim() !== '') {
-      rows = rows.filter((r: ProductEntry) =>
-        r.name.trim().toLowerCase().includes(searchValue.trim().toLowerCase())
-      );
+      rows = rows.filter((r: ProductEntry) => r.name.trim().toLowerCase().includes(searchValue.trim().toLowerCase()));
     }
-    rows.forEach((row: any) => {
+    rows.forEach((row : any) => {
       row.id = row['_id'];
       row.details = (
         <Button type='primary' size='small' onClick={() => showModal(row)}>
@@ -92,10 +84,9 @@ export const ProductCatalog = () => {
       row.build = (
         <InputNumber
           onChange={(value: any) => changeBuildAmount(row.id, value)}
-          placeholder='Input a buildAmount'
+          placeholder='Input a quantity'
           min={0}
-          style={{ width: '100%' }}
-        />
+          style={{ width: '100%' }} />
       );
       row.actions = <EditProductModal product={row} />;
     });
@@ -106,10 +97,10 @@ export const ProductCatalog = () => {
     return rows;
   };
 
-  const showModal = (row: ProductEntry) => {
+  const showModal = (row : ProductEntry) => {
     Modal.info({
       title: 'Product Details',
-      content: <ProductDetails product={row} />,
+      content: <ProductDetails product={row} />
     });
   };
 
@@ -132,6 +123,7 @@ export const ProductCatalog = () => {
           message.success('product built successfully!');
         }).catch((err) => {
           message.error('not enough parts to build product');
+          console.log(err);
         });
     });
   };
@@ -143,11 +135,11 @@ export const ProductCatalog = () => {
           placeholder='Search for a product'
           onChange={onSearch}
           style={{ marginBottom: 18 }} />
-        {getProducts().length > 0 ? (
-          <ResponsiveTable rows={getProducts()} cols={columns} />
-        ) : (
-          <span>No products were found.</span>
-        )}
+        {
+          getProducts().length > 0 ?
+            <ResponsiveTable rows={getProducts()} cols={columns} /> :
+            <span>No products were found.</span>
+        }
       </Card>
       <Button
         onClick={buildProducts}
