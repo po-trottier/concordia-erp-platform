@@ -59,10 +59,10 @@ export const Summary = () => {
     <div>
       <Card style={{ margin: '24px 0' }}>
         <Row>
-          <Col span={12}>
+          <Col sm={12} span={24}>
             <Statistic title='Account Balance (CAD)' value={balance} precision={2} />
           </Col>
-          <Col span={12}>
+          <Col sm={12} span={24}>
             <Statistic title='Expected Balance (CAD)' value={expectedBalance} precision={2} />
           </Col>
         </Row>
