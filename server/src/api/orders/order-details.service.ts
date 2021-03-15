@@ -28,7 +28,7 @@ export class OrderDetailsService {
     return { balance: balance };
   }
 
-	async getSummary(productOrderService : ProductOrdersService, materialOrderService : MaterialOrdersService) {
+    async getSummary(productOrderService : ProductOrdersService, materialOrderService : MaterialOrdersService) {
     const productOrders: CreateProductOrderDto[] = await productOrderService.findAll();
     const materialOrders: CreateMaterialOrderDto[] = await materialOrderService.findMaterialOrders();
 
