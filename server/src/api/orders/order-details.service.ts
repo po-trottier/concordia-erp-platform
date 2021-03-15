@@ -8,7 +8,7 @@ import { SummaryDto } from './dto/summary.dto';
 @Injectable()
 export class OrderDetailsService {
 
-	async getBalance(productOrderService : ProductOrdersService, materialOrderService : MaterialOrdersService) {
+    async getBalance(productOrderService : ProductOrdersService, materialOrderService : MaterialOrdersService) {
     const productOrders: CreateProductOrderDto[] = await productOrderService.findAll();
     const materialOrders: CreateMaterialOrderDto[] = await materialOrderService.findMaterialOrders();
 
