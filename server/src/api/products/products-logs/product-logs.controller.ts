@@ -9,11 +9,11 @@ export class ProductLogsController {
 
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
   @Get(':locationId/:productId')
-  findOneId(
+  findOne(
     @Param('locationId') locationId: string,
     @Param('productId') productId: string,
   ) {
-    return this.productLogsService.findOneId(locationId, productId);
+    return this.productLogsService.findOne(locationId, productId);
   }
 
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)

@@ -31,7 +31,7 @@ export class ProductLogsService {
    * @param locationId the id of the location
    * @param productId the id of the corresponding product
    */
-  async findOneId(locationId: string, productId: string): Promise<ProductLog> {
+  async findOne(locationId: string, productId: string): Promise<ProductLog> {
     const productLog = await this.productLogModel
       .find({
         productId,
