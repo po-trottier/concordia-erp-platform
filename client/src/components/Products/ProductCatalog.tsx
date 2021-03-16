@@ -26,6 +26,11 @@ export const ProductCatalog = () => {
   const [orders, setOrders] = useState(emptyData);
 
   useEffect(() => {
+    setProductListState();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [updated, location]);
+
+  const setProductListState = () => {
     axios.get('/products')
       .then(({ data }) => {
         data.forEach((p : any) => {
@@ -52,8 +57,7 @@ export const ProductCatalog = () => {
         message.error('Something went wrong while getting the products catalog.');
         console.error(err);
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [updated, location]);
+  };
 
   const onSearch = (e : React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
@@ -120,6 +124,7 @@ export const ProductCatalog = () => {
     axios.patch('products/build/' + location, orders)
     .then((data) => {
       console.log(data);
+      setProductListState();
       message.success('products built successfully!');
     }).catch((err) => {
       message.error('not enough parts to build a product!');
