@@ -52,8 +52,8 @@ describe('OrdersController', () => {
 
   beforeEach(async () => {
     materialService = new MaterialsService(materialDocumentModel);
-    productsService = new ProductsService(productDocument);
     materialOrdersService = new MaterialOrdersService(materialOrderDocument, materialService);
+    productsService = new ProductsService(productDocument);
     productOrdersService = new ProductOrdersService(productOrderDocument, productsService);
     orderDetailsService = new OrderDetailsService();
     ordersController = new OrdersController(
