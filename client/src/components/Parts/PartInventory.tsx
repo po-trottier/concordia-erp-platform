@@ -37,7 +37,7 @@ export const PartInventory = () => {
     setSearchValue(value);
   };
 
-  const cols = {
+  const columns = {
     name: 'Part',
     date: 'Date',
     built: 'Built',
@@ -59,7 +59,7 @@ export const PartInventory = () => {
           seriesField='name' />
       </Card>
       <Card>
-        <ResponsiveTable cols={cols} rows={lineGraphData} />
+        <ResponsiveTable columns={columns} values={lineGraphData} />
       </Card>
     </div>
   );

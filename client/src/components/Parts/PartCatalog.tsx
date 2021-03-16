@@ -119,7 +119,7 @@ export const PartCatalog = () => {
           style={{ marginBottom: 18 }} />
         {
           getParts().length > 0 ?
-            <ResponsiveTable rows={getParts()} cols={columns} /> :
+            <ResponsiveTable values={getParts()} columns={columns} /> :
             <span>No parts were found.</span>
         }
       </Card>

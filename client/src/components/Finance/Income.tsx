@@ -66,7 +66,7 @@ export const Income = () => {
           }} style={{ marginLeft: 10 }} />
         </div>
         {getOrders().length > 0 ?
-          <ResponsiveTable cols={getColumns()} rows={getOrders()} />
+          <ResponsiveTable columns={getColumns()} values={getOrders()} />
         : <div>No orders were found.</div>}
       </Card>
     </div>
