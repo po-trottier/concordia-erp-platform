@@ -1,66 +1,86 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Input } from 'antd';
 import { Line } from '@ant-design/charts';
-
 import { ResponsiveTable } from '../ResponsiveTable';
-import { dummyPartData, dummyPartHistoryData } from './PartDummyData';
+import { PartHistoryEntry } from '../../interfaces/PartHistoryEntry';
+import axios from '../../plugins/Axios';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store/Store';
 
 const { Search } = Input;
 
+const inventoryColumns = {
+	name: 'Part',
+	date: 'Date',
+	stockBuilt: 'Built',
+	stockUsed: 'Used',
+	stock: 'Stock',
+};
+
 export const PartInventory = () => {
+	const location = useSelector((state: RootState) => state.location.selected);
 
-  const [lineGraphData, setLineGraphData] = useState(dummyPartHistoryData());
-  const [searchValue, setSearchValue] = useState('');
+	const emptyData: PartHistoryEntry[] = [];
+	const [partsData, setPartsData] = useState(emptyData);
+	const [searchValue, setSearchValue] = useState('');
 
-  useEffect(() => {
-    let data = dummyPartData;
-    let timeLineData : any[] = dummyPartHistoryData();
-    if (searchValue) {
-      data = data.filter(
-        (part) =>
-          part.name.toLowerCase().includes(searchValue) ||
-          part.description.toLowerCase().includes(searchValue) ||
-          part.id.includes(searchValue)
-      );
-      timeLineData = [];
-      data.forEach(({ id: partId }) => {
-        timeLineData.push(
-          ...dummyPartHistoryData().filter(({ id }) => id === partId)
-        );
-      });
-    }
-    setLineGraphData(timeLineData);
-  }, [searchValue]);
+	useEffect(() => {
+		axios.get('parts/logs/' + location).then(async ({ data }) => {
+			for (const row of data) {
+				row.date = new Date(row.date).toLocaleDateString();
+				row.name = row.partId.name;
+			}
+			setPartsData(data);
+		});
+	}, [location]);
 
-  const onSearch = (e : React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.trim().toLowerCase();
-    setSearchValue(value);
-  };
+	const getParts = () => {
+		let rows = JSON.parse(JSON.stringify(partsData));
 
-  const cols = {
-    name: 'Part',
-    date: 'Date',
-    built: 'Built',
-    used: 'Used',
-    quantity: 'Stock',
-  };
+		if (searchValue.trim() !== '') {
+			rows = rows.filter((row: any) =>
+				row.name.trim().toLowerCase().includes(searchValue.trim().toLowerCase())
+			);
+		}
 
-  return (
-    <div>
-      <Card style={{ marginBottom: '24px' }}>
-        <Search
-          placeholder='Search for part transaction'
-          onChange={onSearch}
-          style={{ marginBottom: 16 }} />
-        <Line
-          data={lineGraphData}
-          xField='date'
-          yField='quantity'
-          seriesField='name' />
-      </Card>
-      <Card>
-        <ResponsiveTable cols={cols} rows={lineGraphData} />
-      </Card>
-    </div>
-  );
+		rows.sort((a: any, b: any) => {
+			const dateA = a.date;
+			const dateB = b.date;
+			return dateA < dateB ? -1 : 1;
+		});
+
+		return rows;
+	};
+
+	const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setSearchValue(e.target.value);
+	};
+
+	return (
+		<div>
+			<Card style={{ margin: '24px 0' }}>
+				<Search
+					placeholder="Search for a part transaction"
+					onChange={onSearch}
+					style={{ marginBottom: 18 }}
+				/>
+				{getParts().length > 0 ? (
+					<Line
+						data={getParts()}
+						xField="date"
+						yField="stock"
+						seriesField="name"
+						style={{ marginBottom: '48px' }}
+					/>
+				) : (
+					<span>No part transactions were found.</span>
+				)}
+			</Card>
+			{getParts().length > 0 ? (
+				<Card>
+					<ResponsiveTable rows={getParts()} cols={inventoryColumns} />
+				</Card>
+			) : null}
+		</div>
+	);
 };
