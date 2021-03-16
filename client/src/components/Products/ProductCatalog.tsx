@@ -45,6 +45,7 @@ export const ProductCatalog = () => {
                 prod.stock = 0;
               }
             });
+            console.log(data);
             dispatch(setProductList(data));
           })
           .catch((err) => {

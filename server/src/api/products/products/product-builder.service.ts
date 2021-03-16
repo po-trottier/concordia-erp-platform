@@ -69,7 +69,6 @@ export class ProductBuilderService {
       );
 
       // update parts stock
-      const updatedPartLocationStocks = [];
       const updatePartStockDto: UpdatePartStockDto = {
         stockBuilt: 0,
         stockUsed: null
@@ -77,15 +76,14 @@ export class ProductBuilderService {
 
       for (const part of product.parts) {
         updatePartStockDto.stockUsed = part.quantity * stockBuilt;
-        const updatedPartLocationStock = await this.partLocationStockService.update(
+        await this.partLocationStockService.update(
           part.partId,
           locationId,
           updatePartStockDto,
         );
-        updatedPartLocationStocks.push(updatedPartLocationStock);
       }
 
-      buildResults.push({updatedProductLocationStock, updatedPartLocationStocks});
+      buildResults.push(updatedProductLocationStock);
     }
 
     return buildResults;
