@@ -5,6 +5,7 @@ import { PartsController } from './parts/parts.controller';
 import { Part, PartSchema } from './parts/schemas/part.schema';
 import {
   PartLocationStock,
+  PartLocationStockDocument,
   PartLocationStockSchema,
 } from './parts/schemas/part-location-stock.schema';
 import { PartLog, PartLogSchema } from './parts-logs/schemas/part-log.schema';
@@ -31,5 +32,6 @@ import { PartLocationStockService } from './parts/part-location-stock.service';
   ],
   controllers: [PartLogsController, PartsController],
   providers: [PartsService, PartLogsService, PartLocationStockService],
+  exports: [PartLocationStockService],
 })
 export class PartsModule {}
