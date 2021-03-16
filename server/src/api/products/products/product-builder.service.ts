@@ -11,7 +11,9 @@ import {
   PartLocationStockDocument,
   PartLocationStock,
 } from '../../parts/parts/schemas/part-location-stock.schema';
-import {ProductDocument} from './schemas/products.schema';
+import {Product, ProductDocument} from './schemas/products.schema';
+import {InjectModel} from "@nestjs/mongoose";
+import {ProductLocationStock, ProductLocationStockDocument} from "./schemas/product-location-stock.schema";
 
 /**
  * Used by the ProductsController, handles product data storage and retrieval.
@@ -20,6 +22,8 @@ import {ProductDocument} from './schemas/products.schema';
 export class ProductBuilderService {
   constructor(
     @InjectModel(Product.name) private productModel: Model<ProductDocument>,
+    @InjectModel(ProductLocationStock.name) private productLocationStockModel: Model<ProductLocationStockDocument>,
+    @InjectModel(PartLocationStock.name) private partLocationStockModel: Model<PartLocationStockDocument>,
     private readonly productsService: ProductsService,
     private readonly productLocationStockService: ProductLocationStockService,
     private readonly partLocationStockService: PartLocationStockService,
