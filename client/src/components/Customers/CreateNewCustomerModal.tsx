@@ -4,7 +4,6 @@ import { Button, Col, Form, Input, message, Modal, Row } from 'antd';
 
 //import { addUserEntry } from '../../store/slices/UserListSlice';
 import axios from '../../plugins/Axios';
-import { isArray } from 'util';
 
 
 export const CreateNewCustomerModal = () => {
@@ -37,7 +36,7 @@ export const CreateNewCustomerModal = () => {
       })
       .catch((err) => {
         let error = err.response.data.message;
-        if (isArray(err.response.data.message)) {
+        if (err.response.data.message.isArray()) {
           error = err.response.data.message.join('; ');
         }
         message.error(error, 10);
