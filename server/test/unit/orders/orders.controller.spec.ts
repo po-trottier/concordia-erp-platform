@@ -2,12 +2,10 @@ import { OrdersController } from '../../../src/api/orders/orders.controller';
 import { MaterialOrdersService } from '../../../src/api/orders/material-orders.service';
 import { ProductOrdersService } from '../../../src/api/orders/product-orders.service';
 import { OrderDetailsService } from '../../../src/api/orders/order-details.service';
+import { ProductsService } from '../../../src/api/products/products/products.service';
 import { MaterialsService } from '../../../src/api/materials/materials/materials.service';
-import { CreateProductOrderListDto } from '../../../src/api/orders/dto/create-product-order-list.dto';
 import { CreateProductOrderDto } from '../../../src/api/orders/dto/create-product-order.dto';
 import { CreateMaterialOrderDto } from '../../../src/api/orders/dto/create-material-order.dto';
-import { CreateMaterialOrderListDto } from '../../../src/api/orders/dto/create-material-order-list.dto';
-import { MaterialWithSupplierDto } from '../../../src/api/orders/dto/material-with-supplier.dto';
 import {
   MaterialOrder,
   MaterialOrderDocument,
@@ -17,6 +15,7 @@ import {
   ProductOrderDocument,
 } from '../../../src/api/orders/schemas/product-orders.schema';
 import { MaterialDocument } from '../../../src/api/materials/materials/schemas/material.schema';
+import { ProductDocument } from '../../../src/api/products/products/schemas/products.schema';
 import { Model } from 'mongoose';
 import { SummaryDto } from 'src/api/orders/dto/summary.dto';
 
@@ -26,9 +25,11 @@ describe('OrdersController', () => {
   let productOrdersService: ProductOrdersService;
   let orderDetailsService: OrderDetailsService;
   let materialService: MaterialsService;
+  let productsService: ProductsService;
   let productOrderDocument: Model<ProductOrderDocument>;
   let materialOrderDocument: Model<MaterialOrderDocument>;
   let materialDocumentModel: Model<MaterialDocument>;
+  let productDocument: Model<ProductDocument>
 
   const dummyMaterialOrder: MaterialOrder = {
     amountDue: 5000,
@@ -51,23 +52,23 @@ describe('OrdersController', () => {
 
   beforeEach(async () => {
     materialService = new MaterialsService(materialDocumentModel);
-    materialOrdersService = new MaterialOrdersService(materialOrderDocument);
+    productsService = new ProductsService(productDocument);
+    materialOrdersService = new MaterialOrdersService(materialOrderDocument, materialService);
+    productOrdersService = new ProductOrdersService(productOrderDocument, productsService);
     orderDetailsService = new OrderDetailsService();
-    productOrdersService = new ProductOrdersService(productOrderDocument);
     ordersController = new OrdersController(
       materialOrdersService,
       productOrdersService,
-      materialService,
       orderDetailsService,
     );
   });
 
-  describe('createMaterial', () => {
+  describe('createMaterialOrder', () => {
     it('Should create a new materials order.', async () => {
       const result: MaterialOrder[] = [dummyMaterialOrder];
 
       let newMaterialOrder = new CreateMaterialOrderDto();
-      let newMaterialOrderList: any = new CreateMaterialOrderListDto();
+      let newMaterialOrderList: CreateMaterialOrderDto[] = [];
       newMaterialOrder = dummyMaterialOrder;
       newMaterialOrderList = [newMaterialOrder];
 
@@ -75,15 +76,15 @@ describe('OrdersController', () => {
         .spyOn(materialOrdersService, 'createMaterialOrder')
         .mockImplementation(async () => await result);
 
-      expect(await ordersController.createMaterial(newMaterialOrderList)).toBe(
+      expect(await ordersController.createMaterialOrder(newMaterialOrderList)).toBe(
         result,
       );
     });
   });
 
-  describe('findAllMaterials', () => {
+  describe('findAllMaterialsOrder', () => {
     it('Should find all material orders with supplier.', async () => {
-      const result: MaterialWithSupplierDto[] = [
+      const result: MaterialOrder[] = [
         {
           amountDue: 5000,
           dateDue: new Date(),
@@ -91,7 +92,6 @@ describe('OrdersController', () => {
           quantity: 100,
           isPaid: false,
           materialId: '1234',
-          supplierName: 'Material Dealer',
         },
       ];
 
@@ -99,11 +99,11 @@ describe('OrdersController', () => {
         .spyOn(materialOrdersService, 'findAll')
         .mockImplementation(async () => await result);
 
-      expect(await ordersController.findAllMaterials()).toBe(result);
+      expect(await ordersController.findAllMaterialsOrder()).toBe(result);
     });
   });
 
-  describe('findOneMaterial', () => {
+  describe('findOneMaterialOrder', () => {
     it('Should find one material order by id.', async () => {
       const result: MaterialOrder = dummyMaterialOrder;
       let newMaterialOrder = new CreateMaterialOrderDto();
@@ -114,12 +114,12 @@ describe('OrdersController', () => {
         .mockImplementation(async () => await result);
 
       expect(
-        await ordersController.findOneMaterial(newMaterialOrder.materialId),
+        await ordersController.findOneMaterialOrder(newMaterialOrder.materialId),
       ).toBe(result);
     });
   });
 
-  describe('removeMaterial', () => {
+  describe('removeMaterialOrder', () => {
     it('Should delete one material order by id.', async () => {
       const result: MaterialOrder = dummyMaterialOrder;
       let newMaterialOrder = new CreateMaterialOrderDto();
@@ -130,31 +130,31 @@ describe('OrdersController', () => {
         .mockImplementation(async () => await result);
 
       expect(
-        await ordersController.removeMaterial(newMaterialOrder.materialId),
+        await ordersController.removeMaterialOrder(newMaterialOrder.materialId),
       ).toBe(result);
     });
   });
 
-  describe('createProduct', () => {
+  describe('createProductOrder', () => {
     it('Should create a new product order.', async () => {
       const result: ProductOrder[] = [dummyProductOrder];
 
       let newProductOrder = new CreateProductOrderDto();
-      let newProductOrderList: any = new CreateProductOrderListDto();
+      let newProductOrderList: CreateProductOrderDto[] = [];
       newProductOrder = dummyProductOrder;
       newProductOrderList = [newProductOrder];
 
       jest
-        .spyOn(productOrdersService, 'createProductOrder')
+        .spyOn(productOrdersService, 'create')
         .mockImplementation(async () => await result);
 
-      expect(await ordersController.createProduct(newProductOrderList)).toBe(
+      expect(await ordersController.createProductOrder(newProductOrderList)).toBe(
         result,
       );
     });
   });
 
-  describe('findAllProducts', () => {
+  describe('findAllProductsOrder', () => {
     it('Should find all product orders.', async () => {
       const result: ProductOrder[] = [dummyProductOrder];
 
@@ -162,11 +162,11 @@ describe('OrdersController', () => {
         .spyOn(productOrdersService, 'findAll')
         .mockImplementation(async () => await result);
 
-      expect(await ordersController.findAllProducts()).toBe(result);
+      expect(await ordersController.findAllProductsOrder()).toBe(result);
     });
   });
 
-  describe('findOneProduct', () => {
+  describe('findOneProductOrder', () => {
     it('Should find one product order by id.', async () => {
       const result: ProductOrder = dummyProductOrder;
       let newProductOrder = new CreateProductOrderDto();
@@ -177,12 +177,12 @@ describe('OrdersController', () => {
         .mockImplementation(async () => await result);
 
       expect(
-        await ordersController.findOneProduct(newProductOrder.customerId),
+        await ordersController.findOneProductOrder(newProductOrder.customerId),
       ).toBe(result);
     });
   });
 
-  describe('removeProduct', () => {
+  describe('removeProductOrder', () => {
     it('Should delete one product order by id.', async () => {
       const result: ProductOrder = dummyProductOrder;
       let newProductOrder = new CreateProductOrderDto();
@@ -193,7 +193,7 @@ describe('OrdersController', () => {
         .mockImplementation(async () => await result);
 
       expect(
-        await ordersController.removeProduct(newProductOrder.customerId),
+        await ordersController.removeProductOrder(newProductOrder.customerId),
       ).toBe(result);
     });
   });
