@@ -1,6 +1,6 @@
 import { OrderDetailsService } from '../../../src/api/orders/order-details.service';
 
-describe('OrdersServices', () => {
+describe('OrderDetailsService', () => {
   let orderDetailsService: OrderDetailsService;
 
   beforeEach(async () => {
