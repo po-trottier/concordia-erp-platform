@@ -17,40 +17,41 @@ const inventoryColumns = {
 
 export const MaterialsInventory = () => {
   const emptyData: MaterialsTimelineEntry[] = [];
-    const [tableData, setTableData] = useState(emptyData);
+    const [materialsData, setMaterialsData] = useState(emptyData);
     const [searchValue, setSearchValue] = useState('');
 
     useEffect(() => {
       axios.get('materials/logs').then(async ({ data }) => {
-        let rows = data;
-        const allMaterials = await axios.get('materials').then(({ data }) => data);
-  
-        for (let i = 0; i < rows.length; i++) {
-          let row = rows[i];
+        for (const row of data) {
           row.date = new Date(row.date).toLocaleDateString();
-          row.name = allMaterials.find(
-            (material : any) => material._id === row.materialId
-          ).name;
+          row.name = row.materialId.name;
+          console.log(row);
         }
   
-        rows.sort((a : any, b : any) => {
-          const dateA = a.date;
-          const dateB = b.date;
-          return dateA < dateB ? -1 : 1;
-        });
-  
-        if (searchValue.trim() !== '') {
-          rows = rows.filter((row : any) =>
-            row.name
-              .trim()
-              .toLowerCase()
-              .includes(searchValue.trim().toLowerCase())
-          );
-        }
-  
-        setTableData(rows);
+        setMaterialsData(data);
       });
     }, [searchValue]);
+
+    const getMaterials = () => {
+      let rows = JSON.parse(JSON.stringify(materialsData));
+  
+      if (searchValue.trim() !== '') {
+        rows = rows.filter((row : any) =>
+          row.name
+            .trim()
+            .toLowerCase()
+            .includes(searchValue.trim().toLowerCase())
+        );
+      }
+  
+      rows.sort((a : any, b : any) => {
+        const dateA = a.date;
+        const dateB = b.date;
+        return dateA < dateB ? -1 : 1;
+      });
+  
+      return rows;
+    }
 
   const onSearch = (e : React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
@@ -64,18 +65,18 @@ export const MaterialsInventory = () => {
           onChange={onSearch}
           style={{ marginBottom: 18 }} 
         />
-        { tableData.length > 0 ?
+        { getMaterials().length > 0 ?
         <Line
-          data={tableData}
+          data={getMaterials()}
           xField='date'
           yField='stock'
-          seriesField='material'
+          seriesField='name'
           style={{ marginBottom: '48px' }} /> :
           <span>No material timeline was found.</span>
         }
       </Card>
       <Card>
-        <ResponsiveTable rows={tableData} cols={inventoryColumns} />
+        <ResponsiveTable rows={getMaterials()} cols={inventoryColumns} />
       </Card>
     </div>
   );

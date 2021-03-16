@@ -22,7 +22,9 @@ export class MaterialLogsService {
    * Retrieves all materialLog entries using mongoose materialLogModel
    */
   async findAll(): Promise<MaterialLog[]> {
-    return this.materialLogModel.find();
+    return this.materialLogModel.find()
+    .populate('materialId')
+    .exec();
   }
 
   /**
@@ -41,7 +43,9 @@ export class MaterialLogsService {
       materialId,
       locationId,
       date,
-    });
+    })
+    .populate('materialId')
+    .exec();
     return this.validateMaterialLogFound(
       materialLog,
       materialId,
@@ -72,7 +76,9 @@ export class MaterialLogsService {
       { $set: { stock }, $inc: { stockBought, stockUsed } },
 
       { new: true, upsert: true },
-    );
+    )
+    .populate('materialId')
+    .exec();
 
     return this.validateMaterialLogFound(
       updatedMaterialLog,
