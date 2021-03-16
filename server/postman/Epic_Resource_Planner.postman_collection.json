@@ -82,14 +82,14 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{url}}/orders/materials/604805394ec0e95ac82529ff",
+									"raw": "{{url}}/orders/materials/604aabf55a0ff109b8f5ecab",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
 										"orders",
 										"materials",
-										"604805394ec0e95ac82529ff"
+										"604aabf55a0ff109b8f5ecab"
 									]
 								}
 							},
