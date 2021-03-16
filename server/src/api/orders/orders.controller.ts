@@ -8,12 +8,12 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { MaterialOrdersService } from './material-orders.service';
-import { CreateMaterialOrderListDto } from './dto/create-material-order-list.dto';
 import { ProductOrdersService } from './product-orders.service';
-import { CreateProductOrderListDto } from './dto/create-product-order-list.dto';
-import { MaterialsService } from '../materials/materials/materials.service';
 import { OrderDetailsService } from './order-details.service';
-
+import { Role } from '../roles/roles.enum';
+import { Roles } from '../roles/roles.decorator';
+import { CreateMaterialOrderDto } from './dto/create-material-order.dto';
+import { CreateProductOrderDto } from './dto/create-product-order.dto';
 
 /**
  * Controller class of the Order entity
@@ -23,66 +23,78 @@ export class OrdersController {
   constructor(
     private readonly materialOrderService: MaterialOrdersService,
     private readonly productOrderService: ProductOrdersService,
-    private readonly materialsService: MaterialsService,
     private readonly orderDetailsService: OrderDetailsService,
   ) {}
 
+  @Roles(Role.ACCOUNTANT, Role.SYSTEM_ADMINISTRATOR)
   @Post('materials')
-  createMaterial(
+  createMaterialOrder(
     @Body(ValidationPipe)
-    createMaterialOrderListDto: CreateMaterialOrderListDto,
+    createMaterialOrderDto: CreateMaterialOrderDto[],
   ) {
     return this.materialOrderService.createMaterialOrder(
-      createMaterialOrderListDto,
+      createMaterialOrderDto,
     );
   }
 
+  @Roles(Role.ACCOUNTANT, Role.SYSTEM_ADMINISTRATOR)
   @Get('materials/all')
-  async findAllMaterials() {
-    return this.materialOrderService.findAll(this.materialsService);
+  async findAllMaterialsOrder() {
+    return this.materialOrderService.findAll();
   }
 
+  @Roles(Role.ACCOUNTANT, Role.SYSTEM_ADMINISTRATOR)
   @Get('materials/:id')
-  findOneMaterial(@Param('id') id: string) {
+  findOneMaterialOrder(@Param('id') id: string) {
     return this.materialOrderService.findOne(id);
   }
 
   @Delete('materials/:id')
-  removeMaterial(@Param('id') id: string) {
+  removeMaterialOrder(@Param('id') id: string) {
     return this.materialOrderService.remove(id);
   }
 
+  @Roles(Role.ACCOUNTANT, Role.SYSTEM_ADMINISTRATOR)
   @Post('products')
-  createProduct(
-    @Body(ValidationPipe) createProductOrderListDto: CreateProductOrderListDto,
+  createProductOrder(
+    @Body(ValidationPipe) createProductOrderDto: CreateProductOrderDto[],
   ) {
-    return this.productOrderService.createProductOrder(
-      createProductOrderListDto,
-    );
+    return this.productOrderService.createProductOrder(createProductOrderDto);
   }
 
+  @Roles(Role.ACCOUNTANT, Role.SYSTEM_ADMINISTRATOR)
   @Get('products/all')
-  findAllProducts() {
+  findAllProductsOrder() {
     return this.productOrderService.findAll();
   }
 
+  @Roles(Role.ACCOUNTANT, Role.SYSTEM_ADMINISTRATOR)
   @Get('products/:id')
-  findOneProduct(@Param('id') id: string) {
+  findOneProductOrder(@Param('id') id: string) {
     return this.productOrderService.findOne(id);
   }
 
+  @Roles(Role.ACCOUNTANT, Role.SYSTEM_ADMINISTRATOR)
   @Delete('products/:id')
-  removeProduct(@Param('id') id: string) {
+  removeProductOrder(@Param('id') id: string) {
     return this.productOrderService.remove(id);
   }
 
+  @Roles(Role.ACCOUNTANT, Role.SYSTEM_ADMINISTRATOR)
   @Get('balance')
   balance() {
-    return this.orderDetailsService.getBalance(this.productOrderService, this.materialOrderService);
+    return this.orderDetailsService.getBalance(
+      this.productOrderService,
+      this.materialOrderService,
+    );
   }
 
+  @Roles(Role.ACCOUNTANT, Role.SYSTEM_ADMINISTRATOR)
   @Get('summary')
   summary() {
-    return this.orderDetailsService.getSummary(this.productOrderService, this.materialOrderService);
+    return this.orderDetailsService.getSummary(
+      this.productOrderService,
+      this.materialOrderService,
+    );
   }
 }

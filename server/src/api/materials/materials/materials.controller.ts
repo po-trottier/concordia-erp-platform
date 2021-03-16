@@ -74,7 +74,7 @@ export class MaterialsController {
   }
 
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
-  @Patch('stock/:locationId/:materialId')
+  @Patch('stock/:locationId')
   updateStock(
     @Param('locationId') locationId: string,
     @Body(ValidationPipe) updateMaterialStockDto: UpdateMaterialStockDto[],

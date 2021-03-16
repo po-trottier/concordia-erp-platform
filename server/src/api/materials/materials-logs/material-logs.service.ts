@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 import { UpdateMaterialLogDto } from './dto/update-material-log.dto';
 import {
   MaterialLog,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   MaterialLogDocument,
 } from './schemas/material-log.schema';
 

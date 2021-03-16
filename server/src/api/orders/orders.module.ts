@@ -13,16 +13,6 @@ import {
   ProductOrderSchema,
 } from './schemas/product-orders.schema';
 import { ProductOrdersService } from './product-orders.service';
-import {
-  Material,
-  MaterialSchema,
-} from '../materials/materials/schemas/material.schema';
-import { MaterialsService } from '../materials/materials/materials.service';
-import {
-  MaterialLog,
-  MaterialLogSchema,
-} from '../materials/materials-logs/schemas/material-log.schema';
-import { MaterialLogsService } from '../materials/materials-logs/material-logs.service';
 import { OrderDetailsService } from './order-details.service';
 
 /**
@@ -33,19 +23,11 @@ import { OrderDetailsService } from './order-details.service';
     MongooseModule.forFeature([
       { name: MaterialOrder.name, schema: MaterialOrderSchema },
       { name: ProductOrder.name, schema: ProductOrderSchema },
-      { name: Material.name, schema: MaterialSchema },
-      { name: MaterialLog.name, schema: MaterialLogSchema },
     ]),
     // ENV Support
     ConfigModule.forRoot({ validate, cache: true }),
   ],
   controllers: [OrdersController],
-  providers: [
-    MaterialOrdersService,
-    ProductOrdersService,
-    MaterialsService,
-    MaterialLogsService,
-    OrderDetailsService
-  ],
+  providers: [MaterialOrdersService, ProductOrdersService, OrderDetailsService],
 })
 export class OrdersModule {}

@@ -3,5 +3,5 @@ export interface ProductOrder {
   dateDue: string,
   amountDue: number,
   isPaid: string,
-  details?: React.ReactNode
+  customerName: string,
 }
