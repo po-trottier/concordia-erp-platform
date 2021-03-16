@@ -26,10 +26,6 @@ export const ProductCatalog = () => {
   const [orders, setOrders] = useState(emptyData);
 
   useEffect(() => {
-    setProductListState();
-  }, [updated, location]);
-
-  const setProductListState = () => {
     axios.get('/products')
       .then(({ data }) => {
         data.forEach((p : any) => {
@@ -45,7 +41,6 @@ export const ProductCatalog = () => {
                 prod.stock = 0;
               }
             });
-            console.log(data);
             dispatch(setProductList(data));
           })
           .catch((err) => {
@@ -57,7 +52,17 @@ export const ProductCatalog = () => {
         message.error('Something went wrong while getting the products catalog.');
         console.error(err);
       });
-  };
+  // eslint-disable-next-line
+  }, [updated, location]);
+
+  const updateProductStocks = (response: any) => {
+    const clone = JSON.parse(JSON.stringify(products));
+    response.data.forEach((updatedProductLocationStock: any) => {
+      const foundClone = clone.find((clone: any) => clone.id === updatedProductLocationStock.productId._id);
+      foundClone.stock = updatedProductLocationStock.stock;
+    });
+    dispatch(setProductList(clone));
+  }
 
   const onSearch = (e : React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
@@ -123,8 +128,7 @@ export const ProductCatalog = () => {
   const buildProducts = () => {
     axios.patch('products/build/' + location, orders)
     .then((data) => {
-      console.log(data);
-      setProductListState();
+      updateProductStocks(data);
       message.success('products built successfully!');
     }).catch((err) => {
       message.error('not enough parts to build a product!');
@@ -148,7 +152,7 @@ export const ProductCatalog = () => {
       <Button
         onClick={buildProducts}
         type='primary'
-        style={{ marginTop: 16, float: 'right' }} >
+        style={{ marginTop: 16, float: 'right' }}>
         Build Products
       </Button>
       <CreateProductModal />
