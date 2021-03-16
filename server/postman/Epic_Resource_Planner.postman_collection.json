@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "27a7b65b-a29d-44bd-b6c6-b99067300ad5",
-		"name": "Epic Resource Planner",
+		"_postman_id": "a91380d3-29db-43e2-8319-ac04c8a19993",
+		"name": "Epic_Resource_Planner",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -37,7 +37,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"orders\": [{\n        \"dateOrdered\": \"2021-03-13T18:25:43.511Z\",\n        \"dateDue\": \"2021-03-17T18:25:43.511Z\",\n        \"supplierName\": \"Wood City\",\n        \"amountDue\": 50000,\n        \"isPaid\": true,\n        \"quantity\": 5,\n        \"materialId\":\"6046d12356735d55b04ebd3b\"\n    }, {\n        \"dateOrdered\": \"2021-03-11T18:25:43.511Z\",\n        \"dateDue\": \"2021-03-15T18:25:43.511Z\",\n        \"supplierName\": \"Booty Nation\",\n        \"amountDue\": 5000,\n        \"isPaid\": false,\n        \"quantity\": 2,\n        \"materialId\":\"6046d12356735d55b04ebd3b\"\n    }]\n}",
+									"raw": "[\n    {\n        \"dateOrdered\": \"2021-03-14T18:25:43.511Z\",\n        \"dateDue\": \"2021-03-17T18:25:43.511Z\",\n        \"amountDue\": 1800,\n        \"isPaid\": true,\n        \"quantity\": 18,\n        \"materialId\":\"6045599205d90a49ec102010\"\n    }\n]\n",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -63,14 +63,14 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "{{url}}/orders/materials/604805394ec0e95ac8252a00",
+									"raw": "{{url}}/orders/materials/604ff956e1636a5bf4279425",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
 										"orders",
 										"materials",
-										"604805394ec0e95ac8252a00"
+										"604ff956e1636a5bf4279425"
 									]
 								}
 							},
@@ -82,14 +82,14 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{url}}/orders/materials/604805394ec0e95ac82529ff",
+									"raw": "{{url}}/orders/materials/604aabf55a0ff109b8f5ecab",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
 										"orders",
 										"materials",
-										"604805394ec0e95ac82529ff"
+										"604aabf55a0ff109b8f5ecab"
 									]
 								}
 							},
@@ -126,7 +126,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"orders\": [{\n        \"dateOrdered\": \"2021-03-06T18:25:43.511Z\",\n        \"dateDue\": \"2021-03-09T18:25:43.511Z\",\n        \"customerId\": \"PO's bike store\",\n        \"amountDue\": 500000,\n        \"isPaid\": true,\n        \"quantity\": 12000,\n        \"productId\":\"6046d12356735d55b04ebd3b\"\n    }, {\n        \"dateOrdered\": \"2021-03-06T18:25:43.511Z\",\n        \"dateDue\": \"2021-03-11T18:25:43.511Z\",\n        \"customerId\": \"Bicher's Bike Store\",\n        \"amountDue\": 100,\n        \"isPaid\": true,\n        \"quantity\": 1,\n        \"productId\":\"6046d12356735d55b04ebd3b\"\n    }]\n}",
+									"raw": "[\n    {\n        \"dateOrdered\": \"2021-03-06T18:25:43.511Z\",\n        \"dateDue\": \"2021-03-09T18:25:43.511Z\",\n        \"customerId\": \"Sport Expert\",\n        \"amountDue\": 1800,\n        \"isPaid\": true,\n        \"quantity\": 10,\n        \"productId\":\"6036bc00cce4944a7893ebdf\"\n    }\n]\n",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -152,14 +152,14 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "{{url}}/orders/products/604a9910e82fbd09e4e1d1fa",
+									"raw": "{{url}}/orders/products/604804ee4ec0e95ac82529fd",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
 										"orders",
 										"products",
-										"604a9910e82fbd09e4e1d1fa"
+										"604804ee4ec0e95ac82529fd"
 									]
 								}
 							},

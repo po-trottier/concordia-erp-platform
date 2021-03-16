@@ -42,5 +42,6 @@ import {
     MaterialLogsService,
     MaterialLocationStockService,
   ],
+  exports: [MaterialLogsService, MaterialsService],
 })
 export class MaterialsModule {}

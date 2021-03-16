@@ -3,6 +3,5 @@ export interface MaterialOrder {
   dateDue : string,
   amountDue : number,
   isPaid : string,
-  supplierName : string,
-  details?: React.ReactNode,
+  vendorName : string,
 }

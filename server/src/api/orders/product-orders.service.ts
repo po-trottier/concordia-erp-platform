@@ -3,9 +3,10 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import {
   ProductOrder,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   ProductOrderDocument,
 } from './schemas/product-orders.schema';
-import { CreateProductOrderListDto } from './dto/create-product-order-list.dto';
+import { CreateProductOrderDto } from './dto/create-product-order.dto';
 
 @Injectable()
 export class ProductOrdersService {
@@ -15,24 +16,26 @@ export class ProductOrdersService {
   ) {}
 
   async createProductOrder(
-    createProductOrderListDto: CreateProductOrderListDto,
+    createProductOrderDto: CreateProductOrderDto[],
   ): Promise<ProductOrder[]> {
     const createdOrders: ProductOrder[] = [];
 
-    for (const ProductOrder of createProductOrderListDto.orders) {
-      const createdOrder = new this.ProductOrderModel(ProductOrder);
+    for (const productOrder of createProductOrderDto) {
+      const createdOrder = new this.ProductOrderModel(productOrder);
       createdOrders.push(await createdOrder.save());
     }
     return createdOrders;
   }
 
   async findAll(): Promise<ProductOrder[]> {
-    return await this.ProductOrderModel.find().exec();
+    const productOrders: CreateProductOrderDto[] = await this.ProductOrderModel.find()
+      .populate('productId')
+      .exec();
+    return productOrders;
   }
 
   async findOne(id: string): Promise<ProductOrder> {
-    const order = await this.ProductOrderModel.findById(id);
-
+    const order = await this.ProductOrderModel.findById(id).populate('productId');
     return this.checkOrderFound(order, id);
   }
 

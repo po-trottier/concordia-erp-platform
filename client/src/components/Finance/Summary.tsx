@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Card, message, Statistic, Typography} from 'antd';
+import {Card, message, Statistic, Typography, Row, Col} from 'antd';
 import {Line} from '@ant-design/charts';
 
 import {ResponsiveTable} from '../ResponsiveTable';
@@ -9,22 +9,23 @@ import {SummaryEntry} from "../../interfaces/SummaryEntry";
 const { Title } = Typography;
 
 export const Summary = () => {
+  const emptyData : SummaryEntry[] = [];
   const [balance, setBalance] = useState(0);
   const [expectedBalance, setExpectedBalance] = useState(0);
-  const emptyData : SummaryEntry[] = [];
   const [summaryEntryData, setSummaryEntryData] = useState(emptyData);
   const [updated, setUpdated] = useState(false);
+  
   useEffect(() => {
     setUpdated(true);
     axios.get('/orders/summary ')
       .then((res) => {
         if (res && res.data) {
           const data : SummaryEntry[] = [];
-          let expectedBalance : number = 0;
+          let expectedBalance = 0;
           res.data.forEach((s : any) => {
             data.push({
               date: s.date,
-              profit: s.balance,
+              balance: s.balance,
             });
             expectedBalance += s.balance;
           });
@@ -51,26 +52,36 @@ export const Summary = () => {
 
   const getColumns = () => ({
     date: 'Summary Date',
-    profit: 'Daily Profit'
+    balance: 'Daily Profit'
   });
 
   return (
     <div>
       <Card style={{ margin: '24px 0' }}>
-        <Statistic title='Account Balance (CAD)' value={balance} precision={2} />
+        <Row>
+          <Col sm={12} span={24}>
+            <Statistic title='Account Balance (CAD)' value={balance} precision={2} />
+          </Col>
+          <Col sm={12} span={24}>
+            <Statistic title='Expected Balance (CAD)' value={expectedBalance} precision={2} />
+          </Col>
+        </Row>
       </Card>
-      <Card style={{ margin: '24px 0' }}>
-        <Statistic title='Expected balance (CAD)' value={expectedBalance} precision={2} />
-      </Card>
-      <Card style={{ margin: '24px 0' }}>
-        <Line data={summaryEntryData} xField='date' yField='profit' isStack={true} />
-      </Card>
-      <Card>
-        <Title level={4} style={{ marginBottom: '24px' }}>
-          Daily Financial Summary
-        </Title>
-        <ResponsiveTable rows={summaryEntryData} cols={getColumns()} />
-      </Card>
+
+      {summaryEntryData.length > 0 ?
+        <div>
+          <Card style={{ margin: '24px 0' }}>
+            <Line data={summaryEntryData} xField='date' yField='balance' isStack={true} />
+          </Card>
+          <Card>
+            <Title level={4} style={{ marginBottom: '24px' }}>
+              Daily Financial Summary
+            </Title>
+            <ResponsiveTable rows={summaryEntryData} cols={getColumns()} />
+          </Card>
+        </div>
+        :
+        <div>No orders were found.</div>}
     </div>
   );
 };

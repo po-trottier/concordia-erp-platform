@@ -1,12 +1,11 @@
 import { OrderDetailsService } from '../../../src/api/orders/order-details.service';
 
-  describe('OrdersServices', () => {
+describe('OrdersServices', () => {
+  let orderDetailsService: OrderDetailsService;
 
-		let orderDetailsService: OrderDetailsService;
-
-    beforeEach(async () => {
-      orderDetailsService = new OrderDetailsService();
-    });
+  beforeEach(async () => {
+    orderDetailsService = new OrderDetailsService();
+  });
 
   it('should be defined', () => {
     expect(orderDetailsService).toBeDefined();
