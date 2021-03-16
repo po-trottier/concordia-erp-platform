@@ -39,12 +39,6 @@ export class ProductsController {
     return this.productsService.create(createProductDto);
   }
 
-  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
-  @Get('stock/:locationId')
-  findAllLocationStock(@Param('locationId') locationId: string) {
-    return this.productLocationStockService.findAll(locationId);
-  }
-
   /**
    * Handles GET requests to retrieve all products
    */
@@ -52,15 +46,6 @@ export class ProductsController {
   @Get()
   findAll() {
     return this.productsService.findAll();
-  }
-
-  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
-  @Get(':productId/stock/:locationId')
-  findOneLocationStock(
-    @Param('productId') productId: string,
-    @Param('locationId') locationId: string,
-  ) {
-    return this.productLocationStockService.findOne(productId, locationId);
   }
 
   /**
@@ -71,27 +56,6 @@ export class ProductsController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.productsService.findOne(id);
-  }
-
-  /**
-   * Handles PATCH request to update an existing product by id
-   * HANDLES UPDATES FOR STOCK
-   * @param productId id of the product
-   * @param locationId id of the location
-   * @param updateProductStockDto
-   */
-  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
-  @Patch(':productId/stock/:locationId')
-  updateStock(
-    @Param('productId') productId: string,
-    @Param('locationId') locationId: string,
-    @Body(ValidationPipe) updateProductStockDto: UpdateProductStockDto,
-  ) {
-    return this.productLocationStockService.update(
-      productId,
-      locationId,
-      updateProductStockDto,
-    );
   }
 
   /**
@@ -132,5 +96,43 @@ export class ProductsController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.productsService.remove(id);
+  }
+
+  // STOCK ENDPOINTS
+
+  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
+  @Get('stock/:locationId')
+  findAllLocationStock(@Param('locationId') locationId: string) {
+    return this.productLocationStockService.findAll(locationId);
+  }
+
+  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
+  @Get('stock/:locationId/:productId')
+  findOneLocationStock(
+    @Param('locationId') locationId: string,
+    @Param('productId') productId: string,
+  ) {
+    return this.productLocationStockService.findOne(productId, locationId);
+  }
+
+  /**
+   * Handles PATCH request to update an existing product by id
+   * HANDLES UPDATES FOR STOCK
+   * @param productId id of the product
+   * @param locationId id of the location
+   * @param updateProductStockDto
+   */
+  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
+  @Patch('stock/:locationId/:productId')
+  updateStock(
+    @Param('productId') productId: string,
+    @Param('locationId') locationId: string,
+    @Body(ValidationPipe) updateProductStockDto: UpdateProductStockDto,
+  ) {
+    return this.productLocationStockService.update(
+      productId,
+      locationId,
+      updateProductStockDto,
+    );
   }
 }

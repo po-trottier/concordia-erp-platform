@@ -21,8 +21,11 @@ export class MaterialLogsService {
   /**
    * Retrieves all materialLog entries using mongoose materialLogModel
    */
-  async findAll(): Promise<MaterialLog[]> {
-    return this.materialLogModel.find();
+  async findAll(locationId: string): Promise<MaterialLog[]> {
+    return await this.materialLogModel
+      .find({ locationId })
+      .populate('materialId')
+      .exec();
   }
 
   /**
@@ -30,24 +33,15 @@ export class MaterialLogsService {
    *
    * @param materialId the id of the corresponding material
    * @param locationId the id of the location
-   * @param date the date in history
    */
   async findOne(
     materialId: string,
     locationId: string,
-    date: Date,
-  ): Promise<MaterialLog> {
-    const materialLog = await this.materialLogModel.findOne({
-      materialId,
-      locationId,
-      date,
-    });
-    return this.validateMaterialLogFound(
-      materialLog,
-      materialId,
-      locationId,
-      date,
-    );
+  ): Promise<MaterialLog[]> {
+    return await this.materialLogModel
+      .find({ materialId, locationId })
+      .populate('materialId')
+      .exec();
   }
 
   /**
@@ -70,7 +64,6 @@ export class MaterialLogsService {
     const updatedMaterialLog = await this.materialLogModel.findOneAndUpdate(
       { materialId, locationId, date },
       { $set: { stock }, $inc: { stockBought, stockUsed } },
-
       { new: true, upsert: true },
     );
 
@@ -78,7 +71,7 @@ export class MaterialLogsService {
       updatedMaterialLog,
       materialId,
       locationId,
-      date,
+      date.toString(),
     );
   }
 
@@ -94,11 +87,11 @@ export class MaterialLogsService {
     materialLogResult: any,
     materialId: string,
     locationId: string,
-    date: Date,
+    date: string,
   ) {
     if (!materialLogResult) {
       throw new NotFoundException(
-        `MaterialLog entry with materialId ${materialId} and locationId ${locationId} on ${date.toString()} not found`,
+        `MaterialLog entry with materialId ${materialId} and locationId ${locationId} on ${date} not found`,
       );
     } else {
       return materialLogResult;

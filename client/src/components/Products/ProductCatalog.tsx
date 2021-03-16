@@ -28,6 +28,9 @@ export const ProductCatalog = () => {
   useEffect(() => {
     axios.get('/products')
       .then(({ data }) => {
+        data.forEach((p : any) => {
+          p.id = p._id;
+        });
         axios.get('/products/stock/' + location)
           .then((resp) => {
             data.forEach((prod : ProductEntry) => {
@@ -50,7 +53,7 @@ export const ProductCatalog = () => {
         console.error(err);
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [updated]);
+  }, [updated, location]);
 
   const onSearch = (e : React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
