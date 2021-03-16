@@ -155,12 +155,13 @@ describe('MaterialsController', () => {
       const updatedPartStock = new UpdateMaterialStockDto();
       updatedPartStock.stockBought = 10;
       updatedPartStock.stockUsed = 20;
+      const updatedPartStockList: UpdateMaterialStockDto[] = [updatedPartStock];
 
       jest
         .spyOn(materialLocationStockService, 'update')
         .mockImplementation(async () => await result);
 
-      expect(await materialController.updateStock(dummyMaterialLocationStock.materialId, dummyMaterialLocationStock.locationId, updatedPartStock)).toBe(result);
+      expect(await materialController.updateStock(dummyMaterialLocationStock.locationId, updatedPartStockList)).toBe(result);
     });
   });
 });
