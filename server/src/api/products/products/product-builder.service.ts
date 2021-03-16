@@ -28,57 +28,56 @@ export class ProductBuilderService {
     locationId: string,
     buildOrders: BuildProductDto[],
   ): Promise<Object> {
-    //for(const buildOrder of buildOrders) {
-    for (let i = 0 ; i < buildOrders.length ; i++){
-      const buildOrder = buildOrders[i];
+    for(const buildOrder of buildOrders) {
       const { stockBuilt, productId } = buildOrder;
       console.log(stockBuilt, productId);
-    }
 
-    /*
-    // checking if we can do the operation
-    const product = await this.productsService.findOne(productId);
-    for (const part of product.parts) {
-      const totalPartsCount = part.quantity * stockBuilt;
-      const partLocationStock = await this.partLocationStockService.findOne(
-        part.partId,
+      // checking if we can do the operation
+      const product = await this.productsService.findOne(productId);
+      for (const part of product.parts) {
+        const totalPartsCount = part.quantity * stockBuilt;
+        const partLocationStock = await this.partLocationStockService.findOne(
+          part.partId,
+          locationId,
+        );
+        if (partLocationStock.stock < totalPartsCount) {
+          throw new BadRequestException({error: 'stock of parts is not sufficient'});
+        }
+      }
+
+      // update product stock
+      const updateProductStockDto: UpdateProductStockDto = {
+        stockBuilt: stockBuilt,
+        stockUsed: 0
+      };
+
+      const updatedProductLocationStock = await this.productLocationStockService.update(
+        productId,
         locationId,
+        updateProductStockDto,
       );
-      if (partLocationStock.stock < totalPartsCount) {
-        throw new BadRequestException({error: 'stock of parts is not sufficient'});
+
+      // update parts stock
+      const updatedPartLocationStocks = [];
+      const updatePartStockDto: UpdatePartStockDto = {
+        stockBuilt: 0,
+        stockUsed: null
+      };
+
+      for (const part of product.parts) {
+        updatePartStockDto.stockUsed = part.quantity * stockBuilt;
+        const updatedPartLocationStock = await this.partLocationStockService.update(
+          part.partId,
+          locationId,
+          updatePartStockDto,
+        );
+        updatedPartLocationStocks.push(updatedPartLocationStock);
       }
     }
 
-    // update product stock
-    const updateProductStockDto: UpdateProductStockDto = {
-      stockBuilt: stockBuilt,
-      stockUsed: 0
-    };
-
-    const updatedProductLocationStock = await this.productLocationStockService.update(
-      productId,
-      locationId,
-      updateProductStockDto,
-    );
-
-    // update parts stock
-    const updatedPartLocationStocks = [];
-    const updatePartStockDto: UpdatePartStockDto = {
-      stockBuilt: 0,
-      stockUsed: null
-    };
-
-    for (const part of product.parts) {
-      updatePartStockDto.stockUsed = part.quantity * stockBuilt;
-      const updatedPartLocationStock = await this.partLocationStockService.update(
-        part.partId,
-        locationId,
-        updatePartStockDto,
-      );
-      updatedPartLocationStocks.push(updatedPartLocationStock);
-    }
+    /*
     return { updatedProductLocationStock, updatedPartLocationStocks };
     */
-    return "memes";
+    return 'Fuck';
   }
 }
