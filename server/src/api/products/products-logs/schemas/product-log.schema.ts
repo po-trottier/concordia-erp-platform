@@ -21,7 +21,7 @@ export class ProductLog {
 
   @Prop({
     type: mongooseSchema.Types.ObjectId,
-    ref: 'Product',
+    ref: 'Location',
     required: true,
     index: true,
   })

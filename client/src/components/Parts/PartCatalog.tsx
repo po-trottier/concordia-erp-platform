@@ -68,7 +68,7 @@ export const PartCatalog = () => {
         console.error(err);
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [updated]);
+  }, [updated, location]);
 
   const getMaterials = (part : PartEntry) => {
     const mats = materialsData.filter((m) => part.materials.find((i) => i.materialId === m.id));

@@ -4,8 +4,8 @@ import { AuthModule } from './api/auth/auth.module';
 import { PartsModule } from './api/parts/parts.module';
 import { MaterialsModule } from './api/materials/materials.module';
 import { UsersModule } from './api/users/users.module';
-import { FinanceModule } from './api/finance/finance.module';
 import { ProductsModule } from './api/products/products.module';
+import { OrdersModule } from './api/orders/orders.module';
 import { LocationsModule } from './api/locations/locations.module';
 
 export const routes: Routes = [
@@ -30,8 +30,8 @@ export const routes: Routes = [
         module: UsersModule,
       },
       {
-        path: '/finance',
-        module: FinanceModule,
+        path: '/orders',
+        module: OrdersModule,
       },
       {
         path: '/products',
