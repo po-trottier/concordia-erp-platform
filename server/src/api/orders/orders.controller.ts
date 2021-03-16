@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
   ValidationPipe,
 } from '@nestjs/common';
@@ -14,6 +15,8 @@ import { Role } from '../roles/roles.enum';
 import { Roles } from '../roles/roles.decorator';
 import { CreateMaterialOrderDto } from './dto/create-material-order.dto';
 import { CreateProductOrderDto } from './dto/create-product-order.dto';
+import { UpdateProductOrderDto } from './dto/update-product-order.dto';
+import { UpdateMaterialOrderDto } from './dto/update-material-order.dto';
 
 /**
  * Controller class of the Order entity
@@ -49,9 +52,19 @@ export class OrdersController {
     return this.materialOrderService.findOne(id);
   }
 
+  @Roles(Role.ACCOUNTANT, Role.SYSTEM_ADMINISTRATOR)
   @Delete('materials/:id')
   removeMaterialOrder(@Param('id') id: string) {
     return this.materialOrderService.remove(id);
+  }
+
+  @Roles(Role.ACCOUNTANT, Role.SYSTEM_ADMINISTRATOR)
+  @Patch('materials/:id')
+  updateMaterialOrder(
+    @Param('id') id: string,
+    @Body(ValidationPipe) updateMaterialOrderDto: UpdateMaterialOrderDto,
+  ) {
+    return this.materialOrderService.update(id, updateMaterialOrderDto);
   }
 
   @Roles(Role.ACCOUNTANT, Role.SYSTEM_ADMINISTRATOR)
@@ -59,7 +72,7 @@ export class OrdersController {
   createProductOrder(
     @Body(ValidationPipe) createProductOrderDto: CreateProductOrderDto[],
   ) {
-    return this.productOrderService.createProductOrder(createProductOrderDto);
+    return this.productOrderService.create(createProductOrderDto);
   }
 
   @Roles(Role.ACCOUNTANT, Role.SYSTEM_ADMINISTRATOR)
@@ -78,6 +91,15 @@ export class OrdersController {
   @Delete('products/:id')
   removeProductOrder(@Param('id') id: string) {
     return this.productOrderService.remove(id);
+  }
+
+  @Roles(Role.ACCOUNTANT, Role.SYSTEM_ADMINISTRATOR)
+  @Patch('products/:id')
+  updateProductOrder(
+    @Param('id') id: string,
+    @Body(ValidationPipe) updateProductOrderDto: UpdateProductOrderDto,
+  ) {
+    return this.productOrderService.update(id, updateProductOrderDto);
   }
 
   @Roles(Role.ACCOUNTANT, Role.SYSTEM_ADMINISTRATOR)

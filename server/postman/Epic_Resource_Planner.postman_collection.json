@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "a91380d3-29db-43e2-8319-ac04c8a19993",
-		"name": "Epic_Resource_Planner",
+		"name": "Epic Resource Planner",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -37,7 +37,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "[\n    {\n        \"dateOrdered\": \"2021-03-14T18:25:43.511Z\",\n        \"dateDue\": \"2021-03-17T18:25:43.511Z\",\n        \"amountDue\": 1800,\n        \"isPaid\": true,\n        \"quantity\": 18,\n        \"materialId\":\"6045599205d90a49ec102010\"\n    }\n]\n",
+									"raw": "[\n    {\n        \"dateOrdered\": \"2021-03-14T18:25:43.511Z\",\n        \"dateDue\": \"2021-03-17T18:25:43.511Z\",\n        \"amountDue\": 1100,\n        \"quantity\": 118,\n        \"materialId\":\"6045599205d90a49ec102010\"\n    }\n]\n",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -63,14 +63,14 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "{{url}}/orders/materials/604ff956e1636a5bf4279425",
+									"raw": "{{url}}/orders/materials/604ff6f3bbb5fc50dce3ea6c",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
 										"orders",
 										"materials",
-										"604ff956e1636a5bf4279425"
+										"604ff6f3bbb5fc50dce3ea6c"
 									]
 								}
 							},
@@ -90,6 +90,34 @@
 										"orders",
 										"materials",
 										"604aabf55a0ff109b8f5ecab"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Material Order",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"isPaid\": false,\r\n    \"materialId\": \"60502ac8c94be854b0be03e3\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/orders/materials/60502a88c94be854b0be03e1",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"orders",
+										"materials",
+										"60502a88c94be854b0be03e1"
 									]
 								}
 							},
@@ -126,7 +154,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "[\n    {\n        \"dateOrdered\": \"2021-03-06T18:25:43.511Z\",\n        \"dateDue\": \"2021-03-09T18:25:43.511Z\",\n        \"customerId\": \"Sport Expert\",\n        \"amountDue\": 1800,\n        \"isPaid\": true,\n        \"quantity\": 10,\n        \"productId\":\"6036bc00cce4944a7893ebdf\"\n    }\n]\n",
+									"raw": "[\n    {\n        \"dateOrdered\": \"2021-03-06T18:25:43.511Z\",\n        \"dateDue\": \"2021-03-09T18:25:43.511Z\",\n        \"customerId\": \"Bikes Ultimate\",\n        \"amountDue\": 1800,\n        \"quantity\": 10,\n        \"productId\":\"6036bc00cce4944a7893ebdf\"\n    }\n]\n",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -152,14 +180,14 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "{{url}}/orders/products/604804ee4ec0e95ac82529fd",
+									"raw": "{{url}}/orders/products/604ff927e1636a5bf4279424",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
 										"orders",
 										"products",
-										"604804ee4ec0e95ac82529fd"
+										"604ff927e1636a5bf4279424"
 									]
 								}
 							},
@@ -179,6 +207,34 @@
 										"orders",
 										"products",
 										"604802d74ec0e95ac82529f9"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Product Order",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"isPaid\": true,\r\n    \"productId\": \"60503014c94be854b0be03e5\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/orders/products/60502fffc94be854b0be03e4",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"orders",
+										"products",
+										"60502fffc94be854b0be03e4"
 									]
 								}
 							},
@@ -745,13 +801,13 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{url}}/products/60367da1c6945e5fe2688ce3",
+									"raw": "{{url}}/products/60503014c94be854b0be03e5",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
 										"products",
-										"60367da1c6945e5fe2688ce3"
+										"60503014c94be854b0be03e5"
 									]
 								}
 							},
