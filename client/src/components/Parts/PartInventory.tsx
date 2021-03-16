@@ -1,86 +1,84 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Input } from 'antd';
 import { Line } from '@ant-design/charts';
+import { useSelector } from 'react-redux';
 import { ResponsiveTable } from '../ResponsiveTable';
 import { PartHistoryEntry } from '../../interfaces/PartHistoryEntry';
-import axios from '../../plugins/Axios';
-import { useSelector } from 'react-redux';
 import { RootState } from '../../store/Store';
+import axios from '../../plugins/Axios';
 
 const { Search } = Input;
 
 const inventoryColumns = {
-	name: 'Part',
-	date: 'Date',
-	stockBuilt: 'Built',
-	stockUsed: 'Used',
-	stock: 'Stock',
+  name: 'Part',
+  date: 'Date',
+  stockBuilt: 'Built',
+  stockUsed: 'Used',
+  stock: 'Stock',
 };
 
 export const PartInventory = () => {
-	const location = useSelector((state: RootState) => state.location.selected);
+  const location = useSelector((state : RootState) => state.location.selected);
 
-	const emptyData: PartHistoryEntry[] = [];
-	const [partsData, setPartsData] = useState(emptyData);
-	const [searchValue, setSearchValue] = useState('');
+  const emptyData : PartHistoryEntry[] = [];
+  const [partsData, setPartsData] = useState(emptyData);
+  const [searchValue, setSearchValue] = useState('');
 
-	useEffect(() => {
-		axios.get('parts/logs/' + location).then(async ({ data }) => {
-			for (const row of data) {
-				row.date = new Date(row.date).toLocaleDateString();
-				row.name = row.partId.name;
-			}
-			setPartsData(data);
-		});
-	}, [location]);
+  useEffect(() => {
+    axios.get('parts/logs/' + location).then(async ({ data }) => {
+      for (const row of data) {
+        row.date = new Date(row.date).toLocaleDateString();
+        row.name = row.partId.name;
+      }
+      setPartsData(data);
+    });
+  }, [location]);
 
-	const getParts = () => {
-		let rows = JSON.parse(JSON.stringify(partsData));
+  const getParts = () => {
+    let rows = JSON.parse(JSON.stringify(partsData));
 
-		if (searchValue.trim() !== '') {
-			rows = rows.filter((row: any) =>
-				row.name.trim().toLowerCase().includes(searchValue.trim().toLowerCase())
-			);
-		}
+    if (searchValue.trim() !== '') {
+      rows = rows.filter((row : any) =>
+        row.name.trim().toLowerCase().includes(searchValue.trim().toLowerCase())
+      );
+    }
 
-		rows.sort((a: any, b: any) => {
-			const dateA = a.date;
-			const dateB = b.date;
-			return dateA < dateB ? -1 : 1;
-		});
+    rows.sort((a : any, b : any) => {
+      const dateA = a.date;
+      const dateB = b.date;
+      return dateA < dateB ? -1 : 1;
+    });
 
-		return rows;
-	};
+    return rows;
+  };
 
-	const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setSearchValue(e.target.value);
-	};
+  const onSearch = (e : React.ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(e.target.value);
+  };
 
-	return (
-		<div>
-			<Card style={{ margin: '24px 0' }}>
-				<Search
-					placeholder="Search for a part transaction"
-					onChange={onSearch}
-					style={{ marginBottom: 18 }}
-				/>
-				{getParts().length > 0 ? (
-					<Line
-						data={getParts()}
-						xField="date"
-						yField="stock"
-						seriesField="name"
-						style={{ marginBottom: '48px' }}
-					/>
-				) : (
-					<span>No part transactions were found.</span>
-				)}
-			</Card>
-			{getParts().length > 0 ? (
-				<Card>
-					<ResponsiveTable rows={getParts()} cols={inventoryColumns} />
-				</Card>
-			) : null}
-		</div>
-	);
+  return (
+    <div>
+      <Card style={{ margin: '24px 0' }}>
+        <Search
+          placeholder='Search for a part transaction'
+          onChange={onSearch}
+          style={{ marginBottom: 18 }} />
+        {getParts().length > 0 ? (
+          <Line
+            data={getParts()}
+            xField='date'
+            yField='stock'
+            seriesField='name'
+            style={{ marginBottom: '48px' }} />
+        ) : (
+          <span>No part transactions were found.</span>
+        )}
+      </Card>
+      {getParts().length > 0 ? (
+        <Card>
+          <ResponsiveTable rows={getParts()} cols={inventoryColumns} />
+        </Card>
+      ) : null}
+    </div>
+  );
 };
