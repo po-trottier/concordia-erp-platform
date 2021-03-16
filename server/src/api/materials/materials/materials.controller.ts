@@ -30,44 +30,15 @@ export class MaterialsController {
   }
 
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
-  @Get('stock/:locationId')
-  findAllLocationStock(@Param('locationId') locationId: string) {
-    return this.materialLocationStockService.findAll(locationId);
-  }
-
-  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
   @Get()
   findAll() {
     return this.materialsService.findAll();
   }
 
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
-  @Get(':materialId/stock/:locationId')
-  findOneLocationStock(
-    @Param('materialId') materialId: string,
-    @Param('locationId') locationId: string,
-  ) {
-    return this.materialLocationStockService.findOne(materialId, locationId);
-  }
-
-  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.materialsService.findOne(id);
-  }
-
-  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
-  @Patch(':materialId/stock/:locationId')
-  updateStock(
-    @Param('materialId') materialId: string,
-    @Param('locationId') locationId: string,
-    @Body(ValidationPipe) updateMaterialStockDto: UpdateMaterialStockDto,
-  ) {
-    return this.materialLocationStockService.update(
-      materialId,
-      locationId,
-      updateMaterialStockDto,
-    );
   }
 
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
@@ -83,5 +54,36 @@ export class MaterialsController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.materialsService.remove(id);
+  }
+
+  // STOCK ENDPOINTS
+
+  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
+  @Get('stock/:locationId')
+  findAllLocationStock(@Param('locationId') locationId: string) {
+    return this.materialLocationStockService.findAll(locationId);
+  }
+
+  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
+  @Get('stock/:locationId/:materialId')
+  findOneLocationStock(
+    @Param('materialId') materialId: string,
+    @Param('locationId') locationId: string,
+  ) {
+    return this.materialLocationStockService.findOne(materialId, locationId);
+  }
+
+  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
+  @Patch('stock/:locationId/:materialId')
+  updateStock(
+    @Param('materialId') materialId: string,
+    @Param('locationId') locationId: string,
+    @Body(ValidationPipe) updateMaterialStockDto: UpdateMaterialStockDto,
+  ) {
+    return this.materialLocationStockService.update(
+      materialId,
+      locationId,
+      updateMaterialStockDto,
+    );
   }
 }

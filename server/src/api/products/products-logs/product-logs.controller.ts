@@ -8,18 +8,17 @@ export class ProductLogsController {
   constructor(private readonly productLogsService: ProductLogsService) {}
 
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
-  @Get(':productId/:locationId/:date')
+  @Get(':locationId/:productId')
   findOne(
-    @Param('productId') productId: string,
     @Param('locationId') locationId: string,
-    @Param('date') date: Date,
+    @Param('productId') productId: string,
   ) {
-    return this.productLogsService.findOne(productId, locationId, date);
+    return this.productLogsService.findOne(locationId, productId);
   }
 
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
-  @Get()
-  findAll() {
-    return this.productLogsService.findAll();
+  @Get(':locationId')
+  findAll(@Param('locationId') locationId: string) {
+    return this.productLogsService.findAll(locationId);
   }
 }
