@@ -1,5 +1,4 @@
 import {
-  IsBoolean,
   IsInt,
   IsNotEmpty,
   IsPositive,
@@ -15,12 +14,6 @@ export class CreateMaterialOrderDto {
   @IsInt()
   quantity: number;
 
-  @IsPositive()
-  amountDue: number;
-
   @IsNotEmpty()
   dateOrdered: Date;
-
-  @IsNotEmpty()
-  dateDue: Date;
 }

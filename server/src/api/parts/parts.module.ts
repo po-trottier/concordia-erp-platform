@@ -20,9 +20,9 @@ import { PartLocationStockService } from './parts/part-location-stock.service';
  */
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: Part.name, schema: PartSchema }]),
-    MongooseModule.forFeature([{ name: PartLog.name, schema: PartLogSchema }]),
     MongooseModule.forFeature([
+      { name: Part.name, schema: PartSchema },
+      { name: PartLog.name, schema: PartLogSchema },
       { name: PartLocationStock.name, schema: PartLocationStockSchema },
     ]),
     LocationsModule,
