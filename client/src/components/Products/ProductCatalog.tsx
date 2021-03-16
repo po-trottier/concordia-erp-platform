@@ -59,15 +59,15 @@ export const ProductCatalog = () => {
     setSearchValue(e.target.value);
   };
 
-  const changeBuildAmount = (productId: string, buildAmount: number) => {
+  const changeBuildAmount = (productId: string, stockBuilt: number) => {
     const foundOrder = orders.find(
       (order: OrderItem) => order.productId === productId
     );
     if (foundOrder) {
-      foundOrder.buildAmount = buildAmount;
+      foundOrder.stockBuilt = stockBuilt;
       setOrders(orders);
     } else {
-      setOrders(orders.concat({ productId, buildAmount }));
+      setOrders(orders.concat({ productId, stockBuilt }));
     }
   };
 
@@ -117,17 +117,13 @@ export const ProductCatalog = () => {
   };
 
   const buildProducts = () => {
-    orders.forEach((order) => {
-      axios.patch('products/' + order.productId + '/build/' + location, {
-          stockBuilt: order.buildAmount,
-        })
-        .then((data) => {
-          console.log(data);
-          message.success('product built successfully!');
-        }).catch((err) => {
-          message.error('not enough parts to build product');
-          console.log(err);
-        });
+    axios.patch('products/build/' + location, orders)
+    .then((data) => {
+      console.log(data);
+      message.success('products built successfully!');
+    }).catch((err) => {
+      message.error('not enough parts to build a product!');
+      console.log(err);
     });
   };
 
