@@ -61,11 +61,14 @@ export class MaterialLogsService {
       stockUsed,
     } = updateMaterialLogDto;
 
-    const updatedMaterialLog = await this.materialLogModel.findOneAndUpdate(
-      { materialId, locationId, date },
-      { $set: { stock }, $inc: { stockBought, stockUsed } },
-      { new: true, upsert: true },
-    );
+    const updatedMaterialLog = await this.materialLogModel
+      .findOneAndUpdate(
+        { materialId, locationId, date },
+        { $set: { stock }, $inc: { stockBought, stockUsed } },
+        { new: true, upsert: true },
+      )
+      .populate('materialId')
+      .exec();
 
     return this.validateMaterialLogFound(
       updatedMaterialLog,

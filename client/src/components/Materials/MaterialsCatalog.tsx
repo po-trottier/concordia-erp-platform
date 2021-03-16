@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Card, Input, InputNumber, message } from 'antd';
+import { Card, Input, InputNumber, message } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { ResponsiveTable } from '../ResponsiveTable';
 import { CreateMaterialModal } from './CreateMaterialModal';
 import { EditMaterialModal } from './EditMaterialModal';
+import { OrderMaterialButtons } from './OrderMaterialButtons';
 import { RootState } from '../../store/Store';
 import { MaterialEntry } from '../../interfaces/MaterialEntry';
+import { MaterialQuantity } from '../../interfaces/MaterialQuantity';
 import { MaterialStockEntry } from '../../interfaces/MaterialStockEntry';
 import { setMaterialList } from '../../store/slices/MaterialListSlice';
+import { setMaterialQuantities, updateMaterialQuantities } from '../../store/slices/MaterialQuantitiesSlice';
 import axios from '../../plugins/Axios';
 
 const { Search } = Input;
@@ -17,40 +20,47 @@ export const MaterialsCatalog = () => {
   const dispatch = useDispatch();
 
   const materials = useSelector((state : RootState) => state.materialList.list);
+  const quantities = useSelector((state : RootState) => state.materialQuantities.quantities);
   const updated = useSelector((state : RootState) => state.materialList.updated);
   const location = useSelector((state : RootState) => state.location.selected);
-
   const [searchValue, setSearchValue] = useState('');
 
   useEffect(() => {
-    axios.get('/materials')
-      .then(({ data }) => {
-        data.forEach((m : any) => {
-          m.id = m._id
-        });
-        axios.get('/materials/stock/' + location)
-          .then((resp) => {
-            data.forEach((mat : MaterialEntry) => {
-              const entry = resp.data.find((m : MaterialStockEntry) => m.materialId === mat.id);
-              if (entry) {
-                mat.stock = entry.stock;
-              } else {
-                mat.stock = 0;
-              }
-            });
-            dispatch(setMaterialList(data));
-          })
-          .catch((err) => {
-            message.error('Something went wrong while getting the materials stock.');
-            console.error(err);
-          });
-      })
-      .catch((err) => {
-        message.error('Something went wrong while getting the materials catalog.');
-        console.error(err);
-      });
+    setMaterialListState();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updated, location]);
+
+  const setMaterialListState = () => {
+    let tempQuantities : MaterialQuantity[] = [];
+    axios.get('/materials')
+    .then(({ data }) => {
+      axios.get('/materials/stock/' + location)
+        .then((resp) => {
+          data.forEach((mat : MaterialEntry) => {
+            tempQuantities.push({
+              materialId: mat._id,
+              quantity: 0,
+            });
+            const entry = resp.data.find((m : MaterialStockEntry) => m.materialId ? m.materialId._id === mat._id : false);
+            if (entry) {
+              mat.stock = entry.stock;
+            } else {
+              mat.stock = 0;
+            }
+          });
+          dispatch(setMaterialList(data));
+          dispatch(setMaterialQuantities(tempQuantities));
+        })
+        .catch((err) => {
+          message.error('Something went wrong while getting the materials stock.');
+          console.error(err);
+        });
+    })
+    .catch((err) => {
+      message.error('Something went wrong while getting the materials catalog.');
+      console.error(err);
+    });
+  }
 
   const onSearch = (e : React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
@@ -68,11 +78,14 @@ export const MaterialsCatalog = () => {
       row.id = row['_id'];
       row.actions = <EditMaterialModal material={row} />;
       row.imageNode = <img src={row.image} height={32} alt='Material Preview' />;
+      const index = quantities.findIndex((mq : MaterialQuantity) => mq.materialId === row.id);
       row.order = (
         <InputNumber
+          value={index >= 0 ? quantities[index].quantity : 0}
           placeholder='Input a quantity'
           min={0}
-          style={{ width: '100%' }} />
+          style={{ width: '100%' }}
+          onChange={(value : any) => dispatch(updateMaterialQuantities({materialId: row.id, quantity: value}))} />
       );
     });
 
@@ -107,11 +120,7 @@ export const MaterialsCatalog = () => {
             <span>No materials were found.</span>
         }
       </Card>
-      <Button
-        type='primary'
-        style={{ marginTop: 16, float: 'right' }}>
-        Order Materials
-      </Button>
+      <OrderMaterialButtons quantities={quantities} setMaterialListState={setMaterialListState} />
       <CreateMaterialModal />
     </div>
   );

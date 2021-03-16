@@ -1,5 +1,7 @@
+import { MaterialEntry } from './MaterialEntry';
+
 export interface MaterialStockEntry {
-  materialId : string,
+  materialId : MaterialEntry,
   locationId : string,
   stock : number,
 }
