@@ -1,7 +1,9 @@
 export interface ProductOrder {
-  dateOrdered: string,
-  dateDue: string,
   amountDue: number,
-  isPaid: string,
   customerId: string,
+  dateDue: string,
+  dateOrdered: string,
+  isPaid: string,
+  productId: any,
+  quantity: number,
 }

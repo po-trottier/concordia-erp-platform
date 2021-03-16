@@ -1,5 +1,11 @@
+import React from 'react';
+
 export interface CustomerEntry {
-  _id: string,
+  _id : string,
   name : string,
-  email: string,
+  email : string,
+  balance? : number,
+  paid? : number,
+  items? : number,
+  actions? : React.ReactNode,
 }

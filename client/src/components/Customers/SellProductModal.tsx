@@ -3,13 +3,16 @@ import { Button, InputNumber, message, Modal } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { setProductList } from '../../store/slices/ProductListSlice';
+import { setCustomerList } from '../../store/slices/CustomerListSlice';
 import { RootState } from '../../store/Store';
 import { ProductSale } from '../../interfaces/ProductSale';
 import { ProductEntry } from '../../interfaces/ProductEntry';
 import { ProductStockEntry } from '../../interfaces/ProductStockEntry';
-import axios from '../../plugins/Axios';
-import { ResponsiveTable } from '../ResponsiveTable';
 import { ProductOrderItem } from '../../interfaces/ProductOrderItem';
+import { ResponsiveTable } from '../ResponsiveTable';
+import { ProductOrder } from '../../interfaces/ProductOrder';
+import { CustomerEntry } from '../../interfaces/CustomerEntry';
+import axios from '../../plugins/Axios';
 
 interface CustomProps extends HTMLProps<HTMLDivElement> {
   customerId: string
@@ -20,6 +23,7 @@ export const SellProductModal = (props : CustomProps) => {
 
   const dispatch = useDispatch();
 
+  const customers = useSelector((state : RootState) => state.customerList.list);
   const products = useSelector((state : RootState) => state.productList.list);
   const updated = useSelector((state : RootState) => state.productList.updated);
   const location = useSelector((state : RootState) => state.location.selected);
@@ -122,6 +126,17 @@ export const SellProductModal = (props : CustomProps) => {
     setLoading(true);
     axios.post('/orders/products', body)
       .then(({ data }) => {
+        const clone : CustomerEntry[] = JSON.parse(JSON.stringify(customers));
+        data.forEach((d : ProductOrder) => {
+          const customer = clone.find((o) => o._id === d.customerId);
+          if (!customer)
+            return;
+          if (customer.items)
+            customer.items += d.quantity;
+          if (customer.balance)
+            customer.balance -= d.amountDue;
+        });
+        dispatch(setCustomerList(clone));
         message.success('The products were successfully sold.')
         handleCancel();
       })
@@ -170,7 +185,7 @@ export const SellProductModal = (props : CustomProps) => {
             <ResponsiveTable
               values={getProducts()}
               columns={columns}
-              style={{ margin: -24 }} /> :
+              style={{ margin: -12 }} /> :
             <span>No products were found.</span>
         }
       </Modal>

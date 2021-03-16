@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import { Card, Checkbox, message, Statistic, Switch } from 'antd';
 import {ResponsiveTable} from '../ResponsiveTable';
-import axios from "../../plugins/Axios";
 import {ProductOrder} from "../../interfaces/ProductOrder";
+import axios from "../../plugins/Axios";
 
 export const Income = () => {
   const emptyData : ProductOrder[] = [];
@@ -14,9 +14,10 @@ export const Income = () => {
   useEffect(() => {
     axios.get('/orders/products/all')
       .then((res) => {
-        setProductOrderData(res.data)
+        let orders : ProductOrder[] = res.data;
+        setProductOrderData(orders);
         let balance = 0;
-        res.data.forEach((d: any) => {
+        orders.forEach((d) => {
           if(!d.isPaid)
             balance += d.amountDue;
         })
@@ -44,7 +45,7 @@ export const Income = () => {
       if(!m.isPaid || showPaid) {
         m.dateOrdered = m.dateOrdered.split("T")[0];
         m.dateDue = m.dateDue.split("T")[0];
-        m.customerName = m.customerId;
+        m.customerName = m.customerId.name;
         m.isPaid = <Checkbox checked={m.isPaid} />;
         orders.push(m);
       }
