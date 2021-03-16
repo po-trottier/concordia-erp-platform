@@ -16,7 +16,9 @@ import {
   ProductLocationStockSchema,
 } from './products/schemas/product-location-stock.schema';
 import { LocationsModule } from '../locations/locations.module';
+import { PartsModule } from '../parts/parts.module';
 import { ProductLocationStockService } from './products/product-location-stock.service';
+import { ProductBuilderService } from './products/product-builder.service';
 
 @Module({
   imports: [
@@ -26,10 +28,16 @@ import { ProductLocationStockService } from './products/product-location-stock.s
       { name: ProductLocationStock.name, schema: ProductLocationStockSchema },
     ]),
     LocationsModule,
+    PartsModule,
     // ENV Support
     ConfigModule.forRoot({ validate, cache: true }),
   ],
   controllers: [ProductLogsController, ProductsController],
-  providers: [ProductsService, ProductLogsService, ProductLocationStockService],
+  providers: [
+    ProductsService,
+    ProductLogsService,
+    ProductLocationStockService,
+    ProductBuilderService,
+  ],
 })
 export class ProductsModule {}

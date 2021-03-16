@@ -110,7 +110,7 @@ export class ProductLocationStockService {
       { productId, locationId },
       { $inc: { stock: netStockChange } },
       { new: true, upsert: true },
-    );
+    ).populate('productId').exec();
 
     if (updatedProductLocationStock) {
       const updateProductLogDto: UpdateProductLogDto = {
