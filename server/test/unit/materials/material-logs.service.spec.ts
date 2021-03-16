@@ -2,7 +2,7 @@ import { MaterialLogsService } from '../../../src/api/materials/materials-logs/m
 import { MaterialLogDocument } from '../../../src/api/materials/materials-logs/schemas/material-log.schema';
 import { Model } from 'mongoose';
 
-describe('UsersService', () => {
+describe('MaterialLogsService', () => {
   let materialLogsService: MaterialLogsService;
   let materialLogDocument: Model<MaterialLogDocument>;
 

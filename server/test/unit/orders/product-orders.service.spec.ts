@@ -4,7 +4,7 @@ import { ProductOrdersService } from '../../../src/api/orders/product-orders.ser
 import { ProductOrderDocument } from '../../../src/api/orders/schemas/product-orders.schema';
 import { Model } from 'mongoose';
 
-describe('OrdersServices', () => {
+describe('ProductsService', () => {
   let productsService: ProductsService;
   let productDocument: Model<ProductDocument>
   let productOrdersService: ProductOrdersService;

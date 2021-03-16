@@ -2,7 +2,7 @@ import { ProductLogsService } from '../../../src/api/products/products-logs/prod
 import { Model } from 'mongoose';
 import { ProductLogDocument } from '../../../src/api/products/products-logs/schemas/product-log.schema';
 
-describe('ProductsService', () => {
+describe('ProductLogsService', () => {
   let productLogsService: ProductLogsService;
   let productLogDocument: Model<ProductLogDocument>;
 

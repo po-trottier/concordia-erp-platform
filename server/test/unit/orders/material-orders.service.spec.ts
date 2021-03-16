@@ -4,7 +4,7 @@ import { MaterialOrdersService } from '../../../src/api/orders/material-orders.s
 import { MaterialOrderDocument } from '../../../src/api/orders/schemas/material-orders.schema';
 import { Model } from 'mongoose';
 
-describe('OrdersServices', () => {
+describe('MaterialsService', () => {
   let materialService: MaterialsService;
   let materialDocumentModel: Model<MaterialDocument>;
   let materialOrdersService: MaterialOrdersService;

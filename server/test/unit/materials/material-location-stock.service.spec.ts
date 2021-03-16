@@ -8,7 +8,7 @@ import { Model } from 'mongoose';
 import { LocationDocument } from '../../../src/api/locations/schemas/location.schema';
 import { LocationsService } from '../../../src/api/locations/locations.service';
 
-describe('UsersService', () => {
+describe('MaterialsService', () => {
 	let materialService: MaterialsService;
 	let materialLogsService: MaterialLogsService;
 	let materialLocationStockService: MaterialLocationStockService;

@@ -8,7 +8,7 @@ import { PartLogDocument } from '../../../src/api/parts/parts-logs/schemas/part-
 import { PartLocationStockDocument } from '../../../src/api/parts/parts/schemas/part-location-stock.schema';
 import { LocationDocument } from '../../../src/api/locations/schemas/location.schema';
 
-describe('PartLocationStockService', () => {
+describe('PartsService', () => {
 
   let partsService: PartsService;
   let partLogsService: PartLogsService;

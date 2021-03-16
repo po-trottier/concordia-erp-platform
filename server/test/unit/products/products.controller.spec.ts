@@ -16,7 +16,7 @@ import { ProductLogDocument } from '../../../src/api/products/products-logs/sche
 import { LocationDocument } from '../../../src/api/locations/schemas/location.schema';
 import { LocationsService } from '../../../src/api/locations/locations.service';
 
-describe('PartsController', () => {
+describe('ProductsController', () => {
   let productsController: ProductsController;
   let productsService: ProductsService;
   let productLocationStockService: ProductLocationStockService;
