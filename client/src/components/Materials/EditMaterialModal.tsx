@@ -7,6 +7,7 @@ import { MaterialEntry } from '../../interfaces/MaterialEntry';
 import { RootState } from '../../store/Store';
 import { setSelected } from '../../store/slices/UploadSlice';
 import { removeMaterialEntry, updateMaterialEntry } from '../../store/slices/MaterialListSlice';
+import { removeMaterialQuantity } from '../../store/slices/MaterialQuantitiesSlice';
 import axios from '../../plugins/Axios';
 
 export const EditMaterialModal = (props : { material : MaterialEntry }) => {
@@ -53,12 +54,12 @@ export const EditMaterialModal = (props : { material : MaterialEntry }) => {
         newMaterial.price = 1;
       }
 
-      axios.patch('/materials/' + props.material.id, newMaterial)
+      axios.patch('/materials/' + props.material._id, newMaterial)
         .then(({ data }) => {
           const newMaterial = data;
           newMaterial.id = data['_id'];
           dispatch(updateMaterialEntry({
-            id: props.material.id,
+            id: props.material._id,
             newMaterial: newMaterial
           }));
           dispatch(setSelected(undefined));
@@ -82,9 +83,10 @@ export const EditMaterialModal = (props : { material : MaterialEntry }) => {
   const deleteMaterial = () => {
     Modal.confirm({
       onOk() {
-        axios.delete('/materials/' + props.material.id)
+        axios.delete('/materials/' + props.material._id)
           .then(() => {
-            dispatch(removeMaterialEntry(props.material.id));
+            dispatch(removeMaterialEntry(props.material._id));
+            dispatch(removeMaterialQuantity(props.material._id));
             message.success('The material was removed successfully');
             setIsModalVisible(false);
           })

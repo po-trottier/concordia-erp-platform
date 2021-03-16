@@ -500,6 +500,107 @@
 			]
 		},
 		{
+			"name": "Finance",
+			"item": [
+				{
+					"name": "Get Finance Entries",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/finance",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"finance"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Finance Entry by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/finance/60245c2d2816ce3290065c38",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"finance",
+								"60245c2d2816ce3290065c38"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Finance Entry",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Pink bike tassels\",\n    \"description\": \"makes it go faster\",\n    \"stock\": 70000\n}"
+						},
+						"url": {
+							"raw": "{{url}}/finance",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"finance"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Finance Entry by Id",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"stock\": 4\n}"
+						},
+						"url": {
+							"raw": "{{url}}/finance/6023033e12523415393afc0f",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"finance",
+								"6023033e12523415393afc0f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Finance Entry",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/finance/60220fd37d5a1f2c5a6d9778",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"finance",
+								"60220fd37d5a1f2c5a6d9778"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Auth",
 			"item": [
 				{
@@ -1321,7 +1422,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "[\n    {\n        \"materialId\": \"604fffd6aab3a61d1cf65d29\",\n        \"stockUsed\": 50,\n        \"stockBought\": 325\n    }\n]",
+									"raw": "[\n    {\n        \"materialId\": \"604eaa8a4be3294198d036d3\",\n        \"stockUsed\": 50,\n        \"stockBought\": 325\n    }\n]",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1329,14 +1430,14 @@
 									}
 								},
 								"url": {
-									"raw": "{{url}}/materials/stock/604fffcaaab3a61d1cf65d28",
+									"raw": "{{url}}/materials/stock/604eaa804be3294198d036d2",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
 										"materials",
 										"stock",
-										"604fffcaaab3a61d1cf65d28"
+										"604eaa804be3294198d036d2"
 									]
 								}
 							},
@@ -1368,14 +1469,14 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{url}}/materials/stock/604fffcaaab3a61d1cf65d28",
+									"raw": "{{url}}/materials/stock/604eaa804be3294198d036d2",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
 										"materials",
 										"stock",
-										"604fffcaaab3a61d1cf65d28"
+										"604eaa804be3294198d036d2"
 									]
 								}
 							},

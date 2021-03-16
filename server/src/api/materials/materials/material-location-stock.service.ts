@@ -1,7 +1,7 @@
 import {
+  BadRequestException,
   Injectable,
   NotFoundException,
-  PreconditionFailedException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { format, parse } from 'date-fns';
@@ -36,7 +36,10 @@ export class MaterialLocationStockService {
    * @param locationId the id of the location
    */
   async findAll(locationId: string): Promise<MaterialLocationStock[]> {
-    return this.materialLocationStockModel.find({ locationId });
+    return await this.materialLocationStockModel
+      .find({ locationId })
+      .populate('materialId')
+      .exec();
   }
 
   /**
@@ -49,10 +52,10 @@ export class MaterialLocationStockService {
     materialId: string,
     locationId: string,
   ): Promise<MaterialLocationStock> {
-    let materialLocationStock = await this.materialLocationStockModel.findOne({
-      materialId,
-      locationId,
-    });
+    let materialLocationStock = await this.materialLocationStockModel
+      .findOne({ materialId, locationId })
+      .populate('materialId')
+      .exec();
 
     //if stock info is not found, check if material and location are valid
     //and create new entry
@@ -62,11 +65,11 @@ export class MaterialLocationStockService {
 
       if (material && location) {
         materialLocationStock = new this.materialLocationStockModel({
-          materialId,
+          material,
           locationId,
           stock: 0,
         });
-        materialLocationStock.save();
+        await materialLocationStock.save();
       }
     }
 
@@ -80,54 +83,57 @@ export class MaterialLocationStockService {
   /**
    * Updates material stock by id using mongoose materialLocationStockModel
    *
-   * @param materialId string of the material's objectId
    * @param locationId string of the location's objectId
    * @param updateMaterialStockDto dto used to update material stock
    */
   async update(
-    materialId: string,
     locationId: string,
-    updateMaterialStockDto: UpdateMaterialStockDto,
+    updateMaterialStockDto: UpdateMaterialStockDto[],
   ): Promise<MaterialLocationStock> {
-    const { stockBought, stockUsed } = updateMaterialStockDto;
-
-    const netStockChange = stockBought - stockUsed;
-
-    if (netStockChange < 0) {
-      const currentMaterialLocationStock = await this.findOne(
-        materialId,
-        locationId,
-      );
-
-      if (currentMaterialLocationStock.stock + netStockChange < 0) {
-        throw new PreconditionFailedException(
-          `This operation would result in negative stock. Current stock: ${currentMaterialLocationStock.stock}, netStockChange: ${netStockChange}`,
+    const newStocks = [];
+    for (let i = 0; i < updateMaterialStockDto.length; i++) {
+      const { materialId, stockBought, stockUsed } = updateMaterialStockDto[i];
+      const netStockChange = stockBought - stockUsed;
+      if (netStockChange < 0) {
+        const currentMaterialLocationStock = await this.findOne(
+          materialId,
+          locationId,
         );
+        if (currentMaterialLocationStock.stock + netStockChange < 0) {
+          throw new BadRequestException(
+            `This operation would result in negative stock. Current stock: ${currentMaterialLocationStock.stock}, netStockChange: ${netStockChange}`,
+          );
+        }
+      }
+
+      const updatedMaterialLocationStock = await this.materialLocationStockModel
+        .findOneAndUpdate(
+          { materialId, locationId },
+          { $inc: { stock: netStockChange } },
+          { new: true, upsert: true },
+        )
+        .populate('materialId')
+        .exec();
+
+      if (updatedMaterialLocationStock) {
+        const updateMaterialLogDto: UpdateMaterialLogDto = {
+          materialId,
+          locationId,
+          stock: updatedMaterialLocationStock.stock,
+          stockBought,
+          stockUsed,
+          date: parse(format(new Date(), 'd/M/y'), 'dd/MM/yyyy', new Date()),
+        };
+
+        await this.materialLogsService.update(updateMaterialLogDto);
+
+        newStocks.push(updatedMaterialLocationStock);
       }
     }
 
-    const updatedMaterialLocationStock = await this.materialLocationStockModel.findOneAndUpdate(
-      { materialId, locationId },
-      { $inc: { stock: netStockChange } },
-      { new: true, upsert: true },
-    );
-
-    if (updatedMaterialLocationStock) {
-      const updateMaterialLogDto: UpdateMaterialLogDto = {
-        materialId,
-        locationId,
-        stock: updatedMaterialLocationStock.stock,
-        stockBought,
-        stockUsed,
-        date: parse(format(new Date(), 'd/M/y'), 'dd/MM/yyyy', new Date()),
-      };
-
-      await this.materialLogsService.update(updateMaterialLogDto);
-    }
-
     return this.validateMaterialLocationStockFound(
-      updatedMaterialLocationStock,
-      materialId,
+      newStocks,
+      '"many IDs"',
       locationId,
     );
   }

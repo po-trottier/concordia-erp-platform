@@ -31,7 +31,7 @@ export const Expenses = () => {
   }, [updated]);
 
   const getColumns = () => ({
-    vendorName: 'Supplier',
+    vendorName: 'Vendor',
     dateOrdered: 'Date Ordered',
     dateDue: 'Due Date',
     amountDue: 'Amount',
@@ -46,7 +46,6 @@ export const Expenses = () => {
           m.dateOrdered = m.dateOrdered.split("T")[0];
           m.dateDue = m.dateDue.split("T")[0];
           m.vendorName = m.materialId.vendorName;
-          m.amountDue =  m.amountDue;
           m.isPaid =  <Checkbox checked={m.isPaid} />;
           orders.push(m);
         }
