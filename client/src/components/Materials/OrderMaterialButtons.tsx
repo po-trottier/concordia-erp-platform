@@ -106,7 +106,7 @@ export const OrderMaterialButtons = (props : any) => {
 			.catch((err) => {
 				console.log(err);
 				message.error('Error updating the materrial stock.');
-			})
+			});
 	}
 
     return(
