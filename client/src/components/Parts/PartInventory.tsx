@@ -52,14 +52,6 @@ export const PartInventory = () => {
     return rows;
   };
 
-  const inventoryColumns = {
-  name: 'Part',
-  date: 'Date',
-  stockBuilt: 'Built',
-  stockUsed: 'Used',
-  stock: 'Stock',
-};
-
   const onSearch = (e : React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
   };
