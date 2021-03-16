@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Card, Input, InputNumber, message, Modal } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-
 import { ResponsiveTable } from '../ResponsiveTable';
 import { CreateProductModal } from './CreateProductModal';
 import { EditProductModal } from './EditProductModal';
@@ -9,6 +8,7 @@ import { ProductDetails } from './ProductDetails';
 import { RootState } from '../../store/Store';
 import { ProductEntry } from '../../interfaces/ProductEntry';
 import { ProductStockEntry } from '../../interfaces/ProductStockEntry';
+import { OrderItem } from '../../interfaces/OrderItem';
 import { setProductList } from '../../store/slices/ProductListSlice';
 import axios from '../../plugins/Axios';
 
@@ -21,7 +21,9 @@ export const ProductCatalog = () => {
   const updated = useSelector((state : RootState) => state.productList.updated);
   const location = useSelector((state : RootState) => state.location.selected);
 
+  const emptyData: OrderItem[] = [];
   const [searchValue, setSearchValue] = useState('');
+  const [orders, setOrders] = useState(emptyData);
 
   useEffect(() => {
     axios.get('/products')
@@ -50,21 +52,40 @@ export const ProductCatalog = () => {
         message.error('Something went wrong while getting the products catalog.');
         console.error(err);
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  // eslint-disable-next-line
   }, [updated, location]);
+
+  const updateProductStocks = (response: any) => {
+    const clone = JSON.parse(JSON.stringify(products));
+    response.data.forEach((updatedProductLocationStock: any) => {
+      const foundClone = clone.find((clone: any) => clone.id === updatedProductLocationStock.productId._id);
+      foundClone.stock = updatedProductLocationStock.stock;
+    });
+    dispatch(setProductList(clone));
+  }
 
   const onSearch = (e : React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
+  };
+
+  const changeBuildAmount = (productId: string, stockBuilt: number) => {
+    const foundOrder = orders.find(
+      (order: OrderItem) => order.productId === productId
+    );
+    if (foundOrder) {
+      foundOrder.stockBuilt = stockBuilt;
+      setOrders(orders);
+    } else {
+      setOrders(orders.concat({ productId, stockBuilt }));
+    }
   };
 
   const getProducts = () => {
     let rows = JSON.parse(JSON.stringify(products));
 
     if (searchValue.trim() !== '') {
-      rows = rows.filter(
-        (r : ProductEntry) => r.name.trim().toLowerCase().includes(searchValue.trim().toLowerCase()));
+      rows = rows.filter((r: ProductEntry) => r.name.trim().toLowerCase().includes(searchValue.trim().toLowerCase()));
     }
-
     rows.forEach((row : any) => {
       row.id = row['_id'];
       row.details = (
@@ -74,19 +95,17 @@ export const ProductCatalog = () => {
       );
       row.build = (
         <InputNumber
+          onChange={(value: any) => changeBuildAmount(row.id, value)}
           placeholder='Input a quantity'
           min={0}
           style={{ width: '100%' }} />
       );
-      row.actions = (
-        <EditProductModal product={row} />
-      );
+      row.actions = <EditProductModal product={row} />;
     });
 
-    rows.sort((a : ProductEntry, b : ProductEntry) => {
+    rows.sort((a: ProductEntry, b: ProductEntry) => {
       return a.name < b.name ? -1 : 1;
     });
-
     return rows;
   };
 
@@ -103,7 +122,18 @@ export const ProductCatalog = () => {
     price: 'Price',
     stock: 'Stock',
     actions: 'Actions',
-    build: 'Build'
+    build: 'Build',
+  };
+
+  const buildProducts = () => {
+    axios.patch('products/build/' + location, orders)
+    .then((data) => {
+      updateProductStocks(data);
+      message.success('The products were built successfully.');
+    }).catch((err) => {
+      message.error('There are not enough parts to build the products.');
+      console.log(err);
+    });
   };
 
   return (
@@ -119,7 +149,10 @@ export const ProductCatalog = () => {
             <span>No products were found.</span>
         }
       </Card>
-      <Button type='primary' style={{ marginTop: 16, float: 'right' }}>
+      <Button
+        onClick={buildProducts}
+        type='primary'
+        style={{ marginTop: 16, float: 'right' }}>
         Build Products
       </Button>
       <CreateProductModal />
