@@ -16,7 +16,7 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { UpdateProductStockDto } from './dto/update-product-stock.dto';
 import { BuildProductDto } from './dto/build-product.dto';
 import { ProductLocationStockService } from './product-location-stock.service';
-import {ProductBuilderService} from './product-builder.service';
+import { ProductBuilderService } from './product-builder.service';
 
 /**
  * Controller class for the products
@@ -116,13 +116,12 @@ export class ProductsController {
    * @param buildProductDto
    */
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
-  @Patch(':productId/build/:locationId')
+  @Patch('build/:locationId')
   build(
-    @Param('productId') productId: string,
     @Param('locationId') locationId: string,
-    @Body(ValidationPipe) buildProductDto: BuildProductDto,
+    @Body(ValidationPipe) buildOrders: BuildProductDto[],
   ) {
-    return this.productBuilderService.build(productId, locationId, buildProductDto);
+    return this.productBuilderService.build(locationId, buildOrders);
   }
 
   /**

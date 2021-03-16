@@ -25,12 +25,17 @@ export class ProductBuilderService {
    * @param buildProductDto
    */
   async build(
-    productId: string,
     locationId: string,
-    buildProductDto: BuildProductDto,
+    buildOrders: BuildProductDto[],
   ): Promise<Object> {
-    const { stockBuilt } = buildProductDto;
+    //for(const buildOrder of buildOrders) {
+    for (let i = 0 ; i < buildOrders.length ; i++){
+      const buildOrder = buildOrders[i];
+      const { stockBuilt, productId } = buildOrder;
+      console.log(stockBuilt, productId);
+    }
 
+    /*
     // checking if we can do the operation
     const product = await this.productsService.findOne(productId);
     for (const part of product.parts) {
@@ -73,5 +78,7 @@ export class ProductBuilderService {
       updatedPartLocationStocks.push(updatedPartLocationStock);
     }
     return { updatedProductLocationStock, updatedPartLocationStocks };
+    */
+    return "memes";
   }
 }
