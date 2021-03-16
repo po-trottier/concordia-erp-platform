@@ -29,16 +29,17 @@ export class ProductBuilderService {
   /**
    * builds a product if enough parts are present
    *
-   * @param productId id of the product
-   * @param locationId id of the location
-   * @param buildProductDto
+   * @param locationId id of the location to build for
+   * @param buildOrders buildOrderDtos containing productId and stockBuilt
    */
   async build(
     locationId: string,
     buildOrders: BuildProductDto[],
   ): Promise<Object> {
+    const validatedBuildOrders: {stockBuilt: number, productId: string, product: Product}[] = [];
     // checking every build order to see if there are sufficient parts in the db
-    for(const buildOrder of buildOrders) {
+    // at the same time populate validatedBuildOrders (add product to each object)
+    for (const buildOrder of buildOrders) {
       const { stockBuilt, productId } = buildOrder;
       const product = await this.productsService.findOne(productId);
       for (const part of product.parts) {
@@ -48,13 +49,13 @@ export class ProductBuilderService {
           throw new BadRequestException({error: 'stock of parts is not sufficient'});
         }
       }
+      validatedBuildOrders.push({...buildOrder, product});
     }
 
     // completing every build order
     const buildResults = [];
-    for (const buildOrder of buildOrders) {
-      const { stockBuilt, productId } = buildOrder;
-      const product = await this.productsService.findOne(productId);
+    for (const buildOrder of validatedBuildOrders) {
+      const { stockBuilt, productId, product } = buildOrder;
       // update product stock
       const updateProductStockDto: UpdateProductStockDto = {
         stockBuilt: stockBuilt,
