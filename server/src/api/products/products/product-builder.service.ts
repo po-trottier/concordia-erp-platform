@@ -21,9 +21,6 @@ import {ProductLocationStock, ProductLocationStockDocument} from "./schemas/prod
 @Injectable()
 export class ProductBuilderService {
   constructor(
-    @InjectModel(Product.name) private productModel: Model<ProductDocument>,
-    @InjectModel(ProductLocationStock.name) private productLocationStockModel: Model<ProductLocationStockDocument>,
-    @InjectModel(PartLocationStock.name) private partLocationStockModel: Model<PartLocationStockDocument>,
     private readonly productsService: ProductsService,
     private readonly productLocationStockService: ProductLocationStockService,
     private readonly partLocationStockService: PartLocationStockService,
@@ -40,23 +37,24 @@ export class ProductBuilderService {
     locationId: string,
     buildOrders: BuildProductDto[],
   ): Promise<Object> {
+    // checking every build order to see if there are sufficient parts in the db
     for(const buildOrder of buildOrders) {
       const { stockBuilt, productId } = buildOrder;
-      console.log(stockBuilt, productId);
-
-      // checking if we can do the operation
       const product = await this.productsService.findOne(productId);
       for (const part of product.parts) {
         const totalPartsCount = part.quantity * stockBuilt;
-        const partLocationStock = await this.partLocationStockService.findOne(
-          part.partId,
-          locationId,
-        );
+        const partLocationStock = await this.partLocationStockService.findOne(part.partId, locationId);
         if (partLocationStock.stock < totalPartsCount) {
           throw new BadRequestException({error: 'stock of parts is not sufficient'});
         }
       }
+    }
 
+    // completing every build order
+    const buildResults = [];
+    for (const buildOrder of buildOrders) {
+      const { stockBuilt, productId } = buildOrder;
+      const product = await this.productsService.findOne(productId);
       // update product stock
       const updateProductStockDto: UpdateProductStockDto = {
         stockBuilt: stockBuilt,
@@ -70,9 +68,6 @@ export class ProductBuilderService {
       );
 
       // update parts stock
-      const session = await this.productModel.startSession();
-      session.endSession();
-
       const updatedPartLocationStocks = [];
       const updatePartStockDto: UpdatePartStockDto = {
         stockBuilt: 0,
@@ -88,11 +83,10 @@ export class ProductBuilderService {
         );
         updatedPartLocationStocks.push(updatedPartLocationStock);
       }
+
+      buildResults.push({updatedProductLocationStock, updatedPartLocationStocks});
     }
 
-    /*
-    return { updatedProductLocationStock, updatedPartLocationStocks };
-    */
-    return 'Fuck';
+    return buildResults;
   }
 }
