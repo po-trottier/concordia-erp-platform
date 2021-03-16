@@ -5,6 +5,7 @@ import { PartsController } from './parts/parts.controller';
 import { Part, PartSchema } from './parts/schemas/part.schema';
 import {
   PartLocationStock,
+  PartLocationStockDocument,
   PartLocationStockSchema,
 } from './parts/schemas/part-location-stock.schema';
 import { PartLog, PartLogSchema } from './parts-logs/schemas/part-log.schema';

@@ -5,6 +5,13 @@ import { BuildProductDto } from './dto/build-product.dto';
 import { ProductsService } from './products.service';
 import { PartLocationStockService } from '../../parts/parts/part-location-stock.service';
 import {ProductLocationStockService} from './product-location-stock.service';
+import { Model } from 'mongoose';
+import {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  PartLocationStockDocument,
+  PartLocationStock,
+} from '../../parts/parts/schemas/part-location-stock.schema';
+import {ProductDocument} from './schemas/products.schema';
 
 /**
  * Used by the ProductsController, handles product data storage and retrieval.
@@ -12,6 +19,7 @@ import {ProductLocationStockService} from './product-location-stock.service';
 @Injectable()
 export class ProductBuilderService {
   constructor(
+    @InjectModel(Product.name) private productModel: Model<ProductDocument>,
     private readonly productsService: ProductsService,
     private readonly productLocationStockService: ProductLocationStockService,
     private readonly partLocationStockService: PartLocationStockService,
@@ -58,6 +66,9 @@ export class ProductBuilderService {
       );
 
       // update parts stock
+      const session = await this.productModel.startSession();
+      session.endSession();
+
       const updatedPartLocationStocks = [];
       const updatePartStockDto: UpdatePartStockDto = {
         stockBuilt: 0,
