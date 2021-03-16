@@ -60,8 +60,8 @@ describe('UsersController', () => {
       newUser.lastName = result.lastName;
       newUser.username = result.username;
       newUser.password = result.password;
-      newUser.email = result.email,
-      newUser.role = Role.SYSTEM_ADMINISTRATOR;
+      (newUser.email = result.email),
+        (newUser.role = Role.SYSTEM_ADMINISTRATOR);
 
       jest
         .spyOn(usersService, 'create')

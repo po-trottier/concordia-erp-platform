@@ -1,7 +1,7 @@
 import React from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Avatar, Dropdown, Menu, PageHeader } from 'antd';
+import { Avatar, Dropdown, Menu, message, PageHeader } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 
 import { Routes } from '../../router/Routes';
@@ -30,7 +30,8 @@ export const AppHeader = () => {
       dispatch(logoutAction());
       history.push('/login');
     } catch (e) {
-      console.log(e);
+      message.error('Something went wrong while trying to log out.');
+      console.error(e);
     }
   };
 

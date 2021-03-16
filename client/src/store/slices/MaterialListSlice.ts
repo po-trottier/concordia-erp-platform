@@ -16,7 +16,7 @@ export const materialListSlice = createSlice({
       state.updated = false;
     },
     updateEntry: (state, { payload } : PayloadAction<{ id : string, newMaterial : MaterialEntry }>) => {
-      const i = state.list.findIndex(f => f.id === payload.id);
+      const i = state.list.findIndex(f => f._id === payload.id);
       if (i >= 0) {
         state.list[i] = payload.newMaterial;
       }
@@ -27,7 +27,7 @@ export const materialListSlice = createSlice({
       state.updated = true;
     },
     removeEntry: (state, { payload } : PayloadAction<string>) => {
-      const i = state.list.findIndex(f => f.id === payload);
+      const i = state.list.findIndex(f => f._id === payload);
       if (i >= 0) {
         state.list.splice(i, 1);
       }

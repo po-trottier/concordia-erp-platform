@@ -7,6 +7,7 @@ import { MaterialEntry } from '../../interfaces/MaterialEntry';
 import { RootState } from '../../store/Store';
 import { setSelected } from '../../store/slices/UploadSlice';
 import { removeMaterialEntry, updateMaterialEntry } from '../../store/slices/MaterialListSlice';
+import { removeMaterialQuantity } from '../../store/slices/MaterialQuantitiesSlice';
 import axios from '../../plugins/Axios';
 
 export const EditMaterialModal = (props : { material : MaterialEntry }) => {
@@ -18,73 +19,73 @@ export const EditMaterialModal = (props : { material : MaterialEntry }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const displayFileError = () => {
-    setLoading(false);
-    const fileError = document.getElementById('display-file-error');
-    if (fileError) {
-      fileError.style.display = 'block';
-    }
-  };
-
   const handleSubmit = (values : any) => {
-    if (!selectedFile) {
-      displayFileError();
-      return;
-    }
-
     setLoading(true);
 
-    const reader = new FileReader();
-    reader.readAsDataURL(selectedFile);
+    if (selectedFile) {
+      const reader = new FileReader();
+      reader.readAsDataURL(selectedFile);
 
-    reader.onloadend = () => {
-      const newMaterial = {
-        density: values.density,
-        name: values.name,
-        price: values.price,
-        vendorName: values.vendor,
-        image: reader.result
+      reader.onloadend = () => {
+        updateMaterial(values, reader.result);
       };
 
-      if (!newMaterial.density) {
-        newMaterial.density = 1;
-      }
-      if (!newMaterial.price) {
-        newMaterial.price = 1;
-      }
+      reader.onerror = () => {
+        setLoading(false);
+        message.error('Something went wrong while reading the uploaded image');
+      };
+    } else {
+      updateMaterial(values, null);
+    }
 
-      axios.patch('/materials/' + props.material.id, newMaterial)
-        .then(({ data }) => {
-          const newMaterial = data;
-          newMaterial.id = data['_id'];
-          dispatch(updateMaterialEntry({
-            id: props.material.id,
-            newMaterial: newMaterial
-          }));
-          dispatch(setSelected(undefined));
-          setIsModalVisible(false);
-          message.success('The material was successfully added.');
-          form.resetFields();
-        })
-        .catch((err) => {
-          message.error('Something went wrong while adding the material.');
-          console.error(err);
-        })
-        .finally(() => setLoading(false));
-    };
-
-    reader.onerror = () => {
-      setLoading(false);
-      message.error('Something went wrong while reading the uploaded image');
-    };
   };
+
+  const updateMaterial = (values: any, image: any) => {
+    const newMaterial = {
+      density: values.density,
+      name: values.name,
+      price: values.price,
+      vendorName: values.vendor,
+      image: image
+    };
+
+    if (!newMaterial.image) {
+      delete newMaterial.image;
+    }
+    if (!newMaterial.density) {
+      newMaterial.density = 1;
+    }
+    if (!newMaterial.price) {
+      newMaterial.price = 1;
+    }
+
+    axios.patch('/materials/' + props.material._id, newMaterial)
+      .then(({ data }) => {
+        const newMaterial = data;
+        newMaterial.id = data['_id'];
+        dispatch(updateMaterialEntry({
+          id: props.material._id,
+          newMaterial: newMaterial
+        }));
+        dispatch(setSelected(undefined));
+        setIsModalVisible(false);
+        message.success('The material was successfully added.');
+        form.resetFields();
+      })
+      .catch((err) => {
+        message.error('Something went wrong while adding the material.');
+        console.error(err);
+      })
+      .finally(() => setLoading(false));
+  }
 
   const deleteMaterial = () => {
     Modal.confirm({
       onOk() {
-        axios.delete('/materials/' + props.material.id)
+        axios.delete('/materials/' + props.material._id)
           .then(() => {
-            dispatch(removeMaterialEntry(props.material.id));
+            dispatch(removeMaterialEntry(props.material._id));
+            dispatch(removeMaterialQuantity(props.material._id));
             message.success('The material was removed successfully');
             setIsModalVisible(false);
           })
@@ -112,6 +113,7 @@ export const EditMaterialModal = (props : { material : MaterialEntry }) => {
 
       <Modal
         title='Edit a Material'
+        onCancel={handleCancel}
         visible={isModalVisible}
         confirmLoading={loading}
         footer={[

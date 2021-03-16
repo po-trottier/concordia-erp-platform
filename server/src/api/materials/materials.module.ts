@@ -25,11 +25,7 @@ import {
   imports: [
     MongooseModule.forFeature([
       { name: Material.name, schema: MaterialSchema },
-    ]),
-    MongooseModule.forFeature([
       { name: MaterialLog.name, schema: MaterialLogSchema },
-    ]),
-    MongooseModule.forFeature([
       { name: MaterialLocationStock.name, schema: MaterialLocationStockSchema },
     ]),
     LocationsModule,
@@ -42,5 +38,6 @@ import {
     MaterialLogsService,
     MaterialLocationStockService,
   ],
+  exports: [MaterialLogsService, MaterialsService],
 })
 export class MaterialsModule {}

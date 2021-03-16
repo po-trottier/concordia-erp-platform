@@ -1,10 +1,267 @@
 {
 	"info": {
-		"_postman_id": "be5ee26a-10e3-4c39-bacf-c83a7f9d7618",
-		"name": "Epic_Resource_Planner",
+		"_postman_id": "a91380d3-29db-43e2-8319-ac04c8a19993",
+		"name": "Epic Resource Planner",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
+		{
+			"name": "Orders",
+			"item": [
+				{
+					"name": "Materials",
+					"item": [
+						{
+							"name": "Get Material Orders",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/orders/materials/all",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"orders",
+										"materials",
+										"all"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Material Orders",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "[\n    {\n        \"dateOrdered\": \"2021-03-14T18:25:43.511Z\",\n        \"dateDue\": \"2021-03-17T18:25:43.511Z\",\n        \"amountDue\": 1100,\n        \"quantity\": 118,\n        \"materialId\":\"6045599205d90a49ec102010\"\n    }\n]\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/orders/materials",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"orders",
+										"materials"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Material Order",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/orders/materials/604ff6f3bbb5fc50dce3ea6c",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"orders",
+										"materials",
+										"604ff6f3bbb5fc50dce3ea6c"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Material Order by id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/orders/materials/604aabf55a0ff109b8f5ecab",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"orders",
+										"materials",
+										"604aabf55a0ff109b8f5ecab"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Material Order",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"isPaid\": false,\r\n    \"materialId\": \"60502ac8c94be854b0be03e3\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/orders/materials/60502a88c94be854b0be03e1",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"orders",
+										"materials",
+										"60502a88c94be854b0be03e1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Products",
+					"item": [
+						{
+							"name": "Get Product Orders",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/orders/products/all",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"orders",
+										"products",
+										"all"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Product Orders",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "[\n    {\n        \"dateOrdered\": \"2021-03-06T18:25:43.511Z\",\n        \"dateDue\": \"2021-03-09T18:25:43.511Z\",\n        \"customerId\": \"Bikes Ultimate\",\n        \"amountDue\": 1800,\n        \"quantity\": 10,\n        \"productId\":\"6036bc00cce4944a7893ebdf\"\n    }\n]\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/orders/products",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"orders",
+										"products"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Product Order",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/orders/products/604ff927e1636a5bf4279424",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"orders",
+										"products",
+										"604ff927e1636a5bf4279424"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Product Order by id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/orders/products/604802d74ec0e95ac82529f9",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"orders",
+										"products",
+										"604802d74ec0e95ac82529f9"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Product Order",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"isPaid\": true,\r\n    \"productId\": \"60503014c94be854b0be03e5\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/orders/products/60502fffc94be854b0be03e4",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"orders",
+										"products",
+										"60502fffc94be854b0be03e4"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Get Summary of Orders",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/orders/summary",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"orders",
+								"summary"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
 		{
 			"name": "Parts",
 			"item": [
@@ -121,9 +378,7 @@
 							},
 							"response": []
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Part Logs",
@@ -167,9 +422,7 @@
 							},
 							"response": []
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Part Stock",
@@ -242,12 +495,9 @@
 							},
 							"response": []
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Finance",
@@ -348,8 +598,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Auth",
@@ -365,8 +614,7 @@
 									"    pm.environment.set(\"JWT\", pm.response.json().token);",
 									"}"
 								],
-								"type": "text/javascript",
-								"id": "11934148-3120-4479-a84a-36e5b2260d90"
+								"type": "text/javascript"
 							}
 						}
 					],
@@ -395,8 +643,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Users",
@@ -523,8 +770,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Products",
@@ -555,13 +801,13 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{url}}/products/60367da1c6945e5fe2688ce3",
+									"raw": "{{url}}/products/60503014c94be854b0be03e5",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
 										"products",
-										"60367da1c6945e5fe2688ce3"
+										"60503014c94be854b0be03e5"
 									]
 								}
 							},
@@ -649,9 +895,7 @@
 							},
 							"response": []
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Product Logs",
@@ -662,42 +906,40 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{url}}/products/logs",
-									"host": [
-										"{{url}}"
-									],
-									"path": [
-										"products",
-										"logs"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Get product log by product id, location id and date",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{url}}/products/logs/6046ab9ff88d1e216516a7b7/604569e1a9aad81bc8accc07/2021-03-08T05:00:00.000Z",
+									"raw": "{{url}}/products/logs/604eaa804be3294198d036d2",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
 										"products",
 										"logs",
-										"6046ab9ff88d1e216516a7b7",
-										"604569e1a9aad81bc8accc07",
-										"2021-03-08T05:00:00.000Z"
+										"604eaa804be3294198d036d2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get product log by product id and location id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/products/logs/604eaa804be3294198d036d2/604fdd711ae15c1bf0779aed",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"products",
+										"logs",
+										"604eaa804be3294198d036d2",
+										"604fdd711ae15c1bf0779aed"
 									]
 								}
 							},
 							"response": []
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Product Stock",
@@ -709,7 +951,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"stockBuilt\": 60,\n    \"stockUsed\": 10\n}",
+									"raw": "{\n    \"stockBuilt\": 60,\n    \"stockUsed\": 30\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -717,15 +959,15 @@
 									}
 								},
 								"url": {
-									"raw": "{{url}}/products/6046ab9ff88d1e216516a7b7/stock/604569e1a9aad81bc8accc07",
+									"raw": "{{url}}/products/stock/604eaa804be3294198d036d2/604fdd711ae15c1bf0779aed",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
 										"products",
-										"6046ab9ff88d1e216516a7b7",
 										"stock",
-										"604569e1a9aad81bc8accc07"
+										"604eaa804be3294198d036d2",
+										"604fdd711ae15c1bf0779aed"
 									]
 								}
 							},
@@ -737,15 +979,15 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{url}}/products/6046ab9ff88d1e216516a7b7/stock/604569e1a9aad81bc8accc07",
+									"raw": "{{url}}/products/stock/604eaa804be3294198d036d2/604fdd711ae15c1bf0779aed",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
 										"products",
-										"6046ab9ff88d1e216516a7b7",
 										"stock",
-										"604569e1a9aad81bc8accc07"
+										"604eaa804be3294198d036d2",
+										"604fdd711ae15c1bf0779aed"
 									]
 								}
 							},
@@ -757,12 +999,249 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{url}}/products/stock/604569e1a9aad81bc8accc07",
+									"raw": "{{url}}/products/stock/604eaa804be3294198d036d2",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
 										"products",
+										"stock",
+										"604eaa804be3294198d036d2"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Parts",
+			"item": [
+				{
+					"name": "Parts",
+					"item": [
+						{
+							"name": "Get parts",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/parts",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"parts"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get part by id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/parts/604583485eca8e26ab01107f",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"parts",
+										"604583485eca8e26ab01107f"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create part",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Pink bike tassels\",\n    \"description\": \"makes it go faster\",\n    \"materials\": [\n        { \"materialId\": \"604fdd0d1ae15c1bf0779aeb\", \"quantity\": 1 }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/parts",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"parts"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update part by id",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Pink bike ASS\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/parts/6036fa7f0981691472cb1855",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"parts",
+										"6036fa7f0981691472cb1855"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete part by id",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{url}}/parts/60220fd37d5a1f2c5a6d9778",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"parts",
+										"60220fd37d5a1f2c5a6d9778"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Part Logs",
+					"item": [
+						{
+							"name": "Get parts logs",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/parts/logs/604eaa804be3294198d036d2",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"parts",
+										"logs",
+										"604eaa804be3294198d036d2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get part log by part id, location id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/parts/logs/604eaa804be3294198d036d2/604fdd471ae15c1bf0779aec",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"parts",
+										"logs",
+										"604eaa804be3294198d036d2",
+										"604fdd471ae15c1bf0779aec"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Part Stock",
+					"item": [
+						{
+							"name": "Update part stock by part id and location id",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"stockBuilt\": 1500,\n    \"stockUsed\": 600\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/parts/stock/604eaa804be3294198d036d2/604fdd471ae15c1bf0779aec",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"parts",
+										"stock",
+										"604eaa804be3294198d036d2",
+										"604fdd471ae15c1bf0779aec"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get part stocks at a location",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/parts/stock/604569e1a9aad81bc8accc07",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"parts",
+										"stock",
+										"604569e1a9aad81bc8accc07"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get part stock by part id and location id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/parts/6045b523a65c8c10cb12bee7/stock/604569e1a9aad81bc8accc07",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"parts",
+										"6045b523a65c8c10cb12bee7",
 										"stock",
 										"604569e1a9aad81bc8accc07"
 									]
@@ -770,12 +1249,9 @@
 							},
 							"response": []
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Materials",
@@ -889,9 +1365,7 @@
 							},
 							"response": []
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Material Logs",
@@ -902,13 +1376,14 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{url}}/materials/logs",
+									"raw": "{{url}}/materials/logs/604fffcaaab3a61d1cf65d28",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
 										"materials",
-										"logs"
+										"logs",
+										"604fffcaaab3a61d1cf65d28"
 									]
 								}
 							},
@@ -935,9 +1410,7 @@
 							},
 							"response": []
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Material Stock",
@@ -949,7 +1422,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"stockUsed\": 50,\n    \"stockBought\": 325\n}",
+									"raw": "[\n    {\n        \"materialId\": \"604eaa8a4be3294198d036d3\",\n        \"stockUsed\": 50,\n        \"stockBought\": 325\n    }\n]",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -957,15 +1430,14 @@
 									}
 								},
 								"url": {
-									"raw": "{{url}}/materials/60469de1e84e51169f6d5622/stock/604569e1a9aad81bc8accc07",
+									"raw": "{{url}}/materials/stock/604eaa804be3294198d036d2",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
 										"materials",
-										"60469de1e84e51169f6d5622",
 										"stock",
-										"604569e1a9aad81bc8accc07"
+										"604eaa804be3294198d036d2"
 									]
 								}
 							},
@@ -977,15 +1449,15 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{url}}/materials/60469de1e84e51169f6d5622/stock/604569e1a9aad81bc8accc07",
+									"raw": "{{url}}/materials/stock/604eaa804be3294198d036d2/604eaa8a4be3294198d036d3",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
 										"materials",
-										"60469de1e84e51169f6d5622",
 										"stock",
-										"604569e1a9aad81bc8accc07"
+										"604eaa804be3294198d036d2",
+										"604eaa8a4be3294198d036d3"
 									]
 								}
 							},
@@ -997,25 +1469,22 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{url}}/materials/stock/604569e1a9aad81bc8accc07",
+									"raw": "{{url}}/materials/stock/604eaa804be3294198d036d2",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
 										"materials",
 										"stock",
-										"604569e1a9aad81bc8accc07"
+										"604eaa804be3294198d036d2"
 									]
 								}
 							},
 							"response": []
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Locations",
@@ -1130,8 +1599,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "API Status",
@@ -1165,8 +1633,7 @@
 				"type": "text/javascript",
 				"exec": [
 					""
-				],
-				"id": "8b6a290f-a6ad-44e7-b7af-94d8b0cfa082"
+				]
 			}
 		},
 		{
@@ -1175,10 +1642,8 @@
 				"type": "text/javascript",
 				"exec": [
 					""
-				],
-				"id": "625a2085-2b08-4d21-884c-697bb9399b89"
+				]
 			}
 		}
-	],
-	"protocolProfileBehavior": {}
+	]
 }

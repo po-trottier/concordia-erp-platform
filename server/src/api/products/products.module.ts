@@ -20,11 +20,9 @@ import { ProductLocationStockService } from './products/product-location-stock.s
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: Product.name, schema: ProductSchema }]),
     MongooseModule.forFeature([
+      { name: Product.name, schema: ProductSchema },
       { name: ProductLog.name, schema: ProductLogSchema },
-    ]),
-    MongooseModule.forFeature([
       { name: ProductLocationStock.name, schema: ProductLocationStockSchema },
     ]),
     LocationsModule,
