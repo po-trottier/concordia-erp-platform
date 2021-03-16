@@ -37,36 +37,6 @@ export const Income = () => {
     isPaid: "Paid",
   });
 
-  // const getOrders = (showPaidOnes: boolean) => {
-  //   axios.get('/orders/products/all')
-  //     .then((res) => {
-  //       if (res && res.data) {
-  //         const data : ProductOrder[] = [];
-  //         let balance = 0;
-  //         res.data.forEach((p : any) => {
-  //           if(!p.isPaid) {
-  //             balance += p.amountDue;
-  //           }
-
-  //           if(!p.isPaid || showPaidOnes) {
-  //             data.push({
-  //               dateOrdered: p.dateOrdered.split("T")[0],
-  //               dateDue: p.dateDue.split("T")[0],
-  //               amountDue: p.amountDue,
-  //               isPaid: p.isPaid ? "true" : "false",
-  //               customerName: p.customerId,
-  //             });
-  //           }
-  //         });
-  //         setBalance(balance);
-  //         setProductOrderData(data);
-  //       }
-  //     })
-  //     .catch(err => {
-  //       message.error('Something went wrong while fetching the list of accounts receivable.');
-  //       console.error(err);
-  //     });
-  // }
   const getOrders = () => {
     const data = JSON.parse(JSON.stringify(productOrderData));
     const orders: any[] = [];

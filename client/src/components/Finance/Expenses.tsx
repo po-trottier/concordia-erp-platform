@@ -7,8 +7,6 @@ import {MaterialOrder} from "../../interfaces/MaterialOrder";
 
 export const Expenses = () => {
   const emptyData : MaterialOrder[] = [];
-  // const emptyResponse : any = undefined;
-  // const [response, setResponse] = useState(emptyResponse);
   const [balance, setBalance] = useState(0);
   const [materialOrderData, setMaterialOrderData] = useState(emptyData);
   const [updated, setUpdated] = useState(false);
