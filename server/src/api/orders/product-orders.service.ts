@@ -7,42 +7,53 @@ import {
   ProductOrderDocument,
 } from './schemas/product-orders.schema';
 import { CreateProductOrderDto } from './dto/create-product-order.dto';
+import { UpdateProductOrderDto } from './dto/update-product-order.dto';
 
 @Injectable()
 export class ProductOrdersService {
   constructor(
     @InjectModel(ProductOrder.name)
-    private ProductOrderModel: Model<ProductOrderDocument>,
+    private productOrderModel: Model<ProductOrderDocument>,
   ) {}
 
-  async createProductOrder(
+  async create(
     createProductOrderDto: CreateProductOrderDto[],
   ): Promise<ProductOrder[]> {
     const createdOrders: ProductOrder[] = [];
 
     for (const productOrder of createProductOrderDto) {
-      const createdOrder = new this.ProductOrderModel(productOrder);
+      const createdOrder = new this.productOrderModel(productOrder);
       createdOrders.push(await createdOrder.save());
     }
     return createdOrders;
   }
 
   async findAll(): Promise<ProductOrder[]> {
-    const productOrders: CreateProductOrderDto[] = await this.ProductOrderModel.find()
+    const productOrders: ProductOrder[] = await this.productOrderModel.find()
       .populate('productId')
       .exec();
     return productOrders;
   }
 
   async findOne(id: string): Promise<ProductOrder> {
-    const order = await this.ProductOrderModel.findById(id).populate('productId');
+    const order = await this.productOrderModel.findById(id).populate('productId');
     return this.checkOrderFound(order, id);
   }
 
   async remove(id: string): Promise<ProductOrder> {
-    const deletedorder = await this.ProductOrderModel.findByIdAndDelete(id);
+    const deletedorder = await this.productOrderModel.findByIdAndDelete(id);
 
     return this.checkOrderFound(deletedorder, id);
+  }
+
+  async update(id:string, updateProductOrderDto: UpdateProductOrderDto): Promise<ProductOrder> {
+    const updatedProductOrder = await this.productOrderModel.findByIdAndUpdate(
+      id,
+      { $set: { ...updateProductOrderDto } },
+      { new: true },
+    );
+
+    return this.checkOrderFound(updatedProductOrder, id);
   }
 
   checkOrderFound(orderResult: any, id: string) {

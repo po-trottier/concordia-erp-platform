@@ -7,6 +7,7 @@ import {
   MaterialOrderDocument,
 } from './schemas/material-orders.schema';
 import { CreateMaterialOrderDto } from './dto/create-material-order.dto';
+import { UpdateMaterialOrderDto } from './dto/update-material-order.dto';
 
 @Injectable()
 export class MaterialOrdersService {
@@ -28,11 +29,10 @@ export class MaterialOrdersService {
   }
 
   async findAll(): Promise<MaterialOrder[]> {
-    const materialOrders: CreateMaterialOrderDto[] = await this.materialOrderModel
+     return await this.materialOrderModel
       .find()
       .populate('materialId')
-      .exec();
-    return materialOrders;
+      .exec(); 
   }
 
   async findOne(id: string): Promise<MaterialOrder> {
@@ -44,8 +44,17 @@ export class MaterialOrdersService {
 
   async remove(id: string): Promise<MaterialOrder> {
     const deletedorder = await this.materialOrderModel.findByIdAndDelete(id);
-
     return this.checkOrderFound(deletedorder, id);
+  }
+
+  async update(id:string, updateMaterialOrderDto: UpdateMaterialOrderDto): Promise<MaterialOrder> {
+    const updatedMaterialOrder = await this.materialOrderModel.findByIdAndUpdate(
+      id,
+      { $set: { ...updateMaterialOrderDto } },
+      { new: true },
+    );
+
+    return this.checkOrderFound(updatedMaterialOrder, id);
   }
 
   checkOrderFound(orderResult: any, id: string) {

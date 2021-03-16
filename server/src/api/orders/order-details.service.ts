@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { MaterialOrdersService } from './material-orders.service';
 import { ProductOrdersService } from './product-orders.service';
-import { CreateProductOrderDto } from './dto/create-product-order.dto';
-import { CreateMaterialOrderDto } from './dto/create-material-order.dto';
 import { SummaryDto } from './dto/summary.dto';
+import { ProductOrder } from './schemas/product-orders.schema';
+import { MaterialOrder } from './schemas/material-orders.schema';
 
 @Injectable()
 export class OrderDetailsService {
@@ -11,17 +11,17 @@ export class OrderDetailsService {
     productOrderService: ProductOrdersService,
     materialOrderService: MaterialOrdersService,
   ) {
-    const productOrders: CreateProductOrderDto[] = await productOrderService.findAll();
-    const materialOrders: CreateMaterialOrderDto[] = await materialOrderService.findAll();
+    const productOrders: ProductOrder[] = await productOrderService.findAll();
+    const materialOrders: MaterialOrder[] = await materialOrderService.findAll();
 
     let balance = 0;
-    productOrders.forEach((p: CreateProductOrderDto) => {
+    productOrders.forEach((p: ProductOrder) => {
       if (p.isPaid) {
         balance += p.amountDue;
       }
     });
 
-    materialOrders.forEach((m: CreateMaterialOrderDto) => {
+    materialOrders.forEach((m: MaterialOrder) => {
       if (m.isPaid) {
         balance -= m.amountDue;
       }
@@ -34,12 +34,12 @@ export class OrderDetailsService {
     productOrderService: ProductOrdersService,
     materialOrderService: MaterialOrdersService,
   ) {
-    const productOrders: CreateProductOrderDto[] = await productOrderService.findAll();
-    const materialOrders: CreateMaterialOrderDto[] = await materialOrderService.findAll();
+    const productOrders: ProductOrder[] = await productOrderService.findAll();
+    const materialOrders: MaterialOrder[] = await materialOrderService.findAll();
 
     const dateMap = new Map<string, number>();
 
-    productOrders.forEach((p) => {
+    productOrders.forEach((p: ProductOrder) => {
       const dateOrdered: string = p.dateOrdered.toISOString().split('T')[0];
       let currentValue: number = dateMap.get(dateOrdered);
       if (currentValue == null) {
@@ -48,7 +48,7 @@ export class OrderDetailsService {
       dateMap.set(dateOrdered, currentValue + p.amountDue);
     });
 
-    materialOrders.forEach((m: CreateMaterialOrderDto) => {
+    materialOrders.forEach((m: MaterialOrder) => {
       const dateOrdered: string = m.dateOrdered.toISOString().split('T')[0];
       let currentValue: number = dateMap.get(dateOrdered);
       if (currentValue == null) {
