@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Col, Form, Input, message, Modal, Row } from 'antd';
-import { useDispatch } from 'react-redux';
+// import { useDispatch } from 'react-redux';
 
 //import { addUserEntry } from '../../store/slices/UserListSlice';
 import axios from '../../plugins/Axios';
@@ -8,7 +8,7 @@ import { isArray } from 'util';
 
 
 export const CreateNewCustomerModal = () => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   const [form] = Form.useForm();
 

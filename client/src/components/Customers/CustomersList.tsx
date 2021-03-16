@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Card, Input } from 'antd';
+import { Button, Card, Input, message } from 'antd';
 
 import { ResponsiveTable } from '../ResponsiveTable';
 import { CustomerEntry } from '../../interfaces/CustomerEntry';
 import axios from '../../plugins/Axios';
-import {ProductOrder} from "../../interfaces/ProductOrder";
 
 const { Search } = Input;
 
@@ -43,20 +42,40 @@ export const CustomersList = () => {
                 c.items += o.quantity;
               })
             })
-            console.log(data);
             setCustomerData(data);
           })
-          .catch();
+          .catch((err) => {
+            console.error(err);
+            message.error('Something went wrong while getting the customer orders.');
+          });
       })
-      .catch();
+      .catch((err) => {
+        console.error(err);
+        message.error('Something went wrong while getting the list of customers.');
+      });
   }, [updated]);
 
   const getCustomers = () => {
     let rows = JSON.parse(JSON.stringify(customerData));
+
     if (searchValue.trim() !== '') {
       rows = rows.filter(
         (r:any) => r.name.trim().toLowerCase().includes(searchValue.trim().toLowerCase()));
     }
+
+    rows.forEach((r : any) => {
+      r.actions = (
+        <div>
+          <Button type='primary' size='small' style={{ width: 100, marginRight: 8 }}>
+            Sell Products
+          </Button>
+          <Button type='ghost' size='small' style={{ width: 100 }}>
+            Edit
+          </Button>
+        </div>
+      );
+    });
+
     return rows;
   }
 
@@ -70,9 +89,10 @@ export const CustomersList = () => {
         placeholder='Search for a customer'
         onChange={onSearch}
         style={{ marginBottom: 18 }} />
-      { getCustomers().length > 0 ?
-        <ResponsiveTable rows={getCustomers()} cols={getColumns()}/> :
-        <span>No customers were found.</span>
+      {
+        getCustomers().length > 0 ?
+          <ResponsiveTable rows={getCustomers()} cols={getColumns()} /> :
+          <span>No customers were found.</span>
       }
     </Card>
   );
