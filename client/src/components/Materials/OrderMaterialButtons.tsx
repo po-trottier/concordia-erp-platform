@@ -78,7 +78,7 @@ export const OrderMaterialButtons = (props : any) => {
 
   const placeOrder = (order : MaterialOrderItem[]) => {
 		setOrderLoading(true);
-		axios.post('/orders/materials', { "orders": order })
+		axios.post('/orders/materials', order)
 			.then(() => {
 				updateStock(order);
 				message.success('Order was successfully placed.');
