@@ -19,14 +19,6 @@ export const EditMaterialModal = (props : { material : MaterialEntry }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const displayFileError = () => {
-    setLoading(false);
-    const fileError = document.getElementById('display-file-error');
-    if (fileError) {
-      fileError.style.display = 'block';
-    }
-  };
-
   const handleSubmit = (values : any) => {
     setLoading(true);
 

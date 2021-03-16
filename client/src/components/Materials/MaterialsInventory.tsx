@@ -64,7 +64,7 @@ export const MaterialsInventory = () => {
     <div>
       <Card style={{ margin: '24px 0' }}>
         <Search
-          placeholder='Search for a material'
+          placeholder='Search for a material transaction'
           onChange={onSearch}
           style={{ marginBottom: 18 }} />
         {getMaterials().length > 0 ?

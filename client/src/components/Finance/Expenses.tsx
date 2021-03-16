@@ -60,7 +60,7 @@ export const Expenses = () => {
         <Statistic title='Accounts Payable Balance (CAD)' value={balance} precision={2} />
       </Card>
       <Card>
-        <div style={{ margin: '24px 0', textAlign:'right'}}>
+        <div style={{ marginBottom: 24, textAlign:'right'}}>
           <span>Show Paid Orders</span>
           <Switch
           style={{ marginLeft: 10 }}

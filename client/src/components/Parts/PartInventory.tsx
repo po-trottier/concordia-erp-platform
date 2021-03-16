@@ -49,7 +49,7 @@ export const PartInventory = () => {
     <div>
       <Card style={{ marginBottom: '24px' }}>
         <Search
-          placeholder='Search for part'
+          placeholder='Search for part transaction'
           onChange={onSearch}
           style={{ marginBottom: 16 }} />
         <Line
