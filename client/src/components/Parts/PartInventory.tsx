@@ -52,17 +52,16 @@ export const PartInventory = () => {
     return rows;
   };
 
-<<<<<<< HEAD
-  const columns = {
-    name: 'Part',
-    date: 'Date',
-    built: 'Built',
-    used: 'Used',
-    quantity: 'Stock',
-=======
+  const inventoryColumns = {
+  name: 'Part',
+  date: 'Date',
+  stockBuilt: 'Built',
+  stockUsed: 'Used',
+  stock: 'Stock',
+};
+
   const onSearch = (e : React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
->>>>>>> main
   };
 
   return (
@@ -71,17 +70,6 @@ export const PartInventory = () => {
         <Search
           placeholder='Search for a part transaction'
           onChange={onSearch}
-<<<<<<< HEAD
-          style={{ marginBottom: 16 }} />
-        <Line
-          data={lineGraphData}
-          xField='date'
-          yField='quantity'
-          seriesField='name' />
-      </Card>
-      <Card>
-        <ResponsiveTable columns={columns} values={lineGraphData} />
-=======
           style={{ marginBottom: 18 }} />
         {getParts().length > 0 ? (
           <Line
@@ -93,11 +81,10 @@ export const PartInventory = () => {
         ) : (
           <span>No part transactions were found.</span>
         )}
->>>>>>> main
       </Card>
       {getParts().length > 0 ? (
         <Card>
-          <ResponsiveTable rows={getParts()} cols={inventoryColumns} />
+          <ResponsiveTable values={getParts()} columns={inventoryColumns} />
         </Card>
       ) : null}
     </div>
