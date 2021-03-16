@@ -20,9 +20,7 @@ export class PartLogsService {
    */
   async findAll(locationId: string): Promise<PartLog[]> {
     return await this.partLogModel
-      .find({
-        locationId,
-      })
+      .find({ locationId })
       .populate('partId')
       .exec();
   }
@@ -35,10 +33,7 @@ export class PartLogsService {
    */
   async findOne(partId: string, locationId: string): Promise<PartLog[]> {
     return await this.partLogModel
-      .find({
-        partId,
-        locationId,
-      })
+      .find({ partId, locationId })
       .populate('partId')
       .exec();
   }

@@ -31,20 +31,11 @@ export class ProductLogsService {
    * @param locationId the id of the location
    * @param productId the id of the corresponding product
    */
-  async findOne(locationId: string, productId: string): Promise<ProductLog> {
-    const productLog = await this.productLogModel
-      .find({
-        productId,
-        locationId,
-      })
+  async findOne(locationId: string, productId: string): Promise<ProductLog[]> {
+    return await this.productLogModel
+      .find({ productId, locationId })
       .populate('productId')
       .exec();
-    return this.validateProductLogFound(
-      productLog,
-      productId,
-      locationId,
-      'any',
-    );
   }
 
   /**
