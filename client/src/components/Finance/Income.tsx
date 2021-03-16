@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Card, message, Statistic, Switch} from 'antd';
+import { Card, Checkbox, message, Statistic, Switch } from 'antd';
 import {ResponsiveTable} from '../ResponsiveTable';
 import axios from "../../plugins/Axios";
 import {ProductOrder} from "../../interfaces/ProductOrder";
@@ -45,8 +45,7 @@ export const Income = () => {
         m.dateOrdered = m.dateOrdered.split("T")[0];
         m.dateDue = m.dateDue.split("T")[0];
         m.customerName = m.customerId;
-        m.amountDue =  m.amountDue;
-        m.isPaid =  m.isPaid ? "true" : "false";
+        m.isPaid = <Checkbox checked={m.isPaid} />;
         orders.push(m);
       }
     });
