@@ -1,18 +1,24 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { ApiService } from '../../src/api/api.service';
 import { ApiController } from '../../src/api/api.controller';
 
 describe('ApiController', () => {
-  let controller: ApiController;
+  let apiController: ApiController;
+  let apiService: ApiService
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      controllers: [ApiController],
-    }).compile();
-
-    controller = module.get<ApiController>(ApiController);
+    apiService = new ApiService();
+    apiController = new ApiController(apiService);
   });
 
-  it('should be defined', () => {
-    expect(controller).toBeDefined();
+  describe('getStatus', () => {
+    it('Should return an object with a single attribute name \'status\' and a value of \'Running\'', async () => {
+      const result: any = { status: 'Running' };
+
+    jest
+      .spyOn(apiService, 'getStatus')
+      .mockImplementation(() => result);
+
+      expect(await apiController.getStatus()).toBe(result);
+    });
   });
 });
