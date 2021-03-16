@@ -131,7 +131,7 @@ export const ProductCatalog = () => {
       updateProductStocks(data);
       message.success('The products were built successfully.');
     }).catch((err) => {
-      message.error('not enough parts to build a product!');
+      message.error('There are not enough parts to build the products.');
       console.log(err);
     });
   };
