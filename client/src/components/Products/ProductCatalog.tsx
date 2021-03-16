@@ -129,7 +129,7 @@ export const ProductCatalog = () => {
     axios.patch('products/build/' + location, orders)
     .then((data) => {
       updateProductStocks(data);
-      message.success('products built successfully!');
+      message.success('The products were built successfully.');
     }).catch((err) => {
       message.error('not enough parts to build a product!');
       console.log(err);
