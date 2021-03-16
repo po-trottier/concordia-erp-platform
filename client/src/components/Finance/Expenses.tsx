@@ -31,7 +31,7 @@ export const Expenses = () => {
   }, [updated]);
 
   const getColumns = () => ({
-    vendorName: 'Supplier',
+    vendorName: 'Vendor',
     dateOrdered: 'Date Ordered',
     dateDue: 'Due Date',
     amountDue: 'Amount',

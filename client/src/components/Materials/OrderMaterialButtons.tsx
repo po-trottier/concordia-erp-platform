@@ -49,7 +49,7 @@ export const OrderMaterialButtons = (props : any) => {
 			})
 			.catch((err) => {
 				message.error('Something went wrong while placing order.');
-				console.log(err);
+				console.error(err);
 			})
 			.finally(() => setOrderLoading(false));
   }
@@ -68,7 +68,7 @@ export const OrderMaterialButtons = (props : any) => {
 		axios.patch('/materials/stock/' + locationId, materialStocks)
 			.then(() => props.setMaterialListState())
 			.catch((err) => {
-				console.log(err);
+				console.error(err);
 				message.error('Error updating the material stock.');
 			});
 	}

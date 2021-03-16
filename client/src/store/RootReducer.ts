@@ -22,7 +22,7 @@ const persistConfig = {
     encryptTransform({
       secretKey: 'A2esCQW4z4N2MT5n',
       onError: (error) => {
-        console.log(error);
+        console.error(error);
       },
     }),
   ],
