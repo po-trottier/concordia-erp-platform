@@ -15,7 +15,6 @@ export const Summary = () => {
   const [summaryEntryData, setSummaryEntryData] = useState(emptyData);
   const [updated, setUpdated] = useState(false);
   
-
   useEffect(() => {
     setUpdated(true);
     axios.get('/orders/summary ')

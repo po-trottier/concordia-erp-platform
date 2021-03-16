@@ -20,15 +20,17 @@ export class ProductOrdersService {
   ): Promise<ProductOrder[]> {
     const createdOrders: ProductOrder[] = [];
 
-    for (const ProductOrder of createProductOrderDto) {
-      const createdOrder = new this.ProductOrderModel(ProductOrder);
+    for (const productOrder of createProductOrderDto) {
+      const createdOrder = new this.ProductOrderModel(productOrder);
       createdOrders.push(await createdOrder.save());
     }
     return createdOrders;
   }
 
   async findAll(): Promise<ProductOrder[]> {
-    const productOrders: CreateProductOrderDto[] = await this.ProductOrderModel.find().populate('productId').exec();
+    const productOrders: CreateProductOrderDto[] = await this.ProductOrderModel.find()
+      .populate('productId')
+      .exec();
     return productOrders;
   }
 

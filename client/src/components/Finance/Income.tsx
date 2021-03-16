@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Button, Card, message, Statistic, Switch} from 'antd';
+import {Card, message, Statistic, Switch} from 'antd';
 import {ResponsiveTable} from '../ResponsiveTable';
 import axios from "../../plugins/Axios";
 import {ProductOrder} from "../../interfaces/ProductOrder";
@@ -63,11 +63,11 @@ export const Income = () => {
       <Card>
         <div style={{ margin: '24px 0', textAlign:'right'}}>
           <span>Show Paid Orders</span>
-          <Switch onChange={getOrders} style={{ marginLeft: 10 }}/>
+          <Switch onChange={getOrders} style={{ marginLeft: 10 }} />
         </div>
-        {productOrderData.length > 0 ? 
+        {productOrderData.length > 0 ?
           <ResponsiveTable cols={getColumns()} rows={productOrderData} />
-        : <div>No orders were found.</div>}  
+        : <div>No orders were found.</div>}
       </Card>
     </div>
   );

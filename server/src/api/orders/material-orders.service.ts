@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import {
   MaterialOrder,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   MaterialOrderDocument,
 } from './schemas/material-orders.schema';
 import { CreateMaterialOrderDto } from './dto/create-material-order.dto';
@@ -27,12 +28,17 @@ export class MaterialOrdersService {
   }
 
   async findAll(): Promise<MaterialOrder[]> {
-    const materialOrders: CreateMaterialOrderDto[] = await this.materialOrderModel.find().populate('materialId').exec();
+    const materialOrders: CreateMaterialOrderDto[] = await this.materialOrderModel
+      .find()
+      .populate('materialId')
+      .exec();
     return materialOrders;
   }
 
   async findOne(id: string): Promise<MaterialOrder> {
-    const order = await this.materialOrderModel.findById(id).populate('materialId');
+    const order = await this.materialOrderModel
+      .findById(id)
+      .populate('materialId');
     return this.checkOrderFound(order, id);
   }
 

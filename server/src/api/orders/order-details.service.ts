@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable } from '@nestjs/common';
 import { MaterialOrdersService } from './material-orders.service';
 import { ProductOrdersService } from './product-orders.service';
 import { CreateProductOrderDto } from './dto/create-product-order.dto';
@@ -7,8 +7,10 @@ import { SummaryDto } from './dto/summary.dto';
 
 @Injectable()
 export class OrderDetailsService {
-
-  async getBalance(productOrderService : ProductOrdersService, materialOrderService : MaterialOrdersService) {
+  async getBalance(
+    productOrderService: ProductOrdersService,
+    materialOrderService: MaterialOrdersService,
+  ) {
     const productOrders: CreateProductOrderDto[] = await productOrderService.findAll();
     const materialOrders: CreateMaterialOrderDto[] = await materialOrderService.findAll();
 
@@ -28,7 +30,10 @@ export class OrderDetailsService {
     return { balance: balance };
   }
 
-  async getSummary(productOrderService : ProductOrdersService, materialOrderService : MaterialOrdersService) {
+  async getSummary(
+    productOrderService: ProductOrdersService,
+    materialOrderService: MaterialOrdersService,
+  ) {
     const productOrders: CreateProductOrderDto[] = await productOrderService.findAll();
     const materialOrders: CreateMaterialOrderDto[] = await materialOrderService.findAll();
 

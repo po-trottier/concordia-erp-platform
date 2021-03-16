@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Button, Card, message, Statistic, Switch} from 'antd';
+import {Card, message, Statistic, Switch} from 'antd';
 
 import {ResponsiveTable} from '../ResponsiveTable';
 import axios from "../../plugins/Axios";
@@ -10,7 +10,7 @@ export const Expenses = () => {
   const [balance, setBalance] = useState(0);
   const [materialOrderData, setMaterialOrderData] = useState(emptyData);
   const [updated, setUpdated] = useState(false);
-  
+
   useEffect(() => {
     setUpdated(true);
     getOrders(false);
@@ -63,7 +63,7 @@ export const Expenses = () => {
       <Card>
         <div style={{ margin: '24px 0', textAlign:'right'}}>
           <span>Show Paid Orders</span>
-          <Switch onChange={getOrders} style={{ marginLeft: 10 }}/>
+          <Switch onChange={getOrders} style={{ marginLeft: 10 }} />
         </div>
         {materialOrderData.length > 0 ?
           <ResponsiveTable cols={getColumns()} rows={materialOrderData} />

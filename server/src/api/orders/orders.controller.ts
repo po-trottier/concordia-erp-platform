@@ -59,9 +59,7 @@ export class OrdersController {
   createProductOrder(
     @Body(ValidationPipe) createProductOrderDto: CreateProductOrderDto[],
   ) {
-    return this.productOrderService.createProductOrder(
-      createProductOrderDto,
-    );
+    return this.productOrderService.createProductOrder(createProductOrderDto);
   }
 
   @Roles(Role.ACCOUNTANT, Role.SYSTEM_ADMINISTRATOR)
