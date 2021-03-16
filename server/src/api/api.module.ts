@@ -17,6 +17,7 @@ import { RolesGuard } from './roles/roles.guard';
 import { routes } from '../routes';
 import { validate } from '../shared/env';
 import { DB_NAME, DB_URL } from '../shared/constants';
+import { ApiService } from './api.service';
 
 const mongoDbUrl = process.env.DB_URL || DB_URL;
 const mongoDbName = process.env.DB_NAME || DB_NAME;
@@ -48,6 +49,7 @@ const mongoDbName = process.env.DB_NAME || DB_NAME;
       provide: APP_GUARD,
       useClass: RolesGuard,
     },
+    ApiService
   ],
   controllers: [ApiController],
 })
