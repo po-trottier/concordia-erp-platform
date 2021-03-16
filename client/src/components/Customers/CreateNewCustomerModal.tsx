@@ -30,7 +30,7 @@ export const CreateNewCustomerModal = () => {
     setLoading(true);
     axios.post('/customers', newCustomer)
       .then(() => {
-       // dispatch(addCustomerEntry(newCustomer));
+        //dispatch(addCustomerEntry(newCustomer));
         setIsModalVisible(false);
         form.resetFields();
         message.success('Customer was added successfully.');

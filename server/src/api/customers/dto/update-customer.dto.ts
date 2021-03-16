@@ -1,11 +1,4 @@
-import {
-  IsInt,
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
-  IsPositive,
-  IsString,
-} from 'class-validator';
+import { IsEmail, IsOptional, IsString } from 'class-validator';
 
 /**
  * Customer update DTO
@@ -13,24 +6,10 @@ import {
 export class UpdateCustomerDto {
   @IsString()
   @IsOptional()
-  company: string;
+  name: string;
 
-  @IsNotEmpty()
-  @IsInt()
-  id: number;
-
-  @IsNumber()
-  @IsPositive()
+  @IsString()
   @IsOptional()
-  sold: number;
-
-  @IsNotEmpty()
-  @IsPositive()
-  @IsOptional()
-  paid: number;
-
-  @IsNumber()
-  @IsPositive()
-  @IsOptional()
-  balance: number;
+  @IsEmail()
+  email: string;
 }

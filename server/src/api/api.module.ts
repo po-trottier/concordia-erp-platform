@@ -10,6 +10,7 @@ import { UsersModule } from './users/users.module';
 import { OrdersModule } from './orders/orders.module';
 import { LocationsModule } from './locations/locations.module';
 import { ProductsModule } from './products/products.module';
+import { CustomersModule } from './customers/customers.module';
 import { ApiController } from './api.controller';
 import { JwtAuthGuard } from './auth/guards/jwt.guard';
 import { RolesGuard } from './roles/roles.guard';
@@ -36,6 +37,7 @@ const mongoDbName = process.env.DB_NAME || DB_NAME;
     OrdersModule,
     ProductsModule,
     LocationsModule,
+    CustomersModule,
   ],
   providers: [
     {

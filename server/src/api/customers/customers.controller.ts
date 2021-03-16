@@ -11,26 +11,26 @@ import {
 import { CustomersService } from './customers.service';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
-import { Roles } from './../roles/roles.decorator';
-import { Role } from './../roles/roles.enum';
+import { Roles } from '../roles/roles.decorator';
+import { Role } from '../roles/roles.enum';
 
 @Controller()
-export class MaterialsController {
+export class CustomersController {
   constructor(private readonly CustomersService: CustomersService) {}
 
-  @Roles(Role.SALESPERSON)
+  @Roles(Role.SALESPERSON, Role.SYSTEM_ADMINISTRATOR)
   @Post()
   create(@Body(ValidationPipe) CreateCustomerDto: CreateCustomerDto) {
     return this.CustomersService.create(CreateCustomerDto);
   }
 
-  @Roles(Role.SALESPERSON)
+  @Roles(Role.SALESPERSON, Role.SYSTEM_ADMINISTRATOR)
   @Get()
   findAll() {
     return this.CustomersService.findAll();
   }
 
-  @Roles(Role.SALESPERSON)
+  @Roles(Role.SALESPERSON, Role.SYSTEM_ADMINISTRATOR)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.CustomersService.findOne(id);

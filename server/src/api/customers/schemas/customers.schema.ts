@@ -9,19 +9,10 @@ export type CustomerDocument = Customer & Document;
 @Schema()
 export class Customer {
   @Prop({ required: true, unique: true })
-  company: string;
+  name: string;
 
   @Prop({ required: true })
-  id: number;
-
-  @Prop({ required: true })
-  sold: number;
-
-  @Prop({ required: true, unique: true })
-  paid: number;
-
-  @Prop({ required: true })
-  balance: number;
+  email: string;
 }
 
-export const customerSchema = SchemaFactory.createForClass(Customer);
+export const CustomerSchema = SchemaFactory.createForClass(Customer);

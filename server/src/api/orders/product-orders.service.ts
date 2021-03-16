@@ -46,10 +46,11 @@ export class ProductOrdersService {
     for (const productOrder of createProductOrderDto) {
       const order: any = productOrder;
       const product = await this.productsService.findOne(order.productId);
+      const dateOrdered = new Date(order.dateOrdered);
       order.amountDue = order.quantity * product.price;
-      order.dateDue =
-        order.dateOrdered.getDate() +
-        this.getIncrement(order.dateOrdered.getDay());
+      order.dateDue = new Date(order.dateOrdered).setDate(
+        dateOrdered.getDate() + this.getIncrement(dateOrdered.getDay()),
+      );
       const createdOrder = new this.productOrderModel(order);
       createdOrders.push(await createdOrder.save());
     }
@@ -58,13 +59,19 @@ export class ProductOrdersService {
   }
 
   async findAll(): Promise<ProductOrder[]> {
-    return await this.productOrderModel.find().populate('productId').exec();
+    return await this.productOrderModel
+      .find()
+      .populate('productId')
+      .populate('customerId')
+      .exec();
   }
 
   async findOne(id: string): Promise<ProductOrder> {
     const order = await this.productOrderModel
       .findById(id)
-      .populate('productId');
+      .populate('productId')
+      .populate('customerId')
+      .exec();
     return this.checkOrderFound(order, id);
   }
 
