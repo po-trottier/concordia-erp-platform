@@ -104,7 +104,7 @@ export const MaterialsCatalog = () => {
     price: 'Price',
     vendorName: 'Vendor',
     actions: 'Actions',
-    order: 'Order Quantity',
+    order: 'Order',
   };
 
   return (

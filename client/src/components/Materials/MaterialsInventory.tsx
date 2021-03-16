@@ -10,11 +10,11 @@ import { RootState } from '../../store/Store';
 const { Search } = Input;
 
 const inventoryColumns = {
-  name: 'material',
+  name: 'Material',
   date: 'Date',
   stockBought: 'Bought',
   stockUsed: 'Used',
-  stock: 'stock'
+  stock: 'Stock'
 };
 
 export const MaterialsInventory = () => {
@@ -74,12 +74,14 @@ export const MaterialsInventory = () => {
             yField='stock'
             seriesField='name'
             style={{ marginBottom: '48px' }} /> :
-          <span>No material timeline was found.</span>
+          <span>No material transactions were found.</span>
         }
       </Card>
+      {getMaterials().length > 0 ?
       <Card>
         <ResponsiveTable rows={getMaterials()} cols={inventoryColumns} />
-      </Card>
+      </Card> : null
+      }
     </div>
   );
 };

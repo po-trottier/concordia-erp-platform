@@ -16,53 +16,17 @@ export const OrderMaterialButtons = (props : any) => {
 
 	const [orderLoading, setOrderLoading] = useState(false);
 
-	const getIncrement = (day : number) => {
-		let increment = 0;
-		switch(day){
-			case 0:
-				increment = 5;
-				break;
-			case 1:
-				increment = 4;
-				break;
-			case 2:
-				increment = 3;
-				break;
-			case 3:
-				increment = 2;
-				break;
-			case 4:
-				increment = 8;
-				break;
-			case 5:
-				increment = 7;
-				break;
-			case 6:
-				increment = 6;
-				break;
-		}
-
-		return increment;
-	}
-
 	const createOrder = () => {
     let order : MaterialOrderItem[] = [];
     quantities.forEach((materialQuantity : MaterialQuantity) => {
 			if(materialQuantity.quantity){
 				const material = materials.find((m : MaterialEntry) => materialQuantity.materialId === m._id);
 				const dateOrdered = new Date();
-				const dateDue = new Date();
-				dateDue.setDate(dateDue.getDate() + getIncrement(dateDue.getDay()));
-				const amountDue = materialQuantity.quantity * material.price;
-
 				order.push({
 					materialId: material._id,
 					quantity: materialQuantity.quantity,
 					supplierName: material.vendorName,
-					amountDue,
 					dateOrdered,
-					dateDue,
-					isPaid: false,
 				})
 			}
 			dispatch(updateMaterialQuantities({
@@ -105,7 +69,7 @@ export const OrderMaterialButtons = (props : any) => {
 			.then(() => props.setMaterialListState())
 			.catch((err) => {
 				console.log(err);
-				message.error('Error updating the materrial stock.');
+				message.error('Error updating the material stock.');
 			});
 	}
 
