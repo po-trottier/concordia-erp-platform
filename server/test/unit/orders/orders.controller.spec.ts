@@ -5,7 +5,9 @@ import { OrderDetailsService } from '../../../src/api/orders/order-details.servi
 import { ProductsService } from '../../../src/api/products/products/products.service';
 import { MaterialsService } from '../../../src/api/materials/materials/materials.service';
 import { CreateProductOrderDto } from '../../../src/api/orders/dto/create-product-order.dto';
+import { UpdateProductOrderDto } from '../../../src/api/orders/dto/update-product-order.dto';
 import { CreateMaterialOrderDto } from '../../../src/api/orders/dto/create-material-order.dto';
+import { UpdateMaterialOrderDto } from '../../../src/api/orders/dto/update-material-order.dto';
 import {
   MaterialOrder,
   MaterialOrderDocument,
@@ -82,6 +84,23 @@ describe('OrdersController', () => {
     });
   });
 
+  describe('updateMaterialOrder', () => {
+    it('Should update an existing materials order.', async () => {
+      const result: MaterialOrder = dummyMaterialOrder;
+
+      let newMaterialOrder = new UpdateMaterialOrderDto();
+      newMaterialOrder = dummyMaterialOrder;
+
+      jest
+        .spyOn(materialOrdersService, 'update')
+        .mockImplementation(async () => await result);
+
+      expect(await ordersController.updateMaterialOrder(dummyMaterialOrder.materialId, newMaterialOrder)).toBe(
+        result,
+      );
+    });
+  });
+
   describe('findAllMaterialsOrder', () => {
     it('Should find all material orders with supplier.', async () => {
       const result: MaterialOrder[] = [
@@ -149,6 +168,23 @@ describe('OrdersController', () => {
         .mockImplementation(async () => await result);
 
       expect(await ordersController.createProductOrder(newProductOrderList)).toBe(
+        result,
+      );
+    });
+  });
+
+  describe('updateProductOrder', () => {
+    it('Should update an existing products order.', async () => {
+      const result: ProductOrder = dummyProductOrder;
+
+      let newProductOrder = new UpdateProductOrderDto();
+      newProductOrder = dummyProductOrder;
+
+      jest
+        .spyOn(productOrdersService, 'update')
+        .mockImplementation(async () => await result);
+
+      expect(await ordersController.updateProductOrder(dummyMaterialOrder.materialId, newProductOrder)).toBe(
         result,
       );
     });
