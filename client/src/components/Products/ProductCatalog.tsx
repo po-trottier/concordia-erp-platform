@@ -27,7 +27,6 @@ export const ProductCatalog = () => {
 
   useEffect(() => {
     setProductListState();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updated, location]);
 
   const setProductListState = () => {
