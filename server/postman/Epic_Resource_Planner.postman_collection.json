@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "a91380d3-29db-43e2-8319-ac04c8a19993",
+		"_postman_id": "f70866ac-cb73-407a-8b70-3803b6848c14",
 		"name": "Epic Resource Planner",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -154,7 +154,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "[\n    {\n        \"dateOrdered\": \"2021-03-06T18:25:43.511Z\",\n        \"dateDue\": \"2021-03-09T18:25:43.511Z\",\n        \"customerId\": \"Bikes Ultimate\",\n        \"amountDue\": 1800,\n        \"quantity\": 10,\n        \"productId\":\"6036bc00cce4944a7893ebdf\"\n    }\n]\n",
+									"raw": "[\n    {\n        \"dateOrdered\": \"2021-03-06T18:25:43.511Z\",\n        \"dateDue\": \"2021-03-09T18:25:43.511Z\",\n        \"customerId\": \"6050f70b608c4c6f43d91552\",\n        \"amountDue\": 1800,\n        \"quantity\": 10,\n        \"productId\":\"603671315936aa7ba65660f5\"\n    }\n]\n",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1594,6 +1594,121 @@
 							"path": [
 								"locations",
 								"6036fa7f0981691472cb1855"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Customers",
+			"item": [
+				{
+					"name": "Get customer",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/customers",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get customer by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/customers/6050f5606d28266ed73700a4",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"customers",
+								"6050f5606d28266ed73700a4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create customer",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Montreal\",\n    \"email\": \"Montreal@city.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/customers",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete customer by id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/customer/60220fd37d5a1f2c5a6d9778",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"customer",
+								"60220fd37d5a1f2c5a6d9778"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update customer by id",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"City of Montreal\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/customers/6050f5606d28266ed73700a4",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"customers",
+								"6050f5606d28266ed73700a4"
 							]
 						}
 					},
