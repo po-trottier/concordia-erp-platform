@@ -46,7 +46,6 @@ export const Expenses = () => {
           m.dateOrdered = m.dateOrdered.split("T")[0];
           m.dateDue = m.dateDue.split("T")[0];
           m.vendorName = m.materialId.vendorName;
-          m.amountDue =  m.amountDue;
           m.isPaid =  <Checkbox checked={m.isPaid} />;
           orders.push(m);
         }

@@ -4,6 +4,8 @@ import { Line } from '@ant-design/charts';
 import { ResponsiveTable } from '../ResponsiveTable';
 import { MaterialsTimelineEntry } from '../../interfaces/MaterialsTimelineEntry';
 import axios from '../../plugins/Axios';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store/Store';
 
 const { Search } = Input;
 
@@ -13,45 +15,46 @@ const inventoryColumns = {
   stockBought: 'Bought',
   stockUsed: 'Used',
   stock: 'stock'
-}
+};
 
 export const MaterialsInventory = () => {
-  const emptyData: MaterialsTimelineEntry[] = [];
-    const [materialsData, setMaterialsData] = useState(emptyData);
-    const [searchValue, setSearchValue] = useState('');
+  const location = useSelector((state : RootState) => state.location.selected);
 
-    useEffect(() => {
-      axios.get('materials/logs').then(async ({ data }) => {
+  const emptyData : MaterialsTimelineEntry[] = [];
+  const [materialsData, setMaterialsData] = useState(emptyData);
+  const [searchValue, setSearchValue] = useState('');
+
+  useEffect(() => {
+    axios.get('materials/logs/' + location)
+      .then(async ({ data }) => {
         for (const row of data) {
           row.date = new Date(row.date).toLocaleDateString();
           row.name = row.materialId.name;
-          console.log(row);
         }
-  
         setMaterialsData(data);
       });
-    }, [searchValue]);
+  }, [location]);
 
-    const getMaterials = () => {
-      let rows = JSON.parse(JSON.stringify(materialsData));
-  
-      if (searchValue.trim() !== '') {
-        rows = rows.filter((row : any) =>
-          row.name
-            .trim()
-            .toLowerCase()
-            .includes(searchValue.trim().toLowerCase())
-        );
-      }
-  
-      rows.sort((a : any, b : any) => {
-        const dateA = a.date;
-        const dateB = b.date;
-        return dateA < dateB ? -1 : 1;
-      });
-  
-      return rows;
+  const getMaterials = () => {
+    let rows = JSON.parse(JSON.stringify(materialsData));
+
+    if (searchValue.trim() !== '') {
+      rows = rows.filter((row : any) =>
+        row.name
+          .trim()
+          .toLowerCase()
+          .includes(searchValue.trim().toLowerCase())
+      );
     }
+
+    rows.sort((a : any, b : any) => {
+      const dateA = a.date;
+      const dateB = b.date;
+      return dateA < dateB ? -1 : 1;
+    });
+
+    return rows;
+  };
 
   const onSearch = (e : React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
@@ -64,13 +67,13 @@ export const MaterialsInventory = () => {
           placeholder='Search for a material'
           onChange={onSearch}
           style={{ marginBottom: 18 }} />
-        { tableData.length > 0 ?
-        <Line
-          data={getMaterials()}
-          xField='date'
-          yField='stock'
-          seriesField='name'
-          style={{ marginBottom: '48px' }} /> :
+        {getMaterials().length > 0 ?
+          <Line
+            data={getMaterials()}
+            xField='date'
+            yField='stock'
+            seriesField='name'
+            style={{ marginBottom: '48px' }} /> :
           <span>No material timeline was found.</span>
         }
       </Card>
