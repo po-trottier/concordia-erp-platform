@@ -138,6 +138,11 @@ export const EditProductModal = (props : { product : ProductEntry }) => {
     });
   };
 
+  const handleCancel = () => {
+    setIsModalVisible(false);
+    form.resetFields();
+  };
+
   return (
     <div>
       <Button type='ghost' size='small' onClick={() => setIsModalVisible(true)} style={{ width: 60 }}>
@@ -146,6 +151,7 @@ export const EditProductModal = (props : { product : ProductEntry }) => {
 
       <Modal
         title='Edit a Product'
+        onCancel={handleCancel}
         visible={isModalVisible}
         footer={[
           <Button
@@ -158,7 +164,7 @@ export const EditProductModal = (props : { product : ProductEntry }) => {
           <Button
             key='cancel'
             type='ghost'
-            onClick={() => setIsModalVisible(false)}>
+            onClick={handleCancel}>
             Cancel
           </Button>,
           <Button

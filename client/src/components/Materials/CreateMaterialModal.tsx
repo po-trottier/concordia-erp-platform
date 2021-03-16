@@ -6,6 +6,7 @@ import { MaterialImageUploader } from './MaterialImageUploader';
 import { RootState } from '../../store/Store';
 import { setSelected } from '../../store/slices/UploadSlice';
 import { addMaterialEntry } from '../../store/slices/MaterialListSlice';
+import { addMaterialQuantity } from '../../store/slices/MaterialQuantitiesSlice';
 import axios from '../../plugins/Axios';
 
 export const CreateMaterialModal = () => {
@@ -57,6 +58,10 @@ export const CreateMaterialModal = () => {
           const newMaterial = data;
           newMaterial.id = newMaterial['_id'];
           dispatch(addMaterialEntry(newMaterial));
+          dispatch(addMaterialQuantity({
+            materialId: newMaterial.id,
+            quantity: 0
+          }));
           setIsModalVisible(false);
           message.success('The material was successfully added.');
           dispatch(setSelected(undefined));
