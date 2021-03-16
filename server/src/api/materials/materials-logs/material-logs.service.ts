@@ -65,7 +65,9 @@ export class MaterialLogsService {
       { materialId, locationId, date },
       { $set: { stock }, $inc: { stockBought, stockUsed } },
       { new: true, upsert: true },
-    );
+    )
+    .populate('materialId')
+    .exec();
 
     return this.validateMaterialLogFound(
       updatedMaterialLog,
