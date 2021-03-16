@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Card, Input, message } from 'antd';
 
 import { ResponsiveTable } from '../ResponsiveTable';
+import { SellProductModal } from './SellProductModal';
 import { CustomerEntry } from '../../interfaces/CustomerEntry';
 import axios from '../../plugins/Axios';
 
@@ -65,11 +66,14 @@ export const CustomersList = () => {
 
     rows.forEach((r : any) => {
       r.actions = (
-        <div>
-          <Button type='primary' size='small' style={{ width: 100, marginRight: 8 }}>
-            Sell Products
-          </Button>
-          <Button type='ghost' size='small' style={{ width: 100 }}>
+        <div style={{ margin: '-4px -8px' }}>
+          <SellProductModal
+            customerId={r._id}
+            style={{ width: 100, margin: '4px 8px', display: 'inline-block' }} />
+          <Button
+            type='ghost'
+            size='small'
+            style={{ width: 100, margin: '4px 8px', display: 'inline-block' }}>
             Edit
           </Button>
         </div>
@@ -91,7 +95,7 @@ export const CustomersList = () => {
         style={{ marginBottom: 18 }} />
       {
         getCustomers().length > 0 ?
-          <ResponsiveTable rows={getCustomers()} cols={getColumns()} /> :
+          <ResponsiveTable values={getCustomers()} columns={getColumns()} /> :
           <span>No customers were found.</span>
       }
     </Card>
