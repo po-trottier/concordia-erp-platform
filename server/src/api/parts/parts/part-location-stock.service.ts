@@ -103,6 +103,9 @@ export class PartLocationStockService {
       }
     }
 
+    const session = await this.partLocationStockModel.startSession();
+    session.startTransaction();
+
     const updatedPartLocationStock = await this.partLocationStockModel.findOneAndUpdate(
       { partId, locationId },
       { $inc: { stock: netStockChange } },
@@ -121,6 +124,8 @@ export class PartLocationStockService {
 
       await this.partLogsService.update(updatePartLogDto);
     }
+
+    session.endSession();
 
     return this.validatePartLocationStockFound(
       updatedPartLocationStock,
