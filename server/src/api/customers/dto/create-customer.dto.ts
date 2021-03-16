@@ -7,13 +7,17 @@ export class CreateCustomerDto {
 
   @IsNotEmpty()
   @IsInt()
-  sold: string;
+  id: number;
 
   @IsNotEmpty()
   @IsInt()
-  paid: string;
+  sold: number;
+
+  @IsNotEmpty()
+  @IsInt()
+  paid: number;
 
   @IsDefined()
   @IsInt()
-  balance: string;
+  balance: number;
 }
