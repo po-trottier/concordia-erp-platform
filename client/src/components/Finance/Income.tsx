@@ -1,74 +1,56 @@
-import React, { useEffect, useState } from 'react';
-import { Card, Statistic } from 'antd';
-
-import { FinanceEntry } from '../../interfaces/FinanceEntry';
-import { ResponsiveTable } from '../ResponsiveTable';
+import React, {useEffect, useState} from 'react';
+import { Card, Checkbox, message, Statistic, Switch } from 'antd';
+import {ResponsiveTable} from '../ResponsiveTable';
+import axios from "../../plugins/Axios";
+import {ProductOrder} from "../../interfaces/ProductOrder";
 
 export const Income = () => {
+  const emptyData : ProductOrder[] = [];
   const [balance, setBalance] = useState(0);
+  const [productOrderData, setProductOrderData] = useState(emptyData);
+  const [updated, setUpdated] = useState(false);
+  const [showPaid, setShowPaid] = useState(false);
 
   useEffect(() => {
-    let val = 0;
-    getRows().forEach((row : FinanceEntry) => {
-      if (row.balance) {
-        val += row.balance;
-      }
-    });
-    setBalance(val);
-  }, []);
+    axios.get('/orders/products/all')
+      .then((res) => {
+        setProductOrderData(res.data)
+        let balance = 0;
+        res.data.forEach((d: any) => {
+          if(!d.isPaid)
+            balance += d.amountDue;
+        })
+        setBalance(balance);
+      })
+      .catch(err => {
+        message.error('Something went wrong while fetching the list of accounts payables.');
+        console.error(err);
+      });
+    setUpdated(true);
+  }, [updated]);
 
   const getColumns = () => ({
-    buyer: 'Buyer',
-    date: 'Date Processed',
+    customerName: 'Customer',
+    dateOrdered: 'Date Ordered',
     dateDue: 'Due Date',
-    billed: 'Billed',
-    paid: 'Paid',
-    balance: 'Balance'
+    amountDue: 'Amount',
+    isPaid: "Paid",
   });
 
-  const getRows = () : FinanceEntry[] => {
-    const rows = [
-      {
-        date: (new Date('2021-01-22')).toLocaleDateString(),
-        billed: 30500,
-        paid: 10000,
-        buyer: 'Mark\'s Bike Store',
-        dateDue: (new Date('2021-02-22')).toLocaleDateString(),
-      },
-      {
-        date: (new Date('2021-01-25')).toLocaleDateString(),
-        billed: 4500,
-        paid: 3000,
-        buyer: 'Sports Experts',
-        dateDue: (new Date('2021-02-17')).toLocaleDateString(),
-      },
-      {
-        date: (new Date('2021-01-28')).toLocaleDateString(),
-        billed: 250500,
-        paid: 102500,
-        buyer: 'Walmart',
-        dateDue: (new Date('2021-03-03')).toLocaleDateString(),
-      },
-      {
-        date: (new Date('2021-01-30')).toLocaleDateString(),
-        billed: 25200,
-        paid: 12500,
-        buyer: 'Giant Montreal',
-        dateDue: (new Date('2021-02-21')).toLocaleDateString(),
-      },
-      {
-        date: (new Date('2021-01-21')).toLocaleDateString(),
-        billed: 36200,
-        paid: 14000,
-        buyer: 'Zellers',
-        dateDue: (new Date('2021-03-04')).toLocaleDateString(),
-      },
-    ];
-    rows.forEach((row : FinanceEntry) => {
-      row.balance = row.billed - row.paid;
+  const getOrders = () => {
+    const data = JSON.parse(JSON.stringify(productOrderData));
+    const orders: any[] = [];
+    data.forEach((m : any) => {
+      if(!m.isPaid || showPaid) {
+        m.dateOrdered = m.dateOrdered.split("T")[0];
+        m.dateDue = m.dateDue.split("T")[0];
+        m.customerName = m.customerId;
+        m.isPaid = <Checkbox checked={m.isPaid} />;
+        orders.push(m);
+      }
     });
-    return rows;
-  };
+    return orders;
+}
 
   return (
     <div>
@@ -77,7 +59,15 @@ export const Income = () => {
         <Statistic title='Accounts Receivable Balance (CAD)' value={balance} precision={2} />
       </Card>
       <Card>
-        <ResponsiveTable cols={getColumns()} rows={getRows()} />
+        <div style={{ margin: '24px 0', textAlign:'right'}}>
+          <span>Show Paid Orders</span>
+          <Switch onChange={(val:boolean) => {
+            setShowPaid(val)
+          }} style={{ marginLeft: 10 }} />
+        </div>
+        {getOrders().length > 0 ?
+          <ResponsiveTable cols={getColumns()} rows={getOrders()} />
+        : <div>No orders were found.</div>}
       </Card>
     </div>
   );
