@@ -10,10 +10,10 @@ import {
 import { MaterialOrdersService } from './material-orders.service';
 import { ProductOrdersService } from './product-orders.service';
 import { OrderDetailsService } from './order-details.service';
-import { CreateMaterialOrderListDto } from './dto/create-material-order-list.dto';
-import { CreateProductOrderListDto } from './dto/create-product-order-list.dto';
 import { Role } from '../roles/roles.enum';
 import { Roles } from '../roles/roles.decorator';
+import { CreateMaterialOrderDto } from './dto/create-material-order.dto';
+import { CreateProductOrderDto } from './dto/create-product-order.dto';
 
 /**
  * Controller class of the Order entity
@@ -30,10 +30,10 @@ export class OrdersController {
   @Post('materials')
   createMaterialOrder(
     @Body(ValidationPipe)
-    createMaterialOrderListDto: CreateMaterialOrderListDto,
+    createMaterialOrderDto: CreateMaterialOrderDto[],
   ) {
     return this.materialOrderService.createMaterialOrder(
-      createMaterialOrderListDto,
+      createMaterialOrderDto,
     );
   }
 
@@ -57,10 +57,10 @@ export class OrdersController {
   @Roles(Role.ACCOUNTANT, Role.SYSTEM_ADMINISTRATOR)
   @Post('products')
   createProductOrder(
-    @Body(ValidationPipe) createProductOrderListDto: CreateProductOrderListDto,
+    @Body(ValidationPipe) createProductOrderDto: CreateProductOrderDto[],
   ) {
     return this.productOrderService.createProductOrder(
-      createProductOrderListDto,
+      createProductOrderDto,
     );
   }
 

@@ -6,7 +6,6 @@ import {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   ProductOrderDocument,
 } from './schemas/product-orders.schema';
-import { CreateProductOrderListDto } from './dto/create-product-order-list.dto';
 import { CreateProductOrderDto } from './dto/create-product-order.dto';
 
 @Injectable()
@@ -17,11 +16,11 @@ export class ProductOrdersService {
   ) {}
 
   async createProductOrder(
-    createProductOrderListDto: CreateProductOrderListDto,
+    createProductOrderDto: CreateProductOrderDto[],
   ): Promise<ProductOrder[]> {
     const createdOrders: ProductOrder[] = [];
 
-    for (const ProductOrder of createProductOrderListDto.orders) {
+    for (const ProductOrder of createProductOrderDto) {
       const createdOrder = new this.ProductOrderModel(ProductOrder);
       createdOrders.push(await createdOrder.save());
     }

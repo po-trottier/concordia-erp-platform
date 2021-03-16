@@ -14,7 +14,6 @@ import {
 } from './schemas/product-orders.schema';
 import { ProductOrdersService } from './product-orders.service';
 import { OrderDetailsService } from './order-details.service';
-import { MaterialsModule } from '../materials/materials.module';
 
 /**
  * Contains all logic and files related to finance
@@ -25,7 +24,6 @@ import { MaterialsModule } from '../materials/materials.module';
       { name: MaterialOrder.name, schema: MaterialOrderSchema },
       { name: ProductOrder.name, schema: ProductOrderSchema },
     ]),
-    MaterialsModule,
     // ENV Support
     ConfigModule.forRoot({ validate, cache: true }),
   ],

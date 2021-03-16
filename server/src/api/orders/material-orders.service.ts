@@ -6,7 +6,6 @@ import {
   MaterialOrderDocument,
 } from './schemas/material-orders.schema';
 import { CreateMaterialOrderDto } from './dto/create-material-order.dto';
-import { CreateMaterialOrderListDto } from './dto/create-material-order-list.dto';
 
 @Injectable()
 export class MaterialOrdersService {
@@ -16,19 +15,15 @@ export class MaterialOrdersService {
   ) {}
 
   async createMaterialOrder(
-    createMaterialOrderListDto: CreateMaterialOrderListDto,
+    createMaterialOrderDto: CreateMaterialOrderDto[],
   ): Promise<MaterialOrder[]> {
     const createdOrders: MaterialOrder[] = [];
 
-    for (const materialOrder of createMaterialOrderListDto.orders) {
+    for (const materialOrder of createMaterialOrderDto) {
       const createdOrder = new this.materialOrderModel(materialOrder);
       createdOrders.push(await createdOrder.save());
     }
     return createdOrders;
-  }
-
-  async findMaterialOrders(): Promise<MaterialOrder[]> {
-    return await this.materialOrderModel.find().exec();
   }
 
   async findAll(): Promise<MaterialOrder[]> {
