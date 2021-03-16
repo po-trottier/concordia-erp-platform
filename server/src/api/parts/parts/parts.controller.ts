@@ -30,44 +30,15 @@ export class PartsController {
   }
 
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
-  @Get('stock/:locationId')
-  findAllLocationStock(@Param('locationId') locationId: string) {
-    return this.partLocationStockService.findAll(locationId);
-  }
-
-  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
-  @Get()
-  findAll() {
-    return this.partsService.findAll();
-  }
-
-  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
-  @Get(':partId/stock/:locationId')
-  findOneLocationStock(
-    @Param('partId') partId: string,
-    @Param('locationId') locationId: string,
-  ) {
-    return this.partLocationStockService.findOne(partId, locationId);
-  }
-
-  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.partsService.findOne(id);
   }
 
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
-  @Patch(':partId/stock/:locationId')
-  updateStock(
-    @Param('partId') partId: string,
-    @Param('locationId') locationId: string,
-    @Body(ValidationPipe) updatePartStockDto: UpdatePartStockDto,
-  ) {
-    return this.partLocationStockService.update(
-      partId,
-      locationId,
-      updatePartStockDto,
-    );
+  @Get()
+  findAll() {
+    return this.partsService.findAll();
   }
 
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
@@ -83,5 +54,36 @@ export class PartsController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.partsService.remove(id);
+  }
+
+  // STOCK ENDPOINTS
+
+  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
+  @Get('stock/:locationId')
+  findAllLocationStock(@Param('locationId') locationId: string) {
+    return this.partLocationStockService.findAll(locationId);
+  }
+
+  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
+  @Get('stock/:locationId/:partId')
+  findOneLocationStock(
+    @Param('partId') partId: string,
+    @Param('locationId') locationId: string,
+  ) {
+    return this.partLocationStockService.findOne(partId, locationId);
+  }
+
+  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
+  @Patch('stock/:locationId/:partId')
+  updateStock(
+    @Param('partId') partId: string,
+    @Param('locationId') locationId: string,
+    @Body(ValidationPipe) updatePartStockDto: UpdatePartStockDto,
+  ) {
+    return this.partLocationStockService.update(
+      partId,
+      locationId,
+      updatePartStockDto,
+    );
   }
 }

@@ -18,8 +18,13 @@ export class PartLogsService {
   /**
    * Retrieves all partLog entries using mongoose partLogModel
    */
-  async findAll(): Promise<PartLog[]> {
-    return this.partLogModel.find();
+  async findAll(locationId: string): Promise<PartLog[]> {
+    return await this.partLogModel
+      .find({
+        locationId,
+      })
+      .populate('partId')
+      .exec();
   }
 
   /**
@@ -27,19 +32,15 @@ export class PartLogsService {
    *
    * @param partId the id of the corresponding part
    * @param locationId the id of the location
-   * @param date the date in history
    */
-  async findOne(
-    partId: string,
-    locationId: string,
-    date: Date,
-  ): Promise<PartLog> {
-    const partLog = await this.partLogModel.findOne({
-      partId,
-      locationId,
-      date,
-    });
-    return this.validatePartLogFound(partLog, partId, locationId, date);
+  async findOne(partId: string, locationId: string): Promise<PartLog[]> {
+    return await this.partLogModel
+      .find({
+        partId,
+        locationId,
+      })
+      .populate('partId')
+      .exec();
   }
 
   /**
@@ -63,7 +64,12 @@ export class PartLogsService {
       { new: true, upsert: true },
     );
 
-    return this.validatePartLogFound(updatedPartLog, partId, locationId, date);
+    return this.validatePartLogFound(
+      updatedPartLog,
+      partId,
+      locationId,
+      date.toString(),
+    );
   }
 
   /**
@@ -78,11 +84,11 @@ export class PartLogsService {
     partLogResult: any,
     partId: string,
     locationId: string,
-    date: Date,
+    date: string,
   ) {
     if (!partLogResult) {
       throw new NotFoundException(
-        `PartLog entry with partId ${partId} and locationId ${locationId} on ${date.toString()} not found`,
+        `PartLog entry with partId ${partId} and locationId ${locationId} on ${date} not found`,
       );
     } else {
       return partLogResult;
