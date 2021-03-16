@@ -25,6 +25,9 @@ export const MaterialsCatalog = () => {
   useEffect(() => {
     axios.get('/materials')
       .then(({ data }) => {
+        data.forEach((m : any) => {
+          m.id = m._id
+        });
         axios.get('/materials/stock/' + location)
           .then((resp) => {
             data.forEach((mat : MaterialEntry) => {

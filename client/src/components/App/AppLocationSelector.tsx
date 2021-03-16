@@ -183,20 +183,24 @@ export const AppLocationSelector = (props : HTMLProps<HTMLDivElement>) => {
             {(fields, { add, remove }) => (
               <div>
                 {fields.map((field) => (
-                  <div key={field.key} style={{ marginBottom: 16 }}>
-                    {fields.length > 1 ? (
-                      <MinusCircleTwoTone
-                        style={{ float: 'right', fontSize: 16, lineHeight: '32px' }}
-                        twoToneColor='red'
-                        onClick={() => remove(field.name)} />
-                    ) : null}
+                  <div
+                    key={field.key}
+                    style={{
+                      marginBottom: 16,
+                      display: 'flex',
+                      alignItems: 'flex-end',
+                    }}>
                     <Form.Item
                       {...field}
                       key={'name_' + field.key}
                       name={[field.name, 'name']}
                       fieldKey={[field.fieldKey, 'name']}
                       label='Location Name'
-                      style={{ marginBottom: 0, marginRight: fields.length > 1 ? 36 : 0 }}>
+                      style={{
+                        marginBottom: 0,
+                        marginRight: fields.length > 1 ? 24 : 0,
+                        width: '100%'
+                      }}>
                       <Input placeholder='Location Name' />
                     </Form.Item>
                     <Form.Item
@@ -205,6 +209,16 @@ export const AppLocationSelector = (props : HTMLProps<HTMLDivElement>) => {
                       name={[field.name, '_id']}
                       fieldKey={[field.fieldKey, '_id']}
                       style={{ display: 'none' }} />
+                    {fields.length > 1 ? (
+                      <MinusCircleTwoTone
+                        style={{
+                          float: 'right',
+                          fontSize: 18,
+                          lineHeight: '30px'
+                        }}
+                        twoToneColor='red'
+                        onClick={() => remove(field.name)} />
+                    ) : null}
                   </div>
                 ))}
                 <Form.Item style={{ marginBottom: 0 }}>
