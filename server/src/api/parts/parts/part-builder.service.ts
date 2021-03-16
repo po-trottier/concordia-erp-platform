@@ -5,6 +5,7 @@ import { BuildPartDto } from './dto/build-part.dto';
 import { PartsService } from './parts.service';
 import { MaterialLocationStockService } from '../../materials/materials/material-location-stock.service';
 import {PartLocationStockService} from './part-location-stock.service';
+import {Part} from "./schemas/part.schema";
 
 /**
  * Used by the PartsController, handles part data storage and retrieval.
@@ -20,60 +21,65 @@ export class PartBuilderService {
   /**
    * builds a part if enough materials are present
    *
-   * @param partId of the part
    * @param locationId of the location
-   * @param buildPartDto
+   * @param buildPartOrders
    */
   async build(
-    partId: string,
     locationId: string,
-    buildPartDto: BuildPartDto,
+    buildPartOrders: BuildPartDto[],
   ): Promise<Object> {
-    const { stockBuilt } = buildPartDto;
-
-    // checking if we can do the operation
-    const part = await this.partsService.findOne(partId);
-    for (let i = 0; i < part.materials.length; i++) {
-      const material = part.materials[i];
-      const totalMaterialsCount = material.quantity * stockBuilt;
-      const materialLocationStock = await this.materialLocationStockService.findOne(
-        material.materialId,
-        locationId,
-      );
-      if (materialLocationStock.stock < totalMaterialsCount) {
-        throw new BadRequestException({error: 'stock of materials is not sufficient'});
+    const validatedBuildOrders: {stockBuilt: number, partId: string, part: Part}[] = [];
+    // checking every build order to see if there are sufficient materials in the db
+    // at the same time populate validatedBuildOrders (add part to each object)
+    for (const buildOrder of buildPartOrders) {
+      const { stockBuilt, partId } = buildOrder;
+      const part = await this.partsService.findOne(partId);
+      for (const material of part.materials) {
+        const totalMaterialsCount = material.quantity * stockBuilt;
+        const materialLocationStock = await this.materialLocationStockService.findOne(material.materialId, locationId);
+        if (materialLocationStock.stock < totalMaterialsCount) {
+          throw new BadRequestException({error: 'stock of materials is not sufficient'});
+        }
       }
+      validatedBuildOrders.push({...buildOrder, part});
     }
 
-    // update part stock
-    const updatePartStockDto: UpdatePartStockDto = {
-      stockBuilt: stockBuilt,
-      stockUsed: 0
-    };
+    // completing every build order
+    const buildResults = [];
+    for (const buildOrder of validatedBuildOrders) {
+      const { stockBuilt, partId, part } = buildOrder;
+      // update part stock
+      const updatePartStockDto: UpdatePartStockDto = {
+        stockBuilt: stockBuilt,
+        stockUsed: 0
+      };
 
-    const updatedPartLocationStock = await this.partLocationStockService.update(
-      partId,
-      locationId,
-      updatePartStockDto,
-    );
-
-    // update materials stock
-    const updatedMaterialLocationStocks = [];
-    const updateMaterialStockDto: UpdateMaterialStockDto = {
-      stockBought: 0,
-      stockUsed: null
-    };
-
-    for (let i = 0; i < part.materials.length; i++) {
-      const material = part.materials[i];
-      updateMaterialStockDto.stockUsed = material.quantity * stockBuilt;
-      const updatedMaterialLocationStock = await this.materialLocationStockService.update(
-        material.materialId,
+      const updatedPartLocationStock = await this.partLocationStockService.update(
+        partId,
         locationId,
-        updateMaterialStockDto,
+        updatePartStockDto,
       );
-      updatedMaterialLocationStocks.push(updatedMaterialLocationStock);
+
+      // update parts stock
+
+      let materialUpdates = []
+      for (const material of part.materials) {
+        let updateMaterialStockDto: UpdateMaterialStockDto = {
+          materialId: material.materialId,
+          stockBought: 0,
+          stockUsed: material.quantity * stockBuilt
+        };
+        materialUpdates.push(updateMaterialStockDto);
+      }
+
+      await this.materialLocationStockService.update(
+        locationId,
+        materialUpdates
+      );
+
+      buildResults.push(updatedPartLocationStock);
     }
-    return { updatedPartLocationStock, updatedMaterialLocationStocks };
+
+    return buildResults;
   }
 }

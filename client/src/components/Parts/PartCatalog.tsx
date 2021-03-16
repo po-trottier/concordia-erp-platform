@@ -70,6 +70,15 @@ export const PartCatalog = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updated, location]);
 
+  const updatePartStocks = (response: any) => {
+    const clone = JSON.parse(JSON.stringify(parts));
+    response.data.forEach((updatedProductLocationStock: any) => {
+      const foundClone = clone.find((clone: any) => clone.id === updatedProductLocationStock.productId._id);
+      foundClone.stock = updatedProductLocationStock.stock;
+    });
+    dispatch(setPartList(clone));
+  }
+
   const getMaterials = (part : PartEntry) => {
     const mats = materialsData.filter((m) => part.materials.find((i) => i.materialId === m.id));
     if (mats.length < 1) {
@@ -88,21 +97,6 @@ export const PartCatalog = () => {
     } else {
       setPartOrders(partOrders.concat({ partId, buildAmount }));
     }
-  };
-
-  const buildProducts = () => {
-    partOrders.forEach((order) => {
-      axios.patch('products/' + order.partId + '/build/' + location, {
-        stockBuilt: order.buildAmount,
-      })
-        .then((data) => {
-          console.log(data);
-          message.success('part built successfully!');
-        }).catch((err) => {
-        message.error('not enough materials to build part');
-        console.log(err);
-      });
-    });
   };
 
   const getParts = () => {
@@ -133,6 +127,22 @@ export const PartCatalog = () => {
     setSearchValue(value);
   };
 
+  const buildParts = () => {
+    partOrders.forEach((order) => {
+      axios.patch('parts/' + order.partId + '/build/' + location, {
+        stockBuilt: order.buildAmount,
+      })
+        .then((data) => {
+          console.log(data);
+          message.success('part built successfully!');
+        }).catch((err) => {
+        message.error('not enough materials to build part');
+        console.log(err);
+      });
+    });
+  };
+
+
   const columns = {
     name: 'Part Name',
     materialsString: 'Materials',
@@ -155,7 +165,7 @@ export const PartCatalog = () => {
         }
       </Card>
       <Button
-        onClick={buildProducts}
+        onClick={buildParts}
         type='primary'
         style={{ marginTop: 16, float: 'right' }}>
         Build Parts

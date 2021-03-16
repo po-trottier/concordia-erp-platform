@@ -1,8 +1,12 @@
-import { IsNotEmpty, IsInt, IsPositive} from 'class-validator';
+import {IsNotEmpty, IsInt, IsPositive, IsString} from 'class-validator';
 
 export class BuildPartDto {
   @IsNotEmpty()
   @IsInt()
   @IsPositive()
   stockBuilt: number;
+
+  @IsString()
+  @IsNotEmpty()
+  partId: string;
 }
