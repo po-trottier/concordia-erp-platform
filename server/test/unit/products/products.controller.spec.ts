@@ -1,8 +1,10 @@
 import { ProductsController } from '../../../src/api/products/products/products.controller';
 import { ProductsService } from '../../../src/api/products/products/products.service';
 import { ProductLocationStockService } from '../../../src/api/products/products/product-location-stock.service';
+import { ProductBuilderService } from '../../../src/api/products/products/product-builder.service';
 import { CreateProductDto } from '../../../src/api/products/products/dto/create-product.dto';
 import { UpdateProductDto } from '../../../src/api/products/products/dto/update-product.dto';
+import { BuildProductDto } from '../../../src/api/products/products/dto/build-product.dto';
 import { UpdateProductStockDto } from '../../../src/api/products/products/dto/update-product-stock.dto';
 import { ProductLogsService } from '../../../src/api/products/products-logs/product-logs.service';
 import { Model } from 'mongoose';
@@ -16,16 +18,31 @@ import { ProductLogDocument } from '../../../src/api/products/products-logs/sche
 import { LocationDocument } from '../../../src/api/locations/schemas/location.schema';
 import { LocationsService } from '../../../src/api/locations/locations.service';
 
+import { PartsService } from '../../../src/api/parts/parts/parts.service';
+import { PartLogsService } from '../../../src/api/parts/parts-logs/part-logs.service';
+import { PartLocationStockService } from '../../../src/api/parts/parts/part-location-stock.service';
+import { PartDocument } from '../../../src/api/parts/parts/schemas/part.schema';
+import { PartLogDocument } from '../../../src/api/parts/parts-logs/schemas/part-log.schema';
+import { PartLocationStockDocument } from '../../../src/api/parts/parts/schemas/part-location-stock.schema';
+
 describe('ProductsController', () => {
   let productsController: ProductsController;
   let productsService: ProductsService;
+  let productDocument: Model<ProductDocument>
   let productLocationStockService: ProductLocationStockService;
   let productLogsService: ProductLogsService;
-  let locationsService: LocationsService;
-  let partsDocumentModel: Model<ProductDocument>;
+  let productBuilderService: ProductBuilderService;
   let productLocationStockDocument: Model<ProductLocationStockDocument>
   let productLogDocument: Model<ProductLogDocument>
   let locationDocument: Model<LocationDocument>
+
+  let partsService: PartsService;
+  let partLogsService: PartLogsService;
+  let locationsService: LocationsService;
+  let partLocationStockService: PartLocationStockService;
+  let partLogDocument: Model<PartLogDocument>;
+  let partsDocumentModel: Model<PartDocument>;
+  let partLocationStockDocument: Model<PartLocationStockDocument>
 
   const dummyProduct: Product = {
     name: 'Canondale Bike',
@@ -41,11 +58,17 @@ describe('ProductsController', () => {
   }
 
   beforeEach(async () => {
-    productsService = new ProductsService(partsDocumentModel);
+    partsService = new PartsService(partsDocumentModel);
+    partLogsService = new PartLogsService(partLogDocument);
+    locationsService = new LocationsService(locationDocument);
+    partLocationStockService = new PartLocationStockService(partLocationStockDocument, partsService, partLogsService, locationsService);
+
+    productsService = new ProductsService(productDocument);
     productLogsService = new ProductLogsService(productLogDocument);
     locationsService = new LocationsService(locationDocument);
     productLocationStockService = new ProductLocationStockService(productLocationStockDocument, productsService, productLogsService, locationsService);
-    productsController = new ProductsController(productsService, productLocationStockService);
+    productBuilderService = new ProductBuilderService(productsService, productLocationStockService, partLocationStockService);
+    productsController = new ProductsController(productsService, productLocationStockService, productBuilderService);
   });
 
   describe('findAll', () => {
@@ -86,6 +109,26 @@ describe('ProductsController', () => {
         .mockImplementation(async () => await result);
 
       expect(await productsController.create(newProduct)).toBe(result);
+    });
+  });
+
+  describe('build', () => {
+    it('Should build a new a product from parts at a location', async () => {
+      const result: any = {
+        stockBuilt: 10,
+        productId: dummyProductLocationStock.productId,
+      };
+
+      const newBuiltProduct = new BuildProductDto();
+      newBuiltProduct.stockBuilt = result.stockBuilt;
+      newBuiltProduct.productId = result.productId;
+      const newBuiltProductList: BuildProductDto[] = [newBuiltProduct];
+
+      jest
+        .spyOn(productBuilderService, 'build')
+        .mockImplementation(async () => await result);
+
+      expect(await productsController.build(dummyProductLocationStock.locationId, newBuiltProductList)).toBe(result);
     });
   });
 
