@@ -31,7 +31,6 @@ export class PartBuilderService {
     const validatedBuildOrders: {buildAmount: number, partId: string, part: Part}[] = [];
     // checking every build order to see if there are sufficient materials in the db
     // at the same time populate validatedBuildOrders (add part to each object)
-    console.log(buildPartOrders)
     for (const buildOrder of buildPartOrders) {
       const { buildAmount, partId } = buildOrder;
       const part = await this.partsService.findOne(partId);
@@ -49,7 +48,6 @@ export class PartBuilderService {
     const buildResults = [];
     for (const buildOrder of validatedBuildOrders) {
       const { buildAmount, partId, part } = buildOrder;
-      console.log(buildOrder)
       // update part stock
       const updatePartStockDto: UpdatePartStockDto = {
         stockBuilt: buildAmount,

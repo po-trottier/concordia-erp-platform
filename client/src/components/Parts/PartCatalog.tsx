@@ -67,16 +67,18 @@ export const PartCatalog = () => {
         message.error('Something went wrong while fetching the list of materials.');
         console.error(err);
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [updated, location]);
 
   const updatePartStocks = (response: any) => {
-    const clone = JSON.parse(JSON.stringify(parts));
-    response.data.forEach((updatedProductLocationStock: any) => {
-      const foundClone = clone.find((clone: any) => clone.id === updatedProductLocationStock.productId._id);
-      foundClone.stock = updatedProductLocationStock.stock;
+    debugger;
+    const clonesOfParts = JSON.parse(JSON.stringify(parts));
+    response.data.forEach((updatedPartLocationStock: any) => {
+      const matchingPart = clonesOfParts.find((clone: any) => clone.id === updatedPartLocationStock.partId._id);
+      // quantity is what we display on the frontend
+      matchingPart.quantity = updatedPartLocationStock.stock;
     });
-    dispatch(setPartList(clone));
+    dispatch(setPartList(clonesOfParts));
   }
 
   const getMaterials = (part : PartEntry) => {
