@@ -1,75 +1,96 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Card, Input } from 'antd';
+import { Card, Input, message } from 'antd';
 
 import { ResponsiveTable } from '../ResponsiveTable';
+import { SellProductModal } from './SellProductModal';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../store/Store';
+import { setCustomerList } from '../../store/slices/CustomerListSlice';
+import axios from '../../plugins/Axios';
 import { CustomerEntry } from '../../interfaces/CustomerEntry';
+import { EditCustomerModal } from "./EditCustomerModal";
 
 const { Search } = Input;
 
 export const CustomersList = () => {
+  const dispatch = useDispatch();
 
-  const getColumns = () => ({
-    company: 'Company',
-    sold: 'Items Bought',
-    paid: 'Paid',
-    balance: 'Balance',
-    actions: 'Actions',
-  });
+  const customers = useSelector((state : RootState) => state.customerList.list);
+  const updated = useSelector((state : RootState) => state.customerList.updated);
 
-  const getRows = () : CustomerEntry[] => {
-    const customers = [
-      {
-        company: 'Sports Experts',
-        sold: 123,
-        paid: 1504,
-        balance: -421,
-      },
-      {
-        company: 'Sail',
-        sold: 65,
-        paid: 789,
-        balance: -150,
-      },
-      {
-        company: 'Decathlon',
-        sold: 174,
-        paid: 2407,
-        balance: 0,
-      },
-      {
-        company: 'Amazon CA',
-        sold: 1125,
-        paid: 11057,
-        balance: 0,
-      },
-      {
-        company: 'Ebay CA',
-        sold: 155,
-        paid: 1674,
-        balance: -240,
-      },
-    ];
-    customers.forEach((customer : any) => {
-      customer.actions = (<Button type='ghost'>Sell Items</Button>);
-    });
-    return customers;
-  };
-
-  const [tableData, setTableData] = useState(getRows());
   const [searchValue, setSearchValue] = useState('');
 
   useEffect(() => {
-    let rows = getRows();
+    axios.get('/customers')
+      .then(({data}) => {
+        axios.get('/orders/products/all')
+          .then((resp) => {
+            const orders = resp.data;
+            data.forEach((c : CustomerEntry) => {
+              c.balance = 0;
+              c.paid = 0;
+              c.items = 0;
+              const filtered = orders.filter((o : any) => o.customerId && o.customerId._id === c._id);
+              filtered.forEach((o : any) => {
+                const totalPrice =  o.productId.price * o.quantity;
+                if (c.balance !== undefined)
+                  c.balance -= o.isPaid ? 0 : totalPrice;
+                if (c.paid !== undefined)
+                  c.paid += o.isPaid ? totalPrice : 0;
+                if (c.items !== undefined)
+                  c.items += o.quantity;
+              })
+            })
+            dispatch(setCustomerList(data));
+          })
+          .catch((err) => {
+            console.error(err);
+            message.error('Something went wrong while getting the customer orders.');
+          });
+      })
+      .catch((err) => {
+        console.error(err);
+        message.error('Something went wrong while getting the list of customers.');
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [updated]);
+
+  const getCustomers = () => {
+    let rows : CustomerEntry[] = JSON.parse(JSON.stringify(customers));
+
     if (searchValue.trim() !== '') {
       rows = rows.filter(
-        (r) => r.company.trim().toLowerCase().includes(searchValue.trim().toLowerCase()));
+        (r) => r.name.trim().toLowerCase().includes(searchValue.trim().toLowerCase()));
     }
-    setTableData(rows);
-  }, [searchValue]);
+
+    rows.forEach((r) => {
+      r.actions = (
+        <div style={{ margin: '-4px -8px' }}>
+          <SellProductModal
+            customerId={r._id}
+            style={{ width: 100, margin: '4px 8px', display: 'inline-block' }} />
+          <EditCustomerModal
+            customer={r}
+            style={{ width: 100, margin: '4px 8px', display: 'inline-block' }} />
+        </div>
+      );
+    });
+
+    return rows;
+  }
 
   const onSearch = (e : React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
   };
+
+  const getColumns = () => ({
+    name: 'Company',
+    email: 'Email',
+    items: 'Items Bought',
+    paid: 'Amount Paid',
+    balance: 'Balance',
+    actions: 'Actions',
+  });
 
   return (
     <Card>
@@ -77,7 +98,11 @@ export const CustomersList = () => {
         placeholder='Search for a customer'
         onChange={onSearch}
         style={{ marginBottom: 18 }} />
-      <ResponsiveTable rows={tableData} cols={getColumns()} />
+      {
+        getCustomers().length > 0 ?
+          <ResponsiveTable values={getCustomers()} columns={getColumns()} /> :
+          <span>No customers were found.</span>
+      }
     </Card>
   );
 };

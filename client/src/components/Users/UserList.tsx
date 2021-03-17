@@ -74,7 +74,7 @@ export const UserList = () => {
           style={{ marginBottom: 18 }} />
         {
           getUserList().length > 0 ?
-            <ResponsiveTable rows={getUserList()} cols={getColumns()} /> :
+            <ResponsiveTable values={getUserList()} columns={getColumns()} /> :
             <span>No users were found.</span>
         }
       </Card>

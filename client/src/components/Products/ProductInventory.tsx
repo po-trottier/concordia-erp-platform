@@ -78,7 +78,7 @@ export const ProductInventory = () => {
         }
       </Card>
       <Card style={{ display: getProducts().length > 0 ? 'block' : 'none' }}>
-        <ResponsiveTable rows={getProducts()} cols={inventoryColumns} />
+        <ResponsiveTable values={getProducts()} columns={inventoryColumns} />
       </Card>
     </div>
   );

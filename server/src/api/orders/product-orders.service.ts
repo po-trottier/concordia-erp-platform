@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import {
@@ -8,6 +12,7 @@ import {
 import { CreateProductOrderDto } from './dto/create-product-order.dto';
 import { UpdateProductOrderDto } from './dto/update-product-order.dto';
 import { ProductsService } from '../products/products/products.service';
+import { ProductLocationStockService } from '../products/products/product-location-stock.service';
 
 @Injectable()
 export class ProductOrdersService {
@@ -15,6 +20,7 @@ export class ProductOrdersService {
     @InjectModel(ProductOrder.name)
     private productOrderModel: Model<ProductOrderDocument>,
     private readonly productsService: ProductsService,
+    private readonly productLocationStockService: ProductLocationStockService,
   ) {}
 
   getIncrement(day: number) {
@@ -43,13 +49,30 @@ export class ProductOrdersService {
   ): Promise<ProductOrder[]> {
     const createdOrders: ProductOrder[] = [];
 
+    // verifying that product stocks are enough
+    for (const productOrder of createProductOrderDto) {
+      const productLocationStock: any = await this.productLocationStockService.findOne(
+        productOrder.productId,
+        productOrder.locationId,
+      );
+      if (productLocationStock.stock < productOrder.quantity) {
+        throw new BadRequestException(
+          'There are not enough ' +
+            productLocationStock.productId.name +
+            ' to complete the order.',
+        );
+      }
+    }
+
+    // completing orders
     for (const productOrder of createProductOrderDto) {
       const order: any = productOrder;
       const product = await this.productsService.findOne(order.productId);
+      const dateOrdered = new Date(order.dateOrdered);
       order.amountDue = order.quantity * product.price;
-      order.dateDue =
-        order.dateOrdered.getDate() +
-        this.getIncrement(order.dateOrdered.getDay());
+      order.dateDue = new Date(order.dateOrdered).setDate(
+        dateOrdered.getDate() + this.getIncrement(dateOrdered.getDay()),
+      );
       const createdOrder = new this.productOrderModel(order);
       createdOrders.push(await createdOrder.save());
     }
@@ -58,13 +81,19 @@ export class ProductOrdersService {
   }
 
   async findAll(): Promise<ProductOrder[]> {
-    return await this.productOrderModel.find().populate('productId').exec();
+    return await this.productOrderModel
+      .find()
+      .populate('productId')
+      .populate('customerId')
+      .exec();
   }
 
   async findOne(id: string): Promise<ProductOrder> {
     const order = await this.productOrderModel
       .findById(id)
-      .populate('productId');
+      .populate('productId')
+      .populate('customerId')
+      .exec();
     return this.checkOrderFound(order, id);
   }
 

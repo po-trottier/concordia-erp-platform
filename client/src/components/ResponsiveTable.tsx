@@ -5,46 +5,48 @@ import '../styles/tables.css';
 
 export const ResponsiveTable = (props : TableProps) => {
 
-  const { cols, rows, ...rest } = props;
+  const { columns, values, ...rest } = props;
 
   const getColumns = () => {
-    const columns = Object.entries(cols).map(([key, val]) => {
+    const cols = Object.entries(columns).map(([key, val]) => {
       return (
         <th key={key}>{val}</th>
       );
     });
-    columns.unshift(<th key={'key'} />);
+    cols.unshift(<th key={'key'} />);
     return (
-      <tr>{columns}</tr>
+      <tr>{cols}</tr>
     );
   };
 
   const getRows = () => {
-    return rows.map((row, index) => {
-      const values = Object.entries(cols).map(([key, col]) => {
+    return values.map((row, index) => {
+      const vals = Object.entries(columns).map(([key, col]) => {
         return (
           <td key={key + index} data-label={col}>
             {row[key as keyof object] !== undefined ? row[key as keyof object] : <i>?</i>}
           </td>
         );
       });
-      values.unshift(<td key={'key' + index}>{index + 1}</td>);
+      vals.unshift(<td key={'key' + index}>{index + 1}</td>);
       return (
-        <tr key={'row' + index.toString()}>{values}</tr>
+        <tr key={'row' + index.toString()}>{vals}</tr>
       );
     });
   };
 
   return (
-    <div {...rest} style={{ overflowX: 'auto' }}>
-      <table className='responsive-table'>
-        <thead>
-        {getColumns()}
-        </thead>
-        <tbody>
-        {getRows()}
-        </tbody>
-      </table>
+    <div {...rest}>
+      <div style={{ overflowX: 'auto' }}>
+        <table className='responsive-table'>
+          <thead>
+          {getColumns()}
+          </thead>
+          <tbody>
+          {getRows()}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

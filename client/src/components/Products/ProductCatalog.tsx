@@ -145,7 +145,7 @@ export const ProductCatalog = () => {
           style={{ marginBottom: 18 }} />
         {
           getProducts().length > 0 ?
-            <ResponsiveTable rows={getProducts()} cols={columns} /> :
+            <ResponsiveTable values={getProducts()} columns={columns} /> :
             <span>No products were found.</span>
         }
       </Card>
