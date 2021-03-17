@@ -90,23 +90,23 @@ export class MaterialLocationStockService {
     locationId: string,
     updateMaterialStockDto: UpdateMaterialStockDto[],
   ): Promise<MaterialLocationStock> {
-    const newStocks = [];
+    const updatedStocks = [];
     for (let i = 0; i < updateMaterialStockDto.length; i++) {
       const { materialId, stockBought, stockUsed } = updateMaterialStockDto[i];
       const netStockChange = stockBought - stockUsed;
       if (netStockChange < 0) {
-        const currentMaterialLocationStock = await this.findOne(
+        const currentStock = await this.findOne(
           materialId,
           locationId,
         );
-        if (currentMaterialLocationStock.stock + netStockChange < 0) {
+        if (currentStock.stock + netStockChange < 0) {
           throw new BadRequestException(
-            `This operation would result in negative stock. Current stock: ${currentMaterialLocationStock.stock}, netStockChange: ${netStockChange}`,
+            `This operation would result in negative stock. Current stock: ${currentStock.stock}, netStockChange: ${netStockChange}`,
           );
         }
       }
 
-      const updatedMaterialLocationStock = await this.materialLocationStockModel
+      const updatedStock = await this.materialLocationStockModel
         .findOneAndUpdate(
           { materialId, locationId },
           { $inc: { stock: netStockChange } },
@@ -115,11 +115,11 @@ export class MaterialLocationStockService {
         .populate('materialId')
         .exec();
 
-      if (updatedMaterialLocationStock) {
+      if (updatedStock) {
         const updateMaterialLogDto: UpdateMaterialLogDto = {
           materialId,
           locationId,
-          stock: updatedMaterialLocationStock.stock,
+          stock: updatedStock.stock,
           stockBought,
           stockUsed,
           date: parse(format(new Date(), 'd/M/y'), 'dd/MM/yyyy', new Date()),
@@ -127,12 +127,12 @@ export class MaterialLocationStockService {
 
         await this.materialLogsService.update(updateMaterialLogDto);
 
-        newStocks.push(updatedMaterialLocationStock);
+        updatedStocks.push(updatedStock);
       }
     }
 
     return this.validateMaterialLocationStockFound(
-      newStocks,
+      updatedStocks,
       '"many IDs"',
       locationId,
     );

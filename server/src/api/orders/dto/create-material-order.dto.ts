@@ -10,6 +10,10 @@ export class CreateMaterialOrderDto {
   @IsString()
   materialId: string;
 
+  @IsNotEmpty()
+  @IsString()
+  locationId: string;
+
   @IsPositive()
   @IsInt()
   quantity: number;

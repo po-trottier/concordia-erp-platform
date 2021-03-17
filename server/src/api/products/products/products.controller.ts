@@ -123,14 +123,12 @@ export class ProductsController {
    * @param updateProductStockDto
    */
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
-  @Patch('stock/:locationId/:productId')
+  @Patch('stock/:locationId')
   updateStock(
-    @Param('productId') productId: string,
     @Param('locationId') locationId: string,
-    @Body(ValidationPipe) updateProductStockDto: UpdateProductStockDto,
+    @Body(ValidationPipe) updateProductStockDto: UpdateProductStockDto[],
   ) {
     return this.productLocationStockService.update(
-      productId,
       locationId,
       updateProductStockDto,
     );

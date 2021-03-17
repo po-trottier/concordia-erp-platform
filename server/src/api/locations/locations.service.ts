@@ -17,10 +17,10 @@ export class LocationsService {
   ) {}
 
   async onApplicationBootstrap(): Promise<void> {
-    await this.createDefaultUser();
+    await this.createDefaultLocation();
   }
 
-  async createDefaultUser(): Promise<void> {
+  async createDefaultLocation(): Promise<void> {
     const locations = await this.locationModel.find().limit(1);
     if (!locations || locations.length < 1) {
       const location = new CreateLocationDto();
