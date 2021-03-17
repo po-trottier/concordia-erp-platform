@@ -128,17 +128,13 @@ export const PartCatalog = () => {
   };
 
   const buildParts = () => {
-    partOrders.forEach((order) => {
-      axios.patch('parts/' + order.partId + '/build/' + location, {
-        stockBuilt: order.buildAmount,
-      })
-        .then((data) => {
-          console.log(data);
-          message.success('part built successfully!');
-        }).catch((err) => {
-        message.error('not enough materials to build part');
-        console.log(err);
-      });
+    axios.patch('parts/build/' + location, partOrders)
+      .then((data) => {
+        updatePartStocks(data);
+        message.success('The parts were built successfully.');
+      }).catch((err) => {
+      message.error('There are not enough materials to build the parts.');
+      console.log(err);
     });
   };
 
