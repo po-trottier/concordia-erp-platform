@@ -8,6 +8,7 @@ import {
 import { CreateProductOrderDto } from './dto/create-product-order.dto';
 import { UpdateProductOrderDto } from './dto/update-product-order.dto';
 import { ProductsService } from '../products/products/products.service';
+import { ProductLocationStockService } from '../products/products/product-location-stock.service';
 
 @Injectable()
 export class ProductOrdersService {
@@ -15,6 +16,7 @@ export class ProductOrdersService {
     @InjectModel(ProductOrder.name)
     private productOrderModel: Model<ProductOrderDocument>,
     private readonly productsService: ProductsService,
+    private readonly productLocationStockService: ProductLocationStockService,
   ) {}
 
   getIncrement(day: number) {
@@ -42,6 +44,10 @@ export class ProductOrdersService {
     createProductOrderDto: CreateProductOrderDto[],
   ): Promise<ProductOrder[]> {
     const createdOrders: ProductOrder[] = [];
+
+    for (const productOrder of createProductOrderDto) {
+      const productLocationStock = this.productLocationStockService.findOne(productOrder.productId, productOrder.locationId);
+    }
 
     for (const productOrder of createProductOrderDto) {
       const order: any = productOrder;
