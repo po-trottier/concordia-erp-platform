@@ -61,6 +61,15 @@ export class ProductOrdersService {
             productLocationStock.productId.name +
             ' to complete the order.',
         );
+      } else {
+        await productLocationStock.update(
+          productOrder.productId,
+          productOrder.locationId,
+          {
+            stockUsed: productLocationStock.stockUsed - productOrder.quantity,
+            stockBuilt: productLocationStock.stockBuilt,
+          },
+        );
       }
     }
 
