@@ -62,8 +62,8 @@ export class ProductLocationStockService {
 
       if (product && location) {
         productLocationStock = new this.productLocationStockModel({
-          productId,
-          locationId,
+          product,
+          location,
           stock: 0,
         });
         productLocationStock.save();

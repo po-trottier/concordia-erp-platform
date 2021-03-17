@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import {
@@ -47,9 +51,16 @@ export class ProductOrdersService {
 
     // verifying that product stocks are enough
     for (const productOrder of createProductOrderDto) {
-      const productLocationStock = await this.productLocationStockService.findOne(productOrder.productId, productOrder.locationId);
+      const productLocationStock: any = await this.productLocationStockService.findOne(
+        productOrder.productId,
+        productOrder.locationId,
+      );
       if (productLocationStock.stock < productOrder.quantity) {
-        throw new BadRequestException({error: 'stock of a product is not sufficient to complete sale'});
+        throw new BadRequestException(
+          'There are not enough ' +
+            productLocationStock.productId.name +
+            ' to complete the order.',
+        );
       }
     }
 
