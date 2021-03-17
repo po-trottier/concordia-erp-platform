@@ -39,25 +39,7 @@ export const SellProductModal = (props : CustomProps) => {
         data.forEach((p : any) => {
           p.id = p._id;
         });
-        axios.get('/products/stock/' + location)
-          .then((resp) => {
-            const tempQuantities : ProductSale[] = [];
-            data.forEach((prod : ProductEntry) => {
-              tempQuantities.push({ id: prod.id, quantity: 0 });
-              const entry = resp.data.find((p : ProductStockEntry) => p.productId === prod.id);
-              if (entry) {
-                prod.stock = entry.stock;
-              } else {
-                prod.stock = 0;
-              }
-            });
-            setQuantities(tempQuantities);
-            dispatch(setProductList(data));
-          })
-          .catch((err) => {
-            message.error('Something went wrong while getting the products stock.');
-            console.error(err);
-          });
+        getProductStock(data);
       })
       .catch((err) => {
         message.error('Something went wrong while getting the products catalog.');
@@ -65,6 +47,28 @@ export const SellProductModal = (props : CustomProps) => {
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updated, location]);
+
+  const getProductStock = (products : ProductEntry[]) => {
+    axios.get('/products/stock/' + location)
+      .then((resp) => {
+        const tempQuantities : ProductSale[] = [];
+        products.forEach((product) => {
+          tempQuantities.push({ id: product.id, quantity: 0 });
+          const entry = resp.data.find((p : ProductStockEntry) => p.productId === product.id);
+          if (entry) {
+            product.stock = entry.stock;
+          } else {
+            product.stock = 0;
+          }
+        });
+        setQuantities(tempQuantities);
+        dispatch(setProductList(products));
+      })
+      .catch((err) => {
+        message.error('Something went wrong while getting the products stock.');
+        console.error(err);
+      });
+  }
 
   const getProducts = () => {
     let rows = JSON.parse(JSON.stringify(products));
@@ -106,6 +110,7 @@ export const SellProductModal = (props : CustomProps) => {
         return;
       }
       body.push({
+        locationId: location,
         customerId: props.customerId,
         productId: q.id,
         quantity: q.quantity,
@@ -133,9 +138,14 @@ export const SellProductModal = (props : CustomProps) => {
             return;
           if (customer.items)
             customer.items += d.quantity;
+          else
+            customer.items = d.quantity;
           if (customer.balance)
             customer.balance -= d.amountDue;
+          else
+            customer.balance = 0 - d.amountDue;
         });
+        getProductStock(JSON.parse(JSON.stringify(products)));
         dispatch(setCustomerList(clone));
         message.success('The products were successfully sold.')
         handleCancel();

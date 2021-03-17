@@ -22,9 +22,15 @@ export const CreateCustomerModal = () => {
       email,
     })
       .then(({ data }) => {
-        dispatch(addCustomerEntry(data));
+        const newCustomer = data;
+        newCustomer.balance = 0;
+        newCustomer.paid = 0;
+        newCustomer.items = 0;
+
+        dispatch(addCustomerEntry(newCustomer));
         setIsModalVisible(false);
         form.resetFields();
+
         message.success('Customer was added successfully.');
       })
       .catch((err) => {

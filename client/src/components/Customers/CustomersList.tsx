@@ -30,7 +30,7 @@ export const CustomersList = () => {
               c.balance = 0;
               c.paid = 0;
               c.items = 0;
-              const filtered = orders.filter((o : any) => o.customerId._id === c._id);
+              const filtered = orders.filter((o : any) => o.customerId && o.customerId._id === c._id);
               filtered.forEach((o : any) => {
                 const totalPrice =  o.productId.price * o.quantity;
                 if (c.balance !== undefined)
