@@ -61,15 +61,6 @@ export class ProductOrdersService {
             productLocationStock.productId.name +
             ' to complete the order.',
         );
-      } else {
-        await productLocationStock.update(
-          productOrder.productId,
-          productOrder.locationId,
-          {
-            stockUsed: productLocationStock.stockUsed - productOrder.quantity,
-            stockBuilt: productLocationStock.stockBuilt,
-          },
-        );
       }
     }
 
@@ -82,8 +73,23 @@ export class ProductOrdersService {
       order.dateDue = new Date(order.dateOrdered).setDate(
         dateOrdered.getDate() + this.getIncrement(dateOrdered.getDay()),
       );
+
       const createdOrder = new this.productOrderModel(order);
       createdOrders.push(await createdOrder.save());
+
+      const productLocationStock: any = await this.productLocationStockService.findOne(
+        productOrder.productId,
+        productOrder.locationId,
+      );
+
+      await productLocationStock.update(
+        productOrder.productId,
+        productOrder.locationId,
+        {
+          stockUsed: productLocationStock.stockUsed - productOrder.quantity,
+          stockBuilt: productLocationStock.stockBuilt,
+        },
+      );
     }
 
     return createdOrders;
