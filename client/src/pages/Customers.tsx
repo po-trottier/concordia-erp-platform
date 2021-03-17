@@ -1,15 +1,13 @@
 import React from 'react';
-import { Button } from 'antd';
 
 import { CustomersList } from '../components/Customers/CustomersList';
+import { CreateCustomerModal} from "../components/Customers/CreateCustomerModal";
 
 export const Customers = () => {
   return (
     <div>
       <CustomersList />
-      <Button type='primary' style={{ marginTop: 16 }}>
-        Add a new Customer
-      </Button>
+      <CreateCustomerModal />
     </div>
   );
 };

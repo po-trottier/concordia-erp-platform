@@ -14,6 +14,10 @@ export class CreateProductOrderDto {
   @IsString()
   productId: string;
 
+  @IsNotEmpty()
+  @IsString()
+  locationId: string;
+
   @IsPositive()
   @IsInt()
   quantity: number;

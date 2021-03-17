@@ -116,7 +116,7 @@ export const MaterialsCatalog = () => {
           style={{ marginBottom: 18 }} />
         {
           getMaterials().length > 0 ?
-            <ResponsiveTable cols={columns} rows={getMaterials()} /> :
+            <ResponsiveTable columns={columns} values={getMaterials()} /> :
             <span>No materials were found.</span>
         }
       </Card>

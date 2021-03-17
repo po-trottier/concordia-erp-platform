@@ -7,6 +7,7 @@ import { UsersModule } from './api/users/users.module';
 import { ProductsModule } from './api/products/products.module';
 import { OrdersModule } from './api/orders/orders.module';
 import { LocationsModule } from './api/locations/locations.module';
+import { CustomersModule } from './api/customers/customers.module';
 
 export const routes: Routes = [
   {
@@ -40,6 +41,10 @@ export const routes: Routes = [
       {
         path: '/locations',
         module: LocationsModule,
+      },
+      {
+        path: '/customers',
+        module: CustomersModule,
       },
     ],
   },

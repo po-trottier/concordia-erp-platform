@@ -77,7 +77,7 @@ export const Summary = () => {
             <Title level={4} style={{ marginBottom: '24px' }}>
               Daily Financial Summary
             </Title>
-            <ResponsiveTable rows={summaryEntryData} cols={getColumns()} />
+            <ResponsiveTable values={summaryEntryData} columns={getColumns()} />
           </Card>
         </div>
         :
