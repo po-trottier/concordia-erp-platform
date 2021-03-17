@@ -71,7 +71,6 @@ export const PartCatalog = () => {
   }, [updated, location]);
 
   const updatePartStocks = (response: any) => {
-    debugger;
     const clonesOfParts = JSON.parse(JSON.stringify(parts));
     response.data.forEach((updatedPartLocationStock: any) => {
       const matchingPart = clonesOfParts.find((clone: any) => clone.id === updatedPartLocationStock.partId._id);
@@ -93,10 +92,19 @@ export const PartCatalog = () => {
     const foundOrder = partOrders.find(
       (order: PartOrderItem) => order.partId === partId
     );
+
     if (foundOrder) {
-      foundOrder.buildAmount = buildAmount;
-      setPartOrders(partOrders);
-    } else {
+      if (buildAmount > 0) {
+        foundOrder.buildAmount = buildAmount;
+        setPartOrders(partOrders);
+      } else {
+        // getting rid of the order otherwise
+        debugger;
+        // const index = partOrders.findIndex(order => order.partId === partId);
+        setPartOrders(partOrders.slice(partOrders.findIndex(order => order.partId === partId),1));
+      }
+
+    } else if (buildAmount > 0){
       setPartOrders(partOrders.concat({ partId, buildAmount }));
     }
   };
@@ -112,10 +120,16 @@ export const PartCatalog = () => {
 
     rows.forEach((row : PartEntry) => {
       row.build = (
-        <InputNumber onChange={(value: any) => changeBuildAmount(row.id, value)}
+        <InputNumber
+          onChange={(value: any) => changeBuildAmount(row.id, value)}
+          // value={() => {
+          //     const order = partOrders.find((o) => o.partId === row.id);
+          //     return order ? order.buildAmount: 0;
+          //   }}
           placeholder='Input a quantity'
           min={0}
-          style={{ width: '100%' }} />
+          style={{ width: '100%' }}
+        />
       );
       row.actions = <EditPartModal part={row} />;
       row.materialsString = getMaterials(row);
@@ -130,14 +144,19 @@ export const PartCatalog = () => {
   };
 
   const buildParts = () => {
-    axios.patch('parts/build/' + location, partOrders)
-      .then((data) => {
-        updatePartStocks(data);
-        message.success('The parts were built successfully.');
-      }).catch((err) => {
-      message.error('There are not enough materials to build the parts.');
-      console.log(err);
-    });
+    debugger;
+    if (partOrders.length > 0){
+      axios.patch('parts/build/' + location, partOrders)
+        .then((data) => {
+          updatePartStocks(data);
+          message.success('The part(s) were built successfully.');
+        }).catch((err) => {
+        message.error('There are not enough materials to build the part(s).');
+        console.log(err);
+      });
+    } else {
+      message.error('There are no parts to build.');
+    }
   };
 
 

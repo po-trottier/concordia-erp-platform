@@ -23,7 +23,7 @@ export const ProductCatalog = () => {
 
   const emptyData: OrderItem[] = [];
   const [searchValue, setSearchValue] = useState('');
-  const [orders, setOrders] = useState(emptyData);
+  const [productOrders, setProductOrders] = useState(emptyData);
 
   useEffect(() => {
     axios.get('/products')
@@ -69,14 +69,14 @@ export const ProductCatalog = () => {
   };
 
   const changeBuildAmount = (productId: string, stockBuilt: number) => {
-    const foundOrder = orders.find(
+    const foundOrder = productOrders.find(
       (order: OrderItem) => order.productId === productId
     );
     if (foundOrder) {
       foundOrder.stockBuilt = stockBuilt;
-      setOrders(orders);
+      setProductOrders(productOrders);
     } else {
-      setOrders(orders.concat({ productId, stockBuilt }));
+      setProductOrders(productOrders.concat({ productId, stockBuilt }));
     }
   };
 
@@ -126,7 +126,7 @@ export const ProductCatalog = () => {
   };
 
   const buildProducts = () => {
-    axios.patch('products/build/' + location, orders)
+    axios.patch('products/build/' + location, productOrders)
     .then((data) => {
       updateProductStocks(data);
       message.success('The products were built successfully.');
@@ -134,6 +134,7 @@ export const ProductCatalog = () => {
       message.error('There are not enough parts to build the products.');
       console.log(err);
     });
+    setProductOrders([]);
   };
 
   return (
