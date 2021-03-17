@@ -5,7 +5,6 @@ import { useDispatch } from 'react-redux';
 import { addUserEntry } from '../../store/slices/UserListSlice';
 import { Role } from '../../router/Roles';
 import axios from '../../plugins/Axios';
-import { isArray } from 'util';
 
 const { Option } = Select;
 
@@ -41,7 +40,7 @@ export const AddUserModal = () => {
       })
       .catch((err) => {
         let error = err.response.data.message;
-        if (isArray(err.response.data.message)) {
+        if (err.response.data.message.isArray()) {
           error = err.response.data.message.join('; ');
         }
         message.error(error, 10);

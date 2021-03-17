@@ -79,7 +79,7 @@ export const MaterialsInventory = () => {
       </Card>
       {getMaterials().length > 0 ?
       <Card>
-        <ResponsiveTable rows={getMaterials()} cols={inventoryColumns} />
+        <ResponsiveTable values={getMaterials()} columns={inventoryColumns} />
       </Card> : null
       }
     </div>

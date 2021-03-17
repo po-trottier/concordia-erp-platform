@@ -8,7 +8,12 @@ export type ProductOrderDocument = ProductOrder & Document;
  */
 @Schema()
 export class ProductOrder {
-  @Prop({ required: true })
+  @Prop({
+    type: mongooseSchema.Types.ObjectId,
+    ref: 'Customer',
+    required: true,
+    index: true,
+  })
   customerId: string;
 
   @Prop({

@@ -32,7 +32,7 @@ export const LogList = () => {
 
   return (
     <div style={{ paddingTop: 24 }}>
-      <ResponsiveTable rows={getRows()} cols={getColumns()} />
+      <ResponsiveTable values={getRows()} columns={getColumns()} />
       <Button type='ghost' style={{ float: 'right', marginTop: 24 }}>
         Clear Logs
       </Button>

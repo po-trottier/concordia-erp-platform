@@ -1,38 +1,55 @@
 import { ProductsController } from '../../../src/api/products/products/products.controller';
 import { ProductsService } from '../../../src/api/products/products/products.service';
+import { ProductLocationStockService } from '../../../src/api/products/products/product-location-stock.service';
 import { CreateProductDto } from '../../../src/api/products/products/dto/create-product.dto';
 import { UpdateProductDto } from '../../../src/api/products/products/dto/update-product.dto';
+import { UpdateProductStockDto } from '../../../src/api/products/products/dto/update-product-stock.dto';
 import { ProductLogsService } from '../../../src/api/products/products-logs/product-logs.service';
 import { Model } from 'mongoose';
 import {
   Product,
   ProductDocument,
 } from '../../../src/api/products/products/schemas/products.schema';
+import { ProductLocationStock } from '../../../src/api/products/products/schemas/product-location-stock.schema';
+import { ProductLocationStockDocument } from '../../../src/api/products/products/schemas/product-location-stock.schema';
+import { ProductLogDocument } from '../../../src/api/products/products-logs/schemas/product-log.schema';
+import { LocationDocument } from '../../../src/api/locations/schemas/location.schema';
+import { LocationsService } from '../../../src/api/locations/locations.service';
 
-describe('PartsController', () => {
+describe('ProductsController', () => {
   let productsController: ProductsController;
   let productsService: ProductsService;
+  let productLocationStockService: ProductLocationStockService;
   let productLogsService: ProductLogsService;
+  let locationsService: LocationsService;
   let partsDocumentModel: Model<ProductDocument>;
+  let productLocationStockDocument: Model<ProductLocationStockDocument>
+  let productLogDocument: Model<ProductLogDocument>
+  let locationDocument: Model<LocationDocument>
 
   const dummyProduct: Product = {
     name: 'Canondale Bike',
     price: 1000,
-    stock: 20,
     parts: [],
     properties: [],
   };
 
+  const dummyProductLocationStock: ProductLocationStock = {
+    productId: '123',
+    locationId: 'MTL123',
+    stock: 50
+  }
+
   beforeEach(async () => {
-    productsService = new ProductsService(
-      partsDocumentModel,
-      productLogsService,
-    );
-    productsController = new ProductsController(productsService);
+    productsService = new ProductsService(partsDocumentModel);
+    productLogsService = new ProductLogsService(productLogDocument);
+    locationsService = new LocationsService(locationDocument);
+    productLocationStockService = new ProductLocationStockService(productLocationStockDocument, productsService, productLogsService, locationsService);
+    productsController = new ProductsController(productsService, productLocationStockService);
   });
 
   describe('findAll', () => {
-    it('Should return a list of all parts', async () => {
+    it('Should return a list of all products', async () => {
       const result: Product[] = [dummyProduct];
       jest
         .spyOn(productsService, 'findAll')
@@ -43,7 +60,7 @@ describe('PartsController', () => {
   });
 
   describe('findOne', () => {
-    it('Should return a from by its username', async () => {
+    it('Should return a product by its name', async () => {
       const result: Product = dummyProduct;
 
       jest
@@ -55,13 +72,12 @@ describe('PartsController', () => {
   });
 
   describe('create', () => {
-    it('Should create a new part', async () => {
+    it('Should create a new product', async () => {
       const result: Product = dummyProduct;
 
       const newProduct = new CreateProductDto();
       newProduct.name = result.name;
       newProduct.price = result.price;
-      newProduct.stock = result.stock;
       newProduct.properties = result.properties;
       newProduct.parts = result.parts;
 
@@ -74,7 +90,7 @@ describe('PartsController', () => {
   });
 
   describe('remove', () => {
-    it('Should remove a part by its name', async () => {
+    it('Should remove a product by its name', async () => {
       const result: Product = dummyProduct;
 
       jest
@@ -86,13 +102,12 @@ describe('PartsController', () => {
   });
 
   describe('update', () => {
-    it('Should update user attribute values', async () => {
+    it('Should update product attribute values', async () => {
       const result: Product = dummyProduct;
 
       const updatedProduct = new UpdateProductDto();
       updatedProduct.name = result.name;
       updatedProduct.price = result.price;
-      updatedProduct.stock = result.stock;
       updatedProduct.properties = result.properties;
       updatedProduct.parts = result.parts;
 
@@ -103,6 +118,46 @@ describe('PartsController', () => {
       expect(await productsController.update(result.name, updatedProduct)).toBe(
         result,
       );
+    });
+  });
+
+  describe('findAllLocationStock', () => {
+    it('Should find all products location stock', async () => {
+      const result: ProductLocationStock[] = [dummyProductLocationStock];
+
+      jest
+        .spyOn(productLocationStockService, 'findAll')
+        .mockImplementation(async () => await result);
+
+      expect(await productsController.findAllLocationStock(dummyProductLocationStock.locationId)).toBe(result);
+    });
+  });
+
+  describe('findOneLocationStock', () => {
+    it('Should find one product\'s location stock', async () => {
+      const result: ProductLocationStock = dummyProductLocationStock;
+
+      jest
+        .spyOn(productLocationStockService, 'findOne')
+        .mockImplementation(async () => await result);
+
+      expect(await productsController.findOneLocationStock(dummyProductLocationStock.productId, dummyProductLocationStock.locationId)).toBe(result);
+    });
+  });
+
+  describe('updateStock', () => {
+    it('Should update the stock of a product at a location', async () => {
+      const result: ProductLocationStock = dummyProductLocationStock;
+
+      const updatedProductStock = new UpdateProductStockDto();
+      updatedProductStock.stockBuilt = 10;
+      updatedProductStock.stockUsed = 20;
+
+      jest
+        .spyOn(productLocationStockService, 'update')
+        .mockImplementation(async () => await result);
+
+      expect(await productsController.updateStock(dummyProductLocationStock.productId, dummyProductLocationStock.locationId, updatedProductStock)).toBe(result);
     });
   });
 });

@@ -18,6 +18,10 @@ export class UpdateProductOrderDto {
   @IsString()
   productId: string;
 
+  @IsNotEmpty()
+  @IsString()
+  locationId: string;
+
   @IsOptional()
   @IsPositive()
   @IsInt()
