@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Card, Input, message } from 'antd';
+import { Card, Input, message } from 'antd';
 
 import { ResponsiveTable } from '../ResponsiveTable';
 import { SellProductModal } from './SellProductModal';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store/Store';
 import { setCustomerList } from '../../store/slices/CustomerListSlice';
+import { CustomerListActions} from "./CustomerListActions";
 import axios from '../../plugins/Axios';
 import { CustomerEntry } from '../../interfaces/CustomerEntry';
+import { EditCustomerForm } from "./EditCustomerForm";
 
 const { Search } = Input;
 
@@ -68,12 +70,7 @@ export const CustomersList = () => {
           <SellProductModal
             customerId={r._id}
             style={{ width: 100, margin: '4px 8px', display: 'inline-block' }} />
-          <Button
-            type='ghost'
-            size='small'
-            style={{ width: 100, margin: '4px 8px', display: 'inline-block' }}>
-            Edit
-          </Button>
+          <EditCustomerForm customer={customers} />
         </div>
       );
     });
