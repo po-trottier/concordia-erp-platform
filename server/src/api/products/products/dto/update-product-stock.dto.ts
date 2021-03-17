@@ -1,7 +1,7 @@
 import { IsInt, IsNotEmpty, Min } from 'class-validator';
 
 /**
- * Part creation DTO
+ * Product Stock DTO
  */
 export class UpdateProductStockDto {
   @IsNotEmpty()
