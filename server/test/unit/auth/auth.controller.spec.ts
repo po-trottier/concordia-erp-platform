@@ -20,7 +20,7 @@ describe('AuthController', () => {
   });
 
   describe('login', () => {
-    it('Should return a list of all parts', async () => {
+    it('Should return the currently logged in user.', async () => {
       const result = {
         firstName: 'System',
         lastName: 'Administrator',

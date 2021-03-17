@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import {
@@ -8,6 +12,7 @@ import {
 import { CreateProductOrderDto } from './dto/create-product-order.dto';
 import { UpdateProductOrderDto } from './dto/update-product-order.dto';
 import { ProductsService } from '../products/products/products.service';
+import { ProductLocationStockService } from '../products/products/product-location-stock.service';
 
 @Injectable()
 export class ProductOrdersService {
@@ -15,6 +20,7 @@ export class ProductOrdersService {
     @InjectModel(ProductOrder.name)
     private productOrderModel: Model<ProductOrderDocument>,
     private readonly productsService: ProductsService,
+    private readonly productLocationStockService: ProductLocationStockService,
   ) {}
 
   getIncrement(day: number) {
@@ -43,6 +49,22 @@ export class ProductOrdersService {
   ): Promise<ProductOrder[]> {
     const createdOrders: ProductOrder[] = [];
 
+    // verifying that product stocks are enough
+    for (const productOrder of createProductOrderDto) {
+      const productLocationStock: any = await this.productLocationStockService.findOne(
+        productOrder.productId,
+        productOrder.locationId,
+      );
+      if (productLocationStock.stock < productOrder.quantity) {
+        throw new BadRequestException(
+          'There are not enough ' +
+            productLocationStock.productId.name +
+            ' to complete the order.',
+        );
+      }
+    }
+
+    // completing orders
     for (const productOrder of createProductOrderDto) {
       const order: any = productOrder;
       const product = await this.productsService.findOne(order.productId);

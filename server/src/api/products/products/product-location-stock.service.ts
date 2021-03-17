@@ -62,8 +62,8 @@ export class ProductLocationStockService {
 
       if (product && location) {
         productLocationStock = new this.productLocationStockModel({
-          productId,
-          locationId,
+          product,
+          location,
           stock: 0,
         });
         productLocationStock.save();
@@ -110,7 +110,7 @@ export class ProductLocationStockService {
       { productId, locationId },
       { $inc: { stock: netStockChange } },
       { new: true, upsert: true },
-    );
+    ).populate('productId').exec();
 
     if (updatedProductLocationStock) {
       const updateProductLogDto: UpdateProductLogDto = {

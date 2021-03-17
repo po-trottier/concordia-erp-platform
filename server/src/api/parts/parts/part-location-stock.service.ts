@@ -107,7 +107,7 @@ export class PartLocationStockService {
       { partId, locationId },
       { $inc: { stock: netStockChange } },
       { new: true, upsert: true },
-    );
+    ).populate('partId').exec();
 
     if (updatedPartLocationStock) {
       const updatePartLogDto: UpdatePartLogDto = {

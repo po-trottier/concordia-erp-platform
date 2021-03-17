@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "f70866ac-cb73-407a-8b70-3803b6848c14",
+		"_postman_id": "aa7414df-1af3-4d3d-9daf-40c01bfaadf0",
 		"name": "Epic Resource Planner",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -154,7 +154,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "[\n    {\n        \"dateOrdered\": \"2021-03-06T18:25:43.511Z\",\n        \"dateDue\": \"2021-03-09T18:25:43.511Z\",\n        \"customerId\": \"6050f70b608c4c6f43d91552\",\n        \"amountDue\": 1800,\n        \"quantity\": 10,\n        \"productId\":\"603671315936aa7ba65660f5\"\n    }\n]\n",
+									"raw": "[\n    {\n        \"dateOrdered\": \"2021-03-06T18:25:43.511Z\",\n        \"dateDue\": \"2021-03-09T18:25:43.511Z\",\n        \"customerId\": \"6050f70b608c4c6f43d91552\",\n        \"amountDue\": 1800,\n        \"quantity\": 10,\n        \"productId\":\"603671315936aa7ba65660f5\",\n        \"locationId\":\"604cee081ba2430c10eeee6b\"\n    }\n]\n",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -847,13 +847,13 @@
 							"response": []
 						},
 						{
-							"name": "Update product by id",
+							"name": "Build products",
 							"request": {
 								"method": "PATCH",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"name\": \"Pick of destiny\",\n    \"stock\": 10221020120120120\n}",
+									"raw": "[\n    {\"productId\": \"604cee921ba2430c10eeee6f\", \"stockBuilt\": 2},\n    {\"productId\": \"604e502ab2216b10b25d5225\", \"stockBuilt\": 1}\n]",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -861,13 +861,41 @@
 									}
 								},
 								"url": {
-									"raw": "{{url}}/products/6036f94e0981691472cb1853",
+									"raw": "{{url}}/products/build/604cee081ba2430c10eeee6b",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
 										"products",
-										"6036f94e0981691472cb1853"
+										"build",
+										"604cee081ba2430c10eeee6b"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update product by id",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Pick of destiny\",\n    \"stock\": 6969\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/products/604ccbbdc4242f1795b48a70",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"products",
+										"604ccbbdc4242f1795b48a70"
 									]
 								}
 							},
