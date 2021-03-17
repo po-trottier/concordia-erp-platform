@@ -1,13 +1,13 @@
 import React from 'react';
 
 import { CustomersList } from '../components/Customers/CustomersList';
-import { CreateNewCustomerModal} from "../components/Customers/CreateNewCustomerModal";
+import { CreateCustomerModal} from "../components/Customers/CreateCustomerModal";
 
 export const Customers = () => {
   return (
     <div>
       <CustomersList />
-      <CreateNewCustomerModal />
+      <CreateCustomerModal />
     </div>
   );
 };

@@ -6,10 +6,9 @@ import { SellProductModal } from './SellProductModal';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store/Store';
 import { setCustomerList } from '../../store/slices/CustomerListSlice';
-import { CustomerListActions} from "./CustomerListActions";
 import axios from '../../plugins/Axios';
 import { CustomerEntry } from '../../interfaces/CustomerEntry';
-import { EditCustomerForm } from "./EditCustomerForm";
+import { EditCustomerModal } from "./EditCustomerModal";
 
 const { Search } = Input;
 
@@ -70,7 +69,9 @@ export const CustomersList = () => {
           <SellProductModal
             customerId={r._id}
             style={{ width: 100, margin: '4px 8px', display: 'inline-block' }} />
-          <EditCustomerForm customer={customers} />
+          <EditCustomerModal
+            customer={r}
+            style={{ width: 100, margin: '4px 8px', display: 'inline-block' }} />
         </div>
       );
     });

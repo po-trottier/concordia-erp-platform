@@ -7,7 +7,7 @@ import axios from '../../plugins/Axios';
 import { isArray } from 'util';
 
 
-export const CreateNewCustomerModal = () => {
+export const CreateCustomerModal = () => {
   // const dispatch = useDispatch();
 
   const [form] = Form.useForm();

@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { Button, message, Modal, Form } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { EditCustomerForm } from "./EditCustomerForm";
+import { EditCustomerModal } from "./EditCustomerModal";
 import { RootState } from '../../store/Store';
-import { initializeSelectedCustomer } from '../../store/slices/CustomerEditSlice';
+// import { initializeSelectedCustomer } from '../../store/slices/CustomerEditSlice';
 import { removeCustomerEntry, updateCustomerEntry } from '../../store/slices/CustomerListSlice';
 import axios from '../../plugins/Axios';
 
@@ -20,7 +20,7 @@ export const CustomerListActions = (props : any) => {
   const [deleteVisible, setDeleteVisible] = useState(false);
 
   const initiateEdit = () => {
-    dispatch(initializeSelectedCustomer(props.user));
+    // dispatch(initializeSelectedCustomer(props.user));
     setEditVisible(true);
   };
 
@@ -101,7 +101,7 @@ export const CustomerListActions = (props : any) => {
             OK
           </Button>
         ]}>
-        <EditCustomerForm form={form} />
+        {/*<EditCustomerModal form={form} />*/}
       </Modal>
       <Modal
         title='Delete Customer'
