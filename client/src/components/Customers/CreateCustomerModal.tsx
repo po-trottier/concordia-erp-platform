@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
 import { Button, Col, Form, Input, message, Modal, Row } from 'antd';
-// import { useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
-//import { addUserEntry } from '../../store/slices/UserListSlice';
+import { addCustomerEntry } from '../../store/slices/CustomerListSlice';
 import axios from '../../plugins/Axios';
-import { isArray } from 'util';
-
 
 export const CreateCustomerModal = () => {
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const [form] = Form.useForm();
 
@@ -18,22 +16,20 @@ export const CreateCustomerModal = () => {
   const [loading, setLoading] = useState(false);
 
   const addCustomer = () => {
-    const newCustomer = {
+    setLoading(true);
+    axios.post('/customers', {
       name,
       email,
-    };
-
-    setLoading(true);
-    axios.post('/customers', newCustomer)
-      .then(() => {
-        //dispatch(addCustomerEntry(newCustomer));
+    })
+      .then(({ data }) => {
+        dispatch(addCustomerEntry(data));
         setIsModalVisible(false);
         form.resetFields();
         message.success('Customer was added successfully.');
       })
       .catch((err) => {
         let error = err.response.data.message;
-        if (isArray(err.response.data.message)) {
+        if (err.response.data.message.isArray()) {
           error = err.response.data.message.join('; ');
         }
         message.error(error, 10);
@@ -74,8 +70,9 @@ export const CreateCustomerModal = () => {
                 style={{ marginBottom: 0 }}
                 name='companyName'
                 rules={[{ required: true, message: 'Please input company name!' }]}>
-                <Input placeholder="Enter the company name"
-                       onChange={(e) => setName(e.currentTarget.value)} />
+                <Input
+                  placeholder='Enter the company name'
+                  onChange={(e) => setName(e.currentTarget.value)} />
               </Form.Item>
             </Col>
           </Row>
@@ -88,7 +85,9 @@ export const CreateCustomerModal = () => {
                 style={{ marginBottom: 0 }}
                 name='itemsBought'
                 rules={[{ required: true, message: 'Please input the amount of items bought!' }]}>
-                <Input placeholder="Enter an email address" onChange={(e) => setEmail(e.currentTarget.value)} />
+                <Input
+                  placeholder='Enter an email address'
+                  onChange={(e) => setEmail(e.currentTarget.value)} />
               </Form.Item>
             </Col>
           </Row>
