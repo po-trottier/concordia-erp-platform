@@ -11,6 +11,7 @@ import { OrdersModule } from './orders/orders.module';
 import { LocationsModule } from './locations/locations.module';
 import { ProductsModule } from './products/products.module';
 import { ApiController } from './api.controller';
+import { ApiService } from './api.service';
 import { JwtAuthGuard } from './auth/guards/jwt.guard';
 import { RolesGuard } from './roles/roles.guard';
 import { routes } from '../routes';
@@ -46,6 +47,7 @@ const mongoDbName = process.env.DB_NAME || DB_NAME;
       provide: APP_GUARD,
       useClass: RolesGuard,
     },
+    ApiService
   ],
   controllers: [ApiController],
 })
