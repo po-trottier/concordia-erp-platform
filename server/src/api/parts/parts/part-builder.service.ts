@@ -28,14 +28,15 @@ export class PartBuilderService {
     locationId: string,
     buildPartOrders: BuildPartDto[],
   ): Promise<Object> {
-    const validatedBuildOrders: {stockBuilt: number, partId: string, part: Part}[] = [];
+    const validatedBuildOrders: {buildAmount: number, partId: string, part: Part}[] = [];
     // checking every build order to see if there are sufficient materials in the db
     // at the same time populate validatedBuildOrders (add part to each object)
+    console.log(buildPartOrders)
     for (const buildOrder of buildPartOrders) {
-      const { stockBuilt, partId } = buildOrder;
+      const { buildAmount, partId } = buildOrder;
       const part = await this.partsService.findOne(partId);
       for (const material of part.materials) {
-        const totalMaterialsCount = material.quantity * stockBuilt;
+        const totalMaterialsCount = material.quantity * buildAmount;
         const materialLocationStock = await this.materialLocationStockService.findOne(material.materialId, locationId);
         if (materialLocationStock.stock < totalMaterialsCount) {
           throw new BadRequestException({error: 'stock of materials is not sufficient'});
@@ -47,10 +48,11 @@ export class PartBuilderService {
     // completing every build order
     const buildResults = [];
     for (const buildOrder of validatedBuildOrders) {
-      const { stockBuilt, partId, part } = buildOrder;
+      const { buildAmount, partId, part } = buildOrder;
+      console.log(buildOrder)
       // update part stock
       const updatePartStockDto: UpdatePartStockDto = {
-        stockBuilt: stockBuilt,
+        stockBuilt: buildAmount,
         stockUsed: 0
       };
 
@@ -67,7 +69,7 @@ export class PartBuilderService {
         let updateMaterialStockDto: UpdateMaterialStockDto = {
           materialId: material.materialId,
           stockBought: 0,
-          stockUsed: material.quantity * stockBuilt
+          stockUsed: material.quantity * buildAmount
         };
         materialUpdates.push(updateMaterialStockDto);
       }
