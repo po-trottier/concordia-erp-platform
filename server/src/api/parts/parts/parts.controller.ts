@@ -92,16 +92,11 @@ export class PartsController {
   }
 
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
-  @Patch('stock/:locationId/:partId')
+  @Patch('stock/:locationId')
   updateStock(
-    @Param('partId') partId: string,
     @Param('locationId') locationId: string,
-    @Body(ValidationPipe) updatePartStockDto: UpdatePartStockDto,
+    @Body(ValidationPipe) updatePartStockDto: UpdatePartStockDto[],
   ) {
-    return this.partLocationStockService.update(
-      partId,
-      locationId,
-      updatePartStockDto,
-    );
+    return this.partLocationStockService.update(locationId, updatePartStockDto);
   }
 }

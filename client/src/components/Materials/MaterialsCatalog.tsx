@@ -26,11 +26,6 @@ export const MaterialsCatalog = () => {
   const [searchValue, setSearchValue] = useState('');
 
   useEffect(() => {
-    setMaterialListState();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [updated, location]);
-
-  const setMaterialListState = () => {
     let tempQuantities : MaterialQuantity[] = [];
     axios.get('/materials')
     .then(({ data }) => {
@@ -60,7 +55,8 @@ export const MaterialsCatalog = () => {
       message.error('Something went wrong while getting the materials catalog.');
       console.error(err);
     });
-  }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [updated, location]);
 
   const onSearch = (e : React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
@@ -120,7 +116,7 @@ export const MaterialsCatalog = () => {
             <span>No materials were found.</span>
         }
       </Card>
-      <OrderMaterialButtons quantities={quantities} setMaterialListState={setMaterialListState} />
+      <OrderMaterialButtons />
       <CreateMaterialModal />
     </div>
   );
