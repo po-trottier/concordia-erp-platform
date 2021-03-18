@@ -37,7 +37,9 @@ export const PartCatalog = () => {
         });
         axios.get('/parts/stock/' + location)
           .then((resp) => {
+            const tempOrders: PartOrderItem[] = [];
             data.forEach((part : PartEntry) => {
+              tempOrders.push({ partId: part.id, buildAmount: 0 })
               const entry = resp.data.find((p : PartStockEntry) => p.partId === part.id);
               if (entry) {
                 part.quantity = entry.stock;
@@ -45,6 +47,7 @@ export const PartCatalog = () => {
                 part.quantity = 0;
               }
             });
+            setPartOrders(tempOrders);
             dispatch(setPartList(data));
           })
           .catch((err) => {
@@ -118,29 +121,37 @@ export const PartCatalog = () => {
       );
     }
 
-    rows.forEach((row : PartEntry) => {
+    rows.forEach((row : any) => {
+      const partOrder = partOrders.find((p) => p.partId === row.id);
+      row.id = row['_id'];
       row.build = (
         <InputNumber
-          onChange={(value: any) => changeBuildAmount(row.id, value)}
-          // value={() => {
-          //     const order = partOrders.find((o) => o.partId === row.id);
-          //     return order ? order.buildAmount: 0;
-          //   }}
           placeholder='Input a quantity'
           min={0}
           style={{ width: '100%' }}
-        />
+          value={partOrder ? partOrder.buildAmount : 0}
+          onChange={(v) => updateQuantity(row.id, v)} />
       );
       row.actions = <EditPartModal part={row} />;
       row.materialsString = getMaterials(row);
     });
 
+    rows.sort((a : PartEntry, b : PartEntry) => {
+      return a.name < b.name ? -1 : 1;
+    });
     return rows;
   };
 
   const onSearch = (e : React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.trim().toLowerCase();
     setSearchValue(value);
+  };
+
+  const updateQuantity = (id: string, val: any) => {
+    const clone = JSON.parse(JSON.stringify(partOrders));
+    const partOrder = clone.find((p : PartOrderItem) => p.partId === id);
+    partOrder.buildAmount = val;
+    setPartOrders(clone);
   };
 
   const buildParts = () => {

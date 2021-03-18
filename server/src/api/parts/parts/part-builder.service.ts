@@ -32,6 +32,9 @@ export class PartBuilderService {
     // checking every build order to see if there are sufficient materials in the db
     // at the same time populate validatedBuildOrders (add part to each object)
     for (const buildOrder of buildPartOrders) {
+      if (!buildOrder.buildAmount){
+        continue;
+      }
       const { buildAmount, partId } = buildOrder;
       const part = await this.partsService.findOne(partId);
       for (const material of part.materials) {

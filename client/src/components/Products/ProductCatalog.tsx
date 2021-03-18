@@ -8,7 +8,7 @@ import { ProductDetails } from './ProductDetails';
 import { RootState } from '../../store/Store';
 import { ProductEntry } from '../../interfaces/ProductEntry';
 import { ProductStockEntry } from '../../interfaces/ProductStockEntry';
-import { OrderItem } from '../../interfaces/OrderItem';
+import { ProductManuOrderItem } from '../../interfaces/ProductManuOrderItem';
 import { setProductList } from '../../store/slices/ProductListSlice';
 import axios from '../../plugins/Axios';
 
@@ -21,7 +21,7 @@ export const ProductCatalog = () => {
   const updated = useSelector((state : RootState) => state.productList.updated);
   const location = useSelector((state : RootState) => state.location.selected);
 
-  const emptyData: OrderItem[] = [];
+  const emptyData: ProductManuOrderItem[] = [];
   const [searchValue, setSearchValue] = useState('');
   const [productOrders, setProductOrders] = useState(emptyData);
 
@@ -33,7 +33,9 @@ export const ProductCatalog = () => {
         });
         axios.get('/products/stock/' + location)
           .then((resp) => {
+            const tempOrders: ProductManuOrderItem[] = [];
             data.forEach((prod : ProductEntry) => {
+              tempOrders.push({ productId: prod.id, buildAmount: 0 })
               const entry = resp.data.find((p : ProductStockEntry) => p.productId === prod.id);
               if (entry) {
                 prod.stock = entry.stock;
@@ -41,6 +43,7 @@ export const ProductCatalog = () => {
                 prod.stock = 0;
               }
             });
+            setProductOrders(tempOrders);
             dispatch(setProductList(data));
           })
           .catch((err) => {
@@ -68,15 +71,15 @@ export const ProductCatalog = () => {
     setSearchValue(e.target.value);
   };
 
-  const changeBuildAmount = (productId: string, stockBuilt: number) => {
+  const changeBuildAmount = (productId: string, buildAmount: number) => {
     const foundOrder = productOrders.find(
-      (order: OrderItem) => order.productId === productId
+      (order: ProductManuOrderItem) => order.productId === productId
     );
     if (foundOrder) {
-      foundOrder.stockBuilt = stockBuilt;
+      foundOrder.buildAmount = buildAmount;
       setProductOrders(productOrders);
     } else {
-      setProductOrders(productOrders.concat({ productId, stockBuilt }));
+      setProductOrders(productOrders.concat({ productId, buildAmount }));
     }
   };
 
@@ -93,12 +96,14 @@ export const ProductCatalog = () => {
           See Details
         </Button>
       );
+      const productOrder = productOrders.find((p) => p.productId === row.id);
       row.build = (
         <InputNumber
-          onChange={(value: any) => changeBuildAmount(row.id, value)}
           placeholder='Input a quantity'
           min={0}
-          style={{ width: '100%' }} />
+          style={{ width: '100%' }}
+          value={productOrder ? productOrder.buildAmount : 0}
+          onChange={(v) => updateQuantity(row.id, v)} />
       );
       row.actions = <EditProductModal product={row} />;
     });
@@ -107,6 +112,14 @@ export const ProductCatalog = () => {
       return a.name < b.name ? -1 : 1;
     });
     return rows;
+  };
+
+  const updateQuantity = (id: string, val: any) => {
+    debugger;
+    const clone = JSON.parse(JSON.stringify(productOrders));
+    const productOrder = clone.find((p : ProductManuOrderItem) => p.productId === id);
+    productOrder.buildAmount = val;
+    setProductOrders(clone);
   };
 
   const showModal = (row : ProductEntry) => {
@@ -134,7 +147,6 @@ export const ProductCatalog = () => {
       message.error('There are not enough parts to build the products.');
       console.log(err);
     });
-    setProductOrders([]);
   };
 
   return (

@@ -5,16 +5,7 @@ import { BuildProductDto } from './dto/build-product.dto';
 import { ProductsService } from './products.service';
 import { PartLocationStockService } from '../../parts/parts/part-location-stock.service';
 import {ProductLocationStockService} from './product-location-stock.service';
-import { Model } from 'mongoose';
-import {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  PartLocationStockDocument,
-  PartLocationStock,
-} from '../../parts/parts/schemas/part-location-stock.schema';
 import {Product, ProductDocument} from './schemas/products.schema';
-import {InjectModel} from "@nestjs/mongoose";
-import {ProductLocationStock, ProductLocationStockDocument} from "./schemas/product-location-stock.schema";
-
 /**
  * Used by the ProductsController, handles product data storage and retrieval.
  */
@@ -36,14 +27,17 @@ export class ProductBuilderService {
     locationId: string,
     buildOrders: BuildProductDto[],
   ): Promise<Object> {
-    const validatedBuildOrders: {stockBuilt: number, productId: string, product: Product}[] = [];
+    const validatedBuildOrders: {buildAmount: number, productId: string, product: Product}[] = [];
     // checking every build order to see if there are sufficient parts in the db
     // at the same time populate validatedBuildOrders (add product to each object)
     for (const buildOrder of buildOrders) {
-      const { stockBuilt, productId } = buildOrder;
+      if (!buildOrder.buildAmount){
+        continue;
+      }
+      const { buildAmount, productId } = buildOrder;
       const product = await this.productsService.findOne(productId);
       for (const part of product.parts) {
-        const totalPartsCount = part.quantity * stockBuilt;
+        const totalPartsCount = part.quantity * buildAmount;
         const partLocationStock = await this.partLocationStockService.findOne(part.partId, locationId);
         if (partLocationStock.stock < totalPartsCount) {
           throw new BadRequestException({error: 'stock of parts is not sufficient'});
@@ -55,10 +49,10 @@ export class ProductBuilderService {
     // completing every build order
     const buildResults = [];
     for (const buildOrder of validatedBuildOrders) {
-      const { stockBuilt, productId, product } = buildOrder;
+      const { buildAmount, productId, product } = buildOrder;
       // update product stock
       const updateProductStockDto: UpdateProductStockDto = {
-        stockBuilt: stockBuilt,
+        stockBuilt: buildAmount,
         stockUsed: 0
       };
 
@@ -75,7 +69,7 @@ export class ProductBuilderService {
       };
 
       for (const part of product.parts) {
-        updatePartStockDto.stockUsed = part.quantity * stockBuilt;
+        updatePartStockDto.stockUsed = part.quantity * buildAmount;
         await this.partLocationStockService.update(
           part.partId,
           locationId,
