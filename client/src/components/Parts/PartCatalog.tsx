@@ -134,7 +134,6 @@ export const PartCatalog = () => {
   };
 
   const buildParts = () => {
-    debugger;
     if (partOrders.length > 0){
       axios.patch('parts/build/' + location, partOrders)
         .then((data) => {

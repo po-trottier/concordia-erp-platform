@@ -103,7 +103,6 @@ export const ProductCatalog = () => {
   };
 
   const updateQuantity = (id: string, val: any) => {
-    debugger;
     const clone = JSON.parse(JSON.stringify(productOrders));
     const productOrder = clone.find((p : ProductManuOrderItem) => p.productId === id);
     productOrder.buildAmount = val;
