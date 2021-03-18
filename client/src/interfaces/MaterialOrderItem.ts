@@ -1,6 +1,6 @@
 export interface MaterialOrderItem {
-	materialId : string,
-	quantity : number,
-	supplierName : string,
-	dateOrdered : Date,
+	materialId: string;
+	quantity: number;
+	locationId: string;
+	dateOrdered: Date;
 }
