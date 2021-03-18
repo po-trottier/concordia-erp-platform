@@ -74,9 +74,13 @@ export const PartCatalog = () => {
   }, [updated, location]);
 
   const updatePartStocks = (response: any) => {
+    debugger;
     const clonesOfParts = JSON.parse(JSON.stringify(parts));
     response.data.forEach((updatedPartLocationStock: any) => {
-      const matchingPart = clonesOfParts.find((clone: any) => clone.id === updatedPartLocationStock.partId._id);
+      const matchingPart = clonesOfParts.find((clone: any) => {
+        console.log(clone)
+        return clone.id === updatedPartLocationStock.partId._id
+      });
       // quantity is what we display on the frontend
       matchingPart.quantity = updatedPartLocationStock.stock;
     });
@@ -135,7 +139,6 @@ export const PartCatalog = () => {
 
   const buildParts = () => {
     // checking if any parts were selected to be built
-    debugger;
     const ordersToSend : PartOrderItem[] = partOrders.filter((order)=> order.stockBuilt > 0);
     if (ordersToSend.length > 0){
       axios.patch('parts/build/' + location, ordersToSend)
