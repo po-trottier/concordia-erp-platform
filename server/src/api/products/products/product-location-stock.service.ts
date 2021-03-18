@@ -62,8 +62,8 @@ export class ProductLocationStockService {
 
       if (product && location) {
         productLocationStock = new this.productLocationStockModel({
-          product,
-          location,
+          productId,
+          locationId,
           stock: 0,
         });
         productLocationStock.save();
@@ -95,10 +95,7 @@ export class ProductLocationStockService {
       const netStockChange = stockBuilt - stockUsed;
 
       if (netStockChange < 0) {
-        const currentStock = await this.findOne(
-          productId,
-          locationId,
-        );
+        const currentStock = await this.findOne(productId, locationId);
 
         if (currentStock.stock + netStockChange < 0) {
           throw new BadRequestException(

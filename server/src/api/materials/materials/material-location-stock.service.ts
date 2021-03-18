@@ -65,7 +65,7 @@ export class MaterialLocationStockService {
 
       if (material && location) {
         materialLocationStock = new this.materialLocationStockModel({
-          material,
+          materialId,
           locationId,
           stock: 0,
         });
@@ -95,10 +95,7 @@ export class MaterialLocationStockService {
       const { materialId, stockBought, stockUsed } = updateMaterialStockDto[i];
       const netStockChange = stockBought - stockUsed;
       if (netStockChange < 0) {
-        const currentStock = await this.findOne(
-          materialId,
-          locationId,
-        );
+        const currentStock = await this.findOne(materialId, locationId);
         if (currentStock.stock + netStockChange < 0) {
           throw new BadRequestException(
             `This operation would result in negative stock. Current stock: ${currentStock.stock}, netStockChange: ${netStockChange}`,
