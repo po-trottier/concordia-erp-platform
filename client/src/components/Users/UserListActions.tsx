@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, message, Modal, Form } from 'antd';
+import { Button, Form, message, Modal } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { EditUserForm } from './EditUserForm';

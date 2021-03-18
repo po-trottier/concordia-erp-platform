@@ -7,8 +7,8 @@ import { CreatePartMaterialDto } from './create-part-material.dto';
 export class CreatePartDto {
   @IsNotEmpty()
   @IsString()
-  name: string;
+  name : string;
 
   @IsNotEmpty()
-  materials: CreatePartMaterialDto[];
+  materials : CreatePartMaterialDto[];
 }

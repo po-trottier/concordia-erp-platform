@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, Checkbox, message, Statistic, Switch } from 'antd';
-import {ResponsiveTable} from '../ResponsiveTable';
-import {ProductOrder} from "../../interfaces/ProductOrder";
-import axios from "../../plugins/Axios";
+import { ResponsiveTable } from '../ResponsiveTable';
+import { ProductOrder } from '../../interfaces/ProductOrder';
+import axios from '../../plugins/Axios';
 
 export const Income = () => {
   const emptyData : ProductOrder[] = [];
@@ -18,9 +18,10 @@ export const Income = () => {
         setProductOrderData(orders);
         let balance = 0;
         orders.forEach((d) => {
-          if(!d.isPaid)
+          if (!d.isPaid) {
             balance += d.amountDue;
-        })
+          }
+        });
         setBalance(balance);
       })
       .catch(err => {
@@ -35,23 +36,23 @@ export const Income = () => {
     dateOrdered: 'Date Ordered',
     dateDue: 'Due Date',
     amountDue: 'Amount',
-    isPaid: "Paid",
+    isPaid: 'Paid',
   });
 
   const getOrders = () => {
     const data = JSON.parse(JSON.stringify(productOrderData));
-    const orders: any[] = [];
+    const orders : any[] = [];
     data.forEach((m : any) => {
-      if(!m.isPaid || showPaid) {
-        m.dateOrdered = m.dateOrdered.split("T")[0];
-        m.dateDue = m.dateDue.split("T")[0];
+      if (!m.isPaid || showPaid) {
+        m.dateOrdered = m.dateOrdered.split('T')[0];
+        m.dateDue = m.dateDue.split('T')[0];
         m.customerName = m.customerId.name;
         m.isPaid = <Checkbox checked={m.isPaid} />;
         orders.push(m);
       }
     });
     return orders;
-}
+  };
 
   return (
     <div>
@@ -60,15 +61,15 @@ export const Income = () => {
         <Statistic title='Accounts Receivable Balance (CAD)' value={balance} precision={2} />
       </Card>
       <Card>
-        <div style={{ marginBottom: 24, textAlign:'right'}}>
+        <div style={{ marginBottom: 24, textAlign: 'right' }}>
           <span>Show Paid Orders</span>
-          <Switch onChange={(val:boolean) => {
-            setShowPaid(val)
+          <Switch onChange={(val : boolean) => {
+            setShowPaid(val);
           }} style={{ marginLeft: 10 }} />
         </div>
         {getOrders().length > 0 ?
           <ResponsiveTable columns={getColumns()} values={getOrders()} />
-        : <div>No orders were found.</div>}
+          : <div>No orders were found.</div>}
       </Card>
     </div>
   );

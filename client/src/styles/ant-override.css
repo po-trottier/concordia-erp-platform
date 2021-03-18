@@ -20,12 +20,12 @@
 }
 
 .dark-dropdown .ant-select-item-option-active:not(.ant-select-item-option-disabled),
-.dark-dropdown .ant-select-item-option-selected:not(.ant-select-item-option-disabled){
+.dark-dropdown .ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
   background-color: #363c66 !important;
   color: rgba(255, 255, 255, 0.85) !important;
 }
 
-.dark-dropdown .ant-select-item{
+.dark-dropdown .ant-select-item {
   color: rgba(255, 255, 255, 0.65) !important;
 }
 

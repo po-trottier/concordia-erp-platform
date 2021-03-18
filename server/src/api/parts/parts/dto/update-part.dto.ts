@@ -7,8 +7,8 @@ import { ProductMaterialInterface } from '../schemas/part.schema';
 export class UpdatePartDto {
   @IsString()
   @IsOptional()
-  name: string;
+  name : string;
 
   @IsOptional()
-  materials: ProductMaterialInterface[];
+  materials : ProductMaterialInterface[];
 }
