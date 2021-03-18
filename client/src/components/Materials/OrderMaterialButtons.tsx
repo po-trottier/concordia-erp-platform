@@ -10,45 +10,57 @@ import { MaterialQuantity } from '../../interfaces/MaterialQuantity';
 import axios from '../../plugins/Axios';
 
 export const OrderMaterialButtons = () => {
+	const location = useSelector((state: RootState) => state.location.selected);
+
 	const dispatch = useDispatch();
-	const materials = useSelector((state : RootState) => state.materialList.list);
-	const quantities = useSelector((state : RootState) => state.materialQuantities.quantities);
+	const materials = useSelector((state: RootState) => state.materialList.list);
+	const quantities = useSelector(
+		(state: RootState) => state.materialQuantities.quantities
+	);
 
 	const [orderLoading, setOrderLoading] = useState(false);
 
 	const createOrder = () => {
-    let order : MaterialOrderItem[] = [];
-    quantities.forEach((materialQuantity : MaterialQuantity) => {
-			if(materialQuantity.quantity){
-				const material = materials.find((m : MaterialEntry) => materialQuantity.materialId === m._id);
+		let order: MaterialOrderItem[] = [];
+		quantities.forEach((materialQuantity: MaterialQuantity) => {
+			if (materialQuantity.quantity) {
+				const material = materials.find(
+					(m: MaterialEntry) => materialQuantity.materialId === m._id
+				);
 				const dateOrdered = new Date();
 				order.push({
 					materialId: material._id,
 					quantity: materialQuantity.quantity,
-					supplierName: material.vendorName,
+					locationId: location,
 					dateOrdered,
-				})
+				});
 			}
 		});
-    if (order.length > 0)
+		if (order.length > 0) {
 			placeOrder(order);
-		else
+		} else {
 			message.error('You order is empty.');
-  }
+		}
+	};
 
-  const placeOrder = (order : MaterialOrderItem[]) => {
+	const placeOrder = (order: MaterialOrderItem[]) => {
 		setOrderLoading(true);
-		axios.post('/orders/materials', order)
+		axios
+			.post('/orders/materials', order)
 			.then(() => {
 				const materialList = JSON.parse(JSON.stringify(materials));
-				quantities.forEach((materialQuantity : MaterialQuantity) => {
-					if(materialQuantity.quantity){
-						const index = materialList.findIndex((m : MaterialEntry) => materialQuantity.materialId === m._id);
+				quantities.forEach((materialQuantity: MaterialQuantity) => {
+					if (materialQuantity.quantity) {
+						const index = materialList.findIndex(
+							(m: MaterialEntry) => materialQuantity.materialId === m._id
+						);
 						materialList[index].stock += materialQuantity.quantity;
-						dispatch(updateMaterialQuantities({
-							...materialQuantity,
-							quantity: 0,
-						}));
+						dispatch(
+							updateMaterialQuantities({
+								...materialQuantity,
+								quantity: 0,
+							})
+						);
 					}
 				});
 				dispatch(setMaterialList(materialList));
@@ -59,17 +71,18 @@ export const OrderMaterialButtons = () => {
 				console.error(err);
 			})
 			.finally(() => setOrderLoading(false));
-  }
+	};
 
-    return(
-			<div>
-        <Button
-        type='primary'
-        style={{ marginTop: 16, float: 'right' }}
+	return (
+		<div>
+			<Button
+				type="primary"
+				style={{ marginTop: 16, float: 'right' }}
 				loading={orderLoading}
-        onClick={() => createOrder()}>
-            Place Order
-        </Button>
-			</div>
-    );
-}
+				onClick={() => createOrder()}
+			>
+				Place Order
+			</Button>
+		</div>
+	);
+};
