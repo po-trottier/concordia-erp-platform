@@ -134,8 +134,11 @@ export const PartCatalog = () => {
   };
 
   const buildParts = () => {
-    if (partOrders.length > 0){
-      axios.patch('parts/build/' + location, partOrders)
+    // checking if any parts were selected to be built
+    debugger;
+    const ordersToSend : PartOrderItem[] = partOrders.filter((order)=> order.stockBuilt > 0);
+    if (ordersToSend.length > 0){
+      axios.patch('parts/build/' + location, ordersToSend)
         .then((data) => {
           updatePartStocks(data);
           message.success('The part(s) were built successfully.');
