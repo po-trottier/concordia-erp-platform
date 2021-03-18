@@ -86,7 +86,7 @@ export class PartLocationStockService {
   async update(
     locationId: string,
     updatePartStockDto: UpdatePartStockDto[],
-  ): Promise<PartLocationStock> {
+  ): Promise<PartLocationStock[]> {
     const updatedStocks = [];
 
     for (let i = 0; i < updatePartStockDto.length; i++) {

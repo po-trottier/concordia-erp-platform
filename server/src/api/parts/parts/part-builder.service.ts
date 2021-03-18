@@ -58,7 +58,7 @@ export class PartBuilderService {
     }
 
     // completing every build order
-    const buildResults = [];
+    let buildResults = [];
     for (const buildOrder of validatedBuildOrders) {
       const { stockBuilt, partId, part } = buildOrder;
       // update part stock
@@ -90,7 +90,7 @@ export class PartBuilderService {
         materialUpdates,
       );
 
-      buildResults.push(updatedStock);
+      buildResults = buildResults.concat(updatedStock);
     }
 
     return buildResults;

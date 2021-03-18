@@ -5,7 +5,7 @@ import { BuildProductDto } from './dto/build-product.dto';
 import { ProductsService } from './products.service';
 import { PartLocationStockService } from '../../parts/parts/part-location-stock.service';
 import { ProductLocationStockService } from './product-location-stock.service';
-import {Product, ProductDocument} from './schemas/products.schema';
+import { Product, ProductDocument } from './schemas/products.schema';
 import { Model } from 'mongoose';
 import {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -39,17 +39,14 @@ export class ProductBuilderService {
       productId: string;
       product: Product;
     }[] = [];
-    const productsCache = [];
-
     // checking every build order to see if there are sufficient parts in the db
     // at the same time populate validatedBuildOrders (add product to each object)
     for (const buildOrder of buildOrders) {
-      if (!buildOrder.stockBuilt){
+      if (!buildOrder.stockBuilt) {
         continue;
       }
       const { stockBuilt, productId } = buildOrder;
       const product = await this.productsService.findOne(productId);
-      productsCache.push(product);
       for (const part of product.parts) {
         const totalPartsCount = part.quantity * stockBuilt;
         const partLocationStock = await this.partLocationStockService.findOne(
@@ -65,30 +62,38 @@ export class ProductBuilderService {
       validatedBuildOrders.push({ ...buildOrder, product });
     }
 
-    const updatedProductLocationStock = await this.productLocationStockService.update(
-      locationId,
-      buildOrders.map((o) => ({
-        productId: o.productId,
-        stockBuilt: o.stockBuilt,
+    // completing every build order
+    let buildResults = [];
+    for (const buildOrder of validatedBuildOrders) {
+      const { stockBuilt, productId, product } = buildOrder;
+      // update part stock
+      const updateProductStockDto: UpdateProductStockDto = {
+        productId,
+        stockBuilt,
         stockUsed: 0,
-      })),
-    );
+      };
 
-    for (const product of productsCache) {
-      const order = buildOrders.find((o) => o.productId === product._id);
-      if (!order) {
-        continue;
-      }
-      await this.partLocationStockService.update(
+      const updatedStock = await this.productLocationStockService.update(
         locationId,
-        product.parts.map((p) => ({
-          partId: p.partId,
-          stockUsed: p.quantity * order.stockBuilt,
-          stockBuilt: 0,
-        })),
+        [updateProductStockDto],
       );
-    }
 
-    return updatedProductLocationStock;
+      // update parts stock
+
+      const partUpdates = [];
+      for (const part of product.parts) {
+        const updatePartStockDto: UpdatePartStockDto = {
+          partId: part.partId,
+          stockBuilt: 0,
+          stockUsed: part.quantity * stockBuilt,
+        };
+        partUpdates.push(updatePartStockDto);
+      }
+
+      await this.partLocationStockService.update(locationId, partUpdates);
+
+      buildResults = buildResults.concat(updatedStock);
+    }
+    return buildResults;
   }
 }
