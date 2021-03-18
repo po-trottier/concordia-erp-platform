@@ -40,7 +40,7 @@ export const OrderMaterialButtons = () => {
 		setOrderLoading(true);
 		axios.post('/orders/materials', order)
 			.then(() => {
-				let materialList = JSON.parse(JSON.stringify(materials));
+				const materialList = JSON.parse(JSON.stringify(materials));
 				quantities.forEach((materialQuantity : MaterialQuantity) => {
 					if(materialQuantity.quantity){
 						const index = materialList.findIndex((m : MaterialEntry) => materialQuantity.materialId === m._id);
