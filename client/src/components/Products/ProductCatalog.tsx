@@ -71,18 +71,6 @@ export const ProductCatalog = () => {
     setSearchValue(e.target.value);
   };
 
-  const changeBuildAmount = (productId: string, buildAmount: number) => {
-    const foundOrder = productOrders.find(
-      (order: ProductManuOrderItem) => order.productId === productId
-    );
-    if (foundOrder) {
-      foundOrder.buildAmount = buildAmount;
-      setProductOrders(productOrders);
-    } else {
-      setProductOrders(productOrders.concat({ productId, buildAmount }));
-    }
-  };
-
   const getProducts = () => {
     let rows = JSON.parse(JSON.stringify(products));
 

@@ -91,27 +91,6 @@ export const PartCatalog = () => {
     return mats.map((m) => m.name).join(', ');
   };
 
-  const changeBuildAmount = (partId: string, buildAmount: number) => {
-    const foundOrder = partOrders.find(
-      (order: PartOrderItem) => order.partId === partId
-    );
-
-    if (foundOrder) {
-      if (buildAmount > 0) {
-        foundOrder.buildAmount = buildAmount;
-        setPartOrders(partOrders);
-      } else {
-        // getting rid of the order otherwise
-        debugger;
-        // const index = partOrders.findIndex(order => order.partId === partId);
-        setPartOrders(partOrders.slice(partOrders.findIndex(order => order.partId === partId),1));
-      }
-
-    } else if (buildAmount > 0){
-      setPartOrders(partOrders.concat({ partId, buildAmount }));
-    }
-  };
-
   const getParts = () => {
     let rows = JSON.parse(JSON.stringify(parts));
 
