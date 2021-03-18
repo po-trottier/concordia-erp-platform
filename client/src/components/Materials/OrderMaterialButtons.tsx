@@ -10,9 +10,9 @@ import { MaterialQuantity } from '../../interfaces/MaterialQuantity';
 import axios from '../../plugins/Axios';
 
 export const OrderMaterialButtons = () => {
-	const location = useSelector((state: RootState) => state.location.selected);
+        const dispatch = useDispatch();
 
-	const dispatch = useDispatch();
+	const location = useSelector((state: RootState) => state.location.selected);
 	const materials = useSelector((state: RootState) => state.materialList.list);
 	const quantities = useSelector(
 		(state: RootState) => state.materialQuantities.quantities
