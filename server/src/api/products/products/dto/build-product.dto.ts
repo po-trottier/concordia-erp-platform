@@ -4,7 +4,7 @@ export class BuildProductDto {
   @IsNotEmpty()
   @IsInt()
   @IsPositive()
-  buildAmount: number;
+  stockBuilt: number;
 
   @IsString()
   @IsNotEmpty()

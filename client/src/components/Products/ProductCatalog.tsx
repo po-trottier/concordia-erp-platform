@@ -8,7 +8,7 @@ import { ProductDetails } from './ProductDetails';
 import { RootState } from '../../store/Store';
 import { ProductEntry } from '../../interfaces/ProductEntry';
 import { ProductStockEntry } from '../../interfaces/ProductStockEntry';
-import { ProductManuOrderItem } from '../../interfaces/ProductManuOrderItem';
+import { ProductManufacturingOrderItem } from '../../interfaces/ProductManufacturingOrderItem';
 import { setProductList } from '../../store/slices/ProductListSlice';
 import axios from '../../plugins/Axios';
 
@@ -21,7 +21,7 @@ export const ProductCatalog = () => {
   const updated = useSelector((state : RootState) => state.productList.updated);
   const location = useSelector((state : RootState) => state.location.selected);
 
-  const emptyData: ProductManuOrderItem[] = [];
+  const emptyData: ProductManufacturingOrderItem[] = [];
   const [searchValue, setSearchValue] = useState('');
   const [productOrders, setProductOrders] = useState(emptyData);
 
@@ -33,9 +33,9 @@ export const ProductCatalog = () => {
         });
         axios.get('/products/stock/' + location)
           .then((resp) => {
-            const tempOrders: ProductManuOrderItem[] = [];
+            const tempOrders: ProductManufacturingOrderItem[] = [];
             data.forEach((prod : ProductEntry) => {
-              tempOrders.push({ productId: prod.id, buildAmount: 0 })
+              tempOrders.push({ productId: prod.id, stockBuilt: 0 })
               const entry = resp.data.find((p : ProductStockEntry) => p.productId === prod.id);
               if (entry) {
                 prod.stock = entry.stock;
@@ -90,7 +90,7 @@ export const ProductCatalog = () => {
           placeholder='Input a quantity'
           min={0}
           style={{ width: '100%' }}
-          value={productOrder ? productOrder.buildAmount : 0}
+          value={productOrder ? productOrder.stockBuilt : 0}
           onChange={(v) => updateQuantity(row.id, v)} />
       );
       row.actions = <EditProductModal product={row} />;
@@ -104,8 +104,8 @@ export const ProductCatalog = () => {
 
   const updateQuantity = (id: string, val: any) => {
     const clone = JSON.parse(JSON.stringify(productOrders));
-    const productOrder = clone.find((p : ProductManuOrderItem) => p.productId === id);
-    productOrder.buildAmount = val;
+    const productOrder = clone.find((p : ProductManufacturingOrderItem) => p.productId === id);
+    productOrder.stockBuilt = val;
     setProductOrders(clone);
   };
 

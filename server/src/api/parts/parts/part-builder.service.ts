@@ -28,17 +28,17 @@ export class PartBuilderService {
     locationId: string,
     buildPartOrders: BuildPartDto[],
   ): Promise<Object> {
-    const validatedBuildOrders: {buildAmount: number, partId: string, part: Part}[] = [];
+    const validatedBuildOrders: {stockBuilt: number, partId: string, part: Part}[] = [];
     // checking every build order to see if there are sufficient materials in the db
     // at the same time populate validatedBuildOrders (add part to each object)
     for (const buildOrder of buildPartOrders) {
-      if (!buildOrder.buildAmount){
+      if (!buildOrder.stockBuilt){
         continue;
       }
-      const { buildAmount, partId } = buildOrder;
+      const { stockBuilt, partId } = buildOrder;
       const part = await this.partsService.findOne(partId);
       for (const material of part.materials) {
-        const totalMaterialsCount = material.quantity * buildAmount;
+        const totalMaterialsCount = material.quantity * stockBuilt;
         const materialLocationStock = await this.materialLocationStockService.findOne(material.materialId, locationId);
         if (materialLocationStock.stock < totalMaterialsCount) {
           throw new BadRequestException({error: 'stock of materials is not sufficient'});
@@ -50,10 +50,10 @@ export class PartBuilderService {
     // completing every build order
     const buildResults = [];
     for (const buildOrder of validatedBuildOrders) {
-      const { buildAmount, partId, part } = buildOrder;
+      const { stockBuilt, partId, part } = buildOrder;
       // update part stock
       const updatePartStockDto: UpdatePartStockDto = {
-        stockBuilt: buildAmount,
+        stockBuilt: stockBuilt,
         stockUsed: 0
       };
 
@@ -70,7 +70,7 @@ export class PartBuilderService {
         let updateMaterialStockDto: UpdateMaterialStockDto = {
           materialId: material.materialId,
           stockBought: 0,
-          stockUsed: material.quantity * buildAmount
+          stockUsed: material.quantity * stockBuilt
         };
         materialUpdates.push(updateMaterialStockDto);
       }

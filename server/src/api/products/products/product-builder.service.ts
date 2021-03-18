@@ -27,17 +27,17 @@ export class ProductBuilderService {
     locationId: string,
     buildOrders: BuildProductDto[],
   ): Promise<Object> {
-    const validatedBuildOrders: {buildAmount: number, productId: string, product: Product}[] = [];
+    const validatedBuildOrders: {stockBuilt: number, productId: string, product: Product}[] = [];
     // checking every build order to see if there are sufficient parts in the db
     // at the same time populate validatedBuildOrders (add product to each object)
     for (const buildOrder of buildOrders) {
-      if (!buildOrder.buildAmount){
+      if (!buildOrder.stockBuilt){
         continue;
       }
-      const { buildAmount, productId } = buildOrder;
+      const { stockBuilt, productId } = buildOrder;
       const product = await this.productsService.findOne(productId);
       for (const part of product.parts) {
-        const totalPartsCount = part.quantity * buildAmount;
+        const totalPartsCount = part.quantity * stockBuilt;
         const partLocationStock = await this.partLocationStockService.findOne(part.partId, locationId);
         if (partLocationStock.stock < totalPartsCount) {
           throw new BadRequestException({error: 'stock of parts is not sufficient'});
@@ -49,10 +49,10 @@ export class ProductBuilderService {
     // completing every build order
     const buildResults = [];
     for (const buildOrder of validatedBuildOrders) {
-      const { buildAmount, productId, product } = buildOrder;
+      const { stockBuilt, productId, product } = buildOrder;
       // update product stock
       const updateProductStockDto: UpdateProductStockDto = {
-        stockBuilt: buildAmount,
+        stockBuilt: stockBuilt,
         stockUsed: 0
       };
 
@@ -69,7 +69,7 @@ export class ProductBuilderService {
       };
 
       for (const part of product.parts) {
-        updatePartStockDto.stockUsed = part.quantity * buildAmount;
+        updatePartStockDto.stockUsed = part.quantity * stockBuilt;
         await this.partLocationStockService.update(
           part.partId,
           locationId,

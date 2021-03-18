@@ -39,7 +39,7 @@ export const PartCatalog = () => {
           .then((resp) => {
             const tempOrders: PartOrderItem[] = [];
             data.forEach((part : PartEntry) => {
-              tempOrders.push({ partId: part.id, buildAmount: 0 })
+              tempOrders.push({ partId: part.id, stockBuilt: 0 })
               const entry = resp.data.find((p : PartStockEntry) => p.partId === part.id);
               if (entry) {
                 part.quantity = entry.stock;
@@ -108,7 +108,7 @@ export const PartCatalog = () => {
           placeholder='Input a quantity'
           min={0}
           style={{ width: '100%' }}
-          value={partOrder ? partOrder.buildAmount : 0}
+          value={partOrder ? partOrder.stockBuilt : 0}
           onChange={(v) => updateQuantity(row.id, v)} />
       );
       row.actions = <EditPartModal part={row} />;
@@ -129,7 +129,7 @@ export const PartCatalog = () => {
   const updateQuantity = (id: string, val: any) => {
     const clone = JSON.parse(JSON.stringify(partOrders));
     const partOrder = clone.find((p : PartOrderItem) => p.partId === id);
-    partOrder.buildAmount = val;
+    partOrder.stockBuilt = val;
     setPartOrders(clone);
   };
 
