@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ConfigModule } from '@nestjs/config';
 import {
   ProductLog,
   ProductLogSchema,
@@ -9,7 +10,6 @@ import { ProductsController } from './products/products.controller';
 import { ProductLogsController } from './products-logs/product-logs.controller';
 import { ProductsService } from './products/products.service';
 import { Product, ProductSchema } from './products/schemas/products.schema';
-import { ConfigModule } from '@nestjs/config';
 import { validate } from '../../shared/env';
 import {
   ProductLocationStock,

@@ -8,154 +8,173 @@ import { ProductDetails } from './ProductDetails';
 import { RootState } from '../../store/Store';
 import { ProductEntry } from '../../interfaces/ProductEntry';
 import { ProductStockEntry } from '../../interfaces/ProductStockEntry';
-import { OrderItem } from '../../interfaces/OrderItem';
+import { ProductManufacturingOrderItem } from '../../interfaces/ProductManufacturingOrderItem';
 import { setProductList } from '../../store/slices/ProductListSlice';
 import axios from '../../plugins/Axios';
 
 const { Search } = Input;
 
 export const ProductCatalog = () => {
-  const dispatch = useDispatch();
+	const dispatch = useDispatch();
 
-  const products = useSelector((state : RootState) => state.productList.list);
-  const updated = useSelector((state : RootState) => state.productList.updated);
-  const location = useSelector((state : RootState) => state.location.selected);
+	const products = useSelector((state: RootState) => state.productList.list);
+	const updated = useSelector((state: RootState) => state.productList.updated);
+	const location = useSelector((state: RootState) => state.location.selected);
 
-  const emptyData: OrderItem[] = [];
-  const [searchValue, setSearchValue] = useState('');
-  const [orders, setOrders] = useState(emptyData);
+	const emptyData: ProductManufacturingOrderItem[] = [];
+	const [searchValue, setSearchValue] = useState('');
+	const [productOrders, setProductOrders] = useState(emptyData);
 
-  useEffect(() => {
-    axios.get('/products')
-      .then(({ data }) => {
-        data.forEach((p : any) => {
-          p.id = p._id;
-        });
-        axios.get('/products/stock/' + location)
-          .then((resp) => {
-            data.forEach((prod : ProductEntry) => {
-              const entry = resp.data.find((p : ProductStockEntry) => p.productId === prod.id);
-              if (entry) {
-                prod.stock = entry.stock;
-              } else {
-                prod.stock = 0;
-              }
-            });
-            dispatch(setProductList(data));
-          })
-          .catch((err) => {
-            message.error('Something went wrong while getting the products stock.');
-            console.error(err);
-          });
-      })
-      .catch((err) => {
-        message.error('Something went wrong while getting the products catalog.');
-        console.error(err);
-      });
-  // eslint-disable-next-line
-  }, [updated, location]);
+	useEffect(() => {
+		axios
+			.get('/products')
+			.then(({ data }) => {
+				data.forEach((p: any) => {
+					p.id = p._id;
+				});
+				axios
+					.get('/products/stock/' + location)
+					.then((resp) => {
+						const tempOrders: ProductManufacturingOrderItem[] = [];
+						data.forEach((prod: ProductEntry) => {
+							tempOrders.push({ productId: prod.id, stockBuilt: 0 });
+							const entry = resp.data.find(
+								(p: ProductStockEntry) => p.productId === prod.id
+							);
+							if (entry) {
+								prod.stock = entry.stock;
+							} else {
+								prod.stock = 0;
+							}
+						});
+						setProductOrders(tempOrders);
+						dispatch(setProductList(data));
+					})
+					.catch((err) => {
+						message.error(
+							'Something went wrong while getting the products stock.'
+						);
+						console.error(err);
+					});
+			})
+			.catch((err) => {
+				message.error(
+					'Something went wrong while getting the products catalog.'
+				);
+				console.error(err);
+			});
+		// eslint-disable-next-line
+	}, [updated, location]);
 
-  const updateProductStocks = (response: any) => {
-    const clone = JSON.parse(JSON.stringify(products));
-    response.data.forEach((updatedProductLocationStock: any) => {
-      const foundClone = clone.find((clone: any) => clone.id === updatedProductLocationStock.productId._id);
-      foundClone.stock = updatedProductLocationStock.stock;
-    });
-    dispatch(setProductList(clone));
-  }
+	const updateProductStocks = (response: any) => {
+		const clone = JSON.parse(JSON.stringify(products));
+		response.data.forEach((updatedProductLocationStock: any) => {
+			const foundClone = clone.find(
+				(clone: any) => clone.id === updatedProductLocationStock.productId._id
+			);
+			foundClone.stock = updatedProductLocationStock.stock;
+		});
+		dispatch(setProductList(clone));
+	};
 
-  const onSearch = (e : React.ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(e.target.value);
-  };
+	const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setSearchValue(e.target.value);
+	};
 
-  const changeBuildAmount = (productId: string, stockBuilt: number) => {
-    const foundOrder = orders.find(
-      (order: OrderItem) => order.productId === productId
-    );
-    if (foundOrder) {
-      foundOrder.stockBuilt = stockBuilt;
-      setOrders(orders);
-    } else {
-      setOrders(orders.concat({ productId, stockBuilt }));
-    }
-  };
+	const getProducts = () => {
+		let rows = JSON.parse(JSON.stringify(products));
 
-  const getProducts = () => {
-    let rows = JSON.parse(JSON.stringify(products));
+		if (searchValue.trim() !== '') {
+			rows = rows.filter((r: ProductEntry) =>
+				r.name.trim().toLowerCase().includes(searchValue.trim().toLowerCase())
+			);
+		}
+		rows.forEach((row: any) => {
+			row.id = row['_id'];
+			row.details = (
+				<Button type="primary" size="small" onClick={() => showModal(row)}>
+					See Details
+				</Button>
+			);
+			const productOrder = productOrders.find((p) => p.productId === row.id);
+			row.build = (
+				<InputNumber
+					placeholder="Input a quantity"
+					min={0}
+					style={{ width: '100%' }}
+					value={productOrder ? productOrder.stockBuilt : 0}
+					onChange={(v) => updateQuantity(row.id, v)}
+				/>
+			);
+			row.actions = <EditProductModal product={row} />;
+		});
 
-    if (searchValue.trim() !== '') {
-      rows = rows.filter((r: ProductEntry) => r.name.trim().toLowerCase().includes(searchValue.trim().toLowerCase()));
-    }
-    rows.forEach((row : any) => {
-      row.id = row['_id'];
-      row.details = (
-        <Button type='primary' size='small' onClick={() => showModal(row)}>
-          See Details
-        </Button>
-      );
-      row.build = (
-        <InputNumber
-          onChange={(value: any) => changeBuildAmount(row.id, value)}
-          placeholder='Input a quantity'
-          min={0}
-          style={{ width: '100%' }} />
-      );
-      row.actions = <EditProductModal product={row} />;
-    });
+		rows.sort((a: ProductEntry, b: ProductEntry) => {
+			return a.name < b.name ? -1 : 1;
+		});
+		return rows;
+	};
 
-    rows.sort((a: ProductEntry, b: ProductEntry) => {
-      return a.name < b.name ? -1 : 1;
-    });
-    return rows;
-  };
+	const updateQuantity = (id: string, val: any) => {
+		const clone = JSON.parse(JSON.stringify(productOrders));
+		const productOrder = clone.find(
+			(p: ProductManufacturingOrderItem) => p.productId === id
+		);
+		productOrder.stockBuilt = val;
+		setProductOrders(clone);
+	};
 
-  const showModal = (row : ProductEntry) => {
-    Modal.info({
-      title: 'Product Details',
-      content: <ProductDetails product={row} />
-    });
-  };
+	const showModal = (row: ProductEntry) => {
+		Modal.info({
+			title: 'Product Details',
+			content: <ProductDetails product={row} />,
+		});
+	};
 
-  const columns = {
-    name: 'Name',
-    details: 'Details',
-    price: 'Price',
-    stock: 'Stock',
-    actions: 'Actions',
-    build: 'Build',
-  };
+	const columns = {
+		name: 'Name',
+		details: 'Details',
+		price: 'Price',
+		stock: 'Stock',
+		actions: 'Actions',
+		build: 'Build',
+	};
 
-  const buildProducts = () => {
-    axios.patch('products/build/' + location, orders)
-    .then((data) => {
-      updateProductStocks(data);
-      message.success('The products were built successfully.');
-    }).catch((err) => {
-      message.error('There are not enough parts to build the products.');
-      console.log(err);
-    });
-  };
+	const buildProducts = () => {
+		axios
+			.patch('products/build/' + location, productOrders)
+			.then((data) => {
+				updateProductStocks(data);
+				message.success('The products were built successfully.');
+			})
+			.catch((err) => {
+				message.error('There are not enough parts to build the products.');
+				console.log(err);
+			});
+	};
 
-  return (
-    <div>
-      <Card style={{ margin: '24px 0' }}>
-        <Search
-          placeholder='Search for a product'
-          onChange={onSearch}
-          style={{ marginBottom: 18 }} />
-        {
-          getProducts().length > 0 ?
-            <ResponsiveTable values={getProducts()} columns={columns} /> :
-            <span>No products were found.</span>
-        }
-      </Card>
-      <Button
-        onClick={buildProducts}
-        type='primary'
-        style={{ marginTop: 16, float: 'right' }}>
-        Build Products
-      </Button>
-      <CreateProductModal />
-    </div>
-  );
+	return (
+		<div>
+			<Card style={{ margin: '24px 0' }}>
+				<Search
+					placeholder="Search for a product"
+					onChange={onSearch}
+					style={{ marginBottom: 18 }}
+				/>
+				{getProducts().length > 0 ? (
+					<ResponsiveTable values={getProducts()} columns={columns} />
+				) : (
+					<span>No products were found.</span>
+				)}
+			</Card>
+			<Button
+				onClick={buildProducts}
+				type="primary"
+				style={{ marginTop: 16, float: 'right' }}
+			>
+				Build Products
+			</Button>
+			<CreateProductModal />
+		</div>
+	);
 };
