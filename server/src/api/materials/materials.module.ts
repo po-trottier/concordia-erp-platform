@@ -38,7 +38,10 @@ import {
     MaterialLogsService,
     MaterialLocationStockService,
   ],
-  exports: [MaterialLogsService, MaterialsService, MaterialLocationStockService],
-
+  exports: [
+    MaterialLogsService,
+    MaterialsService,
+    MaterialLocationStockService,
+  ],
 })
 export class MaterialsModule {}
