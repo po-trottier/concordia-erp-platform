@@ -1,7 +1,7 @@
 import {
+  BadRequestException,
   Injectable,
   NotFoundException,
-  PreconditionFailedException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { format, parse } from 'date-fns';
@@ -62,8 +62,8 @@ export class ProductLocationStockService {
 
       if (product && location) {
         productLocationStock = new this.productLocationStockModel({
-          product,
-          location,
+          productId,
+          locationId,
           stock: 0,
         });
         productLocationStock.save();
@@ -80,54 +80,58 @@ export class ProductLocationStockService {
   /**
    * Updates product stock by id using mongoose productLocationStockModel
    *
-   * @param productId string of the product's objectId
    * @param locationId string of the location's objectId
    * @param updateProductStockDto dto used to update product stock
    */
   async update(
-    productId: string,
     locationId: string,
-    updateProductStockDto: UpdateProductStockDto,
+    updateProductStockDto: UpdateProductStockDto[],
   ): Promise<ProductLocationStock> {
-    const { stockBuilt, stockUsed } = updateProductStockDto;
+    const updatedStocks = [];
 
-    const netStockChange = stockBuilt - stockUsed;
+    for (let i = 0; i < updateProductStockDto.length; i++) {
+      const { stockBuilt, stockUsed, productId } = updateProductStockDto[i];
 
-    if (netStockChange < 0) {
-      const currentProductLocationStock = await this.findOne(
-        productId,
-        locationId,
-      );
+      const netStockChange = stockBuilt - stockUsed;
 
-      if (currentProductLocationStock.stock + netStockChange < 0) {
-        throw new PreconditionFailedException(
-          `This operation would result in negative stock. Current stock: ${currentProductLocationStock.stock}, netStockChange: ${netStockChange}`,
-        );
+      if (netStockChange < 0) {
+        const currentStock = await this.findOne(productId, locationId);
+
+        if (currentStock.stock + netStockChange < 0) {
+          throw new BadRequestException(
+            `This operation would result in negative stock. Current stock: ${currentStock.stock}, netStockChange: ${netStockChange}`,
+          );
+        }
+      }
+
+      const updatedStock = await this.productLocationStockModel
+        .findOneAndUpdate(
+          { productId, locationId },
+          { $inc: { stock: netStockChange } },
+          { new: true, upsert: true },
+        )
+        .populate('productId')
+        .exec();
+
+      if (updatedStock) {
+        const updateProductLogDto: UpdateProductLogDto = {
+          productId,
+          locationId,
+          stock: updatedStock.stock,
+          stockBuilt,
+          stockUsed,
+          date: parse(format(new Date(), 'd/M/y'), 'dd/MM/yyyy', new Date()),
+        };
+
+        await this.productLogsService.update(updateProductLogDto);
+
+        updatedStocks.push(updatedStock);
       }
     }
 
-    const updatedProductLocationStock = await this.productLocationStockModel.findOneAndUpdate(
-      { productId, locationId },
-      { $inc: { stock: netStockChange } },
-      { new: true, upsert: true },
-    ).populate('productId').exec();
-
-    if (updatedProductLocationStock) {
-      const updateProductLogDto: UpdateProductLogDto = {
-        productId,
-        locationId,
-        stock: updatedProductLocationStock.stock,
-        stockBuilt,
-        stockUsed,
-        date: parse(format(new Date(), 'd/M/y'), 'dd/MM/yyyy', new Date()),
-      };
-
-      await this.productLogsService.update(updateProductLogDto);
-    }
-
     return this.validateProductLocationStockFound(
-      updatedProductLocationStock,
-      productId,
+      updatedStocks,
+      'many',
       locationId,
     );
   }

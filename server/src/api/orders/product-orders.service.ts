@@ -13,6 +13,7 @@ import { CreateProductOrderDto } from './dto/create-product-order.dto';
 import { UpdateProductOrderDto } from './dto/update-product-order.dto';
 import { ProductsService } from '../products/products/products.service';
 import { ProductLocationStockService } from '../products/products/product-location-stock.service';
+import { UpdateProductStockDto } from '../products/products/dto/update-product-stock.dto';
 
 @Injectable()
 export class ProductOrdersService {
@@ -48,6 +49,7 @@ export class ProductOrdersService {
     createProductOrderDto: CreateProductOrderDto[],
   ): Promise<ProductOrder[]> {
     const createdOrders: ProductOrder[] = [];
+    const stockUpdateDtoMap = new Map<string, UpdateProductStockDto[]>();
 
     // verifying that product stocks are enough
     for (const productOrder of createProductOrderDto) {
@@ -55,10 +57,11 @@ export class ProductOrdersService {
         productOrder.productId,
         productOrder.locationId,
       );
+
       if (productLocationStock.stock < productOrder.quantity) {
         throw new BadRequestException(
-          'There are not enough ' +
-            productLocationStock.productId.name +
+          'There are not enough Product:' +
+            productLocationStock.productId +
             ' to complete the order.',
         );
       }
@@ -77,19 +80,23 @@ export class ProductOrdersService {
       const createdOrder = new this.productOrderModel(order);
       createdOrders.push(await createdOrder.save());
 
-      const productLocationStock: any = await this.productLocationStockService.findOne(
-        productOrder.productId,
-        productOrder.locationId,
-      );
+      const dto: UpdateProductStockDto = {
+        productId: productOrder.productId,
+        stockUsed: productOrder.quantity,
+        stockBuilt: 0,
+      };
 
-      await productLocationStock.update(
-        productOrder.productId,
-        productOrder.locationId,
-        {
-          stockUsed: productLocationStock.stockUsed - productOrder.quantity,
-          stockBuilt: productLocationStock.stockBuilt,
-        },
-      );
+      //add dto to the location, dto[] map
+      if (stockUpdateDtoMap.has(productOrder.locationId)) {
+        stockUpdateDtoMap.get(productOrder.locationId).push(dto);
+      } else {
+        stockUpdateDtoMap.set(productOrder.locationId, [dto]);
+      }
+    }
+
+    //iterate over location, dto[] map and update stocks
+    for (const [location, dtoArray] of stockUpdateDtoMap) {
+      await this.productLocationStockService.update(location, dtoArray);
     }
 
     return createdOrders;

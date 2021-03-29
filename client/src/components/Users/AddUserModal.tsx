@@ -31,7 +31,8 @@ export const AddUserModal = () => {
     };
 
     setLoading(true);
-    axios.post('/users', newUser)
+    axios
+      .post('/users', newUser)
       .then(() => {
         dispatch(addUserEntry(newUser));
         setIsModalVisible(false);
@@ -39,11 +40,7 @@ export const AddUserModal = () => {
         message.success('User was added successfully.');
       })
       .catch((err) => {
-        let error = err.response.data.message;
-        if (err.response.data.message.isArray()) {
-          error = err.response.data.message.join('; ');
-        }
-        message.error(error, 10);
+        message.error('Something went wrong while creating the user.');
         console.error(err);
       })
       .finally(() => {
@@ -58,7 +55,10 @@ export const AddUserModal = () => {
 
   return (
     <div>
-      <Button type='primary' style={{ marginTop: 16 }} onClick={() => setIsModalVisible(true)}>
+      <Button
+        type='primary'
+        style={{ marginTop: 16 }}
+        onClick={() => setIsModalVisible(true)}>
         Add a new User
       </Button>
       <Modal
@@ -80,9 +80,13 @@ export const AddUserModal = () => {
               <Form.Item
                 style={{ marginBottom: 0 }}
                 name='firstName'
-                rules={[{ required: true, message: 'Please input first name!' }]}>
-                <Input placeholder="Enter the user's first name"
-                       onChange={(e) => setFirstName(e.currentTarget.value)} />
+                rules={[
+                  { required: true, message: 'Please input first name!' },
+                ]}>
+                <Input
+                  placeholder="Enter the user's first name"
+                  onChange={(e) => setFirstName(e.currentTarget.value)}
+                />
               </Form.Item>
             </Col>
           </Row>
@@ -95,7 +99,10 @@ export const AddUserModal = () => {
                 style={{ marginBottom: 0 }}
                 name='lastName'
                 rules={[{ required: true, message: 'Please input last name!' }]}>
-                <Input placeholder="Enter the user's last name" onChange={(e) => setLastName(e.currentTarget.value)} />
+                <Input
+                  placeholder="Enter the user's last name"
+                  onChange={(e) => setLastName(e.currentTarget.value)}
+                />
               </Form.Item>
             </Col>
           </Row>
@@ -107,8 +114,13 @@ export const AddUserModal = () => {
               <Form.Item
                 style={{ marginBottom: 0 }}
                 name='email'
-                rules={[{ required: true, message: 'Please input email address!' }]}>
-                <Input placeholder="Enter the user's email" onChange={(e) => setEmail(e.currentTarget.value)} />
+                rules={[
+                  { required: true, message: 'Please input email address!' },
+                ]}>
+                <Input
+                  placeholder="Enter the user's email"
+                  onChange={(e) => setEmail(e.currentTarget.value)}
+                />
               </Form.Item>
             </Col>
           </Row>
@@ -121,7 +133,10 @@ export const AddUserModal = () => {
                 style={{ marginBottom: 0 }}
                 name='username'
                 rules={[{ required: true, message: 'Please input username!' }]}>
-                <Input placeholder="Enter the user's username" onChange={(e) => setUsername(e.currentTarget.value)} />
+                <Input
+                  placeholder="Enter the user's username"
+                  onChange={(e) => setUsername(e.currentTarget.value)}
+                />
               </Form.Item>
             </Col>
           </Row>

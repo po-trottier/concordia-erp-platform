@@ -13,6 +13,10 @@ export class UpdateMaterialOrderDto {
   @IsString()
   materialId: string;
 
+  @IsNotEmpty()
+  @IsString()
+  locationId: string;
+
   @IsOptional()
   @IsPositive()
   @IsInt()

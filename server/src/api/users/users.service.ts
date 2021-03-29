@@ -85,8 +85,15 @@ export class UsersService implements OnApplicationBootstrap {
   async update(username: string, dto: UpdateUserDto): Promise<User> {
     // Trim & Lowercase to make search not case-sensitive
     const user = dto;
-    user.username = user.username.trim().toLowerCase();
-    user.email = user.email.trim().toLowerCase();
+    if (user.username) {
+      user.username = user.username.trim().toLowerCase();
+    }
+    if (user.email) {
+      user.email = user.email.trim().toLowerCase();
+    }
+    if (user.password) {
+      user.password = await hash(user.password, 16);
+    }
     // Cannot change the default user's username
     const isAdmin = username === DEFAULT_USER;
     const usernameChanged = dto.username != username;

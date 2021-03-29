@@ -9,6 +9,8 @@ import {
 import { CreateMaterialOrderDto } from './dto/create-material-order.dto';
 import { UpdateMaterialOrderDto } from './dto/update-material-order.dto';
 import { MaterialsService } from '../materials/materials/materials.service';
+import { UpdateMaterialStockDto } from '../materials/materials/dto/update-material-stock.dto';
+import { MaterialLocationStockService } from '../materials/materials/material-location-stock.service';
 
 @Injectable()
 export class MaterialOrdersService {
@@ -16,6 +18,7 @@ export class MaterialOrdersService {
     @InjectModel(MaterialOrder.name)
     private materialOrderModel: Model<MaterialOrderDocument>,
     private readonly materialsService: MaterialsService,
+    private readonly materialLocationStockService: MaterialLocationStockService,
   ) {}
 
   getIncrement(day: number) {
@@ -43,6 +46,7 @@ export class MaterialOrdersService {
     createMaterialOrderDto: CreateMaterialOrderDto[],
   ): Promise<MaterialOrder[]> {
     const createdOrders: MaterialOrder[] = [];
+    const stockUpdateDtoMap = new Map<string, UpdateMaterialStockDto[]>();
 
     for (const materialOrder of createMaterialOrderDto) {
       const order: any = materialOrder;
@@ -54,6 +58,24 @@ export class MaterialOrdersService {
       );
       const createdOrder = new this.materialOrderModel(order);
       createdOrders.push(await createdOrder.save());
+
+      const dto: UpdateMaterialStockDto = {
+        materialId: materialOrder.materialId,
+        stockUsed: 0,
+        stockBought: materialOrder.quantity,
+      };
+
+      //add dto to the location, dto[] map
+      if (stockUpdateDtoMap.has(materialOrder.locationId)) {
+        stockUpdateDtoMap.get(materialOrder.locationId).push(dto);
+      } else {
+        stockUpdateDtoMap.set(materialOrder.locationId, [dto]);
+      }
+    }
+
+    //iterate over location, dto[] map and update stocks
+    for (const [location, dtoArray] of stockUpdateDtoMap) {
+      await this.materialLocationStockService.update(location, dtoArray);
     }
 
     return createdOrders;

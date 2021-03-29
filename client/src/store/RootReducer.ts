@@ -11,7 +11,7 @@ import { productListSlice } from './slices/ProductListSlice';
 import { partListSlice } from './slices/PartListSlice';
 import { materialListSlice } from './slices/MaterialListSlice';
 import { customerListSlice } from './slices/CustomerListSlice';
-import { materialQuantitiesSlice } from './slices/MaterialQuantitiesSlice'
+import { materialQuantitiesSlice } from './slices/MaterialQuantitiesSlice';
 import { locationSlice } from './slices/LocationSlice';
 
 const persistConfig = {

@@ -46,17 +46,7 @@ export class UsersController {
     @Param('username') username: string,
     @Body(ValidationPipe) dto: UpdateUserDto,
   ) {
-    const body = dto;
-    if (body.username) {
-      body.username = body.username.trim().toLowerCase();
-    }
-    if (body.email) {
-      body.email = body.email.trim().toLowerCase();
-    }
-    if (body.password) {
-      body.password = await hash(body.password, 16);
-    }
-    return this.usersService.update(username.trim().toLowerCase(), body);
+    return this.usersService.update(username.trim().toLowerCase(), dto);
   }
 
   @Roles(Role.SYSTEM_ADMINISTRATOR)

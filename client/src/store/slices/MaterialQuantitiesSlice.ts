@@ -18,14 +18,14 @@ export const materialQuantitiesSlice = createSlice({
         materialId: payload.materialId,
         quantity: payload.quantity
       });
-		},
+    },
     updateQuantities: (state, { payload } : PayloadAction<{ materialId : string, quantity : number }>) => {
       const i = state.quantities.findIndex(quantity => quantity.materialId === payload.materialId);
       state.quantities[i] = {
         materialId: payload.materialId,
         quantity: payload.quantity
       };
-		},
+    },
     removeQuantity: (state, { payload } : PayloadAction<string>) => {
       const i = state.quantities.findIndex(quantity => quantity.materialId === payload);
       if (i >= 0) {

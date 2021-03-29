@@ -11,14 +11,15 @@ import { Part, PartDocument } from './schemas/part.schema';
  */
 @Injectable()
 export class PartsService {
-  constructor(@InjectModel(Part.name) private partModel: Model<PartDocument>) {}
+  constructor(@InjectModel(Part.name) private partModel : Model<PartDocument>) {
+  }
 
   /**
    * Creates part using mongoose partModel
    *
    * @param createPartDto dto used to create parts
    */
-  async create(createPartDto: CreatePartDto): Promise<Part> {
+  async create(createPartDto : CreatePartDto) : Promise<Part> {
     const createdPart = new this.partModel(createPartDto);
     return await createdPart.save();
   }
@@ -26,7 +27,7 @@ export class PartsService {
   /**
    * Retrieves all parts using mongoose partModel
    */
-  async findAll(): Promise<Part[]> {
+  async findAll() : Promise<Part[]> {
     return this.partModel.find();
   }
 
@@ -35,7 +36,7 @@ export class PartsService {
    *
    * @param id string of the part's objectId
    */
-  async findOne(id: string): Promise<Part> {
+  async findOne(id : string) : Promise<Part> {
     const part = await this.partModel.findById(id);
     return this.validatePartFound(part, id);
   }
@@ -46,7 +47,7 @@ export class PartsService {
    * @param id string of the part's objectId
    * @param updatePartDto dto used to update parts
    */
-  async update(id: string, updatePartDto: UpdatePartDto): Promise<Part> {
+  async update(id : string, updatePartDto : UpdatePartDto) : Promise<Part> {
     const updatedPart = await this.partModel.findByIdAndUpdate(
       id,
       { $set: { ...updatePartDto } },
@@ -61,7 +62,7 @@ export class PartsService {
    *
    * @param id string of the part's objectId
    */
-  async remove(id: string): Promise<Part> {
+  async remove(id : string) : Promise<Part> {
     const deletedPart = await this.partModel.findByIdAndDelete(id);
     return this.validatePartFound(deletedPart, id);
   }
@@ -72,7 +73,7 @@ export class PartsService {
    * @param partResult a retrieved part
    * @param id string of the part's objectId
    */
-  validatePartFound(partResult: any, id: string) {
+  validatePartFound(partResult : any, id : string) {
     if (!partResult) {
       throw new NotFoundException(`Part with id ${id} not found`);
     } else {

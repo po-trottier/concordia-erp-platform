@@ -1,7 +1,7 @@
 import {
+  BadRequestException,
   Injectable,
   NotFoundException,
-  PreconditionFailedException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { format, parse } from 'date-fns';
@@ -80,51 +80,58 @@ export class PartLocationStockService {
   /**
    * Updates part stock by id using mongoose partLocationStockModel
    *
-   * @param partId string of the part's objectId
    * @param locationId string of the location's objectId
    * @param updatePartStockDto dto used to update part stock
    */
   async update(
-    partId: string,
     locationId: string,
-    updatePartStockDto: UpdatePartStockDto,
-  ): Promise<PartLocationStock> {
-    const { stockBuilt, stockUsed } = updatePartStockDto;
+    updatePartStockDto: UpdatePartStockDto[],
+  ): Promise<PartLocationStock[]> {
+    const updatedStocks = [];
 
-    const netStockChange = stockBuilt - stockUsed;
+    for (let i = 0; i < updatePartStockDto.length; i++) {
+      const { stockBuilt, stockUsed, partId } = updatePartStockDto[i];
 
-    if (netStockChange < 0) {
-      const currentPartLocationStock = await this.findOne(partId, locationId);
+      const netStockChange = stockBuilt - stockUsed;
 
-      if (currentPartLocationStock.stock + netStockChange < 0) {
-        throw new PreconditionFailedException(
-          `This operation would result in negative stock. Current stock: ${currentPartLocationStock.stock}, netStockChange: ${netStockChange}`,
-        );
+      if (netStockChange < 0) {
+        const currentStock = await this.findOne(partId, locationId);
+
+        if (currentStock.stock + netStockChange < 0) {
+          throw new BadRequestException(
+            `This operation would result in negative stock. Current stock: ${currentStock.stock}, netStockChange: ${netStockChange}`,
+          );
+        }
+      }
+
+      const updatedStock = await this.partLocationStockModel
+        .findOneAndUpdate(
+          { partId, locationId },
+          { $inc: { stock: netStockChange } },
+          { new: true, upsert: true },
+        )
+        .populate('partId')
+        .exec();
+
+      if (updatedStock) {
+        const updatePartLogDto: UpdatePartLogDto = {
+          partId,
+          locationId,
+          stock: updatedStock.stock,
+          stockBuilt,
+          stockUsed,
+          date: parse(format(new Date(), 'd/M/y'), 'dd/MM/yyyy', new Date()),
+        };
+
+        await this.partLogsService.update(updatePartLogDto);
+
+        updatedStocks.push(updatedStock);
       }
     }
 
-    const updatedPartLocationStock = await this.partLocationStockModel.findOneAndUpdate(
-      { partId, locationId },
-      { $inc: { stock: netStockChange } },
-      { new: true, upsert: true },
-    ).populate('partId').exec();
-
-    if (updatedPartLocationStock) {
-      const updatePartLogDto: UpdatePartLogDto = {
-        partId,
-        locationId,
-        stock: updatedPartLocationStock.stock,
-        stockBuilt,
-        stockUsed,
-        date: parse(format(new Date(), 'd/M/y'), 'dd/MM/yyyy', new Date()),
-      };
-
-      await this.partLogsService.update(updatePartLogDto);
-    }
-
     return this.validatePartLocationStockFound(
-      updatedPartLocationStock,
-      partId,
+      updatedStocks,
+      'many',
       locationId,
     );
   }

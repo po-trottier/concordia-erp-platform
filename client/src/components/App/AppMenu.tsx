@@ -13,7 +13,7 @@ const { Sider } = Layout;
 export const AppMenu = () => {
   const location = useLocation();
 
-  const handleCollapse = (collapsed: boolean) => {
+  const handleCollapse = (collapsed : boolean) => {
     const content = document.getElementById('app-content');
     if (content) {
       if (window.innerWidth >= 768) {
@@ -22,7 +22,7 @@ export const AppMenu = () => {
         content.style.marginLeft = '0px';
       }
     }
-  }
+  };
 
   return (
     <Sider
@@ -31,7 +31,7 @@ export const AppMenu = () => {
       breakpoint='md'
       collapsedWidth='0'
       onCollapse={handleCollapse}
-      style={{height: '100vh'}}>
+      style={{ height: '100vh' }}>
       <img
         src={Logo}
         alt='EPIC ERP Logo'
