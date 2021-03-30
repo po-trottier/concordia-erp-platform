@@ -122,7 +122,7 @@ export class ProductsController {
    * @param locationId id of the location
    * @param updateProductStockDto
    */
-  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
+  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR, Role.PRODUCTION_MACHINE)
   @Patch('stock/:locationId')
   updateStock(
     @Param('locationId') locationId: string,

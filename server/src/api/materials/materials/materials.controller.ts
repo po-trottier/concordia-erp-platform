@@ -73,7 +73,7 @@ export class MaterialsController {
     return this.materialLocationStockService.findOne(materialId, locationId);
   }
 
-  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
+  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR, Role.PRODUCTION_MACHINE)
   @Patch('stock/:locationId')
   updateStock(
     @Param('locationId') locationId: string,
