@@ -11,6 +11,7 @@ int greenLed = 8;
 boolean buttonState = LOW;
 
 boolean debounce(boolean);
+void manufacture();
 
 void setup() {
   pinMode(redLed, OUTPUT);
@@ -23,24 +24,39 @@ void setup() {
 
 void loop()
 {
-  if(false)
+  if(Serial.available() > 0)
   {
-    int numberOfBikesToManufacture = Serial.read();
+    int numberOfBikeFrames = Serial.read();
+    Serial.println(numberOfBikeFrames);
 
-
-    Serial.println("An order to build " + String(numberOfBikesToManufacture) + " bike frames was received");
-
-    delay(1000);
-    for(int i = 0; i < numberOfBikesToManufacture; i++)
+    if(numberOfBikeFrames > 0)
     {
-      Serial.println("Loading new materials on the conveyor belt...");
-      delay(1500);
-      manufacture();
+      digitalWrite(redLed, LOW);
+      digitalWrite(yellowLed, HIGH);
+      digitalWrite(greenLed, LOW);
+      Serial.println("An order to build " + String(numberOfBikeFrames) + " bike frames was received");
+  
+      delay(1000);
+      for(int i = 0; i < numberOfBikeFrames; i++)
+      {
+        Serial.println("Loading new materials on the conveyor belt...");
+        delay(1500);
+        digitalWrite(yellowLed, LOW);
+        digitalWrite(greenLed, HIGH);
+        manufacture();
+        digitalWrite(yellowLed, HIGH);
+        digitalWrite(greenLed, LOW);
+      }
+  
+      Serial.println("Batch of " + String(numberOfBikeFrames) + " bike frames completed... Machine is now in loafing state...");
+      Serial.println("#");
+      delay(500);
     }
-
-    Serial.println("Batch of " + String(numberOfBikesToManufacture) + " bike frames completed... Machine is now in loafing state...");
-    delay(500);
-
+    else
+    {
+      Serial.println("Please enter a value larger than 0");
+      Serial.println("#");
+    }
   }
 
   //if(debounce(buttonState) == HIGH && buttonState == LOW)
@@ -53,18 +69,8 @@ void loop()
   //  buttonState = LOW;
   //  buttonReleased();
   //}
-  digitalWrite(redLed, LOW);
-  digitalWrite(yellowLed, LOW);
-  digitalWrite(greenLed, LOW);
-  delay(1000);
   digitalWrite(redLed, HIGH);
-  delay(500);
-  digitalWrite(redLed, LOW);
-  digitalWrite(yellowLed, HIGH);
-  delay(500);
   digitalWrite(yellowLed, LOW);
-  digitalWrite(greenLed, HIGH);
-  delay(500);
   digitalWrite(greenLed, LOW);
 }
 
