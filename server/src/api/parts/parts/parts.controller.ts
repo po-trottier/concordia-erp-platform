@@ -47,13 +47,13 @@ export class PartsController {
     return this.partBuilderService.build(locationId, buildOrders);
   }
 
-  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
+  @Roles(Role.ANY)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.partsService.findOne(id);
   }
 
-  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
+  @Roles(Role.ANY)
   @Get()
   findAll() {
     return this.partsService.findAll();
@@ -76,13 +76,13 @@ export class PartsController {
 
   // STOCK ENDPOINTS
 
-  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
+  @Roles(Role.ANY)
   @Get('stock/:locationId')
   findAllLocationStock(@Param('locationId') locationId: string) {
     return this.partLocationStockService.findAll(locationId);
   }
 
-  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
+  @Roles(Role.ANY)
   @Get('stock/:locationId/:partId')
   findOneLocationStock(
     @Param('partId') partId: string,

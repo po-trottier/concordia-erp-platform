@@ -7,7 +7,7 @@ import { MaterialLogsService } from './material-logs.service';
 export class MaterialLogsController {
   constructor(private readonly materialLogsService: MaterialLogsService) {}
 
-  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
+  @Roles(Role.ANY)
   @Get(':locationId/:materialId')
   findOne(
     @Param('materialId') materialId: string,
@@ -16,7 +16,7 @@ export class MaterialLogsController {
     return this.materialLogsService.findOne(materialId, locationId);
   }
 
-  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
+  @Roles(Role.ANY)
   @Get(':locationId')
   findAll(@Param('locationId') locationId: string) {
     return this.materialLogsService.findAll(locationId);

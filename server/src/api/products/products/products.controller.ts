@@ -42,7 +42,7 @@ export class ProductsController {
   /**
    * Handles GET requests to retrieve all products
    */
-  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
+  @Roles(Role.ANY)
   @Get()
   findAll() {
     return this.productsService.findAll();
@@ -52,7 +52,7 @@ export class ProductsController {
    * Handles GET request to fetch product with given id
    * @param id
    */
-  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
+  @Roles(Role.ANY)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.productsService.findOne(id);
@@ -100,13 +100,13 @@ export class ProductsController {
 
   // STOCK ENDPOINTS
 
-  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
+  @Roles(Role.ANY)
   @Get('stock/:locationId')
   findAllLocationStock(@Param('locationId') locationId: string) {
     return this.productLocationStockService.findAll(locationId);
   }
 
-  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
+  @Roles(Role.ANY)
   @Get('stock/:locationId/:productId')
   findOneLocationStock(
     @Param('locationId') locationId: string,
