@@ -1,51 +1,91 @@
-/** 
- *  Based off "Debounce" example from the Arduino IDE 
-**/
+#include "Arduino.h"
 
-// constants won't change. They're used here to 
-// set pin numbers:
-const int buttonPin = 2;     // the number of the pushbutton pin
-const int ledPin =  13;      // the number of the LED pin
-  
-// Variables will change:
-int ledState = HIGH;         // the current state of the output pin
-int buttonState;             // the current reading from the input pin
-int lastButtonState = LOW;   // the previous reading from the input pin
+// Code specifically for a bike frame building machine
 
-// the following variables are long's because the time, measured in miliseconds,
-// will quickly become a bigger number than can be stored in an int.
-long lastDebounceTime = 0;  // the last time the output pin was toggled
-long debounceDelay = 50;    // the debounce time; increase if the output flickers
+String part_id = "bicycle frame";
+int buttonPin = 2;
+boolean buttonState = LOW;
 
 void setup() {
   pinMode(buttonPin, INPUT);
-  pinMode(ledPin, OUTPUT);
+  pinMode(LED_BUILTIN, OUTPUT);
 }
 
-void loop() {
-  // read the state of the switch into a local variable:
-  int reading = digitalRead(buttonPin);
+boolean loop()
+{
+  if(Serial.available() > 0)
+  {
+    int numberOfBikesToManufacture = Serial.read();
 
-  // check to see if you just pressed the button 
-  // (i.e. the input went from LOW to HIGH),  and you've waited 
-  // long enough since the last press to ignore any noise:  
 
-  // If the switch changed, due to noise or pressing:
-  if (reading != lastButtonState) {
-    // reset the debouncing timer
-    lastDebounceTime = millis();
-  } 
-  
-  if ((millis() - lastDebounceTime) > debounceDelay) {
-    // whatever the reading is at, it's been there for longer
-    // than the debounce delay, so take it as the actual current state:
-    buttonState = reading;
+    Serial.println("An order to build " + String(numberOfBikesToManufacture) + " bike frames was received");
+
+    delay(1000);
+    for(int i = 0; i < numberOfBikesToManufacture; i++)
+    {
+      Serial.println("Loading new materials on the conveyor belt...");
+      delay(1500);
+      manufacture();
+    }
+
+    Serial.println("Batch of " + String(numberOfBikesToManufacture) + " bike frames completed... Machine is now in loafing state...");
+    delay(500);
+
   }
-  
-  // set the LED using the state of the button:
-  digitalWrite(ledPin, buttonState);
 
-  // save the reading.  Next time through the loop,
-  // it'll be the lastButtonState:
-  lastButtonState = reading;
+  if(debounceButton(buttonState) == HIGH && buttonState == LOW)
+  {
+    buttonState = HIGH;
+    buttonPressed();
+  }
+  else if(debounceButton(buttonState) == LOW && buttonState == HIGH)
+  {
+    buttonState = LOW;
+    buttonReleased();
+  }
+}
+
+void buttonPressed(void)
+{
+
+}
+
+void buttonReleased(void)
+{
+
+}
+
+boolean debounce(boolean state)
+{
+  boolean stateNow = digitalRead(buttonPin);
+  if(state != stateNow)
+  {
+    delay(10);
+    stateNow = digitalRead(buttonPin)
+  }
+
+  return stateNow;
+}
+
+void manufacture()
+{
+  // https://www.instructables.com/Build-a-Bicycle-Frame/
+  Serial.println("Starting a new bike frame");
+  delay(800);
+  Serial.println("Tube mitering...");
+  delay(800);
+  Serial.println("Chain Stays...");
+  delay(800);
+  Serial.println("Weld braze...");
+  delay(800);
+  Serial.println("Miter and attach the chain stays...");
+  delay(800);
+  Serial.println("Attach the seat stays...");
+  delay(800);
+  Serial.println("Braze on and bridges...");
+  delay(800);
+  Serial.println("Cleaning and painting...");
+  delay(800);
+  Serial.println("Bike Frame completed");
+  delay(1000);
 }
