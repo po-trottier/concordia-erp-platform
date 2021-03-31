@@ -38,7 +38,7 @@ export class PartsController {
    * @param locationId id of the location
    * @param buildOrders list of build orders for parts
    */
-  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
+  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR, Role.PRODUCTION_MACHINE)
   @Patch('build/:locationId')
   build(
     @Param('locationId') locationId: string,

@@ -79,7 +79,7 @@ export class ProductsController {
    * @param locationId id of the location
    * @param buildProductDto
    */
-  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
+  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR, Role.PRODUCTION_MACHINE)
   @Patch('build/:locationId')
   build(
     @Param('locationId') locationId: string,
@@ -122,7 +122,7 @@ export class ProductsController {
    * @param locationId id of the location
    * @param updateProductStockDto
    */
-  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR, Role.PRODUCTION_MACHINE)
+  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR, Role.PRODUCTION_MACHINE, Role.SALESPERSON)
   @Patch('stock/:locationId')
   updateStock(
     @Param('locationId') locationId: string,

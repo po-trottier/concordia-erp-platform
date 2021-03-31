@@ -29,7 +29,7 @@ export class OrdersController {
     private readonly orderDetailsService: OrderDetailsService,
   ) {}
 
-  @Roles(Role.ACCOUNTANT, Role.SYSTEM_ADMINISTRATOR)
+  @Roles(Role.SYSTEM_ADMINISTRATOR, Role.INVENTORY_MANAGER)
   @Post('materials')
   createMaterialOrder(
     @Body(ValidationPipe)
@@ -40,25 +40,25 @@ export class OrdersController {
     );
   }
 
-  @Roles(Role.ACCOUNTANT, Role.SYSTEM_ADMINISTRATOR)
+  @Roles(Role.ANY)
   @Get('materials/all')
   async findAllMaterialsOrder() {
     return this.materialOrderService.findAll();
   }
 
-  @Roles(Role.ACCOUNTANT, Role.SYSTEM_ADMINISTRATOR)
+  @Roles(Role.ANY)
   @Get('materials/:id')
   findOneMaterialOrder(@Param('id') id: string) {
     return this.materialOrderService.findOne(id);
   }
 
-  @Roles(Role.ACCOUNTANT, Role.SYSTEM_ADMINISTRATOR)
+  @Roles(Role.SYSTEM_ADMINISTRATOR)
   @Delete('materials/:id')
   removeMaterialOrder(@Param('id') id: string) {
     return this.materialOrderService.remove(id);
   }
 
-  @Roles(Role.ACCOUNTANT, Role.SYSTEM_ADMINISTRATOR)
+  @Roles(Role.SYSTEM_ADMINISTRATOR, Role.INVENTORY_MANAGER)
   @Patch('materials/:id')
   updateMaterialOrder(
     @Param('id') id: string,
@@ -67,7 +67,7 @@ export class OrdersController {
     return this.materialOrderService.update(id, updateMaterialOrderDto);
   }
 
-  @Roles(Role.ACCOUNTANT, Role.SYSTEM_ADMINISTRATOR)
+  @Roles(Role.SYSTEM_ADMINISTRATOR, Role.INVENTORY_MANAGER, Role.SALESPERSON)
   @Post('products')
   createProductOrder(
     @Body(ValidationPipe) createProductOrderDto: CreateProductOrderDto[],
@@ -75,25 +75,25 @@ export class OrdersController {
     return this.productOrderService.create(createProductOrderDto);
   }
 
-  @Roles(Role.ACCOUNTANT, Role.SYSTEM_ADMINISTRATOR)
+  @Roles(Role.ANY)
   @Get('products/all')
   findAllProductsOrder() {
     return this.productOrderService.findAll();
   }
 
-  @Roles(Role.ACCOUNTANT, Role.SYSTEM_ADMINISTRATOR)
+  @Roles(Role.ANY)
   @Get('products/:id')
   findOneProductOrder(@Param('id') id: string) {
     return this.productOrderService.findOne(id);
   }
 
-  @Roles(Role.ACCOUNTANT, Role.SYSTEM_ADMINISTRATOR)
+  @Roles(Role.SYSTEM_ADMINISTRATOR)
   @Delete('products/:id')
   removeProductOrder(@Param('id') id: string) {
     return this.productOrderService.remove(id);
   }
 
-  @Roles(Role.ACCOUNTANT, Role.SYSTEM_ADMINISTRATOR)
+  @Roles(Role.SYSTEM_ADMINISTRATOR, Role.INVENTORY_MANAGER, Role.SALESPERSON)
   @Patch('products/:id')
   updateProductOrder(
     @Param('id') id: string,
