@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "aa7414df-1af3-4d3d-9daf-40c01bfaadf0",
+		"_postman_id": "6eb14ccf-9af0-4be6-a98e-945a5f4cdbf5",
 		"name": "Epic Resource Planner",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -1753,6 +1753,32 @@
 					"raw": "{{url}}",
 					"host": [
 						"{{url}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Test Email",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"your@email.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/mail",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"mail"
 					]
 				}
 			},

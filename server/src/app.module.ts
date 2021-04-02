@@ -2,7 +2,7 @@ import { join } from 'path';
 import { Module } from '@nestjs/common';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { ConfigModule } from '@nestjs/config';
-import { ApiModule } from './api/api.module';
+import { ApiModule } from './api/api/api.module';
 import { validate } from './shared/env';
 
 @Module({
