@@ -67,7 +67,7 @@ export class OrdersController {
     return this.materialOrderService.update(id, updateMaterialOrderDto);
   }
 
-  @Roles(Role.SYSTEM_ADMINISTRATOR, Role.INVENTORY_MANAGER, Role.SALESPERSON)
+  @Roles(Role.SYSTEM_ADMINISTRATOR, Role.SALESPERSON)
   @Post('products')
   createProductOrder(
     @Body(ValidationPipe) createProductOrderDto: CreateProductOrderDto[],
@@ -93,7 +93,7 @@ export class OrdersController {
     return this.productOrderService.remove(id);
   }
 
-  @Roles(Role.SYSTEM_ADMINISTRATOR, Role.INVENTORY_MANAGER, Role.SALESPERSON)
+  @Roles(Role.SYSTEM_ADMINISTRATOR, Role.SALESPERSON)
   @Patch('products/:id')
   updateProductOrder(
     @Param('id') id: string,

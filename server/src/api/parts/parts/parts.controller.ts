@@ -91,7 +91,7 @@ export class PartsController {
     return this.partLocationStockService.findOne(partId, locationId);
   }
 
-  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR, Role.PRODUCTION_MACHINE)
+  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
   @Patch('stock/:locationId')
   updateStock(
     @Param('locationId') locationId: string,
