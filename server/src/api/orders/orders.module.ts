@@ -17,24 +17,16 @@ import {
   MaterialSchema,
 } from '../materials/materials/schemas/material.schema';
 import {
-  MaterialLog,
-  MaterialLogSchema,
-} from '../materials/materials-logs/schemas/material-log.schema';
-import {
-  MaterialStock,
-  MaterialStockSchema,
-} from '../materials/materials/schemas/material-stock.schema';
-import {
   Product,
   ProductSchema,
 } from '../products/products/schemas/products.schema';
-import { Part, PartSchema } from '../parts/parts/schemas/part.schema';
 import { ProductOrdersService } from './product-orders.service';
 import { OrderDetailsService } from './order-details.service';
 import { MaterialsService } from '../materials/materials/materials.service';
 import { ProductsService } from '../products/products/products.service';
 import { ProductsModule } from '../products/products.module';
 import { MaterialsModule } from '../materials/materials.module';
+import { PartsModule } from '../parts/parts.module';
 
 /**
  * Contains all logic and files related to finance
@@ -42,16 +34,13 @@ import { MaterialsModule } from '../materials/materials.module';
 @Module({
   imports: [
     MongooseModule.forFeature([
-      { name: Material.name, schema: MaterialSchema },
-      { name: MaterialLog.name, schema: MaterialLogSchema },
-      { name: MaterialStock.name, schema: MaterialStockSchema },
-      { name: Part.name, schema: PartSchema },
-      { name: Product.name, schema: ProductSchema },
       { name: MaterialOrder.name, schema: MaterialOrderSchema },
       { name: ProductOrder.name, schema: ProductOrderSchema },
     ]),
     ProductsModule,
     MaterialsModule,
+    // Required to fulfill dependencies
+    PartsModule,
     // ENV Support
     ConfigModule.forRoot({ validate, cache: true }),
   ],
