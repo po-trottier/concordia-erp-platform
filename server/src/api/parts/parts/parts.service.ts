@@ -1,17 +1,42 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {   
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreatePartDto } from './dto/create-part.dto';
 import { UpdatePartDto } from './dto/update-part.dto';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Part, PartDocument } from './schemas/part.schema';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { Product, ProductDocument } from '../../products/products/schemas/products.schema';
+import {
+  PartStock,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  PartStockDocument,
+} from './schemas/part-stock.schema';
+import {
+  PartLog,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  PartLogDocument,
+} from '../parts-logs/schemas/part-log.schema';
 
 /**
  * Used by the PartsController, handles part data storage and retrieval.
  */
 @Injectable()
 export class PartsService {
-  constructor(@InjectModel(Part.name) private partModel: Model<PartDocument>) {}
+  constructor(
+    @InjectModel(Product.name)
+    private productModel: Model<ProductDocument>,
+    @InjectModel(Part.name)
+    private partModel: Model<PartDocument>,
+    @InjectModel(PartLog.name)
+    private partLogModel: Model<PartLogDocument>,
+    @InjectModel(PartStock.name)
+    private partStockModel: Model<PartStockDocument>
+    ) {}
 
   /**
    * Creates part using mongoose partModel
@@ -62,6 +87,32 @@ export class PartsService {
    * @param id string of the part's objectId
    */
   async remove(id: string): Promise<Part> {
+    //make sure no product depends on the part
+    const dependentProducts = await this.productModel.find({
+      'parts.partId' : id,
+    });
+
+    if (dependentProducts.length > 0) {
+      throw new ForbiddenException(
+        'One or more productsts (' +
+        dependentProducts.map((p: Product) => p.name).join(', ') +
+        ') use the product you are trying to delete.',
+      );
+    }
+
+    //Delete all stock entries for the part
+    const stocks = await this.partStockModel.find({ partId: id});
+    for (const stock of stocks){
+      await stock.delete();
+    }
+
+    //Remove the logs for this part
+    const logs = await this.partLogModel.find({ partId: id});
+    for (const log of logs){
+      await log.delete();
+    }
+
+    //Finally, remove the part
     const deletedPart = await this.partModel.findByIdAndDelete(id);
     return this.validatePartFound(deletedPart, id);
   }

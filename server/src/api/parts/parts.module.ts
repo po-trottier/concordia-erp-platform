@@ -4,6 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import { PartsService } from './parts/parts.service';
 import { PartsController } from './parts/parts.controller';
 import { Part, PartSchema } from './parts/schemas/part.schema';
+import { Product, ProductSchema} from '../products/products/schemas/products.schema';
 import { PartStock, PartStockSchema } from './parts/schemas/part-stock.schema';
 import { PartLog, PartLogSchema } from './parts-logs/schemas/part-log.schema';
 import { PartLogsController } from './parts-logs/part-logs.controller';
@@ -21,6 +22,7 @@ import { ProductsModule } from '../products/products.module';
 @Module({
   imports: [
     MongooseModule.forFeature([
+      { name: Product.name, schema: ProductSchema },
       { name: Part.name, schema: PartSchema },
       { name: PartLog.name, schema: PartLogSchema },
       { name: PartStock.name, schema: PartStockSchema },
