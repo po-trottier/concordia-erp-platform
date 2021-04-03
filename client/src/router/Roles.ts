@@ -4,6 +4,7 @@ export enum Role {
   ACCOUNTANT,
   INVENTORY_MANAGER,
   SYSTEM_ADMINISTRATOR,
+  PRODUCTION_MACHINE,
 }
 
 export const getRoleString = (role : Role) : string => {
@@ -18,6 +19,8 @@ export const getRoleString = (role : Role) : string => {
       return 'Inventory Manager';
     case Role.SYSTEM_ADMINISTRATOR:
       return 'System Administrator';
+    case Role.PRODUCTION_MACHINE:
+      return 'Factory Machine';
     default:
       return 'Unknown Role';
   }

@@ -75,11 +75,14 @@ export class ProductsController {
   /**
    * Route for building products from parts
    *
-   * @param productId id of the product
    * @param locationId id of the location
-   * @param buildProductDto
+   * @param buildOrders
    */
-  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR, Role.PRODUCTION_MACHINE)
+  @Roles(
+    Role.INVENTORY_MANAGER,
+    Role.SYSTEM_ADMINISTRATOR,
+    Role.PRODUCTION_MACHINE,
+  )
   @Patch('build/:locationId')
   build(
     @Param('locationId') locationId: string,
@@ -118,11 +121,10 @@ export class ProductsController {
   /**
    * Handles PATCH request to update an existing product by id
    * HANDLES UPDATES FOR STOCK
-   * @param productId id of the product
    * @param locationId id of the location
    * @param updateProductStockDto
    */
-  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR, Role.PRODUCTION_MACHINE, Role.SALESPERSON)
+  @Roles(Role.SYSTEM_ADMINISTRATOR)
   @Patch('stock/:locationId')
   updateStock(
     @Param('locationId') locationId: string,
