@@ -4,16 +4,13 @@ import { ConfigModule } from '@nestjs/config';
 import { PartsService } from './parts/parts.service';
 import { PartsController } from './parts/parts.controller';
 import { Part, PartSchema } from './parts/schemas/part.schema';
-import {
-  PartLocationStock,
-  PartLocationStockSchema,
-} from './parts/schemas/part-location-stock.schema';
+import { PartStock, PartStockSchema } from './parts/schemas/part-stock.schema';
 import { PartLog, PartLogSchema } from './parts-logs/schemas/part-log.schema';
 import { PartLogsController } from './parts-logs/part-logs.controller';
 import { PartLogsService } from './parts-logs/part-logs.service';
 import { validate } from '../../shared/env';
 import { LocationsModule } from '../locations/locations.module';
-import { PartLocationStockService } from './parts/part-location-stock.service';
+import { PartStockService } from './parts/part-stock.service';
 import { MaterialsModule } from '../materials/materials.module';
 import { PartBuilderService } from './parts/part-builder.service';
 
@@ -25,7 +22,7 @@ import { PartBuilderService } from './parts/part-builder.service';
     MongooseModule.forFeature([
       { name: Part.name, schema: PartSchema },
       { name: PartLog.name, schema: PartLogSchema },
-      { name: PartLocationStock.name, schema: PartLocationStockSchema },
+      { name: PartStock.name, schema: PartStockSchema },
     ]),
     LocationsModule,
     MaterialsModule,
@@ -36,9 +33,9 @@ import { PartBuilderService } from './parts/part-builder.service';
   providers: [
     PartsService,
     PartLogsService,
-    PartLocationStockService,
+    PartStockService,
     PartBuilderService,
   ],
-  exports: [PartLocationStockService],
+  exports: [PartsService, PartStockService],
 })
 export class PartsModule {}

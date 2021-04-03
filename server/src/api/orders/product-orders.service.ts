@@ -7,12 +7,13 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import {
   ProductOrder,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   ProductOrderDocument,
 } from './schemas/product-orders.schema';
 import { CreateProductOrderDto } from './dto/create-product-order.dto';
 import { UpdateProductOrderDto } from './dto/update-product-order.dto';
 import { ProductsService } from '../products/products/products.service';
-import { ProductLocationStockService } from '../products/products/product-location-stock.service';
+import { ProductStockService } from '../products/products/product-stock.service';
 import { UpdateProductStockDto } from '../products/products/dto/update-product-stock.dto';
 
 @Injectable()
@@ -21,7 +22,7 @@ export class ProductOrdersService {
     @InjectModel(ProductOrder.name)
     private productOrderModel: Model<ProductOrderDocument>,
     private readonly productsService: ProductsService,
-    private readonly productLocationStockService: ProductLocationStockService,
+    private readonly productStockService: ProductStockService,
   ) {}
 
   getIncrement(day: number) {
@@ -53,15 +54,15 @@ export class ProductOrdersService {
 
     // verifying that product stocks are enough
     for (const productOrder of createProductOrderDto) {
-      const productLocationStock: any = await this.productLocationStockService.findOne(
+      const productStock: any = await this.productStockService.findOne(
         productOrder.productId,
         productOrder.locationId,
       );
 
-      if (productLocationStock.stock < productOrder.quantity) {
+      if (productStock.stock < productOrder.quantity) {
         throw new BadRequestException(
           'There are not enough Product:' +
-            productLocationStock.productId +
+            productStock.productId +
             ' to complete the order.',
         );
       }
@@ -96,7 +97,7 @@ export class ProductOrdersService {
 
     //iterate over location, dto[] map and update stocks
     for (const [location, dtoArray] of stockUpdateDtoMap) {
-      await this.productLocationStockService.update(location, dtoArray);
+      await this.productStockService.update(location, dtoArray);
     }
 
     return createdOrders;

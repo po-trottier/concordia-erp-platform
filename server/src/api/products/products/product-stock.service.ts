@@ -13,18 +13,18 @@ import { LocationsService } from '../../locations/locations.service';
 import { ProductsService } from './products.service';
 import {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  ProductLocationStockDocument,
-  ProductLocationStock,
-} from './schemas/product-location-stock.schema';
+  ProductStockDocument,
+  ProductStock,
+} from './schemas/product-stock.schema';
 
 /**
  * Used by the ProductsController, handles product location stock data storage and retrieval.
  */
 @Injectable()
-export class ProductLocationStockService {
+export class ProductStockService {
   constructor(
-    @InjectModel(ProductLocationStock.name)
-    private productLocationStockModel: Model<ProductLocationStockDocument>,
+    @InjectModel(ProductStock.name)
+    private productStockModel: Model<ProductStockDocument>,
     private readonly productsService: ProductsService,
     private readonly productLogsService: ProductLogsService,
     private readonly locationsService: LocationsService,
@@ -35,8 +35,8 @@ export class ProductLocationStockService {
    *
    * @param locationId the id of the location
    */
-  async findAll(locationId: string): Promise<ProductLocationStock[]> {
-    return this.productLocationStockModel.find({ locationId });
+  async findAll(locationId: string): Promise<ProductStock[]> {
+    return this.productStockModel.find({ locationId });
   }
 
   /**
@@ -45,40 +45,33 @@ export class ProductLocationStockService {
    * @param productId the id of the product
    * @param locationId the id of the location
    */
-  async findOne(
-    productId: string,
-    locationId: string,
-  ): Promise<ProductLocationStock> {
-    let productLocationStock = await this.productLocationStockModel.findOne({
+  async findOne(productId: string, locationId: string): Promise<ProductStock> {
+    let productStock = await this.productStockModel.findOne({
       productId,
       locationId,
     });
 
     //if stock info is not found, check if product and location are valid
     //and create new entry
-    if (!productLocationStock) {
+    if (!productStock) {
       const product = await this.productsService.findOne(productId);
       const location = await this.locationsService.findOne(locationId);
 
       if (product && location) {
-        productLocationStock = new this.productLocationStockModel({
+        productStock = new this.productStockModel({
           productId,
           locationId,
           stock: 0,
         });
-        productLocationStock.save();
+        productStock.save();
       }
     }
 
-    return this.validateProductLocationStockFound(
-      productLocationStock,
-      productId,
-      locationId,
-    );
+    return this.validateProductStockFound(productStock, productId, locationId);
   }
 
   /**
-   * Updates product stock by id using mongoose productLocationStockModel
+   * Updates product stock by id using mongoose productStockModel
    *
    * @param locationId string of the location's objectId
    * @param updateProductStockDto dto used to update product stock
@@ -86,7 +79,7 @@ export class ProductLocationStockService {
   async update(
     locationId: string,
     updateProductStockDto: UpdateProductStockDto[],
-  ): Promise<ProductLocationStock> {
+  ): Promise<ProductStock> {
     const updatedStocks = [];
 
     for (let i = 0; i < updateProductStockDto.length; i++) {
@@ -104,7 +97,7 @@ export class ProductLocationStockService {
         }
       }
 
-      const updatedStock = await this.productLocationStockModel
+      const updatedStock = await this.productStockModel
         .findOneAndUpdate(
           { productId, locationId },
           { $inc: { stock: netStockChange } },
@@ -129,31 +122,27 @@ export class ProductLocationStockService {
       }
     }
 
-    return this.validateProductLocationStockFound(
-      updatedStocks,
-      'many',
-      locationId,
-    );
+    return this.validateProductStockFound(updatedStocks, 'many', locationId);
   }
 
   /**
-   * Returns NotFoundException if productLocationStock is null, otherwise returns productLocationStock
+   * Returns NotFoundException if productStock is null, otherwise returns productStock
    *
-   * @param productLocationStockResult a retrieved productLocationStock
+   * @param productStockResult a retrieved productStock
    * @param productId string of the product's objectId
    * @param locationId string of the location's objectId
    */
-  validateProductLocationStockFound(
-    productLocationStockResult: any,
+  validateProductStockFound(
+    productStockResult: any,
     productId: string,
     locationId: string,
   ) {
-    if (!productLocationStockResult) {
+    if (!productStockResult) {
       throw new NotFoundException(
-        `ProductLocationStock with product id ${productId} and location id ${locationId} not found`,
+        `ProductStock with product id ${productId} and location id ${locationId} not found`,
       );
     } else {
-      return productLocationStockResult;
+      return productStockResult;
     }
   }
 }

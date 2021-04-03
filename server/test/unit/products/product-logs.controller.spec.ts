@@ -1,6 +1,9 @@
 import { ProductLogsController } from '../../../src/api/products/products-logs/product-logs.controller';
 import { ProductLogsService } from '../../../src/api/products/products-logs/product-logs.service';
-import { ProductLog, ProductLogDocument } from '../../../src/api/products/products-logs/schemas/product-log.schema';
+import {
+  ProductLog,
+  ProductLogDocument,
+} from '../../../src/api/products/products-logs/schemas/product-log.schema';
 import { Model } from 'mongoose';
 
 describe('ProductLogsController', () => {
@@ -11,7 +14,7 @@ describe('ProductLogsController', () => {
   const dummyPartLog: ProductLog = {
     productId: '1234',
     locationId: 'MTL123',
-    date: new Date,
+    date: new Date(),
     stock: 50,
     stockBuilt: 20,
     stockUsed: 0,
@@ -30,7 +33,12 @@ describe('ProductLogsController', () => {
         .spyOn(productLogsService, 'findOne')
         .mockImplementation(async () => await result);
 
-      expect(await productLogsController.findOne(dummyPartLog.productId, dummyPartLog.locationId)).toBe(result);
+      expect(
+        await productLogsController.findOne(
+          dummyPartLog.productId,
+          dummyPartLog.locationId,
+        ),
+      ).toBe(result);
     });
   });
 
@@ -42,7 +50,9 @@ describe('ProductLogsController', () => {
         .spyOn(productLogsService, 'findAll')
         .mockImplementation(async () => await result);
 
-      expect(await productLogsController.findAll(dummyPartLog.locationId)).toBe(result);
+      expect(await productLogsController.findAll(dummyPartLog.locationId)).toBe(
+        result,
+      );
     });
   });
 });

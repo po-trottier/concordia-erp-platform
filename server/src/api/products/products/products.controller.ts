@@ -15,7 +15,7 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { UpdateProductStockDto } from './dto/update-product-stock.dto';
 import { BuildProductDto } from './dto/build-product.dto';
-import { ProductLocationStockService } from './product-location-stock.service';
+import { ProductStockService } from './product-stock.service';
 import { ProductBuilderService } from './product-builder.service';
 
 /**
@@ -25,7 +25,7 @@ import { ProductBuilderService } from './product-builder.service';
 export class ProductsController {
   constructor(
     private readonly productsService: ProductsService,
-    private readonly productLocationStockService: ProductLocationStockService,
+    private readonly productStockService: ProductStockService,
     private readonly productBuilderService: ProductBuilderService,
   ) {}
 
@@ -105,17 +105,17 @@ export class ProductsController {
 
   @Roles(Role.ANY)
   @Get('stock/:locationId')
-  findAllLocationStock(@Param('locationId') locationId: string) {
-    return this.productLocationStockService.findAll(locationId);
+  findAllStock(@Param('locationId') locationId: string) {
+    return this.productStockService.findAll(locationId);
   }
 
   @Roles(Role.ANY)
   @Get('stock/:locationId/:productId')
-  findOneLocationStock(
+  findOneStock(
     @Param('locationId') locationId: string,
     @Param('productId') productId: string,
   ) {
-    return this.productLocationStockService.findOne(productId, locationId);
+    return this.productStockService.findOne(productId, locationId);
   }
 
   /**
@@ -130,9 +130,6 @@ export class ProductsController {
     @Param('locationId') locationId: string,
     @Body(ValidationPipe) updateProductStockDto: UpdateProductStockDto[],
   ) {
-    return this.productLocationStockService.update(
-      locationId,
-      updateProductStockDto,
-    );
+    return this.productStockService.update(locationId, updateProductStockDto);
   }
 }

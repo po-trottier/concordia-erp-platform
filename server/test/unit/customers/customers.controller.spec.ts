@@ -2,7 +2,10 @@ import { CustomersController } from '../../../src/api/customers/customers.contro
 import { CustomersService } from '../../../src/api/customers/customers.service';
 import { CreateCustomerDto } from '../../../src/api/customers/dto/create-customer.dto';
 import { UpdateCustomerDto } from '../../../src/api/customers/dto/update-customer.dto';
-import { Customer, CustomerDocument } from '../../../src/api/customers/schemas/customers.schema';
+import {
+  Customer,
+  CustomerDocument,
+} from '../../../src/api/customers/schemas/customers.schema';
 import { Model } from 'mongoose';
 
 describe('CustomersController', () => {
@@ -12,7 +15,7 @@ describe('CustomersController', () => {
 
   const dummyCustomer: Customer = {
     name: 'Sports Expert',
-    email: 'sportsexpert@sports.com'
+    email: 'sportsexpert@sports.com',
   };
 
   beforeEach(() => {
@@ -49,7 +52,7 @@ describe('CustomersController', () => {
 
       const newCustomer = new CreateCustomerDto();
       newCustomer.name = result.name;
-      newCustomer.email = result.email
+      newCustomer.email = result.email;
 
       jest
         .spyOn(customersService, 'create')
@@ -72,19 +75,17 @@ describe('CustomersController', () => {
   });
 
   describe('update', () => {
-    it('Should update customer\s attribute values by its id', async () => {
+    it('Should update customers attribute values by its id', async () => {
       const result: Customer = dummyCustomer;
 
       const newLocation = new UpdateCustomerDto();
       newLocation.name = result.name;
-      
+
       jest
         .spyOn(customersService, 'update')
         .mockImplementation(async () => await result);
 
-      expect(await customersController.update('123', newLocation)).toBe(
-        result,
-      );
+      expect(await customersController.update('123', newLocation)).toBe(result);
     });
   });
 });

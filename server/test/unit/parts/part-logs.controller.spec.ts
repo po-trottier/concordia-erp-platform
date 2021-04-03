@@ -1,6 +1,9 @@
 import { PartLogsController } from '../../../src/api/parts/parts-logs/part-logs.controller';
 import { PartLogsService } from '../../../src/api/parts/parts-logs/part-logs.service';
-import { PartLog, PartLogDocument } from '../../../src/api/parts/parts-logs/schemas/part-log.schema';
+import {
+  PartLog,
+  PartLogDocument,
+} from '../../../src/api/parts/parts-logs/schemas/part-log.schema';
 import { Model } from 'mongoose';
 
 describe('PartLogsController', () => {
@@ -11,7 +14,7 @@ describe('PartLogsController', () => {
   const dummyPartLog: PartLog = {
     partId: '1234',
     locationId: 'MTL123',
-    date: new Date,
+    date: new Date(),
     stock: 50,
     stockBuilt: 20,
     stockUsed: 0,
@@ -30,7 +33,12 @@ describe('PartLogsController', () => {
         .spyOn(partLogsService, 'findOne')
         .mockImplementation(async () => await result);
 
-      expect(await partLogsController.findOne(dummyPartLog.partId, dummyPartLog.locationId)).toBe(result);
+      expect(
+        await partLogsController.findOne(
+          dummyPartLog.partId,
+          dummyPartLog.locationId,
+        ),
+      ).toBe(result);
     });
   });
 
@@ -42,7 +50,9 @@ describe('PartLogsController', () => {
         .spyOn(partLogsService, 'findAll')
         .mockImplementation(async () => await result);
 
-      expect(await partLogsController.findAll(dummyPartLog.locationId)).toBe(result);
+      expect(await partLogsController.findAll(dummyPartLog.locationId)).toBe(
+        result,
+      );
     });
   });
 });

@@ -3,7 +3,7 @@ import { ApiController } from '../../src/api/api.controller';
 
 describe('ApiController', () => {
   let apiController: ApiController;
-  let apiService: ApiService
+  let apiService: ApiService;
 
   beforeEach(async () => {
     apiService = new ApiService();
@@ -11,12 +11,10 @@ describe('ApiController', () => {
   });
 
   describe('getStatus', () => {
-    it('Should return an object with a single attribute name \'status\' and a value of \'Running\'', async () => {
+    it("Should return an object with a single attribute name 'status' and a value of 'Running'", async () => {
       const result: any = { status: 'Running' };
 
-    jest
-      .spyOn(apiService, 'getStatus')
-      .mockImplementation(() => result);
+      jest.spyOn(apiService, 'getStatus').mockImplementation(() => result);
 
       expect(await apiController.getStatus()).toBe(result);
     });

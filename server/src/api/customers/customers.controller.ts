@@ -8,8 +8,11 @@ import {
   Post,
   ValidationPipe,
 } from '@nestjs/common';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { CustomersService } from './customers.service';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { CreateCustomerDto } from './dto/create-customer.dto';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { UpdateCustomerDto } from './dto/update-customer.dto';
 import { Roles } from '../roles/roles.decorator';
 import { Role } from '../roles/roles.enum';

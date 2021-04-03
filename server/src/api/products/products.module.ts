@@ -12,12 +12,12 @@ import { ProductsService } from './products/products.service';
 import { Product, ProductSchema } from './products/schemas/products.schema';
 import { validate } from '../../shared/env';
 import {
-  ProductLocationStock,
-  ProductLocationStockSchema,
-} from './products/schemas/product-location-stock.schema';
+  ProductStock,
+  ProductStockSchema,
+} from './products/schemas/product-stock.schema';
 import { LocationsModule } from '../locations/locations.module';
 import { PartsModule } from '../parts/parts.module';
-import { ProductLocationStockService } from './products/product-location-stock.service';
+import { ProductStockService } from './products/product-stock.service';
 import { ProductBuilderService } from './products/product-builder.service';
 
 @Module({
@@ -25,7 +25,7 @@ import { ProductBuilderService } from './products/product-builder.service';
     MongooseModule.forFeature([
       { name: Product.name, schema: ProductSchema },
       { name: ProductLog.name, schema: ProductLogSchema },
-      { name: ProductLocationStock.name, schema: ProductLocationStockSchema },
+      { name: ProductStock.name, schema: ProductStockSchema },
     ]),
     LocationsModule,
     PartsModule,
@@ -36,9 +36,9 @@ import { ProductBuilderService } from './products/product-builder.service';
   providers: [
     ProductsService,
     ProductLogsService,
-    ProductLocationStockService,
+    ProductStockService,
     ProductBuilderService,
   ],
-  exports: [ProductLocationStockService],
+  exports: [ProductStockService],
 })
 export class ProductsModule {}

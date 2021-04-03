@@ -1,6 +1,9 @@
 import { MaterialLogsController } from '../../../src/api/materials/materials-logs/material-logs.controller';
 import { MaterialLogsService } from '../../../src/api/materials/materials-logs/material-logs.service';
-import { MaterialLog, MaterialLogDocument } from '../../../src/api/materials/materials-logs/schemas/material-log.schema';
+import {
+  MaterialLog,
+  MaterialLogDocument,
+} from '../../../src/api/materials/materials-logs/schemas/material-log.schema';
 import { Model } from 'mongoose';
 
 describe('MaterialLogsController', () => {
@@ -11,7 +14,7 @@ describe('MaterialLogsController', () => {
   const dummyMaterialLog: MaterialLog = {
     materialId: '1234',
     locationId: 'MTL123',
-    date: new Date,
+    date: new Date(),
     stock: 50,
     stockBought: 20,
     stockUsed: 0,
@@ -30,7 +33,12 @@ describe('MaterialLogsController', () => {
         .spyOn(materialLogsService, 'findOne')
         .mockImplementation(async () => await result);
 
-      expect(await materialLogsController.findOne(dummyMaterialLog.materialId, dummyMaterialLog.locationId)).toBe(result);
+      expect(
+        await materialLogsController.findOne(
+          dummyMaterialLog.materialId,
+          dummyMaterialLog.locationId,
+        ),
+      ).toBe(result);
     });
   });
 
@@ -42,7 +50,9 @@ describe('MaterialLogsController', () => {
         .spyOn(materialLogsService, 'findAll')
         .mockImplementation(async () => await result);
 
-      expect(await materialLogsController.findAll(dummyMaterialLog.locationId)).toBe(result);
+      expect(
+        await materialLogsController.findAll(dummyMaterialLog.locationId),
+      ).toBe(result);
     });
   });
 });

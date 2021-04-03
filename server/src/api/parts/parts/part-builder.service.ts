@@ -1,12 +1,12 @@
-import { Injectable, HttpStatus, BadRequestException } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { UpdateMaterialStockDto } from '../../materials/materials/dto/update-material-stock.dto';
 import { UpdatePartStockDto } from './dto/update-part-stock.dto';
 import { BuildPartDto } from './dto/build-part.dto';
 import { PartsService } from './parts.service';
-import { MaterialLocationStockService } from '../../materials/materials/material-location-stock.service';
-import { PartLocationStockService } from './part-location-stock.service';
+import { MaterialStockService } from '../../materials/materials/material-stock.service';
+import { PartStockService } from './part-stock.service';
 import { Part } from './schemas/part.schema';
-import { PartLocationStock } from './schemas/part-location-stock.schema';
+import { PartStock } from './schemas/part-stock.schema';
 
 /**
  * Used by the PartsController, handles part data storage and retrieval.
@@ -15,8 +15,8 @@ import { PartLocationStock } from './schemas/part-location-stock.schema';
 export class PartBuilderService {
   constructor(
     private readonly partsService: PartsService,
-    private readonly materialLocationStockService: MaterialLocationStockService,
-    private readonly partLocationStockService: PartLocationStockService,
+    private readonly materialStockService: MaterialStockService,
+    private readonly partStockService: PartStockService,
   ) {}
 
   /**
@@ -28,7 +28,7 @@ export class PartBuilderService {
   async build(
     locationId: string,
     buildPartOrders: BuildPartDto[],
-  ): Promise<PartLocationStock[]> {
+  ): Promise<PartStock[]> {
     const validatedBuildOrders: {
       stockBuilt: number;
       partId: string;
@@ -44,11 +44,11 @@ export class PartBuilderService {
       const part = await this.partsService.findOne(partId);
       for (const material of part.materials) {
         const totalMaterialsCount = material.quantity * stockBuilt;
-        const materialLocationStock = await this.materialLocationStockService.findOne(
+        const materialStock = await this.materialStockService.findOne(
           material.materialId,
           locationId,
         );
-        if (materialLocationStock.stock < totalMaterialsCount) {
+        if (materialStock.stock < totalMaterialsCount) {
           throw new BadRequestException({
             error: 'stock of materials is not sufficient',
           });
@@ -68,10 +68,9 @@ export class PartBuilderService {
         stockUsed: 0,
       };
 
-      const updatedStock = await this.partLocationStockService.update(
-        locationId,
-        [updatePartStockDto],
-      );
+      const updatedStock = await this.partStockService.update(locationId, [
+        updatePartStockDto,
+      ]);
 
       // update parts stock
 
@@ -85,10 +84,7 @@ export class PartBuilderService {
         materialUpdates.push(updateMaterialStockDto);
       }
 
-      await this.materialLocationStockService.update(
-        locationId,
-        materialUpdates,
-      );
+      await this.materialStockService.update(locationId, materialUpdates);
 
       buildResults = buildResults.concat(updatedStock);
     }

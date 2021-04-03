@@ -13,18 +13,18 @@ import { LocationsService } from '../../locations/locations.service';
 import { MaterialsService } from './materials.service';
 import {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  MaterialLocationStockDocument,
-  MaterialLocationStock,
-} from './schemas/material-location-stock.schema';
+  MaterialStockDocument,
+  MaterialStock,
+} from './schemas/material-stock.schema';
 
 /**
  * Used by the MaterialsController, handles material location stock data storage and retrieval.
  */
 @Injectable()
-export class MaterialLocationStockService {
+export class MaterialStockService {
   constructor(
-    @InjectModel(MaterialLocationStock.name)
-    private materialLocationStockModel: Model<MaterialLocationStockDocument>,
+    @InjectModel(MaterialStock.name)
+    private materialStockModel: Model<MaterialStockDocument>,
     private readonly materialsService: MaterialsService,
     private readonly materialLogsService: MaterialLogsService,
     private readonly locationsService: LocationsService,
@@ -35,8 +35,8 @@ export class MaterialLocationStockService {
    *
    * @param locationId the id of the location
    */
-  async findAll(locationId: string): Promise<MaterialLocationStock[]> {
-    return await this.materialLocationStockModel
+  async findAll(locationId: string): Promise<MaterialStock[]> {
+    return await this.materialStockModel
       .find({ locationId })
       .populate('materialId')
       .exec();
@@ -51,37 +51,37 @@ export class MaterialLocationStockService {
   async findOne(
     materialId: string,
     locationId: string,
-  ): Promise<MaterialLocationStock> {
-    let materialLocationStock = await this.materialLocationStockModel
+  ): Promise<MaterialStock> {
+    let materialStock = await this.materialStockModel
       .findOne({ materialId, locationId })
       .populate('materialId')
       .exec();
 
     //if stock info is not found, check if material and location are valid
     //and create new entry
-    if (!materialLocationStock) {
+    if (!materialStock) {
       const material = await this.materialsService.findOne(materialId);
       const location = await this.locationsService.findOne(locationId);
 
       if (material && location) {
-        materialLocationStock = new this.materialLocationStockModel({
+        materialStock = new this.materialStockModel({
           materialId,
           locationId,
           stock: 0,
         });
-        await materialLocationStock.save();
+        await materialStock.save();
       }
     }
 
-    return this.validateMaterialLocationStockFound(
-      materialLocationStock,
+    return this.validateMaterialStockFound(
+      materialStock,
       materialId,
       locationId,
     );
   }
 
   /**
-   * Updates material stock by id using mongoose materialLocationStockModel
+   * Updates material stock by id using mongoose materialStockModel
    *
    * @param locationId string of the location's objectId
    * @param updateMaterialStockDto dto used to update material stock
@@ -89,7 +89,7 @@ export class MaterialLocationStockService {
   async update(
     locationId: string,
     updateMaterialStockDto: UpdateMaterialStockDto[],
-  ): Promise<MaterialLocationStock> {
+  ): Promise<MaterialStock> {
     const updatedStocks = [];
     for (let i = 0; i < updateMaterialStockDto.length; i++) {
       const { materialId, stockBought, stockUsed } = updateMaterialStockDto[i];
@@ -103,7 +103,7 @@ export class MaterialLocationStockService {
         }
       }
 
-      const updatedStock = await this.materialLocationStockModel
+      const updatedStock = await this.materialStockModel
         .findOneAndUpdate(
           { materialId, locationId },
           { $inc: { stock: netStockChange } },
@@ -128,7 +128,7 @@ export class MaterialLocationStockService {
       }
     }
 
-    return this.validateMaterialLocationStockFound(
+    return this.validateMaterialStockFound(
       updatedStocks,
       '"many IDs"',
       locationId,
@@ -136,23 +136,23 @@ export class MaterialLocationStockService {
   }
 
   /**
-   * Returns NotFoundException if materialLocationStock is null, otherwise returns materialLocationStock
+   * Returns NotFoundException if materialStock is null, otherwise returns materialStock
    *
-   * @param materialLocationStockResult a retrieved materialLocationStock
+   * @param materialStockResult a retrieved materialStock
    * @param materialId string of the material's objectId
    * @param locationId string of the location's objectId
    */
-  validateMaterialLocationStockFound(
-    materialLocationStockResult: any,
+  validateMaterialStockFound(
+    materialStockResult: any,
     materialId: string,
     locationId: string,
   ) {
-    if (!materialLocationStockResult) {
+    if (!materialStockResult) {
       throw new NotFoundException(
-        `MaterialLocationStock with material id ${materialId} and location id ${locationId} not found`,
+        `MaterialStock with material id ${materialId} and location id ${locationId} not found`,
       );
     } else {
-      return materialLocationStockResult;
+      return materialStockResult;
     }
   }
 }

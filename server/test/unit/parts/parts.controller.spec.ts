@@ -1,7 +1,7 @@
 import { PartsController } from '../../../src/api/parts/parts/parts.controller';
 import { PartsService } from '../../../src/api/parts/parts/parts.service';
 import { PartLogsService } from '../../../src/api/parts/parts-logs/part-logs.service';
-import { PartLocationStockService } from '../../../src/api/parts/parts/part-location-stock.service';
+import { PartStockService } from '../../../src/api/parts/parts/part-stock.service';
 import { LocationsService } from '../../../src/api/locations/locations.service';
 import { CreatePartDto } from '../../../src/api/parts/parts/dto/create-part.dto';
 import { UpdatePartDto } from '../../../src/api/parts/parts/dto/update-part.dto';
@@ -12,9 +12,9 @@ import {
   PartDocument,
 } from '../../../src/api/parts/parts/schemas/part.schema';
 import {
-  PartLocationStock,
-  PartLocationStockDocument
-} from '../../../src/api/parts/parts/schemas/part-location-stock.schema';
+  PartStock,
+  PartStockDocument,
+} from '../../../src/api/parts/parts/schemas/part-stock.schema';
 import { PartLogDocument } from '../../../src/api/parts/parts-logs/schemas/part-log.schema';
 import { LocationDocument } from '../../../src/api/locations/schemas/location.schema';
 
@@ -23,29 +23,34 @@ describe('PartsController', () => {
   let partsService: PartsService;
   let partLogsService: PartLogsService;
   let locationsService: LocationsService;
-  let partLocationStockService: PartLocationStockService;
+  let partStockService: PartStockService;
   let partLogDocument: Model<PartLogDocument>;
   let locationDocument: Model<LocationDocument>;
   let partsDocumentModel: Model<PartDocument>;
-  let partLocationStockDocument: Model<PartLocationStockDocument>
+  let partStockDocument: Model<PartStockDocument>;
 
   const dummyPart: Part = {
     name: 'Handlebar',
     materials: [],
   };
 
-  const dummyPartLocationStock: PartLocationStock = {
+  const dummyPartStock: PartStock = {
     partId: '1234',
     locationId: 'MTL123',
-    stock: 50
-  }
+    stock: 50,
+  };
 
   beforeEach(async () => {
     partsService = new PartsService(partsDocumentModel);
     partLogsService = new PartLogsService(partLogDocument);
     locationsService = new LocationsService(locationDocument);
-    partLocationStockService = new PartLocationStockService(partLocationStockDocument, partsService, partLogsService, locationsService);
-    partsController = new PartsController(partsService, partLocationStockService);
+    partStockService = new PartStockService(
+      partStockDocument,
+      partsService,
+      partLogsService,
+      locationsService,
+    );
+    partsController = new PartsController(partsService, partStockService);
   });
 
   describe('findAll', () => {
@@ -117,43 +122,54 @@ describe('PartsController', () => {
     });
   });
 
-  describe('findAllLocationStock', () => {
+  describe('findAllStock', () => {
     it('Should find all parts location stock', async () => {
-      const result: PartLocationStock[] = [dummyPartLocationStock];
+      const result: PartStock[] = [dummyPartStock];
 
       jest
-        .spyOn(partLocationStockService, 'findAll')
+        .spyOn(partStockService, 'findAll')
         .mockImplementation(async () => await result);
 
-      expect(await partsController.findAllLocationStock(dummyPartLocationStock.locationId)).toBe(result);
+      expect(
+        await partsController.findAllStocks(dummyPartStock.locationId),
+      ).toBe(result);
     });
   });
 
-  describe('findOneLocationStock', () => {
-    it('Should find one part\'s location stock', async () => {
-      const result: PartLocationStock = dummyPartLocationStock;
+  describe('findOneStock', () => {
+    it("Should find one part's location stock", async () => {
+      const result: PartStock = dummyPartStock;
 
       jest
-        .spyOn(partLocationStockService, 'findOne')
+        .spyOn(partStockService, 'findOne')
         .mockImplementation(async () => await result);
 
-      expect(await partsController.findOneLocationStock(dummyPartLocationStock.partId, dummyPartLocationStock.locationId)).toBe(result);
+      expect(
+        await partsController.findOneStock(
+          dummyPartStock.partId,
+          dummyPartStock.locationId,
+        ),
+      ).toBe(result);
     });
   });
 
   describe('updateStock', () => {
     it('Should update the stock of a part at a location', async () => {
-      const result: PartLocationStock = dummyPartLocationStock;
+      const result: PartStock = dummyPartStock;
 
       const updatedPartStock = new UpdatePartStockDto();
       updatedPartStock.stockBuilt = 10;
       updatedPartStock.stockUsed = 20;
 
       jest
-        .spyOn(partLocationStockService, 'update')
+        .spyOn(partStockService, 'update')
         .mockImplementation(async () => await result);
 
-      expect(await partsController.updateStock(dummyPartLocationStock.partId, dummyPartLocationStock.locationId, updatedPartStock)).toBe(result);
+      expect(
+        await partsController.updateStock(dummyPartStock.locationId, [
+          updatedPartStock,
+        ]),
+      ).toBe(result);
     });
   });
 });

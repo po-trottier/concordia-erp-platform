@@ -6,13 +6,16 @@ import { Model } from 'mongoose';
 
 describe('ProductsService', () => {
   let productsService: ProductsService;
-  let productDocument: Model<ProductDocument>
+  let productDocument: Model<ProductDocument>;
   let productOrdersService: ProductOrdersService;
   let productOrderDocument: Model<ProductOrderDocument>;
 
   beforeEach(async () => {
     productsService = new ProductsService(productDocument);
-    productOrdersService = new ProductOrdersService(productOrderDocument, productsService);
+    productOrdersService = new ProductOrdersService(
+      productOrderDocument,
+      productsService,
+    );
   });
 
   it('should be defined', () => {

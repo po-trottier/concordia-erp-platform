@@ -14,13 +14,13 @@ import { UpdateMaterialDto } from './dto/update-material.dto';
 import { Roles } from '../../roles/roles.decorator';
 import { Role } from '../../roles/roles.enum';
 import { UpdateMaterialStockDto } from './dto/update-material-stock.dto';
-import { MaterialLocationStockService } from './material-location-stock.service';
+import { MaterialStockService } from './material-stock.service';
 
 @Controller()
 export class MaterialsController {
   constructor(
     private readonly materialsService: MaterialsService,
-    private readonly materialLocationStockService: MaterialLocationStockService,
+    private readonly materialStockService: MaterialStockService,
   ) {}
 
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
@@ -60,17 +60,17 @@ export class MaterialsController {
 
   @Roles(Role.ANY)
   @Get('stock/:locationId')
-  findAllLocationStock(@Param('locationId') locationId: string) {
-    return this.materialLocationStockService.findAll(locationId);
+  findAllStocks(@Param('locationId') locationId: string) {
+    return this.materialStockService.findAll(locationId);
   }
 
   @Roles(Role.ANY)
   @Get('stock/:locationId/:materialId')
-  findOneLocationStock(
+  findOneStock(
     @Param('materialId') materialId: string,
     @Param('locationId') locationId: string,
   ) {
-    return this.materialLocationStockService.findOne(materialId, locationId);
+    return this.materialStockService.findOne(materialId, locationId);
   }
 
   @Roles(Role.SYSTEM_ADMINISTRATOR)
@@ -79,9 +79,6 @@ export class MaterialsController {
     @Param('locationId') locationId: string,
     @Body(ValidationPipe) updateMaterialStockDto: UpdateMaterialStockDto[],
   ) {
-    return this.materialLocationStockService.update(
-      locationId,
-      updateMaterialStockDto,
-    );
+    return this.materialStockService.update(locationId, updateMaterialStockDto);
   }
 }

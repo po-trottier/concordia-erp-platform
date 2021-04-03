@@ -3,7 +3,10 @@ import { LocationsService } from '../../../src/api/locations/locations.service';
 import { CreateLocationDto } from '../../../src/api/locations/dto/create-location.dto';
 import { UpdateLocationDto } from '../../../src/api/locations/dto/update-location.dto';
 import { Model } from 'mongoose';
-import { Location, LocationDocument } from '../../../src/api/locations/schemas/location.schema';
+import {
+  Location,
+  LocationDocument,
+} from '../../../src/api/locations/schemas/location.schema';
 
 describe('FinanceController', () => {
   let locationsController: LocationsController;
@@ -75,14 +78,12 @@ describe('FinanceController', () => {
 
       const newLocation = new UpdateLocationDto();
       newLocation.name = result.name;
-      
+
       jest
         .spyOn(locationsService, 'update')
         .mockImplementation(async () => await result);
 
-      expect(await locationsController.update('123', newLocation)).toBe(
-        result,
-      );
+      expect(await locationsController.update('123', newLocation)).toBe(result);
     });
   });
 });

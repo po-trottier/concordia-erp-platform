@@ -1,18 +1,18 @@
 import { MaterialsController } from '../../../src/api/materials/materials/materials.controller';
 import { MaterialsService } from '../../../src/api/materials/materials/materials.service';
-import { MaterialLocationStockService } from '../../../src/api/materials/materials/material-location-stock.service';
+import { MaterialStockService } from '../../../src/api/materials/materials/material-stock.service';
 import { CreateMaterialDto } from '../../../src/api/materials/materials/dto/create-material.dto';
 import { UpdateMaterialDto } from '../../../src/api/materials/materials/dto/update-material.dto';
 import { UpdateMaterialStockDto } from '../../../src/api/materials/materials/dto/update-material-stock.dto';
 import { MaterialLogsService } from '../../../src/api/materials/materials-logs/material-logs.service';
 import { MaterialLogDocument } from '../../../src/api/materials/materials-logs/schemas/material-log.schema';
-import { MaterialLocationStock } from '../../../src/api/materials/materials/schemas/material-location-stock.schema';
+import { MaterialStock } from '../../../src/api/materials/materials/schemas/material-stock.schema';
 import { Model } from 'mongoose';
 import {
   Material,
   MaterialDocument,
 } from '../../../src/api/materials/materials/schemas/material.schema';
-import { MaterialLocationStockDocument } from '../../../src/api/materials/materials/schemas/material-location-stock.schema';
+import { MaterialStockDocument } from '../../../src/api/materials/materials/schemas/material-stock.schema';
 import { LocationDocument } from '../../../src/api/locations/schemas/location.schema';
 import { LocationsService } from '../../../src/api/locations/locations.service';
 
@@ -20,10 +20,10 @@ describe('MaterialsController', () => {
   let materialController: MaterialsController;
   let materialService: MaterialsService;
   let materialLogsService: MaterialLogsService;
-  let materialLocationStockService: MaterialLocationStockService;
+  let materialStockService: MaterialStockService;
   let locationsService: LocationsService;
   let locationDocument: Model<LocationDocument>;
-  let materialLocationStockDocument: Model<MaterialLocationStockDocument>;
+  let materialStockDocument: Model<MaterialStockDocument>;
   let materialLogDocument: Model<MaterialLogDocument>;
   let materialDocumentModel: Model<MaterialDocument>;
 
@@ -35,18 +35,26 @@ describe('MaterialsController', () => {
     price: 5,
   };
 
-  const dummyMaterialLocationStock: MaterialLocationStock = {
+  const dummyMaterialStock: MaterialStock = {
     materialId: '123',
     locationId: 'MTL123',
-    stock: 50
-  }
+    stock: 50,
+  };
 
   beforeEach(async () => {
     materialLogsService = new MaterialLogsService(materialLogDocument);
     materialService = new MaterialsService(materialDocumentModel);
     locationsService = new LocationsService(locationDocument);
-    materialLocationStockService = new MaterialLocationStockService(materialLocationStockDocument, materialService, materialLogsService, locationsService);
-    materialController = new MaterialsController(materialService, materialLocationStockService);
+    materialStockService = new MaterialStockService(
+      materialStockDocument,
+      materialService,
+      materialLogsService,
+      locationsService,
+    );
+    materialController = new MaterialsController(
+      materialService,
+      materialStockService,
+    );
   });
 
   describe('findAll', () => {
@@ -124,33 +132,40 @@ describe('MaterialsController', () => {
     });
   });
 
-  describe('findAllLocationStock', () => {
+  describe('findAllStock', () => {
     it('Should find all materials location stock', async () => {
-      const result: MaterialLocationStock[] = [dummyMaterialLocationStock];
+      const result: MaterialStock[] = [dummyMaterialStock];
 
       jest
-        .spyOn(materialLocationStockService, 'findAll')
+        .spyOn(materialStockService, 'findAll')
         .mockImplementation(async () => await result);
 
-      expect(await materialController.findAllLocationStock(dummyMaterialLocationStock.locationId)).toBe(result);
+      expect(
+        await materialController.findAllStocks(dummyMaterialStock.locationId),
+      ).toBe(result);
     });
   });
 
-  describe('findOneLocationStock', () => {
-    it('Should find one material\'s location stock', async () => {
-      const result: MaterialLocationStock = dummyMaterialLocationStock;
+  describe('findOneStock', () => {
+    it("Should find one material's location stock", async () => {
+      const result: MaterialStock = dummyMaterialStock;
 
       jest
-        .spyOn(materialLocationStockService, 'findOne')
+        .spyOn(materialStockService, 'findOne')
         .mockImplementation(async () => await result);
 
-      expect(await materialController.findOneLocationStock(dummyMaterialLocationStock.materialId, dummyMaterialLocationStock.locationId)).toBe(result);
+      expect(
+        await materialController.findOneStock(
+          dummyMaterialStock.materialId,
+          dummyMaterialStock.locationId,
+        ),
+      ).toBe(result);
     });
   });
 
   describe('updateStock', () => {
     it('Should update the stock of a material at a location', async () => {
-      const result: MaterialLocationStock = dummyMaterialLocationStock;
+      const result: MaterialStock = dummyMaterialStock;
 
       const updatedPartStock = new UpdateMaterialStockDto();
       updatedPartStock.stockBought = 10;
@@ -158,10 +173,15 @@ describe('MaterialsController', () => {
       const updatedPartStockList: UpdateMaterialStockDto[] = [updatedPartStock];
 
       jest
-        .spyOn(materialLocationStockService, 'update')
+        .spyOn(materialStockService, 'update')
         .mockImplementation(async () => await result);
 
-      expect(await materialController.updateStock(dummyMaterialLocationStock.locationId, updatedPartStockList)).toBe(result);
+      expect(
+        await materialController.updateStock(
+          dummyMaterialStock.locationId,
+          updatedPartStockList,
+        ),
+      ).toBe(result);
     });
   });
 });

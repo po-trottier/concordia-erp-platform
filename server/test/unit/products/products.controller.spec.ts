@@ -1,6 +1,6 @@
 import { ProductsController } from '../../../src/api/products/products/products.controller';
 import { ProductsService } from '../../../src/api/products/products/products.service';
-import { ProductLocationStockService } from '../../../src/api/products/products/product-location-stock.service';
+import { ProductStockService } from '../../../src/api/products/products/product-stock.service';
 import { ProductBuilderService } from '../../../src/api/products/products/product-builder.service';
 import { CreateProductDto } from '../../../src/api/products/products/dto/create-product.dto';
 import { UpdateProductDto } from '../../../src/api/products/products/dto/update-product.dto';
@@ -12,37 +12,37 @@ import {
   Product,
   ProductDocument,
 } from '../../../src/api/products/products/schemas/products.schema';
-import { ProductLocationStock } from '../../../src/api/products/products/schemas/product-location-stock.schema';
-import { ProductLocationStockDocument } from '../../../src/api/products/products/schemas/product-location-stock.schema';
+import { ProductStock } from '../../../src/api/products/products/schemas/product-stock.schema';
+import { ProductStockDocument } from '../../../src/api/products/products/schemas/product-stock.schema';
 import { ProductLogDocument } from '../../../src/api/products/products-logs/schemas/product-log.schema';
 import { LocationDocument } from '../../../src/api/locations/schemas/location.schema';
 import { LocationsService } from '../../../src/api/locations/locations.service';
 
 import { PartsService } from '../../../src/api/parts/parts/parts.service';
 import { PartLogsService } from '../../../src/api/parts/parts-logs/part-logs.service';
-import { PartLocationStockService } from '../../../src/api/parts/parts/part-location-stock.service';
+import { PartStockService } from '../../../src/api/parts/parts/part-stock.service';
 import { PartDocument } from '../../../src/api/parts/parts/schemas/part.schema';
 import { PartLogDocument } from '../../../src/api/parts/parts-logs/schemas/part-log.schema';
-import { PartLocationStockDocument } from '../../../src/api/parts/parts/schemas/part-location-stock.schema';
+import { PartStockDocument } from '../../../src/api/parts/parts/schemas/part-stock.schema';
 
 describe('ProductsController', () => {
   let productsController: ProductsController;
   let productsService: ProductsService;
-  let productDocument: Model<ProductDocument>
-  let productLocationStockService: ProductLocationStockService;
+  let productDocument: Model<ProductDocument>;
+  let productStockService: ProductStockService;
   let productLogsService: ProductLogsService;
   let productBuilderService: ProductBuilderService;
-  let productLocationStockDocument: Model<ProductLocationStockDocument>
-  let productLogDocument: Model<ProductLogDocument>
-  let locationDocument: Model<LocationDocument>
+  let productStockDocument: Model<ProductStockDocument>;
+  let productLogDocument: Model<ProductLogDocument>;
+  let locationDocument: Model<LocationDocument>;
 
   let partsService: PartsService;
   let partLogsService: PartLogsService;
   let locationsService: LocationsService;
-  let partLocationStockService: PartLocationStockService;
+  let partStockService: PartStockService;
   let partLogDocument: Model<PartLogDocument>;
   let partsDocumentModel: Model<PartDocument>;
-  let partLocationStockDocument: Model<PartLocationStockDocument>
+  let partStockDocument: Model<PartStockDocument>;
 
   const dummyProduct: Product = {
     name: 'Canondale Bike',
@@ -51,24 +51,42 @@ describe('ProductsController', () => {
     properties: [],
   };
 
-  const dummyProductLocationStock: ProductLocationStock = {
+  const dummyProductStock: ProductStock = {
     productId: '123',
     locationId: 'MTL123',
-    stock: 50
-  }
+    stock: 50,
+  };
 
   beforeEach(async () => {
     partsService = new PartsService(partsDocumentModel);
     partLogsService = new PartLogsService(partLogDocument);
     locationsService = new LocationsService(locationDocument);
-    partLocationStockService = new PartLocationStockService(partLocationStockDocument, partsService, partLogsService, locationsService);
+    partStockService = new PartStockService(
+      partStockDocument,
+      partsService,
+      partLogsService,
+      locationsService,
+    );
 
     productsService = new ProductsService(productDocument);
     productLogsService = new ProductLogsService(productLogDocument);
     locationsService = new LocationsService(locationDocument);
-    productLocationStockService = new ProductLocationStockService(productLocationStockDocument, productsService, productLogsService, locationsService);
-    productBuilderService = new ProductBuilderService(productsService, productLocationStockService, partLocationStockService);
-    productsController = new ProductsController(productsService, productLocationStockService, productBuilderService);
+    productStockService = new ProductStockService(
+      productStockDocument,
+      productsService,
+      productLogsService,
+      locationsService,
+    );
+    productBuilderService = new ProductBuilderService(
+      productsService,
+      productStockService,
+      partStockService,
+    );
+    productsController = new ProductsController(
+      productsService,
+      productStockService,
+      productBuilderService,
+    );
   });
 
   describe('findAll', () => {
@@ -116,7 +134,7 @@ describe('ProductsController', () => {
     it('Should build a new a product from parts at a location', async () => {
       const result: any = {
         stockBuilt: 10,
-        productId: dummyProductLocationStock.productId,
+        productId: dummyProductStock.productId,
       };
 
       const newBuiltProduct = new BuildProductDto();
@@ -128,7 +146,12 @@ describe('ProductsController', () => {
         .spyOn(productBuilderService, 'build')
         .mockImplementation(async () => await result);
 
-      expect(await productsController.build(dummyProductLocationStock.locationId, newBuiltProductList)).toBe(result);
+      expect(
+        await productsController.build(
+          dummyProductStock.locationId,
+          newBuiltProductList,
+        ),
+      ).toBe(result);
     });
   });
 
@@ -164,43 +187,56 @@ describe('ProductsController', () => {
     });
   });
 
-  describe('findAllLocationStock', () => {
+  describe('findAllStock', () => {
     it('Should find all products location stock', async () => {
-      const result: ProductLocationStock[] = [dummyProductLocationStock];
+      const result: ProductStock[] = [dummyProductStock];
 
       jest
-        .spyOn(productLocationStockService, 'findAll')
+        .spyOn(productStockService, 'findAll')
         .mockImplementation(async () => await result);
 
-      expect(await productsController.findAllLocationStock(dummyProductLocationStock.locationId)).toBe(result);
+      expect(
+        await productsController.findAllStock(dummyProductStock.locationId),
+      ).toBe(result);
     });
   });
 
-  describe('findOneLocationStock', () => {
-    it('Should find one product\'s location stock', async () => {
-      const result: ProductLocationStock = dummyProductLocationStock;
+  describe('findOneStock', () => {
+    it("Should find one product's location stock", async () => {
+      const result: ProductStock = dummyProductStock;
 
       jest
-        .spyOn(productLocationStockService, 'findOne')
+        .spyOn(productStockService, 'findOne')
         .mockImplementation(async () => await result);
 
-      expect(await productsController.findOneLocationStock(dummyProductLocationStock.productId, dummyProductLocationStock.locationId)).toBe(result);
+      expect(
+        await productsController.findOneStock(
+          dummyProductStock.productId,
+          dummyProductStock.locationId,
+        ),
+      ).toBe(result);
     });
   });
 
   describe('updateStock', () => {
     it('Should update the stock of a product at a location', async () => {
-      const result: ProductLocationStock = dummyProductLocationStock;
+      const result: ProductStock = dummyProductStock;
 
       const updatedProductStock = new UpdateProductStockDto();
       updatedProductStock.stockBuilt = 10;
       updatedProductStock.stockUsed = 20;
 
       jest
-        .spyOn(productLocationStockService, 'update')
+        .spyOn(productStockService, 'update')
         .mockImplementation(async () => await result);
 
-      expect(await productsController.updateStock(dummyProductLocationStock.productId, dummyProductLocationStock.locationId, updatedProductStock)).toBe(result);
+      expect(
+        await productsController.updateStock(
+          dummyProductStock.productId,
+          dummyProductStock.locationId,
+          updatedProductStock,
+        ),
+      ).toBe(result);
     });
   });
 });

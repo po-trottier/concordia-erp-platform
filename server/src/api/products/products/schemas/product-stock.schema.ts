@@ -1,13 +1,13 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema as mongooseSchema } from 'mongoose';
 
-export type ProductLocationStockDocument = ProductLocationStock & Document;
+export type ProductStockDocument = ProductStock & Document;
 
 /**
- * ProductLocationStock collection mongoose schema
+ * ProductStock collection mongoose schema
  */
 @Schema()
-export class ProductLocationStock {
+export class ProductStock {
   @Prop({
     type: mongooseSchema.Types.ObjectId,
     ref: 'Product',
@@ -28,10 +28,5 @@ export class ProductLocationStock {
   stock: number;
 }
 
-export const ProductLocationStockSchema = SchemaFactory.createForClass(
-  ProductLocationStock,
-);
-ProductLocationStockSchema.index(
-  { productId: 1, locationId: 1 },
-  { unique: true },
-);
+export const ProductStockSchema = SchemaFactory.createForClass(ProductStock);
+ProductStockSchema.index({ productId: 1, locationId: 1 }, { unique: true });

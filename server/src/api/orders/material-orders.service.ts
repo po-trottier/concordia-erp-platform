@@ -10,7 +10,7 @@ import { CreateMaterialOrderDto } from './dto/create-material-order.dto';
 import { UpdateMaterialOrderDto } from './dto/update-material-order.dto';
 import { MaterialsService } from '../materials/materials/materials.service';
 import { UpdateMaterialStockDto } from '../materials/materials/dto/update-material-stock.dto';
-import { MaterialLocationStockService } from '../materials/materials/material-location-stock.service';
+import { MaterialStockService } from '../materials/materials/material-stock.service';
 
 @Injectable()
 export class MaterialOrdersService {
@@ -18,7 +18,7 @@ export class MaterialOrdersService {
     @InjectModel(MaterialOrder.name)
     private materialOrderModel: Model<MaterialOrderDocument>,
     private readonly materialsService: MaterialsService,
-    private readonly materialLocationStockService: MaterialLocationStockService,
+    private readonly materialStockService: MaterialStockService,
   ) {}
 
   getIncrement(day: number) {
@@ -75,7 +75,7 @@ export class MaterialOrdersService {
 
     //iterate over location, dto[] map and update stocks
     for (const [location, dtoArray] of stockUpdateDtoMap) {
-      await this.materialLocationStockService.update(location, dtoArray);
+      await this.materialStockService.update(location, dtoArray);
     }
 
     return createdOrders;

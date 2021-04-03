@@ -1,18 +1,12 @@
-import { Injectable, HttpStatus, BadRequestException } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { UpdatePartStockDto } from '../../parts/parts/dto/update-part-stock.dto';
 import { UpdateProductStockDto } from './dto/update-product-stock.dto';
 import { BuildProductDto } from './dto/build-product.dto';
 import { ProductsService } from './products.service';
-import { PartLocationStockService } from '../../parts/parts/part-location-stock.service';
-import { ProductLocationStockService } from './product-location-stock.service';
-import { Product, ProductDocument } from './schemas/products.schema';
-import { Model } from 'mongoose';
-import {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  PartLocationStockDocument,
-  PartLocationStock,
-} from '../../parts/parts/schemas/part-location-stock.schema';
-import { InjectModel } from '@nestjs/mongoose';
+import { PartStockService } from '../../parts/parts/part-stock.service';
+import { ProductStockService } from './product-stock.service';
+import { Product } from './schemas/products.schema';
+
 /**
  * Used by the ProductsController, handles product data storage and retrieval.
  */
@@ -20,8 +14,8 @@ import { InjectModel } from '@nestjs/mongoose';
 export class ProductBuilderService {
   constructor(
     private readonly productsService: ProductsService,
-    private readonly productLocationStockService: ProductLocationStockService,
-    private readonly partLocationStockService: PartLocationStockService,
+    private readonly productStockService: ProductStockService,
+    private readonly partStockService: PartStockService,
   ) {}
 
   /**
@@ -49,11 +43,11 @@ export class ProductBuilderService {
       const product = await this.productsService.findOne(productId);
       for (const part of product.parts) {
         const totalPartsCount = part.quantity * stockBuilt;
-        const partLocationStock = await this.partLocationStockService.findOne(
+        const partStock = await this.partStockService.findOne(
           part.partId,
           locationId,
         );
-        if (partLocationStock.stock < totalPartsCount) {
+        if (partStock.stock < totalPartsCount) {
           throw new BadRequestException({
             error: 'stock of parts is not sufficient',
           });
@@ -73,10 +67,9 @@ export class ProductBuilderService {
         stockUsed: 0,
       };
 
-      const updatedStock = await this.productLocationStockService.update(
-        locationId,
-        [updateProductStockDto],
-      );
+      const updatedStock = await this.productStockService.update(locationId, [
+        updateProductStockDto,
+      ]);
 
       // update parts stock
 
@@ -90,7 +83,7 @@ export class ProductBuilderService {
         partUpdates.push(updatePartStockDto);
       }
 
-      await this.partLocationStockService.update(locationId, partUpdates);
+      await this.partStockService.update(locationId, partUpdates);
 
       buildResults = buildResults.concat(updatedStock);
     }

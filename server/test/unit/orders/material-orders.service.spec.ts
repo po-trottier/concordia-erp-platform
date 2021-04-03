@@ -12,7 +12,10 @@ describe('MaterialsService', () => {
 
   beforeEach(async () => {
     materialService = new MaterialsService(materialDocumentModel);
-    materialOrdersService = new MaterialOrdersService(materialOrderDocument, materialService);
+    materialOrdersService = new MaterialOrdersService(
+      materialOrderDocument,
+      materialService,
+    );
   });
 
   it('should be defined', () => {

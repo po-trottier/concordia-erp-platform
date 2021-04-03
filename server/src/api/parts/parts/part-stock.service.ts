@@ -13,18 +13,18 @@ import { LocationsService } from '../../locations/locations.service';
 import { PartsService } from './parts.service';
 import {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  PartLocationStockDocument,
-  PartLocationStock,
-} from './schemas/part-location-stock.schema';
+  PartStockDocument,
+  PartStock,
+} from './schemas/part-stock.schema';
 
 /**
  * Used by the PartsController, handles part location stock data storage and retrieval.
  */
 @Injectable()
-export class PartLocationStockService {
+export class PartStockService {
   constructor(
-    @InjectModel(PartLocationStock.name)
-    private partLocationStockModel: Model<PartLocationStockDocument>,
+    @InjectModel(PartStock.name)
+    private partStockModel: Model<PartStockDocument>,
     private readonly partsService: PartsService,
     private readonly partLogsService: PartLogsService,
     private readonly locationsService: LocationsService,
@@ -35,8 +35,8 @@ export class PartLocationStockService {
    *
    * @param locationId the id of the location
    */
-  async findAll(locationId: string): Promise<PartLocationStock[]> {
-    return this.partLocationStockModel.find({ locationId });
+  async findAll(locationId: string): Promise<PartStock[]> {
+    return this.partStockModel.find({ locationId });
   }
 
   /**
@@ -45,40 +45,33 @@ export class PartLocationStockService {
    * @param partId the id of the part
    * @param locationId the id of the location
    */
-  async findOne(
-    partId: string,
-    locationId: string,
-  ): Promise<PartLocationStock> {
-    let partLocationStock = await this.partLocationStockModel.findOne({
+  async findOne(partId: string, locationId: string): Promise<PartStock> {
+    let partStock = await this.partStockModel.findOne({
       partId,
       locationId,
     });
 
     //if stock info is not found, check if part and location are valid
     //and create new entry
-    if (!partLocationStock) {
+    if (!partStock) {
       const part = await this.partsService.findOne(partId);
       const location = await this.locationsService.findOne(locationId);
 
       if (part && location) {
-        partLocationStock = new this.partLocationStockModel({
+        partStock = new this.partStockModel({
           partId,
           locationId,
           stock: 0,
         });
-        partLocationStock.save();
+        partStock.save();
       }
     }
 
-    return this.validatePartLocationStockFound(
-      partLocationStock,
-      partId,
-      locationId,
-    );
+    return this.validatePartStockFound(partStock, partId, locationId);
   }
 
   /**
-   * Updates part stock by id using mongoose partLocationStockModel
+   * Updates part stock by id using mongoose partStockModel
    *
    * @param locationId string of the location's objectId
    * @param updatePartStockDto dto used to update part stock
@@ -86,7 +79,7 @@ export class PartLocationStockService {
   async update(
     locationId: string,
     updatePartStockDto: UpdatePartStockDto[],
-  ): Promise<PartLocationStock[]> {
+  ): Promise<PartStock[]> {
     const updatedStocks = [];
 
     for (let i = 0; i < updatePartStockDto.length; i++) {
@@ -104,7 +97,7 @@ export class PartLocationStockService {
         }
       }
 
-      const updatedStock = await this.partLocationStockModel
+      const updatedStock = await this.partStockModel
         .findOneAndUpdate(
           { partId, locationId },
           { $inc: { stock: netStockChange } },
@@ -129,31 +122,27 @@ export class PartLocationStockService {
       }
     }
 
-    return this.validatePartLocationStockFound(
-      updatedStocks,
-      'many',
-      locationId,
-    );
+    return this.validatePartStockFound(updatedStocks, 'many', locationId);
   }
 
   /**
-   * Returns NotFoundException if partLocationStock is null, otherwise returns partLocationStock
+   * Returns NotFoundException if partStock is null, otherwise returns partStock
    *
-   * @param partLocationStockResult a retrieved partLocationStock
+   * @param partStockResult a retrieved partStock
    * @param partId string of the part's objectId
    * @param locationId string of the location's objectId
    */
-  validatePartLocationStockFound(
-    partLocationStockResult: any,
+  validatePartStockFound(
+    partStockResult: any,
     partId: string,
     locationId: string,
   ) {
-    if (!partLocationStockResult) {
+    if (!partStockResult) {
       throw new NotFoundException(
-        `PartLocationStock with part id ${partId} and location id ${locationId} not found`,
+        `PartStock with part id ${partId} and location id ${locationId} not found`,
       );
     } else {
-      return partLocationStockResult;
+      return partStockResult;
     }
   }
 }

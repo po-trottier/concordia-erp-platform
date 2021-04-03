@@ -7,9 +7,8 @@ import { Model } from 'mongoose';
 import { User, UserDocument } from '../../../src/api/users/schemas/user.schema';
 
 describe('UsersController', () => {
-
   jest.setTimeout(30000);
-  
+
   let usersController: UsersController;
   let usersService: UsersService;
   let userDocumentModel: Model<UserDocument>;

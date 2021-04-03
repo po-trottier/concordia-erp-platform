@@ -31,7 +31,7 @@ describe('OrdersController', () => {
   let productOrderDocument: Model<ProductOrderDocument>;
   let materialOrderDocument: Model<MaterialOrderDocument>;
   let materialDocumentModel: Model<MaterialDocument>;
-  let productDocument: Model<ProductDocument>
+  let productDocument: Model<ProductDocument>;
 
   const dummyMaterialOrder: MaterialOrder = {
     amountDue: 5000,
@@ -54,9 +54,15 @@ describe('OrdersController', () => {
 
   beforeEach(async () => {
     materialService = new MaterialsService(materialDocumentModel);
-    materialOrdersService = new MaterialOrdersService(materialOrderDocument, materialService);
+    materialOrdersService = new MaterialOrdersService(
+      materialOrderDocument,
+      materialService,
+    );
     productsService = new ProductsService(productDocument);
-    productOrdersService = new ProductOrdersService(productOrderDocument, productsService);
+    productOrdersService = new ProductOrdersService(
+      productOrderDocument,
+      productsService,
+    );
     orderDetailsService = new OrderDetailsService();
     ordersController = new OrdersController(
       materialOrdersService,
@@ -78,9 +84,9 @@ describe('OrdersController', () => {
         .spyOn(materialOrdersService, 'createMaterialOrder')
         .mockImplementation(async () => await result);
 
-      expect(await ordersController.createMaterialOrder(newMaterialOrderList)).toBe(
-        result,
-      );
+      expect(
+        await ordersController.createMaterialOrder(newMaterialOrderList),
+      ).toBe(result);
     });
   });
 
@@ -95,9 +101,12 @@ describe('OrdersController', () => {
         .spyOn(materialOrdersService, 'update')
         .mockImplementation(async () => await result);
 
-      expect(await ordersController.updateMaterialOrder(dummyMaterialOrder.materialId, newMaterialOrder)).toBe(
-        result,
-      );
+      expect(
+        await ordersController.updateMaterialOrder(
+          dummyMaterialOrder.materialId,
+          newMaterialOrder,
+        ),
+      ).toBe(result);
     });
   });
 
@@ -133,7 +142,9 @@ describe('OrdersController', () => {
         .mockImplementation(async () => await result);
 
       expect(
-        await ordersController.findOneMaterialOrder(newMaterialOrder.materialId),
+        await ordersController.findOneMaterialOrder(
+          newMaterialOrder.materialId,
+        ),
       ).toBe(result);
     });
   });
@@ -167,9 +178,9 @@ describe('OrdersController', () => {
         .spyOn(productOrdersService, 'create')
         .mockImplementation(async () => await result);
 
-      expect(await ordersController.createProductOrder(newProductOrderList)).toBe(
-        result,
-      );
+      expect(
+        await ordersController.createProductOrder(newProductOrderList),
+      ).toBe(result);
     });
   });
 
@@ -184,9 +195,12 @@ describe('OrdersController', () => {
         .spyOn(productOrdersService, 'update')
         .mockImplementation(async () => await result);
 
-      expect(await ordersController.updateProductOrder(dummyMaterialOrder.materialId, newProductOrder)).toBe(
-        result,
-      );
+      expect(
+        await ordersController.updateProductOrder(
+          dummyMaterialOrder.materialId,
+          newProductOrder,
+        ),
+      ).toBe(result);
     });
   });
 
