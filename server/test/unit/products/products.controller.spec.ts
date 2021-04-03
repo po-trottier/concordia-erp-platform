@@ -35,7 +35,6 @@ describe('ProductsController', () => {
   let productStockDocument: Model<ProductStockDocument>;
   let productLogDocument: Model<ProductLogDocument>;
   let locationDocument: Model<LocationDocument>;
-
   let partsService: PartsService;
   let partLogsService: PartLogsService;
   let locationsService: LocationsService;
@@ -67,7 +66,6 @@ describe('ProductsController', () => {
       partLogsService,
       locationsService,
     );
-
     productsService = new ProductsService(productDocument);
     productLogsService = new ProductLogsService(productLogDocument);
     locationsService = new LocationsService(locationDocument);
@@ -232,9 +230,8 @@ describe('ProductsController', () => {
 
       expect(
         await productsController.updateStock(
-          dummyProductStock.productId,
           dummyProductStock.locationId,
-          updatedProductStock,
+          [updatedProductStock]
         ),
       ).toBe(result);
     });

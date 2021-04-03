@@ -20,6 +20,16 @@ import { MaterialDocument } from '../../../src/api/materials/materials/schemas/m
 import { ProductDocument } from '../../../src/api/products/products/schemas/products.schema';
 import { Model } from 'mongoose';
 import { SummaryDto } from 'src/api/orders/dto/summary.dto';
+import { MaterialStockService } from '../../../src/api/materials/materials/material-stock.service';
+import { MaterialStockDocument } from '../../../src/api/materials/materials/schemas/material-stock.schema';
+import { MaterialLogsService } from '../../../src/api/materials/materials-logs/material-logs.service';
+import { MaterialLogDocument } from '../../../src/api/materials/materials-logs/schemas/material-log.schema';
+import { ProductStockService } from '../../../src/api/products/products/product-stock.service';
+import { ProductStockDocument } from '../../../src/api/products/products/schemas/product-stock.schema';
+import { ProductLogsService } from '../../../src/api/products/products-logs/product-logs.service';
+import { ProductLogDocument } from '../../../src/api/products/products-logs/schemas/product-log.schema';
+import { LocationsService } from '../../../src/api/locations/locations.service';
+import { LocationDocument } from '../../../src/api/locations/schemas/location.schema';
 
 describe('OrdersController', () => {
   let ordersController: OrdersController;
@@ -32,6 +42,18 @@ describe('OrdersController', () => {
   let materialOrderDocument: Model<MaterialOrderDocument>;
   let materialDocumentModel: Model<MaterialDocument>;
   let productDocument: Model<ProductDocument>;
+
+  let materialStockService: MaterialStockService;
+  let materialStockDocument: Model<MaterialStockDocument>;
+  let materialLogsService: MaterialLogsService;
+  let materialLogDocument: Model<MaterialLogDocument>;
+  let productStockService: ProductStockService;
+  let productStockDocument: Model<ProductStockDocument>;
+  let productLogsService: ProductLogsService;
+  let productLogDocument: Model<ProductLogDocument>;
+
+  let locationsService: LocationsService;
+  let locationDocument: Model<LocationDocument>;
 
   const dummyMaterialOrder: MaterialOrder = {
     amountDue: 5000,
@@ -53,15 +75,23 @@ describe('OrdersController', () => {
   };
 
   beforeEach(async () => {
+    locationsService = new LocationsService(locationDocument);
     materialService = new MaterialsService(materialDocumentModel);
+    materialLogsService = new MaterialLogsService(materialLogDocument);
+    materialStockService = new MaterialStockService(materialStockDocument, materialService, materialLogsService, locationsService);
     materialOrdersService = new MaterialOrdersService(
       materialOrderDocument,
       materialService,
+      materialStockService
     );
     productsService = new ProductsService(productDocument);
+    productLogsService = new ProductLogsService(productLogDocument);
+    productLogsService = new ProductLogsService(productLogDocument);
+    productStockService = new ProductStockService(productStockDocument, productsService, productLogsService, locationsService);
     productOrdersService = new ProductOrdersService(
       productOrderDocument,
       productsService,
+      productStockService
     );
     orderDetailsService = new OrderDetailsService();
     ordersController = new OrdersController(
@@ -77,7 +107,10 @@ describe('OrdersController', () => {
 
       let newMaterialOrder = new CreateMaterialOrderDto();
       let newMaterialOrderList: CreateMaterialOrderDto[] = [];
-      newMaterialOrder = dummyMaterialOrder;
+      newMaterialOrder = {
+        ...dummyMaterialOrder,
+        locationId: 'MTL123'
+      }
       newMaterialOrderList = [newMaterialOrder];
 
       jest
@@ -95,7 +128,10 @@ describe('OrdersController', () => {
       const result: MaterialOrder = dummyMaterialOrder;
 
       let newMaterialOrder = new UpdateMaterialOrderDto();
-      newMaterialOrder = dummyMaterialOrder;
+      newMaterialOrder = {
+        ...dummyMaterialOrder,
+        locationId: 'MTL123'
+      }
 
       jest
         .spyOn(materialOrdersService, 'update')
@@ -135,7 +171,10 @@ describe('OrdersController', () => {
     it('Should find one material order by id.', async () => {
       const result: MaterialOrder = dummyMaterialOrder;
       let newMaterialOrder = new CreateMaterialOrderDto();
-      newMaterialOrder = dummyMaterialOrder;
+      newMaterialOrder = {
+        ...dummyMaterialOrder,
+        locationId: 'MTL123'
+      }
 
       jest
         .spyOn(materialOrdersService, 'findOne')
@@ -153,7 +192,10 @@ describe('OrdersController', () => {
     it('Should delete one material order by id.', async () => {
       const result: MaterialOrder = dummyMaterialOrder;
       let newMaterialOrder = new CreateMaterialOrderDto();
-      newMaterialOrder = dummyMaterialOrder;
+      newMaterialOrder = {
+        ...dummyMaterialOrder,
+        locationId: 'MTL123'
+      }
 
       jest
         .spyOn(materialOrdersService, 'remove')
@@ -171,7 +213,10 @@ describe('OrdersController', () => {
 
       let newProductOrder = new CreateProductOrderDto();
       let newProductOrderList: CreateProductOrderDto[] = [];
-      newProductOrder = dummyProductOrder;
+      newProductOrder = {
+        ...dummyProductOrder,
+        locationId: 'MTL123'
+      };
       newProductOrderList = [newProductOrder];
 
       jest
@@ -189,7 +234,10 @@ describe('OrdersController', () => {
       const result: ProductOrder = dummyProductOrder;
 
       let newProductOrder = new UpdateProductOrderDto();
-      newProductOrder = dummyProductOrder;
+      newProductOrder = {
+        ...dummyProductOrder,
+        locationId: 'MTL123'
+      };
 
       jest
         .spyOn(productOrdersService, 'update')
@@ -220,7 +268,10 @@ describe('OrdersController', () => {
     it('Should find one product order by id.', async () => {
       const result: ProductOrder = dummyProductOrder;
       let newProductOrder = new CreateProductOrderDto();
-      newProductOrder = dummyProductOrder;
+      newProductOrder = {
+        ...dummyProductOrder,
+        locationId: 'MTL123'
+      };
 
       jest
         .spyOn(productOrdersService, 'findOne')
@@ -236,7 +287,10 @@ describe('OrdersController', () => {
     it('Should delete one product order by id.', async () => {
       const result: ProductOrder = dummyProductOrder;
       let newProductOrder = new CreateProductOrderDto();
-      newProductOrder = dummyProductOrder;
+      newProductOrder = {
+        ...dummyProductOrder,
+        locationId: 'MTL123'
+      };
 
       jest
         .spyOn(productOrdersService, 'remove')

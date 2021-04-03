@@ -4,10 +4,10 @@ import { LocationDocument } from '../../../src/api/locations/schemas/location.sc
 
 describe('UsersService', () => {
   let locationsService: LocationsService;
-  let financeEntryDocument: Model<LocationDocument>;
+  let locationDocument: Model<LocationDocument>;
 
   beforeEach(async () => {
-    locationsService = new LocationsService(financeEntryDocument);
+    locationsService = new LocationsService(locationDocument);
   });
 
   it('should be defined', () => {

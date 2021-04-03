@@ -1,10 +1,12 @@
 import { PartsController } from '../../../src/api/parts/parts/parts.controller';
 import { PartsService } from '../../../src/api/parts/parts/parts.service';
 import { PartLogsService } from '../../../src/api/parts/parts-logs/part-logs.service';
+import { PartBuilderService } from '../../../src/api/parts/parts/part-builder.service';
 import { PartStockService } from '../../../src/api/parts/parts/part-stock.service';
 import { LocationsService } from '../../../src/api/locations/locations.service';
 import { CreatePartDto } from '../../../src/api/parts/parts/dto/create-part.dto';
 import { UpdatePartDto } from '../../../src/api/parts/parts/dto/update-part.dto';
+import { BuildPartDto } from '../../../src/api/parts/parts/dto/build-part.dto';
 import { UpdatePartStockDto } from '../../../src/api/parts/parts/dto/update-part-stock.dto';
 import { Model } from 'mongoose';
 import {
@@ -17,6 +19,12 @@ import {
 } from '../../../src/api/parts/parts/schemas/part-stock.schema';
 import { PartLogDocument } from '../../../src/api/parts/parts-logs/schemas/part-log.schema';
 import { LocationDocument } from '../../../src/api/locations/schemas/location.schema';
+import { MaterialsService } from '../../../src/api/materials/materials/materials.service';
+import { MaterialDocument } from '../../../src/api/materials/materials/schemas/material.schema';
+import { MaterialStockService } from '../../../src/api/materials/materials/material-stock.service';
+import { MaterialStockDocument } from '../../../src/api/materials/materials/schemas/material-stock.schema';
+import { MaterialLogsService } from '../../../src/api/materials/materials-logs/material-logs.service';
+import { MaterialLogDocument } from '../../../src/api/materials/materials-logs/schemas/material-log.schema';
 
 describe('PartsController', () => {
   let partsController: PartsController;
@@ -28,6 +36,13 @@ describe('PartsController', () => {
   let locationDocument: Model<LocationDocument>;
   let partsDocumentModel: Model<PartDocument>;
   let partStockDocument: Model<PartStockDocument>;
+  let materialService: MaterialsService;
+  let materialDocument: Model<MaterialDocument>;
+  let materialStockService: MaterialStockService;
+  let materialStockDocument: Model<MaterialStockDocument>;
+  let materialLogsService: MaterialLogsService;
+  let materialLogDocument: Model<MaterialLogDocument>;
+  let partBuilderService: PartBuilderService;
 
   const dummyPart: Part = {
     name: 'Handlebar',
@@ -50,7 +65,16 @@ describe('PartsController', () => {
       partLogsService,
       locationsService,
     );
-    partsController = new PartsController(partsService, partStockService);
+    materialService = new MaterialsService(materialDocument);
+    materialLogsService = new MaterialLogsService(materialLogDocument);
+    materialStockService = new MaterialStockService(
+      materialStockDocument,
+      materialService,
+      materialLogsService,
+      locationsService
+    );
+    partBuilderService = new PartBuilderService(partsService, materialStockService, partStockService);
+    partsController = new PartsController(partsService, partStockService, partBuilderService);
   });
 
   describe('findAll', () => {
@@ -73,6 +97,22 @@ describe('PartsController', () => {
         .mockImplementation(async () => await result);
 
       expect(await partsController.findOne(result.name)).toBe(result);
+    });
+  });
+
+  describe('build', () => {
+    it('Should build a new part', async () => {
+      const result: PartStock[] = [dummyPartStock];
+
+      const newPartStock = new BuildPartDto();
+      newPartStock.partId = result[0].partId;
+      newPartStock.stockBuilt = result[0].stock;
+
+      jest
+        .spyOn(partBuilderService, 'build')
+        .mockImplementation(async () => await result);
+
+      expect(await partsController.build(dummyPartStock.locationId, [newPartStock])).toBe(result);
     });
   });
 
@@ -155,7 +195,7 @@ describe('PartsController', () => {
 
   describe('updateStock', () => {
     it('Should update the stock of a part at a location', async () => {
-      const result: PartStock = dummyPartStock;
+      const result: PartStock[] = [dummyPartStock];
 
       const updatedPartStock = new UpdatePartStockDto();
       updatedPartStock.stockBuilt = 10;
