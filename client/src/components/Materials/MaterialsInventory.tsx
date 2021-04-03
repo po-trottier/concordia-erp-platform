@@ -6,13 +6,14 @@ import { MaterialsTimelineEntry } from '../../interfaces/MaterialsTimelineEntry'
 import axios from '../../plugins/Axios';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/Store';
+import { addPredictions } from '../../predictions/predictions';
 
 const { Search } = Input;
 
 const inventoryColumns = {
   name: 'Material',
   date: 'Date',
-  stockBought: 'Bought',
+  stockBuilt: 'Bought',
   stockUsed: 'Used',
   stock: 'Stock'
 };
@@ -53,7 +54,7 @@ export const MaterialsInventory = () => {
       return dateA < dateB ? -1 : 1;
     });
 
-    return rows;
+    return addPredictions(rows);
   };
 
   const onSearch = (e : React.ChangeEvent<HTMLInputElement>) => {
