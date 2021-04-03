@@ -19,6 +19,7 @@ import { LocationsModule } from '../locations/locations.module';
 import { PartsModule } from '../parts/parts.module';
 import { ProductStockService } from './products/product-stock.service';
 import { ProductBuilderService } from './products/product-builder.service';
+import { OrdersModule } from '../orders/orders.module';
 
 @Module({
   imports: [

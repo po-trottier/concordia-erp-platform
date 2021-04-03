@@ -1,10 +1,26 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {   
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Product, ProductDocument } from './schemas/products.schema';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { ProductOrder, ProductOrderDocument } from '../../orders/schemas/product-orders.schema';
+import {
+  ProductStock,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  ProductStockDocument,
+} from './schemas/product-stock.schema';
+import {
+  ProductLog,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  ProductLogDocument,
+} from '../products-logs/schemas/product-log.schema';
 
 /**
  * Used by the ProductsController, handles product data storage and retrieval.
@@ -12,7 +28,14 @@ import { Product, ProductDocument } from './schemas/products.schema';
 @Injectable()
 export class ProductsService {
   constructor(
-    @InjectModel(Product.name) private productModel: Model<ProductDocument>,
+    @InjectModel(ProductOrder.name)
+    private productOrderModel: Model<ProductOrderDocument>,
+    @InjectModel(Product.name)
+    private productModel: Model<ProductDocument>,
+    @InjectModel(ProductLog.name)
+    private productLogModel: Model<ProductLogDocument>,
+    @InjectModel(ProductStock.name)
+    private productStockModel: Model<ProductStockDocument>,
   ) {}
 
   /**
@@ -69,6 +92,21 @@ export class ProductsService {
    * @param id string of the product's objectId
    */
   async remove(id: string) {
+    const dependentProductOrders = await this.productOrderModel.find({
+      productId: id,
+    });
+
+    if (dependentProductOrders.length > 0)
+    {
+      throw new ForbiddenException(
+        'One or more orders (' + 
+        dependentProductOrders.map((p: ProductOrder) => p.dateOrdered).join(', ') +
+        ') use the product you are trying to delete',
+      );
+    }
+
+    //delete all stock entries for the product 
+    
     const deletedProduct = await this.productModel.findByIdAndDelete(id);
     return this.validateProductFound(deletedProduct, id);
   }
