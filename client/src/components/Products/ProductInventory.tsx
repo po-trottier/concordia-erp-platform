@@ -82,7 +82,7 @@ export const ProductInventory = () => {
 
           let predictionRow = {
             name: rows[right].name,
-            date: endOfYear.toLocaleString().split(',')[0],
+            date: endOfYear.toLocaleString().split(',')[0] + " (estimate)",
             stockBuilt: stockDifference > 0 ? stockDifference : 0,
             stockUsed: stockDifference < 0 ? -stockDifference : 0,
             stock: predictedStock,
