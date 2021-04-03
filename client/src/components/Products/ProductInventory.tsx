@@ -58,6 +58,7 @@ export const ProductInventory = () => {
 
   const addPredictions = (rows: any) => {
     let seen: any[] = [];
+    let predictionsToAdd: any[] = [];
 
     for (let left = 0 ; left < rows.length ; left++) {
       // already done prediction for this product, move on
@@ -71,25 +72,43 @@ export const ProductInventory = () => {
         if (rows[right].name === rows[left].name) {
           const firstDate = convertDate(rows[left].date);
           const lastDate = convertDate(rows[right].date);
+          const endOfYear = new Date(new Date().getFullYear(), 11, 31);
+          const daysBetween = calculateDiffInDays(firstDate, lastDate);
+          const daysTillEnd = calculateDiffInDays(lastDate, endOfYear);
 
-          const differenceInTime = lastDate.getTime() - firstDate.getTime();
-          const differenceInDays = Math.round(differenceInTime /(1000 * 3600 * 24));
-          const predictedStockMultiplier = (rows[right].stock - rows[left].stock) / differenceInDays;
-          const predictedStock = predictedStockMultiplier * rows[right].stock;
-          console.log(predictedStock);
+          const predictedStockMultiplier = (rows[right].stock - rows[left].stock) / daysBetween;
+          const predictedStock = predictedStockMultiplier * daysTillEnd;
+
+          let predictionRow = {
+            name: rows[right].name,
+            date: endOfYear.toLocaleString().split(',')[0],
+            stockBuilt: 0,
+            stockUsed: 0,
+            stock: predictedStock,
+          };
+
+          predictionsToAdd.push(predictionRow);
           break;
         }
       }
     }
 
-    return rows
+    return [...rows, ...predictionsToAdd];
   }
 
-  // Retarded utility function
+  // Retarded utility functions
   const convertDate = (dateString: any) => {
     const dateParts = dateString.split("/");
     return new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
   }
+
+  const calculateDiffInDays = (dateA: Date, dateB: Date) => {
+      const differenceInTime = dateA.getTime() - dateB.getTime();
+      const differenceInDays = Math.round(differenceInTime /(1000 * 3600 * 24));
+      return Math.abs(differenceInDays);
+  }
+
+  // end of retarded utility functions
 
   const onSearch = (e : React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
