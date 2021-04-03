@@ -78,12 +78,13 @@ export const ProductInventory = () => {
 
           const predictedStockMultiplier = (rows[right].stock - rows[left].stock) / daysBetween;
           const predictedStock = predictedStockMultiplier * daysTillEnd;
+          const stockDifference = predictedStock - rows[right].stock;
 
           let predictionRow = {
             name: rows[right].name,
             date: endOfYear.toLocaleString().split(',')[0],
-            stockBuilt: 0,
-            stockUsed: 0,
+            stockBuilt: stockDifference > 0 ? stockDifference : 0,
+            stockUsed: stockDifference < 0 ? -stockDifference : 0,
             stock: predictedStock,
           };
 
