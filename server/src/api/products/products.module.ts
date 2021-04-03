@@ -39,6 +39,6 @@ import { ProductBuilderService } from './products/product-builder.service';
     ProductLocationStockService,
     ProductBuilderService,
   ],
-  exports: [ ProductLocationStockService ]
+  exports: [ProductLocationStockService],
 })
 export class ProductsModule {}

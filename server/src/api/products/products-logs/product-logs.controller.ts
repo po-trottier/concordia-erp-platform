@@ -7,7 +7,7 @@ import { ProductLogsService } from './product-logs.service';
 export class ProductLogsController {
   constructor(private readonly productLogsService: ProductLogsService) {}
 
-  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
+  @Roles(Role.ANY)
   @Get(':locationId/:productId')
   findOne(
     @Param('locationId') locationId: string,
@@ -16,7 +16,7 @@ export class ProductLogsController {
     return this.productLogsService.findOne(locationId, productId);
   }
 
-  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
+  @Roles(Role.ANY)
   @Get(':locationId')
   findAll(@Param('locationId') locationId: string) {
     return this.productLogsService.findAll(locationId);

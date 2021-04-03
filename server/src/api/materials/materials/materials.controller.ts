@@ -29,13 +29,13 @@ export class MaterialsController {
     return this.materialsService.create(createMaterialDto);
   }
 
-  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
+  @Roles(Role.ANY)
   @Get()
   findAll() {
     return this.materialsService.findAll();
   }
 
-  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
+  @Roles(Role.ANY)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.materialsService.findOne(id);
@@ -58,13 +58,13 @@ export class MaterialsController {
 
   // STOCK ENDPOINTS
 
-  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
+  @Roles(Role.ANY)
   @Get('stock/:locationId')
   findAllLocationStock(@Param('locationId') locationId: string) {
     return this.materialLocationStockService.findAll(locationId);
   }
 
-  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
+  @Roles(Role.ANY)
   @Get('stock/:locationId/:materialId')
   findOneLocationStock(
     @Param('materialId') materialId: string,
@@ -73,7 +73,7 @@ export class MaterialsController {
     return this.materialLocationStockService.findOne(materialId, locationId);
   }
 
-  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
+  @Roles(Role.SYSTEM_ADMINISTRATOR)
   @Patch('stock/:locationId')
   updateStock(
     @Param('locationId') locationId: string,

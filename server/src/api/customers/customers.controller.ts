@@ -24,13 +24,13 @@ export class CustomersController {
     return this.CustomersService.create(CreateCustomerDto);
   }
 
-  @Roles(Role.SALESPERSON, Role.SYSTEM_ADMINISTRATOR)
+  @Roles(Role.ANY)
   @Get()
   findAll() {
     return this.CustomersService.findAll();
   }
 
-  @Roles(Role.SALESPERSON, Role.SYSTEM_ADMINISTRATOR)
+  @Roles(Role.ANY)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.CustomersService.findOne(id);

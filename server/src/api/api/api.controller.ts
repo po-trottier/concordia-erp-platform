@@ -5,7 +5,7 @@ import { SendEmailDto } from './dto/send-email.dto';
 
 @Controller('api')
 export class ApiController {
-  constructor(private readonly apiService: ApiService){}
+  constructor(private readonly apiService: ApiService) {}
 
   @Public()
   @Get()

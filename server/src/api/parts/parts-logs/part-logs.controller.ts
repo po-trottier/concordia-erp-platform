@@ -7,7 +7,7 @@ import { PartLogsService } from './part-logs.service';
 export class PartLogsController {
   constructor(private readonly partLogsService: PartLogsService) {}
 
-  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
+  @Roles(Role.ANY)
   @Get(':locationId/:partId')
   findOne(
     @Param('partId') partId: string,
@@ -16,7 +16,7 @@ export class PartLogsController {
     return this.partLogsService.findOne(partId, locationId);
   }
 
-  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
+  @Roles(Role.ANY)
   @Get(':locationId')
   findAll(@Param('locationId') locationId: string) {
     return this.partLogsService.findAll(locationId);

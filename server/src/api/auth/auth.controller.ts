@@ -5,12 +5,11 @@ import { Public } from '../../shared/public';
 
 @Controller()
 export class AuthController {
-  constructor(private authService : AuthService) {
-  }
+  constructor(private authService: AuthService) {}
 
   @Public()
   @Post('login')
-  login(@Body(ValidationPipe) dto : LoginAuthDto) {
+  login(@Body(ValidationPipe) dto: LoginAuthDto) {
     return this.authService.login(dto);
   }
 }

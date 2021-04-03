@@ -15,8 +15,8 @@ import { Roles } from '../../roles/roles.decorator';
 import { Role } from '../../roles/roles.enum';
 import { UpdatePartStockDto } from './dto/update-part-stock.dto';
 import { PartLocationStockService } from './part-location-stock.service';
-import {BuildPartDto} from "./dto/build-part.dto";
-import {PartBuilderService} from "./part-builder.service";
+import { BuildPartDto } from './dto/build-part.dto';
+import { PartBuilderService } from './part-builder.service';
 
 @Controller()
 export class PartsController {
@@ -38,7 +38,11 @@ export class PartsController {
    * @param locationId id of the location
    * @param buildOrders list of build orders for parts
    */
-  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
+  @Roles(
+    Role.INVENTORY_MANAGER,
+    Role.SYSTEM_ADMINISTRATOR,
+    Role.PRODUCTION_MACHINE,
+  )
   @Patch('build/:locationId')
   build(
     @Param('locationId') locationId: string,
@@ -47,13 +51,13 @@ export class PartsController {
     return this.partBuilderService.build(locationId, buildOrders);
   }
 
-  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
+  @Roles(Role.ANY)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.partsService.findOne(id);
   }
 
-  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
+  @Roles(Role.ANY)
   @Get()
   findAll() {
     return this.partsService.findAll();
@@ -76,13 +80,13 @@ export class PartsController {
 
   // STOCK ENDPOINTS
 
-  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
+  @Roles(Role.ANY)
   @Get('stock/:locationId')
   findAllLocationStock(@Param('locationId') locationId: string) {
     return this.partLocationStockService.findAll(locationId);
   }
 
-  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
+  @Roles(Role.ANY)
   @Get('stock/:locationId/:partId')
   findOneLocationStock(
     @Param('partId') partId: string,

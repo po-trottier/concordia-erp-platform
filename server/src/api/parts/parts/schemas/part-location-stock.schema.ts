@@ -14,7 +14,7 @@ export class PartLocationStock {
     required: true,
     index: true,
   })
-  partId : string;
+  partId: string;
 
   @Prop({
     type: mongooseSchema.Types.ObjectId,
@@ -22,10 +22,10 @@ export class PartLocationStock {
     required: true,
     index: true,
   })
-  locationId : string;
+  locationId: string;
 
   @Prop({ required: true, default: 0 })
-  stock : number;
+  stock: number;
 }
 
 export const PartLocationStockSchema = SchemaFactory.createForClass(

@@ -42,7 +42,7 @@ export class ProductsController {
   /**
    * Handles GET requests to retrieve all products
    */
-  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
+  @Roles(Role.ANY)
   @Get()
   findAll() {
     return this.productsService.findAll();
@@ -52,7 +52,7 @@ export class ProductsController {
    * Handles GET request to fetch product with given id
    * @param id
    */
-  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
+  @Roles(Role.ANY)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.productsService.findOne(id);
@@ -75,11 +75,14 @@ export class ProductsController {
   /**
    * Route for building products from parts
    *
-   * @param productId id of the product
    * @param locationId id of the location
-   * @param buildProductDto
+   * @param buildOrders
    */
-  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
+  @Roles(
+    Role.INVENTORY_MANAGER,
+    Role.SYSTEM_ADMINISTRATOR,
+    Role.PRODUCTION_MACHINE,
+  )
   @Patch('build/:locationId')
   build(
     @Param('locationId') locationId: string,
@@ -100,13 +103,13 @@ export class ProductsController {
 
   // STOCK ENDPOINTS
 
-  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
+  @Roles(Role.ANY)
   @Get('stock/:locationId')
   findAllLocationStock(@Param('locationId') locationId: string) {
     return this.productLocationStockService.findAll(locationId);
   }
 
-  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
+  @Roles(Role.ANY)
   @Get('stock/:locationId/:productId')
   findOneLocationStock(
     @Param('locationId') locationId: string,
@@ -118,11 +121,10 @@ export class ProductsController {
   /**
    * Handles PATCH request to update an existing product by id
    * HANDLES UPDATES FOR STOCK
-   * @param productId id of the product
    * @param locationId id of the location
    * @param updateProductStockDto
    */
-  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
+  @Roles(Role.SYSTEM_ADMINISTRATOR)
   @Patch('stock/:locationId')
   updateStock(
     @Param('locationId') locationId: string,

@@ -6,7 +6,7 @@ import { Logger } from '@nestjs/common';
 
 const PORT = process.env.PORT || 5500;
 
-async function bootstrap() {
+const bootstrap = async () => {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.enableCors();
   // Manually set max request size
@@ -16,6 +16,6 @@ async function bootstrap() {
   await app.listen(PORT).then(() => {
     new Logger('Startup').log('Server Listening on Port ' + PORT);
   });
-}
+};
 
 bootstrap();
