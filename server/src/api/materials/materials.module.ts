@@ -3,6 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { MaterialsService } from './materials/materials.service';
 import { MaterialsController } from './materials/materials.controller';
+import { Part, PartSchema } from '../parts/parts/schemas/part.schema';
 import { Material, MaterialSchema } from './materials/schemas/material.schema';
 import {
   MaterialLog,
@@ -24,6 +25,7 @@ import { validate } from '../../shared/env';
 @Module({
   imports: [
     MongooseModule.forFeature([
+      { name: Part.name, schema: PartSchema },
       { name: Material.name, schema: MaterialSchema },
       { name: MaterialLog.name, schema: MaterialLogSchema },
       { name: MaterialStock.name, schema: MaterialStockSchema },
@@ -34,6 +36,6 @@ import { validate } from '../../shared/env';
   ],
   controllers: [MaterialLogsController, MaterialsController],
   providers: [MaterialsService, MaterialLogsService, MaterialStockService],
-  exports: [MaterialsService, MaterialLogsService, MaterialStockService],
+  exports: [MaterialsService, MaterialStockService],
 })
 export class MaterialsModule {}
