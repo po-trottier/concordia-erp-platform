@@ -49,7 +49,7 @@ const mongoDbName = process.env.DB_NAME || DB_NAME;
       provide: APP_GUARD,
       useClass: RolesGuard,
     },
-    ApiService
+    ApiService,
   ],
   controllers: [ApiController],
 })

@@ -4,9 +4,9 @@ export class BuildPartDto {
   @IsNotEmpty()
   @IsInt()
   @IsPositive()
-  stockBuilt : number;
+  stockBuilt: number;
 
   @IsString()
   @IsNotEmpty()
-  partId : string;
+  partId: string;
 }

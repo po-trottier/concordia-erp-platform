@@ -62,7 +62,7 @@ export class OrderDetailsService {
       summaries.push({ date: key, balance: value });
     });
 
-    summaries.sort(function (a, b) {
+    summaries.sort((a, b) => {
       return new Date(a.date).getTime() - new Date(b.date).getTime();
     });
 

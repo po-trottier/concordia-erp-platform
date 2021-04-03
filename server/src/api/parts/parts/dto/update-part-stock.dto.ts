@@ -6,15 +6,15 @@ import { IsInt, IsNotEmpty, IsString, Min } from 'class-validator';
 export class UpdatePartStockDto {
   @IsNotEmpty()
   @IsString()
-  partId : string;
+  partId: string;
 
   @IsNotEmpty()
   @IsInt()
   @Min(0)
-  stockUsed : number;
+  stockUsed: number;
 
   @IsNotEmpty()
   @IsInt()
   @Min(0)
-  stockBuilt : number;
+  stockBuilt: number;
 }

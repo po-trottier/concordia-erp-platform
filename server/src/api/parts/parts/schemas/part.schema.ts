@@ -4,8 +4,8 @@ import { Document } from 'mongoose';
 export type PartDocument = Part & Document;
 
 export interface ProductMaterialInterface {
-  materialId : string;
-  quantity : number;
+  materialId: string;
+  quantity: number;
 }
 
 /**
@@ -14,10 +14,10 @@ export interface ProductMaterialInterface {
 @Schema()
 export class Part {
   @Prop({ required: true })
-  name : string;
+  name: string;
 
   @Prop({ required: true, default: [] })
-  materials : ProductMaterialInterface[];
+  materials: ProductMaterialInterface[];
 }
 
 export const PartSchema = SchemaFactory.createForClass(Part);

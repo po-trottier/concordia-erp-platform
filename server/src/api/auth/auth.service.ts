@@ -7,12 +7,11 @@ import { LoginAuthDto } from './dto/login-auth.dto';
 @Injectable()
 export class AuthService {
   constructor(
-    private usersService : UsersService,
-    private jwtService : JwtService,
-  ) {
-  }
+    private usersService: UsersService,
+    private jwtService: JwtService,
+  ) {}
 
-  async validateUser(username : string, pass : string) : Promise<any> {
+  async validateUser(username: string, pass: string): Promise<any> {
     const user = await this.usersService.findOneInternal(
       username.trim().toLowerCase(),
     );
@@ -23,7 +22,7 @@ export class AuthService {
     return null;
   }
 
-  async login(dto : LoginAuthDto) {
+  async login(dto: LoginAuthDto) {
     const user = await this.validateUser(dto.username, dto.password);
     if (!user) {
       throw new UnauthorizedException('Invalid login information.');

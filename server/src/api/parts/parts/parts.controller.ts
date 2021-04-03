@@ -15,8 +15,8 @@ import { Roles } from '../../roles/roles.decorator';
 import { Role } from '../../roles/roles.enum';
 import { UpdatePartStockDto } from './dto/update-part-stock.dto';
 import { PartLocationStockService } from './part-location-stock.service';
-import {BuildPartDto} from "./dto/build-part.dto";
-import {PartBuilderService} from "./part-builder.service";
+import { BuildPartDto } from './dto/build-part.dto';
+import { PartBuilderService } from './part-builder.service';
 
 @Controller()
 export class PartsController {
@@ -38,7 +38,11 @@ export class PartsController {
    * @param locationId id of the location
    * @param buildOrders list of build orders for parts
    */
-  @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR, Role.PRODUCTION_MACHINE)
+  @Roles(
+    Role.INVENTORY_MANAGER,
+    Role.SYSTEM_ADMINISTRATOR,
+    Role.PRODUCTION_MACHINE,
+  )
   @Patch('build/:locationId')
   build(
     @Param('locationId') locationId: string,

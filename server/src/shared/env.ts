@@ -29,7 +29,7 @@ class EnvironmentVariables {
   DEFAULT_PASSWORD: string;
 }
 
-export function validate(config: Record<string, unknown>) {
+export const validate = (config: Record<string, unknown>) => {
   const validatedConfig = plainToClass(EnvironmentVariables, config, {
     enableImplicitConversion: true,
   });
@@ -41,4 +41,4 @@ export function validate(config: Record<string, unknown>) {
     throw new Error(errors.toString());
   }
   return validatedConfig;
-}
+};

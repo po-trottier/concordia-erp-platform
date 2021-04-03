@@ -25,5 +25,4 @@ import { validate } from '../../shared/env';
   controllers: [AuthController],
   exports: [AuthService, JwtModule],
 })
-export class AuthModule {
-}
+export class AuthModule {}

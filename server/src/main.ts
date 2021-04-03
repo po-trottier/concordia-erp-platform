@@ -5,7 +5,7 @@ import { AppModule } from './app.module';
 
 const PORT = process.env.PORT || 5500;
 
-async function bootstrap() {
+const bootstrap = async () => {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.enableCors();
   // Manually set max request size
@@ -15,6 +15,6 @@ async function bootstrap() {
   await app.listen(PORT).then(() => {
     console.log('Server Listening on Port', PORT);
   });
-}
+};
 
 bootstrap();
