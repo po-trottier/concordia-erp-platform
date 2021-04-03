@@ -53,7 +53,42 @@ export const ProductInventory = () => {
       return dateA < dateB ? -1 : 1;
     });
 
-    return rows;
+    return addPredictions(rows);
+  }
+
+  const addPredictions = (rows: any) => {
+    let seen: any[] = [];
+
+    for (let left = 0 ; left < rows.length ; left++) {
+      // already done prediction for this product, move on
+      if (seen.includes(rows[left].name)) {
+        continue;
+      }
+
+      // calculate the prediction
+      seen.push(rows[left].name)
+      for (let right = rows.length - 1; left < right ; right--) {
+        if (rows[right].name === rows[left].name) {
+          const firstDate = convertDate(rows[left].date);
+          const lastDate = convertDate(rows[right].date);
+
+          const differenceInTime = lastDate.getTime() - firstDate.getTime();
+          const differenceInDays = Math.round(differenceInTime /(1000 * 3600 * 24));
+          const predictedStockMultiplier = (rows[right].stock - rows[left].stock) / differenceInDays;
+          const predictedStock = predictedStockMultiplier * rows[right].stock;
+          console.log(predictedStock);
+          break;
+        }
+      }
+    }
+
+    return rows
+  }
+
+  // Retarded utility function
+  const convertDate = (dateString: any) => {
+    const dateParts = dateString.split("/");
+    return new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
   }
 
   const onSearch = (e : React.ChangeEvent<HTMLInputElement>) => {
