@@ -26,6 +26,21 @@ import {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   ProductStockDocument,
 } from '../products/products/schemas/product-stock.schema';
+import {
+  MaterialLog,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  MaterialLogDocument,
+} from '../materials/materials-logs/schemas/material-log.schema';
+import {
+  PartLog,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  PartLogDocument,
+} from '../parts/parts-logs/schemas/part-log.schema';
+import {
+  ProductLog,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  ProductLogDocument,
+} from '../products/products-logs/schemas/product-log.schema';
 
 /**
  * Used by the LocationsController, handles location data storage and retrieval.
@@ -43,6 +58,12 @@ export class LocationsService implements OnApplicationBootstrap {
     private partStockModel: Model<PartStockDocument>,
     @InjectModel(ProductStock.name)
     private productStockModel: Model<ProductStockDocument>,
+    @InjectModel(MaterialLog.name)
+    private materialLogModel: Model<MaterialLogDocument>,
+    @InjectModel(PartLog.name)
+    private partLogModel: Model<PartLogDocument>,
+    @InjectModel(ProductLog.name)
+    private productLogModel: Model<ProductLogDocument>,
   ) {}
 
   async onApplicationBootstrap(): Promise<void> {
@@ -117,21 +138,35 @@ export class LocationsService implements OnApplicationBootstrap {
     const materialStock = await this.materialStockModel.find({
       locationId: id,
     });
-    for (const stock of materialStock) {
-      await stock.delete();
-    }
+    for (const stock of materialStock) await stock.delete();
+
     const partStock = await this.partStockModel.find({
       locationId: id,
     });
-    for (const stock of partStock) {
-      await stock.delete();
-    }
+    for (const stock of partStock) await stock.delete();
+
     const productStock = await this.productStockModel.find({
       locationId: id,
     });
-    for (const stock of productStock) {
-      await stock.delete();
-    }
+    for (const stock of productStock) await stock.delete();
+
+    // Remove all log entries for that location
+    const materialLog = await this.materialLogModel.find({
+      locationId: id,
+    });
+    for (const log of materialLog) await log.delete();
+
+    const partLog = await this.partLogModel.find({
+      locationId: id,
+    });
+    for (const log of partLog) await log.delete();
+
+    const productLog = await this.productLogModel.find({
+      locationId: id,
+    });
+    for (const log of productLog) await log.delete();
+
+    // Delete the actual location
     const deletedLocation = await this.locationModel.findByIdAndDelete(id);
     return this.validateLocationFound(deletedLocation, id);
   }
