@@ -83,7 +83,7 @@ export class UsersService implements OnApplicationBootstrap {
           to: createdUser.email,
           from: CONTACT_EMAIL,
           subject: 'New User Password',
-          html: `<p>The new password for username: <strong>${createdUser.username}</strong> is <strong>${randomPassword}</strong></p>`,
+          html: `<p>The new password for username: <strong>${createdUser.username}</strong> is <strong>${randomPassword}</strong>. We encourage you to reset that password when first logging in.</p>`,
         })
         .then(() => {
           return {
