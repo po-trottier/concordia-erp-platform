@@ -1,5 +1,4 @@
-import {   
-  ForbiddenException,
+import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -88,16 +87,15 @@ export class ProductsService {
    * @param id string of the product's objectId
    */
   async remove(id: string) {
-
     //delete all stock entries for the product
-    const stocks = await this.productStockModel.find({ productId: id});
-    for (const stock of stocks){
+    const stocks = await this.productStockModel.find({ productId: id });
+    for (const stock of stocks) {
       await stock.delete();
     }
 
     //Remove the logs for this part
-    const logs = await this.productLogModel.find({ productId: id});
-    for (const log of logs){
+    const logs = await this.productLogModel.find({ productId: id });
+    for (const log of logs) {
       await log.delete();
     }
 

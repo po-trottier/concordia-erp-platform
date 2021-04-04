@@ -1,4 +1,4 @@
-import {   
+import {
   ForbiddenException,
   Injectable,
   NotFoundException,
@@ -10,7 +10,10 @@ import { UpdatePartDto } from './dto/update-part.dto';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Part, PartDocument } from './schemas/part.schema';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Product, ProductDocument } from '../../products/products/schemas/products.schema';
+import {
+  Product,
+  ProductDocument,
+} from '../../products/products/schemas/products.schema';
 import {
   PartStock,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -35,8 +38,8 @@ export class PartsService {
     @InjectModel(PartLog.name)
     private partLogModel: Model<PartLogDocument>,
     @InjectModel(PartStock.name)
-    private partStockModel: Model<PartStockDocument>
-    ) {}
+    private partStockModel: Model<PartStockDocument>,
+  ) {}
 
   /**
    * Creates part using mongoose partModel
@@ -89,26 +92,26 @@ export class PartsService {
   async remove(id: string): Promise<Part> {
     //make sure no product depends on the part
     const dependentProducts = await this.productModel.find({
-      'parts.partId' : id,
+      'parts.partId': id,
     });
 
     if (dependentProducts.length > 0) {
       throw new ForbiddenException(
         'One or more productsts (' +
-        dependentProducts.map((p: Product) => p.name).join(', ') +
-        ') use the product you are trying to delete.',
+          dependentProducts.map((p: Product) => p.name).join(', ') +
+          ') use the product you are trying to delete.',
       );
     }
 
     //Delete all stock entries for the part
-    const stocks = await this.partStockModel.find({ partId: id});
-    for (const stock of stocks){
+    const stocks = await this.partStockModel.find({ partId: id });
+    for (const stock of stocks) {
       await stock.delete();
     }
 
     //Remove the logs for this part
-    const logs = await this.partLogModel.find({ partId: id});
-    for (const log of logs){
+    const logs = await this.partLogModel.find({ partId: id });
+    for (const log of logs) {
       await log.delete();
     }
 
