@@ -1,6 +1,7 @@
 import {
   ConflictException,
   Injectable,
+  Logger,
   NotFoundException,
   OnApplicationBootstrap,
   UnauthorizedException,
@@ -17,6 +18,8 @@ import { User, UserDocument } from './schemas/user.schema';
 
 @Injectable()
 export class UsersService implements OnApplicationBootstrap {
+  private readonly logger = new Logger(UsersService.name);
+
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
   async onApplicationBootstrap(): Promise<void> {
@@ -35,9 +38,9 @@ export class UsersService implements OnApplicationBootstrap {
       user.role = Role.SYSTEM_ADMINISTRATOR;
       user.password = await hash(process.env.DEFAULT_PASSWORD, 16);
       await this.create(user);
-      console.log('Default user was created successfully.');
+      this.logger.log('Default user was created successfully');
     } else {
-      console.log('Default user already exits.');
+      this.logger.warn('Default user already exits');
     }
   }
 
