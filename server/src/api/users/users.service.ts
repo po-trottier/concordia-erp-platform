@@ -65,24 +65,34 @@ export class UsersService implements OnApplicationBootstrap {
     }
 
     const createdUser = new this.userModel(account);
-    // TODO Generate a random password and send it to the email
+
     if (!createdUser.password) {
-      const allowedChars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#?!@$%^&*-';
-      const passwordLength = 14
-      var randomPassword = Array(passwordLength).fill(allowedChars).map(function(x) { return x[Math.floor(Math.random() * x.length)] }).join('');
+      const allowedChars =
+        'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#?!@$%^&*-';
+      const passwordLength = 14;
+      const randomPassword = Array(passwordLength)
+        .fill(allowedChars)
+        .map(function (x) {
+          return x[Math.floor(Math.random() * x.length)];
+        })
+        .join('');
       createdUser.password = await hash(randomPassword, 16);
-      Mail.instance.send({
-        to: createdUser.email,
-        from: CONTACT_EMAIL,
-        subject: 'New User Password',
-        html: `<p>Your new password is <strong>${randomPassword}</strong>.</p>`,
-      })
-      .then(() => {
-        return { result: 'Email sent to ' + createdUser.email + ' successfully.' };
-      })
-      .catch((err) => {
-        throw err;
-      });
+
+      Mail.instance
+        .send({
+          to: createdUser.email,
+          from: CONTACT_EMAIL,
+          subject: 'New User Password',
+          html: `<p>Your new password is <strong>${randomPassword}</strong></p>`,
+        })
+        .then(() => {
+          return {
+            result: 'Email sent to ' + createdUser.email + ' successfully.',
+          };
+        })
+        .catch((err) => {
+          throw err;
+        });
     }
 
     const user = await createdUser.save();
