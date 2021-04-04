@@ -6,7 +6,6 @@ import { MaterialsTimelineEntry } from '../../interfaces/MaterialsTimelineEntry'
 import axios from '../../plugins/Axios';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/Store';
-import { addPredictions } from '../../predictions/predictions';
 
 const { Search } = Input;
 
@@ -54,7 +53,7 @@ export const MaterialsInventory = () => {
       return dateA < dateB ? -1 : 1;
     });
 
-    return addPredictions(rows);
+    return rows;
   };
 
   const onSearch = (e : React.ChangeEvent<HTMLInputElement>) => {

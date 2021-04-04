@@ -6,7 +6,6 @@ import { ResponsiveTable } from '../ResponsiveTable';
 import { ProductHistoryEntry } from '../../interfaces/ProductHistoryEntry';
 import { RootState } from '../../store/Store';
 import axios from '../../plugins/Axios';
-import { addPredictions } from '../../predictions/predictions';
 
 const { Search } = Input;
 
@@ -54,7 +53,7 @@ export const ProductInventory = () => {
       return dateA < dateB ? -1 : 1;
     });
 
-    return addPredictions(rows);
+    return rows;
   }
 
   const onSearch = (e : React.ChangeEvent<HTMLInputElement>) => {
