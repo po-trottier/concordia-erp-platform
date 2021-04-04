@@ -18,6 +18,10 @@ import { MaterialStockService } from './materials/material-stock.service';
 import { LocationsModule } from '../locations/locations.module';
 import { validate } from '../../shared/env';
 import { PartsModule } from '../parts/parts.module';
+import { 
+  MaterialOrder,
+  MaterialOrderSchema
+} from '../orders/schemas/material-orders.schema';
 
 /**
  * Contains all logic and files related to Materials
@@ -25,6 +29,7 @@ import { PartsModule } from '../parts/parts.module';
 @Module({
   imports: [
     MongooseModule.forFeature([
+      { name: MaterialOrder.name, schema: MaterialOrderSchema},
       { name: Material.name, schema: MaterialSchema },
       { name: MaterialLog.name, schema: MaterialLogSchema },
       { name: MaterialStock.name, schema: MaterialStockSchema },
