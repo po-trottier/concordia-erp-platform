@@ -9,8 +9,6 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Product, ProductDocument } from './schemas/products.schema';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { ProductOrder, ProductOrderDocument } from '../../orders/schemas/product-orders.schema';
 import {
   ProductStock,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -28,8 +26,6 @@ import {
 @Injectable()
 export class ProductsService {
   constructor(
-    @InjectModel(ProductOrder.name)
-    private productOrderModel: Model<ProductOrderDocument>,
     @InjectModel(Product.name)
     private productModel: Model<ProductDocument>,
     @InjectModel(ProductLog.name)
@@ -92,12 +88,6 @@ export class ProductsService {
    * @param id string of the product's objectId
    */
   async remove(id: string) {
-
-    //delete all product orders for the product
-    const orders = await this.productOrderModel.find({productId: id});
-    for (const order of orders){
-      await order.delete();
-    }
 
     //delete all stock entries for the product
     const stocks = await this.productStockModel.find({ productId: id});

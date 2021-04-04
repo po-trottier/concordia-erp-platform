@@ -21,8 +21,6 @@ import {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   MaterialLogDocument,
 } from '../materials-logs/schemas/material-log.schema';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { MaterialOrder, MaterialOrderDocument } from '../../orders/schemas/material-orders.schema';
 
 /**
  * Used by the MaterialsController, handles material data storage and retrieval.
@@ -32,8 +30,6 @@ export class MaterialsService {
   constructor(
     @InjectModel(Part.name)
     private partModel: Model<PartDocument>,
-    @InjectModel(MaterialOrder.name)
-    private materialOrderModel: Model<MaterialOrderDocument>,
     @InjectModel(Material.name)
     private materialModel: Model<MaterialDocument>,
     @InjectModel(MaterialLog.name)
@@ -103,12 +99,6 @@ export class MaterialsService {
           dependantParts.map((p: Part) => p.name).join(', ') +
           ') use the material you are trying to delete.',
       );
-    }
-
-    // Remove all material orders for that material
-    const orders = await this.materialOrderModel.find({materialId: id});
-    for (const order of orders){
-      await order.delete();
     }
 
     // Remove all stock entries for that material

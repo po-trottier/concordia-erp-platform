@@ -19,15 +19,10 @@ import { LocationsModule } from '../locations/locations.module';
 import { PartsModule } from '../parts/parts.module';
 import { ProductStockService } from './products/product-stock.service';
 import { ProductBuilderService } from './products/product-builder.service';
-import { 
-  ProductOrder,
-  ProductOrderSchema
-} from '../orders/schemas/product-orders.schema';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
-      { name: ProductOrder.name, schema: ProductOrderSchema},
       { name: Product.name, schema: ProductSchema },
       { name: ProductLog.name, schema: ProductLogSchema },
       { name: ProductStock.name, schema: ProductStockSchema },
