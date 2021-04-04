@@ -82,7 +82,7 @@ export class UsersService implements OnApplicationBootstrap {
         .send({
           to: createdUser.email,
           from: CONTACT_EMAIL,
-          subject: 'New User Password',
+          subject: '[EPIC Resource Planner] New User Password',
           html: `<p>The new password for username: <strong>${createdUser.username}</strong> is <strong>${randomPassword}</strong>. We encourage you to reset that password when first logging in.</p>`,
         })
         .then(() => {
