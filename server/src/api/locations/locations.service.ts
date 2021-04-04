@@ -1,21 +1,48 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  NotFoundException,
+  OnApplicationBootstrap,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { DEFAULT_LOCATION } from '../../shared/constants';
 import { CreateLocationDto } from './dto/create-location.dto';
 import { UpdateLocationDto } from './dto/update-location.dto';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Location, LocationDocument } from './schemas/location.schema';
-import { DEFAULT_LOCATION } from '../../shared/constants';
+import {
+  MaterialStock,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  MaterialStockDocument,
+} from '../materials/materials/schemas/material-stock.schema';
+import {
+  PartStock,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  PartStockDocument,
+} from '../parts/parts/schemas/part-stock.schema';
+import {
+  ProductStock,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  ProductStockDocument,
+} from '../products/products/schemas/product-stock.schema';
 
 /**
  * Used by the LocationsController, handles location data storage and retrieval.
  */
 @Injectable()
-export class LocationsService {
+export class LocationsService implements OnApplicationBootstrap {
   private readonly logger = new Logger(LocationsService.name);
 
   constructor(
-    @InjectModel(Location.name) private locationModel: Model<LocationDocument>,
+    @InjectModel(Location.name)
+    private locationModel: Model<LocationDocument>,
+    @InjectModel(MaterialStock.name)
+    private materialStockModel: Model<MaterialStockDocument>,
+    @InjectModel(PartStock.name)
+    private partStockModel: Model<PartStockDocument>,
+    @InjectModel(ProductStock.name)
+    private productStockModel: Model<ProductStockDocument>,
   ) {}
 
   async onApplicationBootstrap(): Promise<void> {
@@ -86,6 +113,25 @@ export class LocationsService {
    * @param id string of the location's objectId
    */
   async remove(id: string): Promise<Location> {
+    // Remove all stock entries for that location
+    const materialStock = await this.materialStockModel.find({
+      locationId: id,
+    });
+    for (const stock of materialStock) {
+      await stock.delete();
+    }
+    const partStock = await this.partStockModel.find({
+      locationId: id,
+    });
+    for (const stock of partStock) {
+      await stock.delete();
+    }
+    const productStock = await this.productStockModel.find({
+      locationId: id,
+    });
+    for (const stock of productStock) {
+      await stock.delete();
+    }
     const deletedLocation = await this.locationModel.findByIdAndDelete(id);
     return this.validateLocationFound(deletedLocation, id);
   }

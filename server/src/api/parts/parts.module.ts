@@ -25,8 +25,8 @@ import { ProductsModule } from '../products/products.module';
       { name: PartLog.name, schema: PartLogSchema },
       { name: PartStock.name, schema: PartStockSchema },
     ]),
-    LocationsModule,
     // Avoid Circular Dependencies
+    forwardRef(() => LocationsModule),
     forwardRef(() => MaterialsModule),
     forwardRef(() => ProductsModule),
     // ENV Support
