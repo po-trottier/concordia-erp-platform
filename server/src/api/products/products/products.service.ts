@@ -92,21 +92,25 @@ export class ProductsService {
    * @param id string of the product's objectId
    */
   async remove(id: string) {
-    const dependentProductOrders = await this.productOrderModel.find({
-      productId: id,
-    });
 
-    if (dependentProductOrders.length > 0)
-    {
-      throw new ForbiddenException(
-        'One or more orders (' + 
-        dependentProductOrders.map((p: ProductOrder) => p.dateOrdered).join(', ') +
-        ') use the product you are trying to delete',
-      );
+    //delete all product orders for the product
+    const orders = await this.productOrderModel.find({productId: id});
+    for (const order of orders){
+      await order.delete();
     }
 
-    //delete all stock entries for the product 
-    
+    //delete all stock entries for the product
+    const stocks = await this.productStockModel.find({ productId: id});
+    for (const stock of stocks){
+      await stock.delete();
+    }
+
+    //Remove the logs for this part
+    const logs = await this.productLogModel.find({ productId: id});
+    for (const log of logs){
+      await log.delete();
+    }
+
     const deletedProduct = await this.productModel.findByIdAndDelete(id);
     return this.validateProductFound(deletedProduct, id);
   }
