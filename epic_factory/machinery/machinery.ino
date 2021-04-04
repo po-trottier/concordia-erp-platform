@@ -40,7 +40,7 @@ void loop()
       for(int i = 0; i < numberOfBikeFrames; i++)
       {
         Serial.println("Loading new materials on the conveyor belt...");
-        delay(1500);
+        delay(5000);
         digitalWrite(yellowLed, LOW);
         digitalWrite(greenLed, HIGH);
         manufacture();

@@ -1,7 +1,7 @@
 import serial
 import requests
 
-running = False
+running = True
 
 partId = '6051597e09e2ae2dc1019adf'
 
@@ -15,26 +15,29 @@ headersAPI = {
     'Authorization': 'Bearer '+ token,
 }
 
-partBuildDto = dict()
-
-partBuildDto['partId'] = partId
-partBuildDto['stockBuild'] = 5
-
-partsToBuild = []
-
-partsToBuild.append(partBuildDto)
-
-response = requests.patch(url, json=partsToBuild, headers=headersAPI, verify=False)
-print(response)
 
 
-# ser = serial.Serial('/dev/ttyACM0', 9600)
-# while running:
-#     number_frames = int(input("Enter the number of bicycle frames to manufacture : "))
-#     print(number_frames)
-#     ser.write(b'\x05')
 
-#     last_message = ""
-#     while last_message != "#":
-#         last_message = str(ser.readline().decode())
-#         print(last_message)
+ser = serial.Serial('/dev/ttyACM0', 9600)
+while running:
+    number_frames = int(input("Enter the number of bicycle frames to manufacture : "))
+    number_frames_bytes = bytes([number_frames])
+    print("Asking the machine to manufacture ", number_frames, " frames")
+    print("Sending ", number_frames_bytes)
+    ser.write(number_frames_bytes)
+
+    last_message = ""
+    while "#" not in last_message:
+        last_message = str(ser.readline().decode())
+        print(last_message)
+
+    partBuildDto = dict()
+
+    partBuildDto['partId'] = partId
+    partBuildDto['stockBuild'] = number_frames
+
+    partsToBuild = []
+
+    partsToBuild.append(partBuildDto)
+    response = requests.patch(url, json=partsToBuild, headers=headersAPI, verify=False)
+    print(response)
