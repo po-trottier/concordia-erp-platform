@@ -20,13 +20,12 @@ export class ProductLogsService {
    * Retrieves all productLog entries using mongoose productLogModel
    */
   async findAll(locationId: string): Promise<ProductLog[]> {
-    const memes = await this.productLogModel
+    const products = await this.productLogModel
       .find({ locationId })
       .populate('productId')
       .exec();
-    const ass = addPredictions(memes);
-    console.log(ass);
-    return ass;
+    const productsWithPredictions = addPredictions(products);
+    return productsWithPredictions;
   }
 
   /**

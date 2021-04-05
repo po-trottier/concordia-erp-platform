@@ -25,12 +25,13 @@ export const addPredictions = (rows: any) => {
 
         const predictionRow = {
           _id: rows[right]._id,
-          date: endOfYear.toLocaleString().split(',')[0] + ' (estimate)',
+          date: endOfYear.toLocaleString().split(',')[0],
           locationId: rows[right].locationId,
           productId: rows[right].productId,
           stockBuilt: stockDifference > 0 ? stockDifference : 0,
           stockUsed: stockDifference < 0 ? -stockDifference : 0,
           stock: predictedStock,
+          isEstimate: true,
         };
 
         predictionsToAdd.push(predictionRow);
