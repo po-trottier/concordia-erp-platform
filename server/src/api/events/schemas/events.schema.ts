@@ -11,7 +11,7 @@ export type EventDocument = Event & Document;
  */
 @Schema()
 export class Event {
-  @Prop({ required: true, unique: true })
+  @Prop({ required: true })
   eventId: string;
 
   @Prop({ type: [{ type: mongooseSchema.Types.ObjectId, ref: Customer.name }] })
