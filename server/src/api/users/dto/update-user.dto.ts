@@ -1,6 +1,6 @@
 import {
   IsEmail,
-  IsInt,
+  IsEnum,
   IsNotEmpty,
   IsOptional,
   IsString,
@@ -39,6 +39,6 @@ export class UpdateUserDto {
   password: string;
 
   @IsOptional()
-  @IsInt()
+  @IsEnum(Role)
   role: Role;
 }

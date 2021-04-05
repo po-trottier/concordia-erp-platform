@@ -59,7 +59,7 @@ export class EventsService {
   async update(id: string, updateEventDto: UpdateEventDto): Promise<Event> {
     const updatedEvent = await this.eventModel.findByIdAndUpdate(
       id,
-      { updateEventDto },
+      { ...updateEventDto },
       { new: true },
     );
     return this.validateEventFound(updatedEvent, id);

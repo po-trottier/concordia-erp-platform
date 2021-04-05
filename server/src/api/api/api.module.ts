@@ -11,6 +11,7 @@ import { OrdersModule } from '../orders/orders.module';
 import { LocationsModule } from '../locations/locations.module';
 import { ProductsModule } from '../products/products.module';
 import { CustomersModule } from '../customers/customers.module';
+import { EventsModule } from '../events/events.module';
 import { ApiController } from './api.controller';
 import { ApiService } from './api.service';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
@@ -39,6 +40,7 @@ const mongoDbName = process.env.DB_NAME || DB_NAME;
     ProductsModule,
     LocationsModule,
     CustomersModule,
+    EventsModule,
   ],
   providers: [
     {

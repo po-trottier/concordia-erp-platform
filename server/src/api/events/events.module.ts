@@ -11,14 +11,12 @@ import { validate } from '../../shared/env';
  */
 @Module({
   imports: [
-    MongooseModule.forFeature([
-      { name: Event.name, schema: EventSchema },
-    ]),
+    MongooseModule.forFeature([{ name: Event.name, schema: EventSchema }]),
     // ENV Support
     ConfigModule.forRoot({ validate, cache: true }),
   ],
   controllers: [EventsController],
   providers: [EventsService],
-  exports: [EventsService],
+  exports: [EventsService, MongooseModule],
 })
 export class EventsModule {}

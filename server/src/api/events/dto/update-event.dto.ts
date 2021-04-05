@@ -11,13 +11,13 @@ export class UpdateEventDto {
 
   @IsOptional()
   @IsString()
-  customerId: string;
+  customerId: string[];
 
   @IsOptional()
   @IsString()
-  userId: string;
+  userId: string[];
 
   @IsOptional()
   @IsEnum(Role)
-  roleId: string;
+  role: number;
 }
