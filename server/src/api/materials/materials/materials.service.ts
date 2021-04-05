@@ -100,7 +100,6 @@ export class MaterialsService {
           ') use the material you are trying to delete.',
       );
     }
-
     // Remove all stock entries for that material
     const stocks = await this.materialStockModel.find({ materialId: id });
     for (const stock of stocks) {
