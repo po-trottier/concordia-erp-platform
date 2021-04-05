@@ -16,13 +16,35 @@ export class EventsService {
     @InjectModel(Event.name) private eventModel: Model<EventDocument>,
   ) {}
 
+  // Make sure there is only ever 1 recipient type. This method is not
+  // ideal as it prioritizes some types of recipients but it's a quick
+  // fix to an otherwise more complex problem.
+  validateRecipients(updateEventDto: UpdateEventDto | CreateEventDto) {
+    const updatedFields = updateEventDto;
+    if (updatedFields.customerId) {
+      updatedFields.userId = [];
+      updatedFields.role = undefined;
+    }
+    if (updatedFields.userId) {
+      updatedFields.customerId = [];
+      updatedFields.role = undefined;
+    }
+    if (updatedFields.role) {
+      updatedFields.userId = [];
+      updatedFields.customerId = [];
+    }
+    return updatedFields;
+  }
+
   /**
    * Creates event using mongoose eventModel
    *
    * @param createEventDto dto used to create events
    */
   async create(createEventDto: CreateEventDto): Promise<Event> {
-    const createdEvent = new this.eventModel(createEventDto);
+    const createdEvent = new this.eventModel(
+      this.validateRecipients(createEventDto),
+    );
     return await createdEvent.save();
   }
 
@@ -57,11 +79,14 @@ export class EventsService {
    * @param updateEventDto dto used to update events
    */
   async update(id: string, updateEventDto: UpdateEventDto): Promise<Event> {
+    // Make sure we only ever have 1 "to" field max
+
     const updatedEvent = await this.eventModel.findByIdAndUpdate(
       id,
-      { ...updateEventDto },
+      { ...this.validateRecipients(updateEventDto) },
       { new: true },
     );
+
     return this.validateEventFound(updatedEvent, id);
   }
 
