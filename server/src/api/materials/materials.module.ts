@@ -29,8 +29,8 @@ import { PartsModule } from '../parts/parts.module';
       { name: MaterialLog.name, schema: MaterialLogSchema },
       { name: MaterialStock.name, schema: MaterialStockSchema },
     ]),
-    LocationsModule,
     // Avoid Circular Dependencies
+    forwardRef(() => LocationsModule),
     forwardRef(() => PartsModule),
     // ENV Support
     ConfigModule.forRoot({ validate, cache: true }),

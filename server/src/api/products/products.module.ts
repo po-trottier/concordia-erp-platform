@@ -27,7 +27,7 @@ import { ProductBuilderService } from './products/product-builder.service';
       { name: ProductLog.name, schema: ProductLogSchema },
       { name: ProductStock.name, schema: ProductStockSchema },
     ]),
-    LocationsModule,
+    forwardRef(() => LocationsModule),
     forwardRef(() => PartsModule),
     // ENV Support
     ConfigModule.forRoot({ validate, cache: true }),
