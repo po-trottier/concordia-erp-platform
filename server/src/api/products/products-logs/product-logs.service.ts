@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 import { UpdateProductLogDto } from './dto/update-product-log.dto';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { ProductLog, ProductLogDocument } from './schemas/product-log.schema';
+import { addPredictions } from '../../../shared/predictions';
 
 /**
  * Handles productLog data storage and retrieval.
@@ -19,10 +20,13 @@ export class ProductLogsService {
    * Retrieves all productLog entries using mongoose productLogModel
    */
   async findAll(locationId: string): Promise<ProductLog[]> {
-    return await this.productLogModel
+    const memes = await this.productLogModel
       .find({ locationId })
       .populate('productId')
       .exec();
+    const ass = addPredictions(memes);
+    console.log(ass);
+    return ass;
   }
 
   /**

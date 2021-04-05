@@ -1,30 +1,33 @@
 export const addPredictions = (rows: any) => {
-  let seen: any[] = [];
-  let predictionsToAdd: any[] = [];
+  const seen: any[] = [];
+  const predictionsToAdd: any[] = [];
 
-  for (let left = 0 ; left < rows.length ; left++) {
+  for (let left = 0; left < rows.length; left++) {
     // already done prediction for this product, move on
-    if (seen.includes(rows[left].name)) {
+    if (seen.includes(rows[left].productId)) {
       continue;
     }
 
     // calculate the prediction
-    seen.push(rows[left].name)
-    for (let right = rows.length - 1; left < right ; right--) {
-      if (rows[right].name === rows[left].name) {
-        const firstDate = convertDate(rows[left].date);
-        const lastDate = convertDate(rows[right].date);
+    seen.push(rows[left].productId);
+    for (let right = rows.length - 1; left < right; right--) {
+      if (rows[right].productId === rows[left].productId) {
+        const firstDate = new Date(rows[left].date);
+        const lastDate = new Date(rows[right].date);
         const endOfYear = new Date(new Date().getFullYear(), 11, 31);
         const daysBetween = calculateDiffInDays(firstDate, lastDate);
         const daysTillEnd = calculateDiffInDays(lastDate, endOfYear);
 
-        const predictedStockMultiplier = (rows[right].stock - rows[left].stock) / daysBetween;
+        const predictedStockMultiplier =
+          (rows[right].stock - rows[left].stock) / daysBetween;
         const predictedStock = predictedStockMultiplier * daysTillEnd;
         const stockDifference = predictedStock - rows[right].stock;
 
-        let predictionRow = {
-          name: rows[right].name,
-          date: endOfYear.toLocaleString().split(',')[0] + " (estimate)",
+        const predictionRow = {
+          _id: rows[right]._id,
+          date: endOfYear.toLocaleString().split(',')[0] + ' (estimate)',
+          locationId: rows[right].locationId,
+          productId: rows[right].productId,
           stockBuilt: stockDifference > 0 ? stockDifference : 0,
           stockUsed: stockDifference < 0 ? -stockDifference : 0,
           stock: predictedStock,
@@ -37,15 +40,10 @@ export const addPredictions = (rows: any) => {
   }
 
   return [...rows, ...predictionsToAdd];
-}
-
-const convertDate = (dateString: any) => {
-  const dateParts = dateString.split("/");
-  return new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
-}
+};
 
 const calculateDiffInDays = (dateA: Date, dateB: Date) => {
-    const differenceInTime = dateA.getTime() - dateB.getTime();
-    const differenceInDays = Math.round(differenceInTime /(1000 * 3600 * 24));
-    return Math.abs(differenceInDays);
-}
+  const differenceInTime = dateA.getTime() - dateB.getTime();
+  const differenceInDays = Math.round(differenceInTime / (1000 * 3600 * 24));
+  return Math.abs(differenceInDays);
+};
