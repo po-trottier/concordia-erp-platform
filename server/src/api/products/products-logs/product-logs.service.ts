@@ -24,7 +24,7 @@ export class ProductLogsService {
       .find({ locationId })
       .populate('productId')
       .exec();
-    const productsWithPredictions = addPredictions(products);
+    const productsWithPredictions = addPredictions(products, 'productId');
     return productsWithPredictions;
   }
 

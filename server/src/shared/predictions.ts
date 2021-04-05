@@ -1,17 +1,17 @@
-export const addPredictions = (rows: any) => {
+export const addPredictions = (rows: any, IdKey: string) => {
   const seen: any[] = [];
   const predictionsToAdd: any[] = [];
 
   for (let left = 0; left < rows.length; left++) {
     // already done prediction for this product, move on
-    if (seen.includes(rows[left].productId)) {
+    if (seen.includes(rows[left][IdKey])) {
       continue;
     }
 
     // calculate the prediction
-    seen.push(rows[left].productId);
+    seen.push(rows[left][IdKey]);
     for (let right = rows.length - 1; left < right; right--) {
-      if (rows[right].productId === rows[left].productId) {
+      if (rows[right][IdKey] === rows[left][IdKey]) {
         const firstDate = new Date(rows[left].date);
         const lastDate = new Date(rows[right].date);
         const endOfYear = new Date(new Date().getFullYear(), 11, 31);
@@ -27,12 +27,13 @@ export const addPredictions = (rows: any) => {
           _id: rows[right]._id,
           date: endOfYear.toLocaleString().split(',')[0],
           locationId: rows[right].locationId,
-          productId: rows[right].productId,
           stockBuilt: stockDifference > 0 ? stockDifference : 0,
           stockUsed: stockDifference < 0 ? -stockDifference : 0,
           stock: predictedStock,
           isEstimate: true,
         };
+        predictionRow[IdKey] = rows[right][IdKey];
+        console.log(predictionRow);
 
         predictionsToAdd.push(predictionRow);
         break;
