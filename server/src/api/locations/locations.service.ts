@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateLocationDto } from './dto/create-location.dto';
@@ -12,6 +12,8 @@ import { DEFAULT_LOCATION } from '../../shared/constants';
  */
 @Injectable()
 export class LocationsService {
+  private readonly logger = new Logger(LocationsService.name);
+
   constructor(
     @InjectModel(Location.name) private locationModel: Model<LocationDocument>,
   ) {}
@@ -26,9 +28,9 @@ export class LocationsService {
       const location = new CreateLocationDto();
       location.name = DEFAULT_LOCATION;
       await this.create(location);
-      console.log('Default location was created successfully.');
+      this.logger.log('Default location was created successfully');
     } else {
-      console.log('Default location already exits.');
+      this.logger.warn('Default location already exits');
     }
   }
 

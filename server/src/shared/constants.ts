@@ -3,3 +3,4 @@ export const DEFAULT_USER = 'admin';
 export const DEFAULT_LOCATION = 'Default Location';
 export const DB_URL = 'mongodb://localhost:27017';
 export const DB_NAME = 'ERP_db';
+export const CONTACT_EMAIL = 'no-reply@erp.p-o.me';

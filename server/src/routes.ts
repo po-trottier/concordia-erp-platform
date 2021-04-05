@@ -1,5 +1,5 @@
 import { Routes } from 'nest-router';
-import { ApiModule } from './api/api.module';
+import { ApiModule } from './api/api/api.module';
 import { AuthModule } from './api/auth/auth.module';
 import { PartsModule } from './api/parts/parts.module';
 import { MaterialsModule } from './api/materials/materials.module';
