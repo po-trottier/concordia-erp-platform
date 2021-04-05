@@ -59,7 +59,22 @@ export class EventsService {
    * Retrieves all events using mongoose eventModel
    */
   async findAll(): Promise<Event[]> {
-    return this.eventModel.find();
+    const events = await this.eventModel
+      .find()
+      .populate('userId')
+      .populate('customerId')
+      .exec();
+
+    for (const event of events) {
+      if (event.userId.length > 0) {
+        for (const user of event.userId) {
+          const obj: any = user;
+          obj.password = undefined;
+        }
+      }
+    }
+
+    return events;
   }
 
   /**
@@ -68,7 +83,11 @@ export class EventsService {
    * @param id string of the event's objectId
    */
   async findOne(id: string): Promise<Event> {
-    const event = await this.eventModel.findById(id);
+    const event = await this.eventModel
+      .findById(id)
+      .populate('userId')
+      .populate('customerId')
+      .exec();
     return this.validateEventFound(event, id);
   }
 
@@ -81,11 +100,15 @@ export class EventsService {
   async update(id: string, updateEventDto: UpdateEventDto): Promise<Event> {
     // Make sure we only ever have 1 "to" field max
 
-    const updatedEvent = await this.eventModel.findByIdAndUpdate(
-      id,
-      { ...this.validateRecipients(updateEventDto) },
-      { new: true },
-    );
+    const updatedEvent = await this.eventModel
+      .findByIdAndUpdate(
+        id,
+        { ...this.validateRecipients(updateEventDto) },
+        { new: true },
+      )
+      .populate('userId')
+      .populate('customerId')
+      .exec();
 
     return this.validateEventFound(updatedEvent, id);
   }
@@ -110,6 +133,12 @@ export class EventsService {
     if (!eventResult) {
       throw new NotFoundException(`event with id ${id} not found`);
     } else {
+      if (eventResult.userId.length > 0) {
+        for (const user of eventResult.userId) {
+          const obj: any = user;
+          obj.password = undefined;
+        }
+      }
       return eventResult;
     }
   }
