@@ -31,7 +31,6 @@ export const ProductInventory = () => {
           row.date = new Date(row.date).toLocaleDateString();
           if (row.isEstimate)
             row.date = row.date + " (estimate)";
-
           row.name = row.productId.name;
         }
         setProducts(data);

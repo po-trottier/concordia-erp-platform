@@ -8,7 +8,7 @@ export const addPredictions = (rows: any, IdKey: string) => {
       continue;
     }
 
-    // calculate the prediction
+    // calculate the prediction if possible
     seen.push(rows[left][IdKey]);
     for (let right = rows.length - 1; left < right; right--) {
       if (rows[right][IdKey] === rows[left][IdKey]) {
@@ -18,8 +18,7 @@ export const addPredictions = (rows: any, IdKey: string) => {
         const daysBetween = calculateDiffInDays(firstDate, lastDate);
         const daysTillEnd = calculateDiffInDays(lastDate, endOfYear);
 
-        const predictedStockMultiplier =
-          (rows[right].stock - rows[left].stock) / daysBetween;
+        const predictedStockMultiplier = (rows[right].stock - rows[left].stock) / daysBetween;
         const predictedStock = predictedStockMultiplier * daysTillEnd;
         const stockDifference = predictedStock - rows[right].stock;
 
