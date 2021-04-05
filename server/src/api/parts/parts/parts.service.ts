@@ -9,9 +9,9 @@ import { CreatePartDto } from './dto/create-part.dto';
 import { UpdatePartDto } from './dto/update-part.dto';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Part, PartDocument } from './schemas/part.schema';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import {
   Product,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   ProductDocument,
 } from '../../products/products/schemas/products.schema';
 import {
@@ -97,9 +97,9 @@ export class PartsService {
 
     if (dependentProducts.length > 0) {
       throw new ForbiddenException(
-        'One or more productsts (' +
+        'One or more products (' +
           dependentProducts.map((p: Product) => p.name).join(', ') +
-          ') use the product you are trying to delete.',
+          ') use the part you are trying to delete.',
       );
     }
 

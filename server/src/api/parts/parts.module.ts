@@ -25,7 +25,6 @@ import { ProductsModule } from '../products/products.module';
 @Module({
   imports: [
     MongooseModule.forFeature([
-      { name: Product.name, schema: ProductSchema },
       { name: Part.name, schema: PartSchema },
       { name: PartLog.name, schema: PartLogSchema },
       { name: PartStock.name, schema: PartStockSchema },
