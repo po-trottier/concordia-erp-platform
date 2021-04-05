@@ -27,6 +27,12 @@ export class EventsController {
   }
 
   @Roles(Role.SYSTEM_ADMINISTRATOR)
+  @Get('/all')
+  findEvents() {
+    return this.eventsService.findEvents();
+  }
+
+  @Roles(Role.SYSTEM_ADMINISTRATOR)
   @Get()
   findAll() {
     return this.eventsService.findAll();

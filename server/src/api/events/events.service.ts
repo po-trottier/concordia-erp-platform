@@ -5,6 +5,7 @@ import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Event, EventDocument } from './schemas/events.schema';
+import { Events } from '../../shared/events';
 
 /**
  * Used by the EventsController, handles event data storage and retrieval.
@@ -23,6 +24,13 @@ export class EventsService {
   async create(createEventDto: CreateEventDto): Promise<Event> {
     const createdEvent = new this.eventModel(createEventDto);
     return await createdEvent.save();
+  }
+
+  /**
+   * Retrieves all events using mongoose eventModel
+   */
+  async findEvents(): Promise<{ name: string; id: string }[]> {
+    return Events;
   }
 
   /**
@@ -48,13 +56,10 @@ export class EventsService {
    * @param id string of the event's objectId
    * @param updateEventDto dto used to update events
    */
-  async update(
-    id: string,
-    updateEventDto: UpdateEventDto,
-  ): Promise<Event> {
+  async update(id: string, updateEventDto: UpdateEventDto): Promise<Event> {
     const updatedEvent = await this.eventModel.findByIdAndUpdate(
       id,
-      { $set: { ...updateEventDto } },
+      { updateEventDto },
       { new: true },
     );
     return this.validateEventFound(updatedEvent, id);
