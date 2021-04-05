@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 import { UpdatePartLogDto } from './dto/update-part-log.dto';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { PartLog, PartLogDocument } from './schemas/part-log.schema';
+import { addPredictions } from '../../../shared/predictions';
 
 /**
  * Handles partLog data storage and retrieval.
@@ -19,10 +20,11 @@ export class PartLogsService {
    * Retrieves all partLog entries using mongoose partLogModel
    */
   async findAll(locationId: string): Promise<PartLog[]> {
-    return await this.partLogModel
+    const parts = await this.partLogModel
       .find({ locationId })
       .populate('partId')
       .exec();
+    return addPredictions(parts, 'partId');
   }
 
   /**

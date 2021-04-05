@@ -28,6 +28,8 @@ export const PartInventory = () => {
     axios.get('parts/logs/' + location).then(async ({ data }) => {
       for (const row of data) {
         row.date = new Date(row.date).toLocaleDateString();
+        if (row.isEstimate)
+          row.date = row.date + ' (estimate)';
         row.name = row.partId.name;
       }
       setPartsData(data);
