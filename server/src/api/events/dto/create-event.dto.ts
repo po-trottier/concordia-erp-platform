@@ -1,6 +1,4 @@
-import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
-
-import { Role } from '../../roles/roles.enum';
+import { IsArray, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateEventDto {
   @IsNotEmpty()
@@ -8,14 +6,14 @@ export class CreateEventDto {
   eventId: string;
 
   @IsOptional()
-  @IsString()
+  @IsArray()
   customerId: string[];
 
   @IsOptional()
-  @IsString()
+  @IsArray()
   userId: string[];
 
   @IsOptional()
-  @IsEnum(Role)
-  role: number;
+  @IsArray()
+  role: number[];
 }

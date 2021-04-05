@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Divider, Input } from 'antd';
 import { EventEntry } from '../../interfaces/EventEntry';
-import axios from '../../plugins/Axios';
-import { setUserList } from '../../store/slices/UserListSlice';
 import { getRoleString } from '../../router/Roles';
+import axios from '../../plugins/Axios';
 
 const { Search } = Input;
 
@@ -12,7 +11,6 @@ export const EventsList = () => {
   const emptyListeners : EventEntry[] = [];
   const [eventList, setEventList] = useState(emptyEvents);
   const [listenerList, setListenerList] = useState(emptyListeners);
-  const [searchValue, setSearchValue] = useState('');
   const [updated, setUpdated] = useState(false);
 
   useEffect(() => {
@@ -41,7 +39,7 @@ export const EventsList = () => {
                   <b><p>{event ? event.name : 'UNKNOWN EVENT'}</p></b>
                   <p>Customers: {l.customerId.map((u) => u.name).join(', ')}</p>
                   <p>Users: {l.userId.map((u) => u.firstName).join(', ')}</p>
-                  <p>Role: {l.role ? getRoleString(l.role) : ''}</p>
+                  <p>Role: {l.role ? l.role.map((r) => getRoleString(r)).join(', ') : ''}</p>
                   <Divider />
                 </div>
               );

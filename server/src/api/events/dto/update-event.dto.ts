@@ -1,5 +1,4 @@
-import { IsEnum, IsOptional, IsString } from 'class-validator';
-import { Role } from '../../roles/roles.enum';
+import { IsArray, IsOptional, IsString } from 'class-validator';
 
 /**
  * Event update DTO
@@ -10,14 +9,14 @@ export class UpdateEventDto {
   eventId: string;
 
   @IsOptional()
-  @IsString()
+  @IsArray()
   customerId: string[];
 
   @IsOptional()
-  @IsString()
+  @IsArray()
   userId: string[];
 
   @IsOptional()
-  @IsEnum(Role)
-  role: number;
+  @IsArray()
+  role: number[];
 }

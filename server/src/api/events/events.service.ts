@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateEventDto } from './dto/create-event.dto';
@@ -19,19 +23,24 @@ export class EventsService {
   // Make sure there is only ever 1 recipient type. This method is not
   // ideal as it prioritizes some types of recipients but it's a quick
   // fix to an otherwise more complex problem.
-  validateRecipients(updateEventDto: UpdateEventDto | CreateEventDto) {
+  validateRecipients(
+    updateEventDto: UpdateEventDto | CreateEventDto,
+    required: boolean,
+  ) {
     const updatedFields = updateEventDto;
     if (updatedFields.customerId) {
       updatedFields.userId = [];
-      updatedFields.role = undefined;
-    }
-    if (updatedFields.userId) {
+      updatedFields.role = [];
+    } else if (updatedFields.userId) {
       updatedFields.customerId = [];
-      updatedFields.role = undefined;
-    }
-    if (updatedFields.role) {
+      updatedFields.role = [];
+    } else if (updatedFields.role) {
       updatedFields.userId = [];
       updatedFields.customerId = [];
+    } else if (required) {
+      throw new BadRequestException(
+        'At least one recipient must be present in the listener.',
+      );
     }
     return updatedFields;
   }
@@ -43,7 +52,7 @@ export class EventsService {
    */
   async create(createEventDto: CreateEventDto): Promise<Event> {
     const createdEvent = new this.eventModel(
-      this.validateRecipients(createEventDto),
+      this.validateRecipients(createEventDto, true),
     );
     return await createdEvent.save();
   }
@@ -103,7 +112,7 @@ export class EventsService {
     const updatedEvent = await this.eventModel
       .findByIdAndUpdate(
         id,
-        { ...this.validateRecipients(updateEventDto) },
+        { ...this.validateRecipients(updateEventDto, false) },
         { new: true },
       )
       .populate('userId')

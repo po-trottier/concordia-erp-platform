@@ -20,8 +20,8 @@ export class Event {
   @Prop({ type: [{ type: mongooseSchema.Types.ObjectId, ref: User.name }] })
   userId: string[];
 
-  @Prop({ enum: Role })
-  role: number;
+  @Prop({ type: [Number], enum: Role })
+  role: number[];
 }
 
 export const EventSchema = SchemaFactory.createForClass(Event);
