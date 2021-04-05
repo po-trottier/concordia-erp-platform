@@ -209,13 +209,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{url}}/events/604583485eca8e26ab01107f",
+							"raw": "{{url}}/events/606ab02cb1c9166558ee0c00",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"events",
-								"604583485eca8e26ab01107f"
+								"606ab02cb1c9166558ee0c00"
 							]
 						}
 					},
@@ -228,7 +228,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"eventId\": \"01F2G8C0VAKT3Z17PSPE0TTVJ2\",\n    \"userId\": \"6052cd93a54ab130087d5af6\"\n}",
+							"raw": "{\n    \"eventId\": \"01F2G8C0VAKT3Z17PSPE0TTVJ2\",\n    \"userId\": [\"606ac40c46c1b47d380405ab\"]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -276,7 +276,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"role\": 5\n}",
+							"raw": "{\n    \"eventId\": [2, 4]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -284,13 +284,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}/events/606aab9795d6f4826062d344",
+							"raw": "{{url}}/events/606ac6db7b6e1d6c6c9b84ef",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"events",
-								"606aab9795d6f4826062d344"
+								"606ac6db7b6e1d6c6c9b84ef"
 							]
 						}
 					},
