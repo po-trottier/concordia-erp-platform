@@ -1,8 +1,17 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { compare } from 'bcryptjs';
+import { compare, hash } from 'bcryptjs';
 import { UsersService } from '../users/users.service';
 import { LoginAuthDto } from './dto/login-auth.dto';
+import { PasswordResetDto } from './dto/password-reset.dto';
+import { Role } from '../roles/roles.enum';
+import { UpdateUserDto } from '../users/dto/update-user.dto';
+
+interface UserToken {
+  username: string;
+  id: string;
+  role: Role;
+}
 
 @Injectable()
 export class AuthService {
@@ -39,5 +48,20 @@ export class AuthService {
       role: user.role,
       token: this.jwtService.sign(payload),
     };
+  }
+
+  async forgot(dto: PasswordResetDto, token: string) {
+    console.log(token, dto);
+  }
+
+  async reset(dto: PasswordResetDto, auth: string) {
+    const decoded: any = this.jwtService.decode(auth.substr(7));
+    const token: UserToken = decoded;
+    const updateDto: UpdateUserDto = {
+      password: await hash(dto.password, 16),
+    };
+    const user = await this.usersService.updateInternal(token.id, updateDto);
+    user.password = undefined;
+    return user;
   }
 }

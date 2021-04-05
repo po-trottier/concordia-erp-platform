@@ -49,6 +49,11 @@ export class UsersService implements OnApplicationBootstrap {
     return this.userModel.findOne({ username });
   }
 
+  // To be used internally only as it leaks the password hash!
+  async updateInternal(id: string, dto: UpdateUserDto): Promise<User> {
+    return this.userModel.findByIdAndUpdate(id, { ...dto }, { new: true });
+  }
+
   async create(dto: CreateUserDto): Promise<User> | undefined {
     const account = dto;
     account.username = account.username.trim().toLowerCase();

@@ -35,10 +35,22 @@ export const AppHeader = () => {
     }
   };
 
+  const changePassword = () => {
+    try {
+      history.push('/changePassword');
+    } catch (e) {
+      message.error('Something went wrong while redirecting you to the change password page.');
+      console.error(e);
+    }
+  };
+
   const dropdown = (
     <Menu>
       <Menu.Item onClick={logOut}>
         Log Out
+      </Menu.Item>
+      <Menu.Item onClick={changePassword}>
+        Change Password
       </Menu.Item>
     </Menu>
   );

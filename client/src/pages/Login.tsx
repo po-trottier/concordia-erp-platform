@@ -1,7 +1,8 @@
 import React from 'react';
-import { Card, Layout, Typography } from 'antd';
+import {Button, Card, Form, Layout, Typography} from 'antd';
 
 import { LoginForm } from '../components/Login/LoginForm';
+import {ForgotPasswordModal} from "../components/Login/ForgotPasswordModal";
 
 const { Title } = Typography;
 const { Content } = Layout;
@@ -14,6 +15,7 @@ export const Login = () => {
           <Card style={{ margin: '0 32px' }}>
             <Title style={{ textAlign: 'center' }}>Log In</Title>
             <LoginForm />
+            <ForgotPasswordModal />
           </Card>
         </div>
       </Content>
