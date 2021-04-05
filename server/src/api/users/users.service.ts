@@ -15,6 +15,8 @@ import { Role } from '../roles/roles.enum';
 import { DEFAULT_USER } from '../../shared/constants';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { User, UserDocument } from './schemas/user.schema';
+import { Mail } from '../../shared/mail';
+import { CONTACT_EMAIL } from '../../shared/constants';
 
 @Injectable()
 export class UsersService implements OnApplicationBootstrap {
@@ -63,9 +65,34 @@ export class UsersService implements OnApplicationBootstrap {
     }
 
     const createdUser = new this.userModel(account);
-    // TODO Generate a random password and send it to the email
+
     if (!createdUser.password) {
-      createdUser.password = await hash(process.env.DEFAULT_PASSWORD, 16);
+      const allowedChars =
+        'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#?!@$%^&*-';
+      const passwordLength = 14;
+      const randomPassword = Array(passwordLength)
+        .fill(allowedChars)
+        .map(function (x) {
+          return x[Math.floor(Math.random() * x.length)];
+        })
+        .join('');
+      createdUser.password = await hash(randomPassword, 16);
+
+      Mail.instance
+        .send({
+          to: createdUser.email,
+          from: CONTACT_EMAIL,
+          subject: '[EPIC Resource Planner] New User Password',
+          html: `<p>The new password for username: <strong>${createdUser.username}</strong> is <strong>${randomPassword}</strong>. We encourage you to reset that password when first logging in.</p>`,
+        })
+        .then(() => {
+          return {
+            result: 'Email sent to ' + createdUser.email + ' successfully.',
+          };
+        })
+        .catch((err) => {
+          throw err;
+        });
     }
 
     const user = await createdUser.save();
