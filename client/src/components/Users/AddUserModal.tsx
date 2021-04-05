@@ -3,7 +3,7 @@ import { Button, Col, Form, Input, message, Modal, Row, Select } from 'antd';
 import { useDispatch } from 'react-redux';
 
 import { addUserEntry } from '../../store/slices/UserListSlice';
-import { Role } from '../../router/Roles';
+import { getRoleString, Role } from '../../router/Roles';
 import axios from '../../plugins/Axios';
 
 const { Option } = Select;
@@ -52,6 +52,8 @@ export const AddUserModal = () => {
     setIsModalVisible(false);
     form.resetFields();
   };
+
+  let dropdownOffset = 0;
 
   return (
     <div>
@@ -151,13 +153,19 @@ export const AddUserModal = () => {
                 rules={[{ required: true, message: 'Please select a role!' }]}>
                 <Select
                   placeholder="Select the user's role"
-                  onSelect={(e : Role) => {
-                    setRole(e);
-                  }}>
-                  <Option value={1}>Salesperson</Option>
-                  <Option value={2}>Accountant</Option>
-                  <Option value={3}>Inventory Manager</Option>
-                  <Option value={4}>System Administrator</Option>
+                  onSelect={(e : Role) => setRole(e)}>
+                  {
+                    Object.keys(Role).map((key, val) => {
+                      if (isFinite(Number(key))) {
+                        dropdownOffset++;
+                        return null;
+                      }
+                      const role : Role = val - dropdownOffset;
+                      return (
+                        <Option key={key} value={role}>{getRoleString(role)}</Option>
+                      );
+                    })
+                  }
                 </Select>
               </Form.Item>
             </Col>
