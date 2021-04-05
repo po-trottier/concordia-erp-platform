@@ -26,6 +26,7 @@ import { MaterialsService } from '../materials/materials/materials.service';
 import { ProductsService } from '../products/products/products.service';
 import { ProductsModule } from '../products/products.module';
 import { MaterialsModule } from '../materials/materials.module';
+import { PartsModule } from '../parts/parts.module';
 
 /**
  * Contains all logic and files related to finance
@@ -33,13 +34,13 @@ import { MaterialsModule } from '../materials/materials.module';
 @Module({
   imports: [
     MongooseModule.forFeature([
-      { name: Material.name, schema: MaterialSchema },
-      { name: Product.name, schema: ProductSchema },
       { name: MaterialOrder.name, schema: MaterialOrderSchema },
       { name: ProductOrder.name, schema: ProductOrderSchema },
     ]),
     ProductsModule,
     MaterialsModule,
+    // Required to fulfill dependencies
+    PartsModule,
     // ENV Support
     ConfigModule.forRoot({ validate, cache: true }),
   ],

@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { PartsService } from './parts/parts.service';
@@ -13,6 +13,7 @@ import { LocationsModule } from '../locations/locations.module';
 import { PartStockService } from './parts/part-stock.service';
 import { MaterialsModule } from '../materials/materials.module';
 import { PartBuilderService } from './parts/part-builder.service';
+import { ProductsModule } from '../products/products.module';
 
 /**
  * Contains all logic and files related to parts
@@ -25,7 +26,9 @@ import { PartBuilderService } from './parts/part-builder.service';
       { name: PartStock.name, schema: PartStockSchema },
     ]),
     LocationsModule,
-    MaterialsModule,
+    // Avoid Circular Dependencies
+    forwardRef(() => MaterialsModule),
+    forwardRef(() => ProductsModule),
     // ENV Support
     ConfigModule.forRoot({ validate, cache: true }),
   ],
@@ -36,6 +39,6 @@ import { PartBuilderService } from './parts/part-builder.service';
     PartStockService,
     PartBuilderService,
   ],
-  exports: [PartsService, PartStockService],
+  exports: [PartsService, PartStockService, MongooseModule],
 })
 export class PartsModule {}

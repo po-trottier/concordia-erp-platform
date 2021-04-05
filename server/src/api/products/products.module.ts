@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import {
@@ -28,7 +28,7 @@ import { ProductBuilderService } from './products/product-builder.service';
       { name: ProductStock.name, schema: ProductStockSchema },
     ]),
     LocationsModule,
-    PartsModule,
+    forwardRef(() => PartsModule),
     // ENV Support
     ConfigModule.forRoot({ validate, cache: true }),
   ],
@@ -39,6 +39,6 @@ import { ProductBuilderService } from './products/product-builder.service';
     ProductStockService,
     ProductBuilderService,
   ],
-  exports: [ProductStockService],
+  exports: [ProductsService, ProductStockService, MongooseModule],
 })
 export class ProductsModule {}
