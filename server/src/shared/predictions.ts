@@ -33,7 +33,6 @@ export const addPredictions = (rows: any, IdKey: string) => {
           isEstimate: true,
         };
         predictionRow[IdKey] = rows[right][IdKey];
-        console.log(predictionRow);
 
         predictionsToAdd.push(predictionRow);
         break;
