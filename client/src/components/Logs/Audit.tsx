@@ -35,17 +35,56 @@ export const Audit = () => {
 
   const exportOptions = (
     <Menu>
-      <Menu.Item>
+      <Menu.Item onClick={() => exportPDF()}>
         PDF
       </Menu.Item>
-      <Menu.Item>
+      <Menu.Item onClick={() => exportCSV()}>
         CSV
-      </Menu.Item>
-      <Menu.Item>
-        TXT
       </Menu.Item>
     </Menu>
   );
+
+  const dummyData : any[] = [
+    {
+      date: new Date,
+      author: "Radley",
+      action: "Create",
+      target: "15 tires"
+    },
+    {
+      date: new Date,
+      author: "John",
+      action: "Deletes",
+      target: "15 tires"
+    }
+  ]
+
+  const exportPDF = () => {
+  }
+
+  const exportCSV = () => {
+    const date = new Date;
+    const fileName = 'Audit-' + (date.toDateString() + ' ' + date.toLocaleTimeString()).replace(/\s/g, '-');
+    const csvRows : any[] = [];
+
+    dummyData.forEach((object : any) => {
+      const headers = Object.keys(object);
+      const values = Object.values(object);
+      csvRows.push(headers.join(','));
+      csvRows.push(values.join(','));
+      csvRows.push('\n');
+    });
+
+    const blob = new Blob([csvRows.join('\n')], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.setAttribute('hidden', '');
+    a.setAttribute('href', url);
+    a.setAttribute('download', 'logs ' + fileName + '.csv');
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }
 
   return (
     <div>
