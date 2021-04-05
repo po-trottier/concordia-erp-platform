@@ -12,7 +12,7 @@ const { Search } = Input;
 const inventoryColumns = {
   name: 'Material',
   date: 'Date',
-  stockBuilt: 'Bought',
+  stockBought: 'Bought',
   stockUsed: 'Used',
   stock: 'Stock'
 };
@@ -29,6 +29,8 @@ export const MaterialsInventory = () => {
       .then(async ({ data }) => {
         for (const row of data) {
           row.date = new Date(row.date).toLocaleDateString();
+          if (row.isEstimate)
+            row.date = row.date + ' (estimate)';
           row.name = row.materialId.name;
         }
         setMaterialsData(data);
