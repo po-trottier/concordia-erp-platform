@@ -1,26 +1,27 @@
 import React from 'react';
 import DropboxChooser from 'react-dropbox-chooser';
-import { useDispatch } from 'react-redux';
-import { setFiles } from '../../store/slices/DropboxSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { setFiles, setLinks, addLink } from '../../store/slices/DropboxSlice';
 import { Dropbox } from 'dropbox';
 import { Button } from 'antd';
 
 export const UploadAuditButton = () => {
   const dispatch = useDispatch();
-
+  const files = useSelector((state) => state.dropbox.files);
+  const links = useSelector((state) => state.dropbox.links);
   const dropbox = new Dropbox({
     accessToken: 'oQ2YpqFmtFEAAAAAAAAAASVGkjlXl1afaVGSJsSPg0KeMdHWJFhH4p-Y4HkNltxm',
     fetch: window.fetch.bind(window),
   });
 
   const handleSuccess = (files) => {
-   const a = document.createElement('a');
-   a.setAttribute('hidden', '');
-   a.setAttribute('href', files[0].link);
-   a.setAttribute('target', '_blank');
-   document.body.appendChild(a);
-   a.click();
-   document.body.removeChild(a);
+    const a = document.createElement('a');
+    a.setAttribute('hidden', '');
+    a.setAttribute('href', files[0].link);
+    a.setAttribute('target', '_blank');
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
   }
 
   const handleCancel = () => {
@@ -28,6 +29,14 @@ export const UploadAuditButton = () => {
       path: '',
     }).then(res => {
       dispatch(setFiles(res.result.entries));
+      dispatch(setLinks([]));
+      files.forEach(file => {
+        dropbox.filesGetTemporaryLink({
+          path: file['path_lower']
+        }).then(res => {
+          dispatch(addLink(res.result.link));
+        })
+      });
     });
   }
 

@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store/Store';
-import { setFiles } from '../../store/slices/DropboxSlice';
-import { Card } from 'antd';
+import { setFiles, setLinks, addLink } from '../../store/slices/DropboxSlice';
+import { Card, Button } from 'antd';
 import { ResponsiveTable } from '../ResponsiveTable';
 import { Dropbox } from 'dropbox';
 import { UploadAuditButton } from './UploadAuditButton.js';
@@ -10,6 +10,7 @@ import { UploadAuditButton } from './UploadAuditButton.js';
 export const Cloud = () => {
   const dispatch = useDispatch();
   const files = useSelector((state : RootState) => state.dropbox.files);
+  const links = useSelector((state : RootState) => state.dropbox.links);
   const updated = useSelector((state : RootState) => state.dropbox.updated);
 
   const dropbox = new Dropbox({
@@ -22,6 +23,14 @@ export const Cloud = () => {
       path: '',
     }).then(res => {
       dispatch(setFiles(res.result.entries));
+      dispatch(setLinks([]));
+      files.forEach((file : any)=> {
+        dropbox.filesGetTemporaryLink({
+          path: file['path_lower']
+        }).then(res => {
+          dispatch(addLink(res.result.link));
+        })
+      });
     });
   }, [updated])
 
@@ -29,18 +38,29 @@ export const Cloud = () => {
     let filesCopy = JSON.parse(JSON.stringify(files));
     let rows : any[] = [];
 
-    filesCopy.forEach((file : any) => {
+    filesCopy.forEach((file : any, index : number) => {
       rows.push({
         name: file['name'],
+        action: 
+            <a href={links[index]}>
+              <Button>
+              Download
+              </Button>
+            </a>
       });
     });
     return rows;
   }
 
+  const columns = {
+    name: 'Name',
+    action: 'Action'
+  }
+
   return(
     <div>
       <Card>
-        <ResponsiveTable columns={{name: 'Name'}} values={getFiles()} />
+        <ResponsiveTable columns={columns} values={getFiles()} />
       </Card>
       <UploadAuditButton />
     </div>
