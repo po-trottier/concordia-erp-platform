@@ -22,7 +22,7 @@ export class OrderListener {
   ) {}
 
   @OnEvent(EventMap.ACCOUNT_PAYABLE_PAID.id)
-  async handleAccountPayable(order: MaterialOrderDocument) {
+  async handleAccountPayable(orders: MaterialOrderDocument[]) {
     const emails = await getEmails(
       EventMap.ACCOUNT_PAYABLE_PAID,
       this.eventModel,
@@ -34,8 +34,8 @@ export class OrderListener {
         to: emails,
         from: CONTACT_EMAIL,
         subject: '[EPIC Resource Planner] Account Payable Paid',
-        html: `<p>An account payable was paid in your EPIC Resource Planner instance. The details are below:</p><p>${JSON.stringify(
-          order,
+        html: `<p>Accounts payable were paid in your EPIC Resource Planner instance. The details are below:</p><p>${JSON.stringify(
+          orders,
         )}</p>`,
       });
     }
@@ -46,7 +46,7 @@ export class OrderListener {
   }
 
   @OnEvent(EventMap.ACCOUNT_RECEIVABLE_PAID.id)
-  async handleAccountReceivable(order: ProductOrderDocument) {
+  async handleAccountReceivable(orders: ProductOrderDocument[]) {
     const emails = await getEmails(
       EventMap.ACCOUNT_RECEIVABLE_PAID,
       this.eventModel,
@@ -58,8 +58,8 @@ export class OrderListener {
         to: emails,
         from: CONTACT_EMAIL,
         subject: '[EPIC Resource Planner] Account Receivable Paid',
-        html: `<p>An account receivable was paid in your EPIC Resource Planner instance. The details are below:</p><p>${JSON.stringify(
-          order,
+        html: `<p>Accounts receivable were paid in your EPIC Resource Planner instance. The details are below:</p><p>${JSON.stringify(
+          orders,
         )}</p>`,
       });
     }
