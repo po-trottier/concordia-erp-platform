@@ -18,6 +18,7 @@ import { ScheduleModule } from '@nestjs/schedule';
       cache: true,
       isGlobal: true,
     }),
+    // Cron Job Support
     ScheduleModule.forRoot(),
     // Use the output of the react build as static assets
     // Relative path: ../../client/build
