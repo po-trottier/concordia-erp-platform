@@ -3,8 +3,9 @@ import DropboxChooser from 'react-dropbox-chooser';
 import { useDispatch } from 'react-redux';
 import { setFiles } from '../../store/slices/DropboxSlice';
 import { Dropbox } from 'dropbox';
+import { Button } from 'antd';
 
-export const UploadAuditButton = (props) => {
+export const UploadAuditButton = () => {
   const dispatch = useDispatch();
 
   const dropbox = new Dropbox({
@@ -37,7 +38,9 @@ export const UploadAuditButton = (props) => {
         multiselect={false}
         success={handleSuccess}
         cancel={handleCancel}
-      />
+        extensions={['.pdf', '.csv']}>
+          <Button type='primary'>Open Dropbox Chooser</Button>
+      </DropboxChooser>
     </div>
   );
 }

@@ -34,20 +34,15 @@ export const Cloud = () => {
         name: file['name'],
       });
     });
-
     return rows;
   }
-
-  const filesColumns = {
-    name: 'Name',
-  };
 
   return(
     <div>
       <Card>
-        <ResponsiveTable columns={filesColumns} values={getFiles()} />
+        <ResponsiveTable columns={{name: 'Name'}} values={getFiles()} />
       </Card>
-      <UploadAuditButton dropbox={dropbox} />
+      <UploadAuditButton />
     </div>
   );
 }
