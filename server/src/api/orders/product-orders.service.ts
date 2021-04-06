@@ -19,6 +19,8 @@ import { ProductsService } from '../products/products/products.service';
 import { ProductStockService } from '../products/products/product-stock.service';
 import { UpdateProductStockDto } from '../products/products/dto/update-product-stock.dto';
 import { EventMap } from '../../events/common';
+import { Mail } from '../../shared/mail';
+import { CONTACT_EMAIL } from '../../shared/constants';
 
 @Injectable()
 export class ProductOrdersService {
@@ -152,16 +154,23 @@ export class ProductOrdersService {
     }
   }
 
-  @Cron(CronExpression.EVERY_DAY_AT_10AM)
+  @Cron(CronExpression.EVERY_10_SECONDS)
   async handleAccountsReceivablePayments() {
-    const productOrders: any[] = await this.findAll();
-    const unpaidOrders = productOrders.filter(
-      (order) => order.isPaid === false,
-    );
+    const unpaidOrders: any[] = await this.productOrderModel
+      .find({
+        isPaid: false,
+      })
+      .populate('customerId')
+      .populate('productId')
+      .exec();
+
+    console.log(unpaidOrders);
+
+    const paidOrders: ProductOrder[] = [];
 
     for (const order of unpaidOrders) {
       if (
-        isSameDay(new Date(order.dateDue), new Date()) ||
+        isSameDay(new Date(), new Date(order.dateDue)) ||
         isAfter(new Date(), new Date(order.dateDue))
       ) {
         const paidOrder = await this.productOrderModel.findByIdAndUpdate(
@@ -170,8 +179,34 @@ export class ProductOrdersService {
           { new: true },
         );
 
-        this.emitter.emit(EventMap.ACCOUNT_RECEIVABLE_PAID.id, paidOrder);
+        console.log('email sent with:', {
+          product: order.productId.name,
+          quantity: order.quantity,
+          amountDue: order.amountDue,
+          dateOrderd: order.dateOrdered,
+        });
+
+        await Mail.instance.send({
+          to: order.customerId.email,
+          from: CONTACT_EMAIL,
+          subject: 'Bicycle purchase billing confirmation',
+          html: `<h3>Dear ${order.customerId.name}, </h3>
+          <p>Your recent bicycle order has been billed to you. The details of your order are as follows:</p><p>${JSON.stringify(
+            {
+              product: order.productId.name,
+              quantity: order.quantity,
+              amountDue: order.amountDue,
+              dateOrderd: order.dateOrdered,
+            },
+          )}</p>`,
+        });
+
+        paidOrders.push(paidOrder);
       }
+    }
+
+    if (paidOrders.length > 0) {
+      this.emitter.emit(EventMap.ACCOUNT_RECEIVABLE_PAID.id, paidOrders);
     }
   }
 }
