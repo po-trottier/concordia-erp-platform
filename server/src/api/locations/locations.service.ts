@@ -1,19 +1,69 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  NotFoundException,
+  OnApplicationBootstrap,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { DEFAULT_LOCATION } from '../../shared/constants';
 import { CreateLocationDto } from './dto/create-location.dto';
 import { UpdateLocationDto } from './dto/update-location.dto';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Location, LocationDocument } from './schemas/location.schema';
-import { DEFAULT_LOCATION } from '../../shared/constants';
+import {
+  MaterialStock,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  MaterialStockDocument,
+} from '../materials/materials/schemas/material-stock.schema';
+import {
+  PartStock,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  PartStockDocument,
+} from '../parts/parts/schemas/part-stock.schema';
+import {
+  ProductStock,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  ProductStockDocument,
+} from '../products/products/schemas/product-stock.schema';
+import {
+  MaterialLog,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  MaterialLogDocument,
+} from '../materials/materials-logs/schemas/material-log.schema';
+import {
+  PartLog,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  PartLogDocument,
+} from '../parts/parts-logs/schemas/part-log.schema';
+import {
+  ProductLog,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  ProductLogDocument,
+} from '../products/products-logs/schemas/product-log.schema';
 
 /**
  * Used by the LocationsController, handles location data storage and retrieval.
  */
 @Injectable()
-export class LocationsService {
+export class LocationsService implements OnApplicationBootstrap {
+  private readonly logger = new Logger(LocationsService.name);
+
   constructor(
-    @InjectModel(Location.name) private locationModel: Model<LocationDocument>,
+    @InjectModel(Location.name)
+    private locationModel: Model<LocationDocument>,
+    @InjectModel(MaterialStock.name)
+    private materialStockModel: Model<MaterialStockDocument>,
+    @InjectModel(PartStock.name)
+    private partStockModel: Model<PartStockDocument>,
+    @InjectModel(ProductStock.name)
+    private productStockModel: Model<ProductStockDocument>,
+    @InjectModel(MaterialLog.name)
+    private materialLogModel: Model<MaterialLogDocument>,
+    @InjectModel(PartLog.name)
+    private partLogModel: Model<PartLogDocument>,
+    @InjectModel(ProductLog.name)
+    private productLogModel: Model<ProductLogDocument>,
   ) {}
 
   async onApplicationBootstrap(): Promise<void> {
@@ -26,9 +76,9 @@ export class LocationsService {
       const location = new CreateLocationDto();
       location.name = DEFAULT_LOCATION;
       await this.create(location);
-      console.log('Default location was created successfully.');
+      this.logger.log('Default location was created successfully');
     } else {
-      console.log('Default location already exits.');
+      this.logger.warn('Default location already exits');
     }
   }
 
@@ -84,6 +134,39 @@ export class LocationsService {
    * @param id string of the location's objectId
    */
   async remove(id: string): Promise<Location> {
+    // Remove all stock entries for that location
+    const materialStock = await this.materialStockModel.find({
+      locationId: id,
+    });
+    for (const stock of materialStock) await stock.delete();
+
+    const partStock = await this.partStockModel.find({
+      locationId: id,
+    });
+    for (const stock of partStock) await stock.delete();
+
+    const productStock = await this.productStockModel.find({
+      locationId: id,
+    });
+    for (const stock of productStock) await stock.delete();
+
+    // Remove all log entries for that location
+    const materialLog = await this.materialLogModel.find({
+      locationId: id,
+    });
+    for (const log of materialLog) await log.delete();
+
+    const partLog = await this.partLogModel.find({
+      locationId: id,
+    });
+    for (const log of partLog) await log.delete();
+
+    const productLog = await this.productLogModel.find({
+      locationId: id,
+    });
+    for (const log of productLog) await log.delete();
+
+    // Delete the actual location
     const deletedLocation = await this.locationModel.findByIdAndDelete(id);
     return this.validateLocationFound(deletedLocation, id);
   }

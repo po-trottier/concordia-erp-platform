@@ -24,7 +24,7 @@ export const UserList = () => {
       dispatch(setUserList(data));
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchValue]);
+  }, [userList.length]);
 
   const getUserList = () => {
     let rows = JSON.parse(JSON.stringify(userList));

@@ -12,14 +12,6 @@ import {
   ProductOrder,
   ProductOrderSchema,
 } from './schemas/product-orders.schema';
-import {
-  Material,
-  MaterialSchema,
-} from '../materials/materials/schemas/material.schema';
-import {
-  Product,
-  ProductSchema,
-} from '../products/products/schemas/products.schema';
 import { ProductOrdersService } from './product-orders.service';
 import { OrderDetailsService } from './order-details.service';
 import { MaterialsService } from '../materials/materials/materials.service';
