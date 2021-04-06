@@ -164,8 +164,6 @@ export class ProductOrdersService {
       .populate('productId')
       .exec();
 
-    console.log(unpaidOrders);
-
     const paidOrders: ProductOrder[] = [];
 
     for (const order of unpaidOrders) {
@@ -178,13 +176,6 @@ export class ProductOrdersService {
           { $set: { isPaid: true } },
           { new: true },
         );
-
-        console.log('email sent with:', {
-          product: order.productId.name,
-          quantity: order.quantity,
-          amountDue: order.amountDue,
-          dateOrderd: order.dateOrdered,
-        });
 
         await Mail.instance.send({
           to: order.customerId.email,
