@@ -18,7 +18,8 @@ export const addPredictions = (rows: any, IdKey: string) => {
         const daysBetween = calculateDiffInDays(firstDate, lastDate);
         const daysTillEnd = calculateDiffInDays(lastDate, endOfYear);
 
-        const predictedStockMultiplier = (rows[right].stock - rows[left].stock) / daysBetween;
+        const predictedStockMultiplier =
+          (rows[right].stock - rows[left].stock) / daysBetween;
         const predictedStock = predictedStockMultiplier * daysTillEnd;
         const stockDifference = predictedStock - rows[right].stock;
 
@@ -32,6 +33,8 @@ export const addPredictions = (rows: any, IdKey: string) => {
           isEstimate: true,
         };
         predictionRow[IdKey] = rows[right][IdKey];
+        if ((IdKey = 'materialId'))
+          predictionRow['stockBought'] = predictionRow.stockBuilt;
 
         predictionsToAdd.push(predictionRow);
         break;
