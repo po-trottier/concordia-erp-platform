@@ -154,7 +154,7 @@ export class ProductOrdersService {
     }
   }
 
-  @Cron(CronExpression.EVERY_10_SECONDS)
+  @Cron(CronExpression.EVERY_DAY_AT_10AM)
   async handleAccountsReceivablePayments() {
     const unpaidOrders: any[] = await this.productOrderModel
       .find({
