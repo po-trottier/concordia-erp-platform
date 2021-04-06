@@ -4,7 +4,7 @@ import { FunnelPlotTwoTone, SafetyCertificateTwoTone, DropboxOutlined } from '@a
 
 import { Audit } from '../components/Logs/Audit';
 import { LogList } from '../components/Logs/LogList';
-import { Dropbox } from '../components/Logs/Dropbox.js';
+import { Dropbox } from '../components/Logs/Dropbox';
 
 export const Logs = () => {
 

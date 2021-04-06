@@ -16,6 +16,7 @@ export const dropboxSlice = createSlice({
       if (i < 0) {
         state.files.push(payload);
       }
+      state.updated = true;
     },
     removeFile: (state, { payload } : PayloadAction<string>) => {
       const i = state.files.findIndex((file : FileEntry) => file.id === payload);

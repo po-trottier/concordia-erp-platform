@@ -1,15 +1,28 @@
 import React, { useEffect } from 'react';
 import { Card, Button, message } from 'antd';
+import { RootState } from '../../store/Store';
 import { useDispatch, useSelector } from 'react-redux';
 import { addFile, removeFile } from '../../store/slices/DropboxSlice';
 import { ResponsiveTable } from '../ResponsiveTable';
 import { Dropbox as Dbx } from 'dropbox';
-import DropboxChooser from 'react-dropbox-chooser';
+//import DropboxChooser from 'react-dropbox-chooser';
+import { useDropboxChooser } from 'use-dropbox-chooser';
 
 export const Dropbox = () => {
   const dispatch = useDispatch();
-  const files = useSelector(state => state.dropbox.files);
-  const updated = useSelector(state => state.dropbox.updated);
+  const files = useSelector((state : RootState) => state.dropbox.files);
+  const updated = useSelector((state : RootState) => state.dropbox.updated);
+
+  const { open, isOpen } = useDropboxChooser({
+    appKey: 'bi2msqa4xuxy011',
+    chooserOptions: { multiselect: false, linkType: 'direct' },
+    onSelected: (files : any) => {
+      handleSuccess(files);
+    },
+    onCanceled: () => {
+      getFiles();
+    }
+  })
 
   const dbx = new Dbx({
     accessToken: 'oQ2YpqFmtFEAAAAAAAAAASVGkjlXl1afaVGSJsSPg0KeMdHWJFhH4p-Y4HkNltxm',
@@ -23,11 +36,12 @@ export const Dropbox = () => {
   const getFiles = () => {
     dbx.filesListFolder({
       path: '',
-    }).then(res => {
-      res.result.entries.forEach(file => {
+    })
+    .then(res => {
+      res.result.entries.forEach((file : any) => {
         dbx.filesGetTemporaryLink({
           path: file['path_lower']
-        }).then(res => {
+        }).then((res : any) => {
           dispatch(addFile({
             id: file['id'],
             name: file['name'],
@@ -36,10 +50,13 @@ export const Dropbox = () => {
           }));    
         });
       });
+    })
+    .catch(() => {
+      message.error('Files could not be fetched');
     });
   }
 
-  const deleteFile = (path, id) => {
+  const deleteFile = (path : string, id : string) => {
     dbx.filesDeleteV2({ path })
     .then(res => {
       console.log(res);
@@ -53,8 +70,8 @@ export const Dropbox = () => {
 
   const getRows = () => {
     let filesCopy = JSON.parse(JSON.stringify(files));
-    let rows = [];
-    filesCopy.forEach((file) => {
+    let rows : any[] = [];
+    filesCopy.forEach((file : any) => {
       rows.push({
         name: file['name'],
         download:
@@ -75,7 +92,7 @@ export const Dropbox = () => {
     delete: 'Delete',
   }
 
-  const handleSuccess = (files) => {
+  const handleSuccess = (files : any[]) => {
     const a = document.createElement('a');
     a.setAttribute('hidden', '');
     a.setAttribute('href', files[0].link);
@@ -90,7 +107,14 @@ export const Dropbox = () => {
       <Card>
         <ResponsiveTable columns={columns} values={getRows()} />
       </Card>
-      <DropboxChooser
+      <Button
+      type='primary'
+      style={{marginTop: 16}}
+      onClick={open}
+      disabled={isOpen}>
+        Choose from Dropbox
+      </Button>
+      {/* <DropboxChooser
         appKey={'bi2msqa4xuxy011'}
         multiselect={false}
         success={handleSuccess}
@@ -99,7 +123,7 @@ export const Dropbox = () => {
           <Button type='primary' style={{marginTop: 16}}>
             Open Dropbox Chooser
           </Button>
-      </DropboxChooser>
+      </DropboxChooser> */}
     </div>
   );
 }
