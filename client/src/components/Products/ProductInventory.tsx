@@ -29,7 +29,7 @@ export const ProductInventory = () => {
       .then(async ({ data }) => {
         for (const row of data) {
           row.date = row.date.substring(0,10);
-          row.name = row.productId.name;
+          row.name = row.productId.name + (row.isEstimate ? ' (estimate)' : '');
         }
         setProducts(data);
       });
@@ -57,10 +57,6 @@ export const ProductInventory = () => {
     const rows = getProducts();
     const seriesNames: any = {};
     rows.forEach((row: any) => {
-      if (row.isEstimate) {
-        row.name = row.name + ' (estimate)';
-      }
-
       if (! seriesNames[row.name])  {
         seriesNames[row.name] = true;
         series.push({

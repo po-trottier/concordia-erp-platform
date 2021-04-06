@@ -45,7 +45,7 @@ export const addPredictions = (rows: any, IdKey: string) => {
           locationId: rows[right].locationId,
           stockBuilt: rows[right].stockBuilt,
           stockUsed: rows[right].stockUsed,
-          stock: rows[right].stockUsed,
+          stock: rows[right].stock,
           isEstimate: true,
         }
         copyRow[IdKey] = rows[right][IdKey];
