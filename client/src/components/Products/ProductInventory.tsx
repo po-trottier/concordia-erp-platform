@@ -28,28 +28,12 @@ export const ProductInventory = () => {
     axios.get('products/logs/' + location)
       .then(async ({ data }) => {
         for (const row of data) {
-//          row.date = new Date(row.date).toLocaleDateString();
-//          if (row.isEstimate)
-//            row.date = row.date + " (estimate)";
+          row.date = row.date.substring(0,10);
           row.name = row.productId.name;
         }
         setProducts(data);
       });
   }, [location]);
-
-  const formatDate = (date: string) => {
-    var d = new Date(date),
-        month = '' + (d.getMonth() + 1),
-        day = '' + d.getDate(),
-        year = d.getFullYear();
-
-    if (month.length < 2)
-        month = '0' + month;
-    if (day.length < 2)
-        day = '0' + day;
-
-    return [year, month, day].join('/');
-  };
 
   const getProducts = () => {
     let rows = JSON.parse(JSON.stringify(products));
@@ -103,12 +87,7 @@ export const ProductInventory = () => {
           type: 'datetime',
         },
       },
-      series: getSeries()/*[
-        {
-          name: "series-1",
-          data: [{ x: '05/06/2014', y: 54 }, { x: '05/08/2014', y: 17 } , { x: '05/28/2014', y: 26 }],
-        }
-      ]*/
+      series: getSeries()
     };
 
   return (
