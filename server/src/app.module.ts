@@ -5,6 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { ApiModule } from './api/api/api.module';
 import { validate } from './shared/env';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -17,6 +18,8 @@ import { validate } from './shared/env';
       cache: true,
       isGlobal: true,
     }),
+    // Cron Job Support
+    ScheduleModule.forRoot(),
     // Use the output of the react build as static assets
     // Relative path: ../../client/build
     ServeStaticModule.forRoot({
