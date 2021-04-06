@@ -4,19 +4,19 @@ import erp_authenticate
 import sys
 
 running = True
+baseURL = 'http://localhost:5500/'
+if len(sys.argv) > 1:
+    if sys.argv[1] == "prod":
+        baseURL = 'https://erp.p-o.me/'
+
 
 partId = '6051597e09e2ae2dc1019adf'
 
-token = erp_authenticate.authenticate()
+token = erp_authenticate.authenticate(baseURL + "api/auth/login")
 
 locationId = '604cee081ba2430c10eeee6b'
 buildApi = 'api/parts/build/' + locationId
-
-url = 'http://localhost:5500/' + buildApi
-
-if len(sys.argv) > 1:
-    if sys.argv[1] == "prod":
-        url = 'https://erp.p-o.me/' + buildApi
+url = baseURL + buildApi
 
 headersAPI = {
     'accept': 'application/json',
@@ -43,5 +43,5 @@ while running:
     partsToBuild = []
 
     partsToBuild.append(partBuildDto)
-    response = requests.patch(url, json=partsToBuild, headers=headersAPI, verify=False)
+    response = requests.patch(url, json=partsToBuild, headers=headersAPI)
     print(response)

@@ -3,13 +3,13 @@ import xml.etree.ElementTree as ET
 import requests
 import erp_authenticate
 
-token = erp_authenticate.authenticate()
-
-url = "http://localhost:5500/api/"
-
+baseURL = 'http://localhost:5500/'
 if len(sys.argv) > 1:
     if sys.argv[1] == "prod":
-        url = 'https://erp.p-o.me/api/'
+        baseURL = 'https://erp.p-o.me/'
+
+token = erp_authenticate.authenticate(baseURL + "api/auth/login")
+
 
 headersAPI = {
     'accept': 'application/json',
@@ -35,7 +35,7 @@ if __name__ == "__main__":
         stockBuilt = part.attrib['stockBuilt']
         partsToBuild.append({'partId': partId, 'stockBuilt': stockBuilt})
 
-    response = requests.patch(url + "parts/build/" + location, json=partsToBuild, headers=headersAPI, verify=False)
+    response = requests.patch(baseURL + "api/parts/build/" + location, json=partsToBuild, headers=headersAPI, verify=False)
     print(response.content)
 
     for product in root.find('products').findall('product'):
@@ -43,5 +43,5 @@ if __name__ == "__main__":
         stockBuilt = product.attrib['stockBuilt']
         productsToBuild.append({'productsId': partId, 'stockBuilt': stockBuilt})
 
-    response = requests.patch(url + "products/build/" + location, json=productsToBuild, headers=headersAPI, verify=False)
+    response = requests.patch(baseURL + "api/products/build/" + location, json=productsToBuild, headers=headersAPI, verify=False)
     print(response.content)
