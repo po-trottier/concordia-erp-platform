@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema as mongooseSchema } from 'mongoose';
+import { Material } from '../../materials/materials/schemas/material.schema';
 
 export type MaterialOrderDocument = MaterialOrder & Document;
 
@@ -10,7 +11,7 @@ export type MaterialOrderDocument = MaterialOrder & Document;
 export class MaterialOrder {
   @Prop({
     type: mongooseSchema.Types.ObjectId,
-    ref: 'Material',
+    ref: Material.name,
     required: true,
     index: true,
   })
