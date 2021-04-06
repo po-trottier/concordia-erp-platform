@@ -15,15 +15,11 @@ headersAPI = {
     'Authorization': 'Bearer '+ token,
 }
 
-
-
-
 ser = serial.Serial('/dev/ttyACM0', 9600)
 while running:
     number_frames = int(input("Enter the number of bicycle frames to manufacture : "))
     number_frames_bytes = bytes([number_frames])
     print("Asking the machine to manufacture ", number_frames, " frames")
-    print("Sending ", number_frames_bytes)
     ser.write(number_frames_bytes)
 
     last_message = ""
