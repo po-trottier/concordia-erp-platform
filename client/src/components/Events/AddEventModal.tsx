@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Modal, Select, Form, Row, Col, Input, InputNumber} from 'antd';
+import { Button, Modal, Select, Form, Row, Col, Input, InputNumber, Radio } from 'antd';
 import { MinusCircleTwoTone, PlusOutlined } from '@ant-design/icons';
 import { useDispatch } from 'react-redux';
 
@@ -14,7 +14,7 @@ export const AddEventModal = () => {
   const dispatch = useDispatch();
 
   const [form] = Form.useForm();
-  
+
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [customerIdList, setCustomerIdList] = useState(['']);
   const [customerId, setCustomerId] = useState('');
@@ -23,7 +23,7 @@ export const AddEventModal = () => {
   const [roles, setRoles] = useState([]);
   const [role, setRole] = useState(0);
 
-  const emptyData : EventDropdownEntry[] = [];
+  const emptyData: EventDropdownEntry[] = [];
   const [eventsData, setEventsData] = useState(emptyData);
 
   const [loading, setLoading] = useState(false);
@@ -88,10 +88,10 @@ export const AddEventModal = () => {
         onOk={form.submit}
         onCancel={handleCancel}>
         <Form
-        form={form}
-        onFinish={addEvent}
-        name='basic'
-        style={{ marginBottom: '-24px', width: '100%', maxWidth: '500px' }}>
+          form={form}
+          onFinish={addEvent}
+          name='basic'
+          style={{ marginBottom: '-24px', width: '100%', maxWidth: '500px' }}>
           {/*Action/Event Field*/}
           <Row align='middle' style={{ marginBottom: 16 }}>
             <Col sm={6} span={9}>
@@ -102,17 +102,35 @@ export const AddEventModal = () => {
                 style={{ marginBottom: 0 }}
                 name='action'
                 rules={[{ required: true, message: 'Please select an action.' }]}>
-               <Select
-                          showSearch
-                          style={{ width: '100%', display: 'inline-table' }}
-                          placeholder='Select an action'
-                          optionFilterProp='children'
-                          onChange={hideActionsError}>
-                          {eventsData.map((event) => (
-                            <Option key={event.id} value={event.id}>
-                              {event.name}
-                            </Option>))}
-                        </Select>
+                <Select
+                  showSearch
+                  style={{ width: '100%', display: 'inline-table' }}
+                  placeholder='Select an action'
+                  optionFilterProp='children'
+                  onChange={hideActionsError}>
+                  {eventsData.map((event) => (
+                    <Option key={event.id} value={event.id}>
+                      {event.name}
+                    </Option>))}
+                </Select>
+              </Form.Item>
+            </Col>
+          </Row>
+
+          <Row align='middle' style={{ marginBottom: 16 }}>
+            <Col sm={6} span={9}>
+              <span>Action:</span>
+            </Col>
+            <Col sm={18} span={15}>
+              <Form.Item
+                style={{ marginBottom: 0 }}
+                name='group'
+                rules={[{ required: true, message: 'Please select a group for this event.' }]}>
+                <Radio.Group name="group" defaultValue={1}>
+                  <Radio value={'customers'}>Customers</Radio>
+                  <Radio value={'users'}>Users</Radio>
+                  <Radio value={'roles'}>Roles</Radio>
+                </Radio.Group>
               </Form.Item>
             </Col>
           </Row>
