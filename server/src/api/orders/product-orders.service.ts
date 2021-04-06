@@ -187,7 +187,7 @@ export class ProductOrdersService {
               product: order.productId.name,
               quantity: order.quantity,
               amountDue: order.amountDue,
-              dateOrderd: order.dateOrdered,
+              dateOrdered: order.dateOrdered,
             },
           )}</p>`,
         });
