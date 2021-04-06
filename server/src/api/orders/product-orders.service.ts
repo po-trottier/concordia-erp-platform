@@ -23,11 +23,11 @@ import { EventMap } from '../../events/common';
 @Injectable()
 export class ProductOrdersService {
   constructor(
+    private emitter: EventEmitter2,
     @InjectModel(ProductOrder.name)
     private productOrderModel: Model<ProductOrderDocument>,
     private readonly productsService: ProductsService,
     private readonly productStockService: ProductStockService,
-    private emitter: EventEmitter2,
   ) {}
 
   getIncrement(day: number) {
@@ -105,6 +105,7 @@ export class ProductOrdersService {
       await this.productStockService.update(location, dtoArray);
     }
 
+    this.emitter.emit(EventMap.PRODUCT_SOLD.id, createdOrders);
     return createdOrders;
   }
 
