@@ -1,25 +1,28 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { Button, Card, Checkbox, DatePicker, Divider, Menu, Popover, Select, Typography } from 'antd';
+import {useDispatch, useSelector} from "react-redux";
+import axios from "../../plugins/Axios";
+import {setUserList} from "../../store/slices/UserListSlice";
+import {RootState} from "../../store/Store";
+import {UserEntry} from "../../interfaces/UserEntry";
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 const { Title } = Typography;
 
 export const Audit = () => {
+  const dispatch = useDispatch();
+  const userList = useSelector((state : RootState) => state.userList.list);
+  const [updated, setUpdated] = useState(false);
 
-  const getNames = () => {
-    let names : { name : string }[] = [
-      { name: 'Mike' },
-      { name: 'Alex' },
-    ];
-    return names.map((personName) => (
-      <Option
-        key={personName.name}
-        value={personName.name}>
-        {personName.name}
-      </Option>),
-    );
-  };
+  useEffect(() => {
+    setUpdated(true);
+    axios.get('users').then(({ data }) => {
+      dispatch(setUserList(data));
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [updated]);
+
 
   const actionOptions = ['Create', 'Modify', 'Delete'];
   const securityOptions = ['Successful Login', 'Failed Login'];
@@ -70,7 +73,15 @@ export const Audit = () => {
           mode='multiple'
           placeholder='Select users'
           optionFilterProp='children'>
-          {getNames()}
+          {
+            userList.map((user: UserEntry) => (
+              <Option
+                key={user._id}
+                value={user.username}>
+                {user.firstName + ' ' + user.lastName}
+              </Option>)
+            )
+          }
         </Select>
         <p style={style}>Select the kind of action to query:</p>
         <Checkbox.Group options={securityOptions} />
