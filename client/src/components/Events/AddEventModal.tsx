@@ -116,10 +116,10 @@ export const AddEventModal = () => {
               </Form.Item>
             </Col>
           </Row>
-
+          {/*Group Selector Field*/}
           <Row align='middle' style={{ marginBottom: 16 }}>
             <Col sm={6} span={9}>
-              <span>Action:</span>
+              <span>Group:</span>
             </Col>
             <Col sm={18} span={15}>
               <Form.Item
@@ -131,6 +131,31 @@ export const AddEventModal = () => {
                   <Radio value={'users'}>Users</Radio>
                   <Radio value={'roles'}>Roles</Radio>
                 </Radio.Group>
+              </Form.Item>
+            </Col>
+          </Row>
+          {/*Customers Field*/}
+          <Row align='middle' style={{ marginBottom: 16 }}>
+            <Col sm={6} span={9}>
+              <span>Customers:</span>
+            </Col>
+            <Col sm={18} span={15}>
+              <Form.Item
+                style={{ marginBottom: 0 }}
+                name='action'
+                rules={[{ required: true, message: 'Please select customers.' }]}>
+                <Select
+                  mode='multiple'
+                  showSearch
+                  style={{ width: '100%', display: 'inline-table' }}
+                  placeholder='Select 1 or more customers'
+                  optionFilterProp='children'
+                  onChange={hideActionsError}>
+                  {eventsData.map((event) => (
+                    <Option key={event.id} value={event.id}>
+                      {event.name}
+                    </Option>))}
+                </Select>
               </Form.Item>
             </Col>
           </Row>
