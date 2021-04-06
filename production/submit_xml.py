@@ -5,12 +5,17 @@ import erp_authenticate
 
 token = erp_authenticate.authenticate()
 
+url = "http://localhost:5500/api/"
+
+if len(sys.argv) > 1:
+    if sys.argv[1] == "prod":
+        url = 'https://erp.p-o.me/api/'
+
 headersAPI = {
     'accept': 'application/json',
     'Authorization': 'Bearer '+ token,
 }
 
-url = "http://localhost:5500/api/"
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:

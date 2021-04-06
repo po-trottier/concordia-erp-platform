@@ -1,6 +1,7 @@
 import serial
 import requests
 import erp_authenticate
+import sys
 
 running = True
 
@@ -9,7 +10,13 @@ partId = '6051597e09e2ae2dc1019adf'
 token = erp_authenticate.authenticate()
 
 locationId = '604cee081ba2430c10eeee6b'
-url = 'http://localhost:5500/api/parts/build/' + locationId
+buildApi = 'api/parts/build/' + locationId
+
+url = 'http://localhost:5500/' + buildApi
+
+if len(sys.argv) > 1:
+    if sys.argv[1] == "prod":
+        url = 'https://erp.p-o.me/' + buildApi
 
 headersAPI = {
     'accept': 'application/json',
