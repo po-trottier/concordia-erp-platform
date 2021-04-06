@@ -159,6 +159,56 @@ export const AddEventModal = () => {
               </Form.Item>
             </Col>
           </Row>
+          {/*Users Field*/}
+          <Row align='middle' style={{ marginBottom: 16 }}>
+            <Col sm={6} span={9}>
+              <span>Users:</span>
+            </Col>
+            <Col sm={18} span={15}>
+              <Form.Item
+                style={{ marginBottom: 0 }}
+                name='action'
+                rules={[{ required: true, message: 'Please select users.' }]}>
+                <Select
+                  mode='multiple'
+                  showSearch
+                  style={{ width: '100%', display: 'inline-table' }}
+                  placeholder='Select 1 or more users'
+                  optionFilterProp='children'
+                  onChange={hideActionsError}>
+                  {eventsData.map((event) => (
+                    <Option key={event.id} value={event.id}>
+                      {event.name}
+                    </Option>))}
+                </Select>
+              </Form.Item>
+            </Col>
+          </Row>
+          {/*Roles Field*/}
+          <Row align='middle' style={{ marginBottom: 16 }}>
+            <Col sm={6} span={9}>
+              <span>Roles:</span>
+            </Col>
+            <Col sm={18} span={15}>
+              <Form.Item
+                style={{ marginBottom: 0 }}
+                name='action'
+                rules={[{ required: true, message: 'Please select users.' }]}>
+                <Select
+                  mode='multiple'
+                  showSearch
+                  style={{ width: '100%', display: 'inline-table' }}
+                  placeholder='Select 1 or more roles'
+                  optionFilterProp='children'
+                  onChange={hideActionsError}>
+                  {eventsData.map((event) => (
+                    <Option key={event.id} value={event.id}>
+                      {event.name}
+                    </Option>))}
+                </Select>
+              </Form.Item>
+            </Col>
+          </Row>
         </Form>
       </Modal>
     </div>
