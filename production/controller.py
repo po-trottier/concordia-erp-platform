@@ -1,11 +1,12 @@
 import serial
 import requests
+import erp_authenticate
 
 running = True
 
 partId = '6051597e09e2ae2dc1019adf'
 
-token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIiLCJpZCI6IjYwMjRjNGQ3ZDJmZTE4NGNhNDU1Y2VlMiIsInJvbGVzIjo0LCJpYXQiOjE2MTMwMjc5NzcsImV4cCI6MTY0NDU2Mzk3N30.PSIkyPoZbG_rmYzvhiM4xtxQ5_wmAfjHU1UHNbB-WfU'
+token, role = erp_authenticate.authenticate()
 
 locationId = '604cee081ba2430c10eeee6b'
 url = 'http://localhost:5500/api/parts/build/' + locationId

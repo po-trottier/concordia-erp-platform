@@ -1,8 +1,9 @@
 import sys
 import xml.etree.ElementTree as ET
 import requests
+import erp_authenticate
 
-token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIiLCJpZCI6IjYwMjRjNGQ3ZDJmZTE4NGNhNDU1Y2VlMiIsInJvbGVzIjo0LCJpYXQiOjE2MTMwMjc5NzcsImV4cCI6MTY0NDU2Mzk3N30.PSIkyPoZbG_rmYzvhiM4xtxQ5_wmAfjHU1UHNbB-WfU'
+token, role = erp_authenticate.authenticate()
 
 headersAPI = {
     'accept': 'application/json',
