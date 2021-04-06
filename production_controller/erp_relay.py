@@ -30,7 +30,7 @@ while running:
     partBuildDto = dict()
 
     partBuildDto['partId'] = partId
-    partBuildDto['stockBuild'] = number_frames
+    partBuildDto['stockBuilt'] = number_frames
 
     partsToBuild = []
 
