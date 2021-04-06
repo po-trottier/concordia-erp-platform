@@ -126,14 +126,17 @@ export class MaterialOrdersService {
 
   @Cron(CronExpression.EVERY_DAY_AT_10AM)
   async handleAccountsPayablePayments() {
-    const materialOrders: any[] = await this.findAll();
-    const unpaidOrders = materialOrders.filter(
-      (order) => order.isPaid === false,
+    const unpaidOrders: MaterialOrderDocument[] = await this.materialOrderModel.find(
+      {
+        isPaid: false,
+      },
     );
+
+    const paidOrders: MaterialOrder[] = [];
 
     for (const order of unpaidOrders) {
       if (
-        isSameDay(new Date(order.dateDue), new Date()) ||
+        isSameDay(new Date(), new Date(order.dateDue)) ||
         isAfter(new Date(), new Date(order.dateDue))
       ) {
         const paidOrder = await this.materialOrderModel.findByIdAndUpdate(
@@ -141,9 +144,12 @@ export class MaterialOrdersService {
           { $set: { isPaid: true } },
           { new: true },
         );
-
-        this.emitter.emit(EventMap.ACCOUNT_PAYABLE_PAID.id, paidOrder);
+        paidOrders.push(paidOrder);
       }
+    }
+
+    if (paidOrders.length > 0) {
+      this.emitter.emit(EventMap.ACCOUNT_PAYABLE_PAID.id, paidOrders);
     }
   }
 }
