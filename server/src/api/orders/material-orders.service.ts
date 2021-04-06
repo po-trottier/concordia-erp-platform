@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Cron, CronExpression } from '@nestjs/schedule';
-import { isSameDay } from 'date-fns';
+import { isAfter, isSameDay } from 'date-fns';
 import { Model } from 'mongoose';
 import {
   MaterialOrder,
@@ -132,7 +132,10 @@ export class MaterialOrdersService {
     );
 
     for (const order of unpaidOrders) {
-      if (isSameDay(new Date(order.dateDue), new Date())) {
+      if (
+        isSameDay(new Date(order.dateDue), new Date()) ||
+        isAfter(new Date(), new Date(order.dateDue))
+      ) {
         const paidOrder = await this.materialOrderModel.findByIdAndUpdate(
           order._id,
           { $set: { isPaid: true } },

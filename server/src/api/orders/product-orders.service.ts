@@ -6,7 +6,7 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Cron, CronExpression } from '@nestjs/schedule';
-import { isSameDay } from 'date-fns';
+import { isSameDay, isAfter } from 'date-fns';
 import { Model } from 'mongoose';
 import {
   ProductOrder,
@@ -154,13 +154,16 @@ export class ProductOrdersService {
 
   @Cron(CronExpression.EVERY_DAY_AT_10AM)
   async handleAccountsReceivablePayments() {
-    const materialOrders: any[] = await this.findAll();
-    const unpaidOrders = materialOrders.filter(
+    const productOrders: any[] = await this.findAll();
+    const unpaidOrders = productOrders.filter(
       (order) => order.isPaid === false,
     );
 
     for (const order of unpaidOrders) {
-      if (isSameDay(new Date(order.dateDue), new Date())) {
+      if (
+        isSameDay(new Date(order.dateDue), new Date()) ||
+        isAfter(new Date(), new Date(order.dateDue))
+      ) {
         const paidOrder = await this.productOrderModel.findByIdAndUpdate(
           order._id,
           { $set: { isPaid: true } },
