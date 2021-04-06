@@ -73,6 +73,8 @@ export const AddEventModal = () => {
     }
   };
 
+  let dropdownOffset = 0;
+
   return (
     <div>
       <Button
@@ -142,7 +144,7 @@ export const AddEventModal = () => {
             <Col sm={18} span={15}>
               <Form.Item
                 style={{ marginBottom: 0 }}
-                name='action'
+                name='customers'
                 rules={[{ required: true, message: 'Please select customers.' }]}>
                 <Select
                   mode='multiple'
@@ -167,7 +169,7 @@ export const AddEventModal = () => {
             <Col sm={18} span={15}>
               <Form.Item
                 style={{ marginBottom: 0 }}
-                name='action'
+                name='users'
                 rules={[{ required: true, message: 'Please select users.' }]}>
                 <Select
                   mode='multiple'
@@ -192,8 +194,8 @@ export const AddEventModal = () => {
             <Col sm={18} span={15}>
               <Form.Item
                 style={{ marginBottom: 0 }}
-                name='action'
-                rules={[{ required: true, message: 'Please select users.' }]}>
+                name='roles'
+                rules={[{ required: true, message: 'Please select roles.' }]}>
                 <Select
                   mode='multiple'
                   showSearch
@@ -201,10 +203,18 @@ export const AddEventModal = () => {
                   placeholder='Select 1 or more roles'
                   optionFilterProp='children'
                   onChange={hideActionsError}>
-                  {eventsData.map((event) => (
-                    <Option key={event.id} value={event.id}>
-                      {event.name}
-                    </Option>))}
+                  {
+                    Object.keys(Role).map((rkey, rval) => {
+                      if (isFinite(Number(rkey))) {
+                        dropdownOffset++;
+                        return null;
+                      }
+                      const role: Role = rval - dropdownOffset;
+                      return (
+                        <Option key={rkey} value={role}>{getRoleString(role)}</Option>
+                      );
+                    })
+                  }
                 </Select>
               </Form.Item>
             </Col>
