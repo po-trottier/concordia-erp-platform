@@ -3,7 +3,7 @@ import xml.etree.ElementTree as ET
 import requests
 import erp_authenticate
 
-token, role = erp_authenticate.authenticate()
+token = erp_authenticate.authenticate()
 
 headersAPI = {
     'accept': 'application/json',

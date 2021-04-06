@@ -14,4 +14,9 @@ def authenticate():
         exit(1)
 
     result = req.json()
-    return result['token'], result['role']
+
+    if result['role'] != 5:
+        print("Logged in user is not a production machine")
+        exit(1)
+
+    return result['token']
