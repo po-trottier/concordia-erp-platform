@@ -19,6 +19,16 @@ export class UserListener {
     @InjectModel(Event.name) private eventModel: Model<EventDocument>,
   ) {}
 
+  getEmailHTML(user: UserDocument, action: string) {
+    return `<p>A user was <b>${action}</b> in your EPIC Resource Planner instance. The details are below:</p>
+      <ul>
+        <li><b>Username:</b> ${user.username}</li>
+        <li><b>Email:</b> ${user.email}</li>
+        <li><b>Name:</b> ${user.firstName} ${user.lastName}</li>
+        <li><b>Role:</b> ${user.role}</li>
+      </ul>`;
+  }
+
   @OnEvent(EventMap.USER_CREATED.id)
   async handleUserCreated(user: UserDocument) {
     const emails = await getEmails(
@@ -32,9 +42,7 @@ export class UserListener {
         to: emails,
         from: CONTACT_EMAIL,
         subject: '[EPIC Resource Planner] New User Created',
-        html: `<p>A new user was created in your EPIC Resource Planner instance. The details are below:</p><p>${JSON.stringify(
-          user,
-        )}</p>`,
+        html: this.getEmailHTML(user, 'created'),
       });
     }
 
@@ -56,9 +64,7 @@ export class UserListener {
         to: emails,
         from: CONTACT_EMAIL,
         subject: '[EPIC Resource Planner] User Deleted',
-        html: `<p>A user was deleted in your EPIC Resource Planner instance. The details are below:</p><p>${JSON.stringify(
-          user,
-        )}</p>`,
+        html: this.getEmailHTML(user, 'deleted'),
       });
     }
 
@@ -80,9 +86,7 @@ export class UserListener {
         to: emails,
         from: CONTACT_EMAIL,
         subject: '[EPIC Resource Planner] User Modified',
-        html: `<p>A user was modified in your EPIC Resource Planner instance. The details are below:</p><p>${JSON.stringify(
-          user,
-        )}</p>`,
+        html: this.getEmailHTML(user, 'modified'),
       });
     }
 
