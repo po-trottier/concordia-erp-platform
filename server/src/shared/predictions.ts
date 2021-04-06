@@ -2,7 +2,7 @@ export const addPredictions = (rows: any, IdKey: string) => {
   const seen: any[] = [];
   const predictionsToAdd: any[] = [];
 
-  for (let left = 0; left < rows.length; left++) {
+  for (let left = 0; left < rows.length - 1; left++) {
     // already done prediction for this product, move on
     if (seen.includes(rows[left][IdKey])) {
       continue;
@@ -33,7 +33,7 @@ export const addPredictions = (rows: any, IdKey: string) => {
           isEstimate: true,
         };
         predictionRow[IdKey] = rows[right][IdKey];
-        if ((IdKey = 'materialId'))
+        if (IdKey === 'materialId')
           predictionRow['stockBought'] = predictionRow.stockBuilt;
 
         predictionsToAdd.push(predictionRow);
