@@ -37,6 +37,7 @@ export const UploadAuditButton = () => {
           dispatch(addLink(res.result.link));
         })
       });
+      console.log(links);
     });
   }
 

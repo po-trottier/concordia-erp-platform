@@ -47,13 +47,13 @@ export const Audit = () => {
 
   const dummyData : any[] = [
     {
-      date: new Date,
+      date: new Date(),
       author: "Radley",
       action: "Create",
       target: "15 tires"
     },
     {
-      date: new Date,
+      date: new Date(),
       author: "John",
       action: "Deletes",
       target: "15 tires"
@@ -61,7 +61,7 @@ export const Audit = () => {
   ]
 
   const exportPDF = () => {
-    const date = new Date;
+    const date = new Date();
     const fileName = 'Audit-' + (date.toDateString() + ' ' + date.toLocaleTimeString()).replace(/\s/g, '-');
     const doc = new jsPDF({
       orientation: 'portrait',
@@ -85,7 +85,7 @@ export const Audit = () => {
   }
 
   const exportCSV = () => {
-    const date = new Date;
+    const date = new Date();
     const fileName = 'Audit-' + (date.toDateString() + ' ' + date.toLocaleTimeString()).replace(/\s/g, '-');
     const csvRows : any[] = [];
     const headers = Object.keys(dummyData[0]);

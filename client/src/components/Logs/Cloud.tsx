@@ -11,7 +11,6 @@ export const Cloud = () => {
   const dispatch = useDispatch();
   const files = useSelector((state : RootState) => state.dropbox.files);
   const links = useSelector((state : RootState) => state.dropbox.links);
-  const updated = useSelector((state : RootState) => state.dropbox.updated);
 
   const dropbox = new Dropbox({
     accessToken: 'oQ2YpqFmtFEAAAAAAAAAASVGkjlXl1afaVGSJsSPg0KeMdHWJFhH4p-Y4HkNltxm',
@@ -31,8 +30,9 @@ export const Cloud = () => {
           dispatch(addLink(res.result.link));
         })
       });
+      console.log(links);
     });
-  }, [updated])
+  });
 
   const getFiles = () => {
     let filesCopy = JSON.parse(JSON.stringify(files));
@@ -41,7 +41,7 @@ export const Cloud = () => {
     filesCopy.forEach((file : any, index : number) => {
       rows.push({
         name: file['name'],
-        action: 
+        action:
             <a href={links[index]}>
               <Button>
               Download
