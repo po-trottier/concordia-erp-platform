@@ -9,7 +9,7 @@ import { User, UserDocument } from '../../api/users/schemas/user.schema';
 import { ProductDocument } from '../../api/products/products/schemas/products.schema';
 import { ProductStockDocument } from '../../api/products/products/schemas/product-stock.schema';
 import { ProductOrderDocument } from '../../api/orders/schemas/product-orders.schema';
-import { EventID, getEmails } from '../common';
+import { EventMap, getEmails } from '../common';
 import { Mail } from '../../shared/mail';
 import { CONTACT_EMAIL } from '../../shared/constants';
 
@@ -22,10 +22,10 @@ export class ProductListener {
     @InjectModel(Event.name) private eventModel: Model<EventDocument>,
   ) {}
 
-  @OnEvent(EventID.PRODUCT_CREATED)
+  @OnEvent(EventMap.PRODUCT_CREATED.id)
   async handleProductCreated(product: ProductDocument) {
     const emails = await getEmails(
-      EventID.PRODUCT_CREATED,
+      EventMap.PRODUCT_CREATED,
       this.eventModel,
       this.userModel,
     );
@@ -46,10 +46,10 @@ export class ProductListener {
     );
   }
 
-  @OnEvent(EventID.PRODUCT_DELETED)
+  @OnEvent(EventMap.PRODUCT_DELETED.id)
   async handleProductDeleted(product: ProductDocument) {
     const emails = await getEmails(
-      EventID.PRODUCT_DELETED,
+      EventMap.PRODUCT_DELETED,
       this.eventModel,
       this.userModel,
     );
@@ -70,10 +70,10 @@ export class ProductListener {
     );
   }
 
-  @OnEvent(EventID.PRODUCT_MODIFIED)
+  @OnEvent(EventMap.PRODUCT_MODIFIED.id)
   async handleProductModified(product: ProductDocument) {
     const emails = await getEmails(
-      EventID.PRODUCT_MODIFIED,
+      EventMap.PRODUCT_MODIFIED,
       this.eventModel,
       this.userModel,
     );
@@ -94,10 +94,10 @@ export class ProductListener {
     );
   }
 
-  @OnEvent(EventID.PRODUCT_BUILT)
+  @OnEvent(EventMap.PRODUCT_BUILT.id)
   async handleProductBuilt(stocks: ProductStockDocument[]) {
     const emails = await getEmails(
-      EventID.PRODUCT_BUILT,
+      EventMap.PRODUCT_BUILT,
       this.eventModel,
       this.userModel,
     );
@@ -118,10 +118,10 @@ export class ProductListener {
     );
   }
 
-  @OnEvent(EventID.PRODUCT_SOLD)
+  @OnEvent(EventMap.PRODUCT_SOLD.id)
   async handleProductSold(orders: ProductOrderDocument[]) {
     const emails = await getEmails(
-      EventID.PRODUCT_SOLD,
+      EventMap.PRODUCT_SOLD,
       this.eventModel,
       this.userModel,
     );

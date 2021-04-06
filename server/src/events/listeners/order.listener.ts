@@ -8,7 +8,7 @@ import { Event, EventDocument } from '../../api/events/schemas/events.schema';
 import { User, UserDocument } from '../../api/users/schemas/user.schema';
 import { ProductOrderDocument } from '../../api/orders/schemas/product-orders.schema';
 import { MaterialOrderDocument } from '../../api/orders/schemas/material-orders.schema';
-import { EventID, getEmails } from '../common';
+import { EventMap, getEmails } from '../common';
 import { Mail } from '../../shared/mail';
 import { CONTACT_EMAIL } from '../../shared/constants';
 
@@ -21,10 +21,10 @@ export class OrderListener {
     @InjectModel(Event.name) private eventModel: Model<EventDocument>,
   ) {}
 
-  @OnEvent(EventID.ACCOUNT_PAYABLE_PAID)
+  @OnEvent(EventMap.ACCOUNT_PAYABLE_PAID.id)
   async handleAccountPayable(order: MaterialOrderDocument) {
     const emails = await getEmails(
-      EventID.ACCOUNT_PAYABLE_PAID,
+      EventMap.ACCOUNT_PAYABLE_PAID,
       this.eventModel,
       this.userModel,
     );
@@ -45,10 +45,10 @@ export class OrderListener {
     );
   }
 
-  @OnEvent(EventID.ACCOUNT_RECEIVABLE_PAID)
+  @OnEvent(EventMap.ACCOUNT_RECEIVABLE_PAID.id)
   async handleAccountReceivable(order: ProductOrderDocument) {
     const emails = await getEmails(
-      EventID.ACCOUNT_RECEIVABLE_PAID,
+      EventMap.ACCOUNT_RECEIVABLE_PAID,
       this.eventModel,
       this.userModel,
     );

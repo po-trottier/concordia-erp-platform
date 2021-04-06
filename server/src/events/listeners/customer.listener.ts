@@ -7,7 +7,7 @@ import { Event, EventDocument } from '../../api/events/schemas/events.schema';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { User, UserDocument } from '../../api/users/schemas/user.schema';
 import { CustomerDocument } from '../../api/customers/schemas/customers.schema';
-import { EventID, getEmails } from '../common';
+import { EventMap, getEmails } from '../common';
 import { Mail } from '../../shared/mail';
 import { CONTACT_EMAIL } from '../../shared/constants';
 
@@ -20,10 +20,10 @@ export class CustomerListener {
     @InjectModel(Event.name) private eventModel: Model<EventDocument>,
   ) {}
 
-  @OnEvent(EventID.CUSTOMER_CREATED)
+  @OnEvent(EventMap.CUSTOMER_CREATED.id)
   async handleCustomerCreated(customer: CustomerDocument) {
     const emails = await getEmails(
-      EventID.CUSTOMER_CREATED,
+      EventMap.CUSTOMER_CREATED,
       this.eventModel,
       this.userModel,
     );
@@ -44,10 +44,10 @@ export class CustomerListener {
     );
   }
 
-  @OnEvent(EventID.CUSTOMER_DELETED)
+  @OnEvent(EventMap.CUSTOMER_DELETED.id)
   async handleCustomerDeleted(customer: CustomerDocument) {
     const emails = await getEmails(
-      EventID.CUSTOMER_DELETED,
+      EventMap.CUSTOMER_DELETED,
       this.eventModel,
       this.userModel,
     );
@@ -68,10 +68,10 @@ export class CustomerListener {
     );
   }
 
-  @OnEvent(EventID.CUSTOMER_MODIFIED)
+  @OnEvent(EventMap.CUSTOMER_MODIFIED.id)
   async handleCustomerModified(customer: CustomerDocument) {
     const emails = await getEmails(
-      EventID.CUSTOMER_MODIFIED,
+      EventMap.CUSTOMER_MODIFIED,
       this.eventModel,
       this.userModel,
     );

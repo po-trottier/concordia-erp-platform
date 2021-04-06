@@ -8,7 +8,7 @@ import { Event, EventDocument } from '../../api/events/schemas/events.schema';
 import { User, UserDocument } from '../../api/users/schemas/user.schema';
 import { PartDocument } from '../../api/parts/parts/schemas/part.schema';
 import { PartStockDocument } from '../../api/parts/parts/schemas/part-stock.schema';
-import { EventID, getEmails } from '../common';
+import { EventMap, getEmails } from '../common';
 import { Mail } from '../../shared/mail';
 import { CONTACT_EMAIL } from '../../shared/constants';
 
@@ -21,10 +21,10 @@ export class PartListener {
     @InjectModel(Event.name) private eventModel: Model<EventDocument>,
   ) {}
 
-  @OnEvent(EventID.PART_CREATED)
+  @OnEvent(EventMap.PART_CREATED.id)
   async handlePartCreated(part: PartDocument) {
     const emails = await getEmails(
-      EventID.PART_CREATED,
+      EventMap.PART_CREATED,
       this.eventModel,
       this.userModel,
     );
@@ -45,10 +45,10 @@ export class PartListener {
     );
   }
 
-  @OnEvent(EventID.PART_DELETED)
+  @OnEvent(EventMap.PART_DELETED.id)
   async handlePartDeleted(part: PartDocument) {
     const emails = await getEmails(
-      EventID.PART_DELETED,
+      EventMap.PART_DELETED,
       this.eventModel,
       this.userModel,
     );
@@ -69,10 +69,10 @@ export class PartListener {
     );
   }
 
-  @OnEvent(EventID.PART_MODIFIED)
+  @OnEvent(EventMap.PART_MODIFIED.id)
   async handlePartModified(part: PartDocument) {
     const emails = await getEmails(
-      EventID.PART_MODIFIED,
+      EventMap.PART_MODIFIED,
       this.eventModel,
       this.userModel,
     );
@@ -93,10 +93,10 @@ export class PartListener {
     );
   }
 
-  @OnEvent(EventID.PART_BUILT)
+  @OnEvent(EventMap.PART_BUILT.id)
   async handlePartBuilt(stocks: PartStockDocument[]) {
     const emails = await getEmails(
-      EventID.PART_BUILT,
+      EventMap.PART_BUILT,
       this.eventModel,
       this.userModel,
     );

@@ -10,7 +10,7 @@ import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Event, EventDocument } from './schemas/events.schema';
-import { EventID, EventsMap } from '../../events/common';
+import { EventMap } from '../../events/common';
 
 /**
  * Used by the EventsController, handles event data storage and retrieval.
@@ -58,7 +58,7 @@ export class EventsService {
     );
 
     const event = await createdEvent.save();
-    this.emitter.emit(EventID.EVENT_CREATED, event);
+    this.emitter.emit(EventMap.EVENT_CREATED.id, event);
     return event;
   }
 
@@ -66,7 +66,7 @@ export class EventsService {
    * Retrieves all events using mongoose eventModel
    */
   async findEvents(): Promise<{ name: string; id: string }[]> {
-    return EventsMap;
+    return Object.values(EventMap);
   }
 
   /**
@@ -125,7 +125,7 @@ export class EventsService {
       .exec();
 
     const result = this.validateEventFound(updatedEvent, id);
-    this.emitter.emit(EventID.EVENT_MODIFIED, result);
+    this.emitter.emit(EventMap.EVENT_MODIFIED.id, result);
     return result;
   }
 
@@ -138,7 +138,7 @@ export class EventsService {
     const deletedEvent = await this.eventModel.findByIdAndDelete(id);
 
     const result = this.validateEventFound(deletedEvent, id);
-    this.emitter.emit(EventID.EVENT_DELETED, result);
+    this.emitter.emit(EventMap.EVENT_DELETED.id, result);
     return result;
   }
 

@@ -8,7 +8,7 @@ import { Event, EventDocument } from '../../api/events/schemas/events.schema';
 import { User, UserDocument } from '../../api/users/schemas/user.schema';
 import { MaterialDocument } from '../../api/materials/materials/schemas/material.schema';
 import { MaterialOrderDocument } from '../../api/orders/schemas/material-orders.schema';
-import { EventID, getEmails } from '../common';
+import { EventMap, getEmails } from '../common';
 import { Mail } from '../../shared/mail';
 import { CONTACT_EMAIL } from '../../shared/constants';
 
@@ -21,10 +21,10 @@ export class MaterialListener {
     @InjectModel(Event.name) private eventModel: Model<EventDocument>,
   ) {}
 
-  @OnEvent(EventID.MATERIAL_CREATED)
+  @OnEvent(EventMap.MATERIAL_CREATED.id)
   async handleMaterialCreated(material: MaterialDocument) {
     const emails = await getEmails(
-      EventID.MATERIAL_CREATED,
+      EventMap.MATERIAL_CREATED,
       this.eventModel,
       this.userModel,
     );
@@ -45,10 +45,10 @@ export class MaterialListener {
     );
   }
 
-  @OnEvent(EventID.MATERIAL_DELETED)
+  @OnEvent(EventMap.MATERIAL_DELETED.id)
   async handleMaterialDeleted(material: MaterialDocument) {
     const emails = await getEmails(
-      EventID.MATERIAL_DELETED,
+      EventMap.MATERIAL_DELETED,
       this.eventModel,
       this.userModel,
     );
@@ -69,10 +69,10 @@ export class MaterialListener {
     );
   }
 
-  @OnEvent(EventID.MATERIAL_MODIFIED)
+  @OnEvent(EventMap.MATERIAL_MODIFIED.id)
   async handleMaterialModified(material: MaterialDocument) {
     const emails = await getEmails(
-      EventID.MATERIAL_MODIFIED,
+      EventMap.MATERIAL_MODIFIED,
       this.eventModel,
       this.userModel,
     );
@@ -93,10 +93,10 @@ export class MaterialListener {
     );
   }
 
-  @OnEvent(EventID.MATERIAL_ORDERED)
+  @OnEvent(EventMap.MATERIAL_ORDERED.id)
   async handleMaterialOrdered(orders: MaterialOrderDocument[]) {
     const emails = await getEmails(
-      EventID.MATERIAL_ORDERED,
+      EventMap.MATERIAL_ORDERED,
       this.eventModel,
       this.userModel,
     );

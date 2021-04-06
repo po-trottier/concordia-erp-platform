@@ -7,7 +7,7 @@ import { Event, EventDocument } from '../../api/events/schemas/events.schema';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { User, UserDocument } from '../../api/users/schemas/user.schema';
 import { LocationDocument } from '../../api/locations/schemas/location.schema';
-import { EventID, getEmails } from '../common';
+import { EventMap, getEmails } from '../common';
 import { Mail } from '../../shared/mail';
 import { CONTACT_EMAIL } from '../../shared/constants';
 
@@ -20,10 +20,10 @@ export class LocationListener {
     @InjectModel(Event.name) private eventModel: Model<EventDocument>,
   ) {}
 
-  @OnEvent(EventID.LOCATION_CREATED)
+  @OnEvent(EventMap.LOCATION_CREATED.id)
   async handleLocationCreated(location: LocationDocument) {
     const emails = await getEmails(
-      EventID.LOCATION_CREATED,
+      EventMap.LOCATION_CREATED,
       this.eventModel,
       this.userModel,
     );
@@ -44,10 +44,10 @@ export class LocationListener {
     );
   }
 
-  @OnEvent(EventID.LOCATION_DELETED)
+  @OnEvent(EventMap.LOCATION_DELETED.id)
   async handleLocationDeleted(location: LocationDocument) {
     const emails = await getEmails(
-      EventID.LOCATION_DELETED,
+      EventMap.LOCATION_DELETED,
       this.eventModel,
       this.userModel,
     );
@@ -68,10 +68,10 @@ export class LocationListener {
     );
   }
 
-  @OnEvent(EventID.LOCATION_MODIFIED)
+  @OnEvent(EventMap.LOCATION_MODIFIED.id)
   async handleLocationModified(location: LocationDocument) {
     const emails = await getEmails(
-      EventID.LOCATION_MODIFIED,
+      EventMap.LOCATION_MODIFIED,
       this.eventModel,
       this.userModel,
     );

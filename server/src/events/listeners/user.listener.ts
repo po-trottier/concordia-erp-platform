@@ -6,7 +6,7 @@ import { Model } from 'mongoose';
 import { Event, EventDocument } from '../../api/events/schemas/events.schema';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { User, UserDocument } from '../../api/users/schemas/user.schema';
-import { EventID, getEmails } from '../common';
+import { EventMap, getEmails } from '../common';
 import { Mail } from '../../shared/mail';
 import { CONTACT_EMAIL } from '../../shared/constants';
 
@@ -19,10 +19,10 @@ export class UserListener {
     @InjectModel(Event.name) private eventModel: Model<EventDocument>,
   ) {}
 
-  @OnEvent(EventID.USER_CREATED)
+  @OnEvent(EventMap.USER_CREATED.id)
   async handleUserCreated(user: UserDocument) {
     const emails = await getEmails(
-      EventID.USER_CREATED,
+      EventMap.USER_CREATED,
       this.eventModel,
       this.userModel,
     );
@@ -43,10 +43,10 @@ export class UserListener {
     );
   }
 
-  @OnEvent(EventID.USER_DELETED)
+  @OnEvent(EventMap.USER_DELETED.id)
   async handleUserDeleted(user: UserDocument) {
     const emails = await getEmails(
-      EventID.USER_DELETED,
+      EventMap.USER_DELETED,
       this.eventModel,
       this.userModel,
     );
@@ -67,10 +67,10 @@ export class UserListener {
     );
   }
 
-  @OnEvent(EventID.USER_MODIFIED)
+  @OnEvent(EventMap.USER_MODIFIED.id)
   async handleUserModified(user: UserDocument) {
     const emails = await getEmails(
-      EventID.USER_MODIFIED,
+      EventMap.USER_MODIFIED,
       this.eventModel,
       this.userModel,
     );
