@@ -37,7 +37,7 @@ export const AppHeader = () => {
 
   const changePassword = () => {
     try {
-      history.push('/changePassword');
+      history.push('/reset-password');
     } catch (e) {
       message.error('Something went wrong while redirecting you to the change password page.');
       console.error(e);
