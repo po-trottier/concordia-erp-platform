@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 //import { addEventEntry } from '../../store/slices/EventListSlice';
 import { EventDropdownEntry } from '../../interfaces/EventDropdownEntry';
 import { CustomerDropdownEntry } from '../../interfaces/CustomerDropdownEntry';
+import { UserDropdownEntry } from '../../interfaces/UserDropdownEntry';
 import { getRoleString, Role } from '../../router/Roles';
 import axios from '../../plugins/Axios';
 
@@ -16,6 +17,7 @@ export const AddEventModal = () => {
 
   const [form] = Form.useForm();
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [eventsUpdated, setEventsUpdated] = useState(false);
   const [customersUpdated, setCustomersUpdated] = useState(false);
   const [usersUpdated, setUsersUpdated] = useState(false);
   
@@ -30,11 +32,33 @@ export const AddEventModal = () => {
   const emptyCustomersData: CustomerDropdownEntry[] = [];
   const [customersData, setCustomersData] = useState(emptyCustomersData);
 
-  const emptyUsersData: CustomerDropdownEntry[] = [];
-  const [UsersData, setUsersData] = useState(emptyUsersData);
+  const emptyUsersData: UserDropdownEntry[] = [];
+  const [usersData, setUsersData] = useState(emptyUsersData);
 
   const [loading, setLoading] = useState(false);
 
+  //get the events
+  useEffect(() => {
+    setEventsUpdated(true);
+    axios.get('/events/all')
+      .then((res) => {
+        if (res && res.data) {
+          const data : CustomerDropdownEntry[] = [];
+          res.data.forEach((p : any) => {
+            data.push({
+              id: p['_id'],
+              name: p.name
+            });
+          });
+          setEventsData(data);
+        }
+      })
+      .catch(err => {
+        // message.error('Something went wrong while fetching the list of customers.');
+        console.error(err);
+      });
+  }, [eventsUpdated]);
+  
   //get the customers
   useEffect(() => {
     setCustomersUpdated(true);
@@ -58,26 +82,28 @@ export const AddEventModal = () => {
   }, [customersUpdated]);
 
   //get the users
-  // useEffect(() => {
-  //   setUsersUpdated(true);
-  //   axios.get('/users')
-  //     .then((res) => {
-  //       if (res && res.data) {
-  //         const data : CustomerDropdownEntry[] = [];
-  //         res.data.forEach((p : any) => {
-  //           data.push({
-  //             id: p['_id'],
-  //             name: p.name
-  //           });
-  //         });
-  //         setUsersData(data);
-  //       }
-  //     })
-  //     .catch(err => {
-  //       // message.error('Something went wrong while fetching the list of users.');
-  //       console.error(err);
-  //     });
-  // }, [usersUpdated]);
+  useEffect(() => {
+    setUsersUpdated(true);
+    axios.get('/users')
+      .then((res) => {
+        if (res && res.data) {
+          const data : UserDropdownEntry[] = [];
+          res.data.forEach((p : any) => {
+            data.push({
+              id: p['_id'],
+              username: p.username
+            });
+          });
+          setUsersData(data);
+          console.log('users: ');
+          console.log(data);
+        }
+      })
+      .catch(err => {
+        // message.error('Something went wrong while fetching the list of users.');
+        console.error(err);
+      });
+  }, [usersUpdated]);
 
   const addEvent = () => {
     const newEvent = {
@@ -229,9 +255,9 @@ export const AddEventModal = () => {
                   placeholder='Select 1 or more users'
                   optionFilterProp='children'
                   onChange={hideActionsError}>
-                  {eventsData.map((event) => (
-                    <Option key={event.id} value={event.id}>
-                      {event.name}
+                  {usersData.map((user) => (
+                    <Option key={user.id} value={user.id}>
+                      {user.username}
                     </Option>))}
                 </Select>
               </Form.Item>
