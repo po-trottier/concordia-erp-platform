@@ -32,7 +32,7 @@ export class UsersService implements OnApplicationBootstrap {
   async createDefaultUser(): Promise<void> {
     const admin = await this.findOneInternal(DEFAULT_USER);
     if (!admin) {
-      const user = new CreateUserDto();
+      const user : any = new CreateUserDto();
       user.username = DEFAULT_USER;
       user.firstName = 'Administrator';
       user.lastName = 'Person';

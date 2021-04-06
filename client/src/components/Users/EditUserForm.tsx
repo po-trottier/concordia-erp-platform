@@ -13,6 +13,8 @@ export const EditUserForm = (props : any) => {
 
   const selectedUser = useSelector((state : RootState) => state.edit.selectedUser);
 
+  let dropdownOffset = 0;
+
   return (
     <Form
       form={props.form}
@@ -91,11 +93,19 @@ export const EditUserForm = (props : any) => {
             rules={[{ required: true, message: 'Please select a role!' }]}>
             <Select
               placeholder="Select the user's role"
-              onSelect={() => (e : Role) => dispatch(setRole(e))}>
-              <Option value={1}>Salesperson</Option>
-              <Option value={2}>Accountant</Option>
-              <Option value={3}>Inventory Manager</Option>
-              <Option value={4}>System Administrator</Option>
+              onSelect={(e : any) => dispatch(setRole(e))}>
+              {
+                Object.keys(Role).map((key, val) => {
+                  if (isFinite(Number(key))) {
+                    dropdownOffset++;
+                    return null;
+                  }
+                  const role : Role = val - dropdownOffset;
+                  return (
+                    <Option key={key} value={role}>{getRoleString(role)}</Option>
+                  );
+                })
+              }
             </Select>
           </Form.Item>
         </Col>

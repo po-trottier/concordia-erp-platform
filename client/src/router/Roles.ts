@@ -1,5 +1,5 @@
 export enum Role {
-  ANY,
+  ANY = 0,
   SALESPERSON,
   ACCOUNTANT,
   INVENTORY_MANAGER,
