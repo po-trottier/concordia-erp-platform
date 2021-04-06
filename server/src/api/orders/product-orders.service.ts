@@ -4,6 +4,9 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { Cron, CronExpression } from '@nestjs/schedule';
+import { isSameDay } from 'date-fns';
 import { Model } from 'mongoose';
 import {
   ProductOrder,
@@ -15,6 +18,7 @@ import { UpdateProductOrderDto } from './dto/update-product-order.dto';
 import { ProductsService } from '../products/products/products.service';
 import { ProductStockService } from '../products/products/product-stock.service';
 import { UpdateProductStockDto } from '../products/products/dto/update-product-stock.dto';
+import { EventMap } from '../../events/common';
 
 @Injectable()
 export class ProductOrdersService {
@@ -23,6 +27,7 @@ export class ProductOrdersService {
     private productOrderModel: Model<ProductOrderDocument>,
     private readonly productsService: ProductsService,
     private readonly productStockService: ProductStockService,
+    private emitter: EventEmitter2,
   ) {}
 
   getIncrement(day: number) {
@@ -143,6 +148,26 @@ export class ProductOrdersService {
       throw new NotFoundException(`Product order with id ${id} not found`);
     } else {
       return orderResult;
+    }
+  }
+
+  @Cron(CronExpression.EVERY_DAY_AT_10AM)
+  async handleAccountsReceivablePayments() {
+    const materialOrders: any[] = await this.findAll();
+    const unpaidOrders = materialOrders.filter(
+      (order) => order.isPaid === false,
+    );
+
+    for (const order of unpaidOrders) {
+      if (isSameDay(new Date(order.dateDue), new Date())) {
+        const paidOrder = await this.productOrderModel.findByIdAndUpdate(
+          order._id,
+          { $set: { isPaid: true } },
+          { new: true },
+        );
+
+        this.emitter.emit(EventMap.ACCOUNT_RECEIVABLE_PAID.id, paidOrder);
+      }
     }
   }
 }
