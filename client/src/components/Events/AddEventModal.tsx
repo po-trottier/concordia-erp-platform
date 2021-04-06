@@ -17,6 +17,7 @@ export const AddEventModal = () => {
   const [form] = Form.useForm();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [customersUpdated, setCustomersUpdated] = useState(false);
+  const [usersUpdated, setUsersUpdated] = useState(false);
   
   const [userIdList, setUserIdList] = useState(['']);
   const [userId, setUserId] = useState('');
@@ -28,6 +29,9 @@ export const AddEventModal = () => {
 
   const emptyCustomersData: CustomerDropdownEntry[] = [];
   const [customersData, setCustomersData] = useState(emptyCustomersData);
+
+  const emptyUsersData: CustomerDropdownEntry[] = [];
+  const [UsersData, setUsersData] = useState(emptyUsersData);
 
   const [loading, setLoading] = useState(false);
 
@@ -48,10 +52,32 @@ export const AddEventModal = () => {
         }
       })
       .catch(err => {
-        // message.error('Something went wrong while fetching the list of parts.');
+        // message.error('Something went wrong while fetching the list of customers.');
         console.error(err);
       });
   }, [customersUpdated]);
+
+  //get the users
+  // useEffect(() => {
+  //   setUsersUpdated(true);
+  //   axios.get('/users')
+  //     .then((res) => {
+  //       if (res && res.data) {
+  //         const data : CustomerDropdownEntry[] = [];
+  //         res.data.forEach((p : any) => {
+  //           data.push({
+  //             id: p['_id'],
+  //             name: p.name
+  //           });
+  //         });
+  //         setUsersData(data);
+  //       }
+  //     })
+  //     .catch(err => {
+  //       // message.error('Something went wrong while fetching the list of users.');
+  //       console.error(err);
+  //     });
+  // }, [usersUpdated]);
 
   const addEvent = () => {
     const newEvent = {
