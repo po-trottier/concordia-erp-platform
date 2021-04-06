@@ -49,12 +49,6 @@ export const MaterialsInventory = () => {
       );
     }
 
-    rows.sort((a : any, b : any) => {
-      const dateA = a.date;
-      const dateB = b.date;
-      return dateA < dateB ? -1 : 1;
-    });
-
     return rows;
   };
 
