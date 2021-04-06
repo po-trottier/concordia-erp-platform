@@ -23,6 +23,7 @@ export const addPredictions = (rows: any, IdKey: string) => {
         const predictedStock = predictedStockMultiplier * daysTillEnd;
         const stockDifference = predictedStock - rows[right].stock;
 
+        // creating and adding prediction row
         const predictionRow = {
           _id: rows[right]._id,
           date: endOfYear.toLocaleString().split(',')[0],
@@ -35,8 +36,20 @@ export const addPredictions = (rows: any, IdKey: string) => {
         predictionRow[IdKey] = rows[right][IdKey];
         if (IdKey === 'materialId')
           predictionRow['stockBought'] = predictionRow.stockBuilt;
-
         predictionsToAdd.push(predictionRow);
+
+        // adding copy of last element
+        const copyRow = {
+          _id: rows[right]._id,
+          date: rows[right].date,
+          locationId: rows[right].locationId,
+          stockBuilt: rows[right].stockBuilt,
+          stockUsed: rows[right].stockUsed,
+          stock: rows[right].stockUsed,
+          isEstimate: true,
+        }
+        copyRow[IdKey] = rows[right][IdKey];
+        predictionsToAdd.push(copyRow);
         break;
       }
     }

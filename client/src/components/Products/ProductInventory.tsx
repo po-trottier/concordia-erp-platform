@@ -50,35 +50,37 @@ export const ProductInventory = () => {
     return rows;
   };
 
-  const getSeries = () => {
-    const rows = getProducts();
-
-    const seriesNames: any = {};
+  const getChartState = () => {
+    const dashArray: number[] = [];
     const series: any[] = [];
+
+    const rows = getProducts();
+    const seriesNames: any = {};
     rows.forEach((row: any) => {
+      if (row.isEstimate) {
+        row.name = row.name + ' (estimate)';
+      }
+
       if (! seriesNames[row.name])  {
         seriesNames[row.name] = true;
         series.push({
           name: row.name,
           data: []
-        })
+        });
+        if (row.isEstimate)
+          dashArray.push(5);
+        else
+          dashArray.push(0);
       }
+
       const toAddTo = series.find((item: any) => item.name === row.name);
       toAddTo.data.push({
         x: row.date,
         y: row.stock
       });
-    })
+    });
 
-    console.log(series);
-    return series;
-  };
-
-  const onSearch = (e : React.ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(e.target.value);
-  };
-
-  const state = {
+    const state = {
       options: {
         chart: {
           id: "basic-bar"
@@ -86,9 +88,19 @@ export const ProductInventory = () => {
         xaxis: {
           type: 'datetime',
         },
+        stroke: {
+          dashArray: dashArray
+        },
       },
-      series: getSeries()
+      series: series
     };
+    return state;
+  }
+
+  const onSearch = (e : React.ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(e.target.value);
+  };
+
 
   return (
     <div>
@@ -99,7 +111,7 @@ export const ProductInventory = () => {
           style={{ marginBottom: 18 }} />
         {
           getProducts().length > 0 ?
-              <Chart options={state.options} series={state.series} type="line" height={350} />
+              <Chart {...getChartState()} type="line" height={350} />
               :
             <span>No product transactions were found.</span>
         }
