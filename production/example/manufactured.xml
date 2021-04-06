@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<manufactured location="604cee081ba2430c10eeee6b">
+    <parts>
+        <part id="606bc081d6fbd22f2c3ceafc" stockBuilt="2" />
+        <part id="606bc091d6fbd22f2c3ceafd" stockBuilt="4" />
+        <part id="606bc09bd6fbd22f2c3ceafe" stockBuilt="3"/>
+    </parts>
+    <products>
+        <product id="606bc0bdd6fbd22f2c3ceb00" stockBuilt="1" />
+        <product id="606bc0acd6fbd22f2c3ceaff" stockBuilt="2" />
+    </products>
+</manufactured>
