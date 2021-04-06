@@ -4,6 +4,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { ConfigModule } from '@nestjs/config';
 import { ApiModule } from './api/api/api.module';
 import { validate } from './shared/env';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { validate } from './shared/env';
       cache: true,
       isGlobal: true,
     }),
+    ScheduleModule.forRoot(),
     // Use the output of the react build as static assets
     // Relative path: ../../client/build
     ServeStaticModule.forRoot({
