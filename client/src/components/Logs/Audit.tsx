@@ -75,7 +75,6 @@ export const Audit = () => {
     dummyData.forEach((object : any) => {
       const keys = Object.keys(object);
       const values = Object.values(object);
-
       keys.forEach((key : any, index : number) => {
         doc.text(key.charAt(0).toUpperCase() + key.slice(1) + ': ' + values[index], 1, lineNum);
         lineNum += 0.2;

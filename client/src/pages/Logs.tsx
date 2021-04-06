@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Menu } from 'antd';
-import { FunnelPlotTwoTone, SafetyCertificateTwoTone } from '@ant-design/icons';
+import { FunnelPlotTwoTone, SafetyCertificateTwoTone, CloudTwoTone } from '@ant-design/icons';
 
 import { Audit } from '../components/Logs/Audit';
 import { LogList } from '../components/Logs/LogList';
+import { Cloud } from '../components/Logs/Cloud';
 
 export const Logs = () => {
 
@@ -19,6 +20,8 @@ export const Logs = () => {
         return <Audit />;
       case 'logs':
         return <LogList />;
+      case 'cloud':
+        return <Cloud />;
       default:
         return <Audit />;
     }
@@ -32,6 +35,9 @@ export const Logs = () => {
         </Menu.Item>
         <Menu.Item key='logs' icon={<SafetyCertificateTwoTone twoToneColor='#eb2f96' />}>
           All Logs
+        </Menu.Item>
+        <Menu.Item key='cloud' icon={<CloudTwoTone />}>
+          Cloud
         </Menu.Item>
       </Menu>
       {renderSection()}
