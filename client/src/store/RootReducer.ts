@@ -13,7 +13,7 @@ import { materialListSlice } from './slices/MaterialListSlice';
 import { customerListSlice } from './slices/CustomerListSlice';
 import { materialQuantitiesSlice } from './slices/MaterialQuantitiesSlice';
 import { locationSlice } from './slices/LocationSlice';
-import { dropboxSlice } from './slices/Dropbox';
+import { dropboxSlice } from './slices/DropboxSlice';
 
 const persistConfig = {
   key: 'root',

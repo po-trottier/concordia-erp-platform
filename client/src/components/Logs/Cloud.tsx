@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store/Store';
-import { setFiles } from '../../store/slices/Dropbox';
-import { Button, Card } from 'antd';
+import { setFiles } from '../../store/slices/DropboxSlice';
+import { Card } from 'antd';
 import { ResponsiveTable } from '../ResponsiveTable';
 import { Dropbox } from 'dropbox';
-import { UploadAuditButton } from './UploadAuditButton';
+import { UploadAuditButton } from './UploadAuditButton.js';
 
 export const Cloud = () => {
   const dispatch = useDispatch();
@@ -22,8 +22,7 @@ export const Cloud = () => {
       path: '',
     }).then(res => {
       dispatch(setFiles(res.result.entries));
-      console.log(files);
-    })
+    });
   }, [updated])
 
   const getFiles = () => {
@@ -33,8 +32,6 @@ export const Cloud = () => {
     filesCopy.forEach((file : any) => {
       rows.push({
         name: file['name'],
-        download: <Button>Download</Button>,
-        delete: <Button>Delete</Button> 
       });
     });
 
@@ -43,8 +40,6 @@ export const Cloud = () => {
 
   const filesColumns = {
     name: 'Name',
-    download: 'Download',
-    delete: 'Delete'
   };
 
   return(
