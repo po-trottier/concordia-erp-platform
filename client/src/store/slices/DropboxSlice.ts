@@ -17,9 +17,17 @@ export const dropboxSlice = createSlice({
         state.files.push(payload);
       }
     },
+    removeFile: (state, { payload } : PayloadAction<string>) => {
+      const i = state.files.findIndex((file : FileEntry) => file.id === payload);
+      if (i >= 0) {
+        state.files.splice(i, 1);
+      }
+      state.updated = true;
+    },
   }
 });
 
 export const {
   addFile,
+  removeFile
 } = dropboxSlice.actions;

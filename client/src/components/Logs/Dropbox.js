@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
-import { Card, Button } from 'antd';
+import { Card, Button, message } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { addFile } from '../../store/slices/DropboxSlice';
+import { addFile, removeFile } from '../../store/slices/DropboxSlice';
 import { ResponsiveTable } from '../ResponsiveTable';
 import { Dropbox as Dbx } from 'dropbox';
 import DropboxChooser from 'react-dropbox-chooser';
@@ -31,10 +31,23 @@ export const Dropbox = () => {
           dispatch(addFile({
             id: file['id'],
             name: file['name'],
+            path: file['path_lower'],
             link: res.result.link
           }));    
         });
       });
+    });
+  }
+
+  const deleteFile = (path, id) => {
+    dbx.filesDeleteV2({ path })
+    .then(res => {
+      console.log(res);
+      dispatch(removeFile(id));
+      message.success('File successfully deleted');
+    })
+    .catch(() => {
+      message.error('File unsuccessfully deleted');
     });
   }
 
@@ -44,12 +57,13 @@ export const Dropbox = () => {
     filesCopy.forEach((file) => {
       rows.push({
         name: file['name'],
-        action:
+        download:
             <a href={file['link']}>
               <Button>
               Download
               </Button>
-            </a>
+            </a>,
+        delete: <Button onClick={() => deleteFile(file['path'], file['id'])}>Delete</Button>
       });
     });
     return rows;
@@ -57,7 +71,8 @@ export const Dropbox = () => {
 
   const columns = {
     name: 'Name',
-    action: 'Action'
+    download: 'Download',
+    delete: 'Delete',
   }
 
   const handleSuccess = (files) => {
