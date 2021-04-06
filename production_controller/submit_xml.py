@@ -30,7 +30,7 @@ if __name__ == "__main__":
         partsToBuild.append({'partId': partId, 'stockBuilt': stockBuilt})
 
     response = requests.patch(url + "parts/build/" + location, json=partsToBuild, headers=headersAPI, verify=False)
-    print(response)
+    print(response.content)
 
     for product in root.find('products').findall('product'):
         productId = product.attrib['id']
@@ -38,4 +38,4 @@ if __name__ == "__main__":
         productsToBuild.append({'productsId': partId, 'stockBuilt': stockBuilt})
 
     response = requests.patch(url + "products/build/" + location, json=productsToBuild, headers=headersAPI, verify=False)
-    print(response)
+    print(response.content)
