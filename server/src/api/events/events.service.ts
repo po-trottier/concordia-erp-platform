@@ -4,12 +4,13 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Model } from 'mongoose';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Event, EventDocument } from './schemas/events.schema';
-import { EventsMap } from '../../shared/events';
+import { EventMap } from '../../events/common';
 
 /**
  * Used by the EventsController, handles event data storage and retrieval.
@@ -17,6 +18,7 @@ import { EventsMap } from '../../shared/events';
 @Injectable()
 export class EventsService {
   constructor(
+    private emitter: EventEmitter2,
     @InjectModel(Event.name) private eventModel: Model<EventDocument>,
   ) {}
 
@@ -54,14 +56,17 @@ export class EventsService {
     const createdEvent = new this.eventModel(
       this.validateRecipients(createEventDto, true),
     );
-    return await createdEvent.save();
+
+    const event = await createdEvent.save();
+    this.emitter.emit(EventMap.EVENT_CREATED.id, event);
+    return event;
   }
 
   /**
    * Retrieves all events using mongoose eventModel
    */
   async findEvents(): Promise<{ name: string; id: string }[]> {
-    return EventsMap;
+    return Object.values(EventMap);
   }
 
   /**
@@ -119,7 +124,9 @@ export class EventsService {
       .populate('customerId')
       .exec();
 
-    return this.validateEventFound(updatedEvent, id);
+    const result = this.validateEventFound(updatedEvent, id);
+    this.emitter.emit(EventMap.EVENT_MODIFIED.id, result);
+    return result;
   }
 
   /**
@@ -129,7 +136,10 @@ export class EventsService {
    */
   async remove(id: string): Promise<Event> {
     const deletedEvent = await this.eventModel.findByIdAndDelete(id);
-    return this.validateEventFound(deletedEvent, id);
+
+    const result = this.validateEventFound(deletedEvent, id);
+    this.emitter.emit(EventMap.EVENT_DELETED.id, result);
+    return result;
   }
 
   /**

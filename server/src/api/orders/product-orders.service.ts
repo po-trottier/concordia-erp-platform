@@ -4,6 +4,7 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Model } from 'mongoose';
 import {
   ProductOrder,
@@ -15,10 +16,12 @@ import { UpdateProductOrderDto } from './dto/update-product-order.dto';
 import { ProductsService } from '../products/products/products.service';
 import { ProductStockService } from '../products/products/product-stock.service';
 import { UpdateProductStockDto } from '../products/products/dto/update-product-stock.dto';
+import { EventMap } from '../../events/common';
 
 @Injectable()
 export class ProductOrdersService {
   constructor(
+    private emitter: EventEmitter2,
     @InjectModel(ProductOrder.name)
     private productOrderModel: Model<ProductOrderDocument>,
     private readonly productsService: ProductsService,
@@ -100,6 +103,7 @@ export class ProductOrdersService {
       await this.productStockService.update(location, dtoArray);
     }
 
+    this.emitter.emit(EventMap.PRODUCT_SOLD.id, createdOrders);
     return createdOrders;
   }
 
