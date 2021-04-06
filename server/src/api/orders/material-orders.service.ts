@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Model } from 'mongoose';
 import {
   MaterialOrder,
@@ -11,10 +12,12 @@ import { UpdateMaterialOrderDto } from './dto/update-material-order.dto';
 import { MaterialsService } from '../materials/materials/materials.service';
 import { UpdateMaterialStockDto } from '../materials/materials/dto/update-material-stock.dto';
 import { MaterialStockService } from '../materials/materials/material-stock.service';
+import { EventMap } from '../../events/common';
 
 @Injectable()
 export class MaterialOrdersService {
   constructor(
+    private emitter: EventEmitter2,
     @InjectModel(MaterialOrder.name)
     private materialOrderModel: Model<MaterialOrderDocument>,
     private readonly materialsService: MaterialsService,
@@ -78,6 +81,7 @@ export class MaterialOrdersService {
       await this.materialStockService.update(location, dtoArray);
     }
 
+    this.emitter.emit(EventMap.MATERIAL_ORDERED.id, createdOrders);
     return createdOrders;
   }
 

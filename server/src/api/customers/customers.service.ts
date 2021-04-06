@@ -1,10 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Model } from 'mongoose';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Customer, CustomerDocument } from './schemas/customers.schema';
+import { EventMap } from '../../events/common';
 
 /**
  * Used by the CustomersController, handles customer data storage and retrieval.
@@ -12,6 +14,7 @@ import { Customer, CustomerDocument } from './schemas/customers.schema';
 @Injectable()
 export class CustomersService {
   constructor(
+    private emitter: EventEmitter2,
     @InjectModel(Customer.name) private customerModel: Model<CustomerDocument>,
   ) {}
 
@@ -22,7 +25,10 @@ export class CustomersService {
    */
   async create(createCustomerDto: CreateCustomerDto): Promise<Customer> {
     const createdCustomer = new this.customerModel(createCustomerDto);
-    return await createdCustomer.save();
+
+    const customer = await createdCustomer.save();
+    this.emitter.emit(EventMap.CUSTOMER_CREATED.id, customer);
+    return customer;
   }
 
   /**
@@ -57,7 +63,10 @@ export class CustomersService {
       { $set: { ...updateCustomerDto } },
       { new: true },
     );
-    return this.validateCustomerFound(updatedCustomer, id);
+
+    const result = this.validateCustomerFound(updatedCustomer, id);
+    this.emitter.emit(EventMap.CUSTOMER_MODIFIED.id, result);
+    return result;
   }
 
   /**
@@ -67,7 +76,10 @@ export class CustomersService {
    */
   async remove(id: string): Promise<Customer> {
     const deletedCustomer = await this.customerModel.findByIdAndDelete(id);
-    return this.validateCustomerFound(deletedCustomer, id);
+
+    const result = this.validateCustomerFound(deletedCustomer, id);
+    this.emitter.emit(EventMap.CUSTOMER_DELETED.id, result);
+    return result;
   }
 
   /**
