@@ -4,7 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import { EventsService } from './events.service';
 import { EventsController } from './events.controller';
 import { Event, EventSchema } from './schemas/events.schema';
-import { EventListener } from '../../events/listeners/events.listener';
+import { EventListener } from '../../events/listeners/event.listener';
 import { validate } from '../../shared/env';
 import { UsersModule } from '../users/users.module';
 

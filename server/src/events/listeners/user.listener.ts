@@ -11,18 +11,18 @@ import { Mail } from '../../shared/mail';
 import { CONTACT_EMAIL } from '../../shared/constants';
 
 @Injectable()
-export class EventListener {
-  private readonly logger = new Logger('EventListener');
+export class UserListener {
+  private readonly logger = new Logger('UserListener');
 
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
     @InjectModel(Event.name) private eventModel: Model<EventDocument>,
   ) {}
 
-  @OnEvent(EventID.EVENT_CREATED)
-  async handleEventCreated(event: EventDocument) {
+  @OnEvent(EventID.USER_CREATED)
+  async handleUserCreated(user: UserDocument) {
     const emails = await getEmails(
-      EventID.EVENT_CREATED,
+      EventID.USER_CREATED,
       this.eventModel,
       this.userModel,
     );
@@ -31,22 +31,22 @@ export class EventListener {
       await Mail.instance.send({
         to: emails,
         from: CONTACT_EMAIL,
-        subject: '[EPIC Resource Planner] New Event Created',
-        html: `<p>A new event was created in your EPIC Resource Planner instance. The details are below:</p><p>${JSON.stringify(
-          event,
+        subject: '[EPIC Resource Planner] New User Created',
+        html: `<p>A new user was created in your EPIC Resource Planner instance. The details are below:</p><p>${JSON.stringify(
+          user,
         )}</p>`,
       });
     }
 
     this.logger.log(
-      'An event was created. ' + emails.length + ' user(s) notified.',
+      'A user was created. ' + emails.length + ' user(s) notified.',
     );
   }
 
-  @OnEvent(EventID.EVENT_DELETED)
-  async handleEventDeleted(event: EventDocument) {
+  @OnEvent(EventID.USER_DELETED)
+  async handleUserDeleted(user: UserDocument) {
     const emails = await getEmails(
-      EventID.EVENT_DELETED,
+      EventID.USER_DELETED,
       this.eventModel,
       this.userModel,
     );
@@ -55,22 +55,22 @@ export class EventListener {
       await Mail.instance.send({
         to: emails,
         from: CONTACT_EMAIL,
-        subject: '[EPIC Resource Planner] Event Deleted',
-        html: `<p>An event was deleted in your EPIC Resource Planner instance. The details are below:</p><p>${JSON.stringify(
-          event,
+        subject: '[EPIC Resource Planner] User Deleted',
+        html: `<p>A user was deleted in your EPIC Resource Planner instance. The details are below:</p><p>${JSON.stringify(
+          user,
         )}</p>`,
       });
     }
 
     this.logger.log(
-      'An event was deleted. ' + emails.length + ' user(s) notified.',
+      'A user was deleted. ' + emails.length + ' user(s) notified.',
     );
   }
 
-  @OnEvent(EventID.EVENT_MODIFIED)
-  async handleEventEdited(event: EventDocument) {
+  @OnEvent(EventID.USER_MODIFIED)
+  async handleUserModified(user: UserDocument) {
     const emails = await getEmails(
-      EventID.EVENT_MODIFIED,
+      EventID.USER_MODIFIED,
       this.eventModel,
       this.userModel,
     );
@@ -79,15 +79,15 @@ export class EventListener {
       await Mail.instance.send({
         to: emails,
         from: CONTACT_EMAIL,
-        subject: '[EPIC Resource Planner] Event Modified',
-        html: `<p>An event was modified in your EPIC Resource Planner instance. The details are below:</p><p>${JSON.stringify(
-          event,
+        subject: '[EPIC Resource Planner] User Modified',
+        html: `<p>A user was modified in your EPIC Resource Planner instance. The details are below:</p><p>${JSON.stringify(
+          user,
         )}</p>`,
       });
     }
 
     this.logger.log(
-      'An event was modified. ' + emails.length + ' user(s) notified.',
+      'A user was modified. ' + emails.length + ' user(s) notified.',
     );
   }
 }
