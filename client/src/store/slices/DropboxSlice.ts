@@ -1,29 +1,25 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { FileEntry } from '../../interfaces/FileEntry';
 
-const initialState : { files : any[], links : any[] } =
+const initialState : { files : FileEntry[], updated : boolean} =
   {
     files: [],
-    links: []
+    updated: false
   };
 
 export const dropboxSlice = createSlice({
   name: 'dropboxFiles',
   initialState,
   reducers: {
-    setFiles: (state, { payload } : PayloadAction<any[]>) => {
-      state.files = payload;
-    },
-    setLinks: (state, { payload } : PayloadAction<any[]>) => {
-      state.links = payload;
-    },
-    addLink: (state, { payload } : PayloadAction<any>) => {
-      state.links.push(payload);
+    addFile: (state, { payload } : PayloadAction<FileEntry>) => {
+      const i = state.files.findIndex((file : FileEntry) => file.id === payload.id);
+      if (i < 0) {
+        state.files.push(payload);
+      }
     },
   }
 });
 
 export const {
-  setFiles,
-  setLinks,
-  addLink
+  addFile,
 } = dropboxSlice.actions;

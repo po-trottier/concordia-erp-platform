@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Menu } from 'antd';
-import { FunnelPlotTwoTone, SafetyCertificateTwoTone, CloudTwoTone } from '@ant-design/icons';
+import { FunnelPlotTwoTone, SafetyCertificateTwoTone, DropboxOutlined } from '@ant-design/icons';
 
 import { Audit } from '../components/Logs/Audit';
 import { LogList } from '../components/Logs/LogList';
-import { Cloud } from '../components/Logs/Cloud';
+import { Dropbox } from '../components/Logs/Dropbox.js';
 
 export const Logs = () => {
 
@@ -20,8 +20,8 @@ export const Logs = () => {
         return <Audit />;
       case 'logs':
         return <LogList />;
-      case 'cloud':
-        return <Cloud />;
+      case 'dropbox':
+        return <Dropbox />;
       default:
         return <Audit />;
     }
@@ -36,8 +36,8 @@ export const Logs = () => {
         <Menu.Item key='logs' icon={<SafetyCertificateTwoTone twoToneColor='#eb2f96' />}>
           All Logs
         </Menu.Item>
-        <Menu.Item key='cloud' icon={<CloudTwoTone />}>
-          Cloud
+        <Menu.Item key='dropbox' icon={<DropboxOutlined style={{color: "#4E89FF"}}/>}>
+          Dropbox
         </Menu.Item>
       </Menu>
       {renderSection()}
