@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Modal, Select, Form, Row, Col, Input, InputNumber, Radio } from 'antd';
 import { MinusCircleTwoTone, PlusOutlined } from '@ant-design/icons';
 import { useDispatch } from 'react-redux';
 
 //import { addEventEntry } from '../../store/slices/EventListSlice';
 import { EventDropdownEntry } from '../../interfaces/EventDropdownEntry';
+import { CustomerDropdownEntry } from '../../interfaces/CustomerDropdownEntry';
 import { getRoleString, Role } from '../../router/Roles';
 import axios from '../../plugins/Axios';
 
@@ -14,23 +15,47 @@ export const AddEventModal = () => {
   const dispatch = useDispatch();
 
   const [form] = Form.useForm();
-
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [customerIdList, setCustomerIdList] = useState(['']);
-  const [customerId, setCustomerId] = useState('');
+  const [customersUpdated, setCustomersUpdated] = useState(false);
+  
   const [userIdList, setUserIdList] = useState(['']);
   const [userId, setUserId] = useState('');
   const [roles, setRoles] = useState([]);
   const [role, setRole] = useState(0);
 
-  const emptyData: EventDropdownEntry[] = [];
-  const [eventsData, setEventsData] = useState(emptyData);
+  const emptyEventsData: EventDropdownEntry[] = [];
+  const [eventsData, setEventsData] = useState(emptyEventsData);
+
+  const emptyCustomersData: CustomerDropdownEntry[] = [];
+  const [customersData, setCustomersData] = useState(emptyCustomersData);
 
   const [loading, setLoading] = useState(false);
 
+  //get the customers
+  useEffect(() => {
+    setCustomersUpdated(true);
+    axios.get('/customers')
+      .then((res) => {
+        if (res && res.data) {
+          const data : CustomerDropdownEntry[] = [];
+          res.data.forEach((p : any) => {
+            data.push({
+              id: p['_id'],
+              name: p.name
+            });
+          });
+          setCustomersData(data);
+        }
+      })
+      .catch(err => {
+        // message.error('Something went wrong while fetching the list of parts.');
+        console.error(err);
+      });
+  }, [customersUpdated]);
+
   const addEvent = () => {
     const newEvent = {
-      customerIdList,
+      customersData,
       userIdList,
       roles
     }
@@ -153,9 +178,9 @@ export const AddEventModal = () => {
                   placeholder='Select 1 or more customers'
                   optionFilterProp='children'
                   onChange={hideActionsError}>
-                  {eventsData.map((event) => (
-                    <Option key={event.id} value={event.id}>
-                      {event.name}
+                  {customersData.map((customer) => (
+                    <Option key={customer.id} value={customer.id}>
+                      {customer.name}
                     </Option>))}
                 </Select>
               </Form.Item>
