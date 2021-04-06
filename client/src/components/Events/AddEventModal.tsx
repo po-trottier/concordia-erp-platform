@@ -92,23 +92,17 @@ export const AddEventModal = () => {
         onFinish={addEvent}
         name='basic'
         style={{ marginBottom: '-24px', width: '100%', maxWidth: '500px' }}>
-          <Form.List name='list_events'>
-            {(fields, { add, remove }, { errors }) => (
-              <div>
-                {fields.map((field, index) => (
-                  // Single Action/Event Entry
-                  <Row key={index} align='middle' style={{ marginBottom: 8 }}>
-                    {/*Action/Event Selector*/}
-                    <Col sm={4} span={6} style={{ paddingRight: 8 }}>
-                      Actions:
-                    </Col>
-                    <Col className='margin-bottom-mobile' sm={11} span={18}>
-                      <Form.Item
-                        name={[field.name, 'eventId']}
-                        fieldKey={[field.fieldKey, 'eventId']}
-                        validateTrigger={['onChange', 'onBlur']}
-                        noStyle>
-                        <Select
+          {/*Action/Event Field*/}
+          <Row align='middle' style={{ marginBottom: 16 }}>
+            <Col sm={6} span={9}>
+              <span>Action:</span>
+            </Col>
+            <Col sm={18} span={15}>
+              <Form.Item
+                style={{ marginBottom: 0 }}
+                name='action'
+                rules={[{ required: true, message: 'Please select an action.' }]}>
+               <Select
                           showSearch
                           style={{ width: '100%', display: 'inline-table' }}
                           placeholder='Select an action'
@@ -119,40 +113,9 @@ export const AddEventModal = () => {
                               {event.name}
                             </Option>))}
                         </Select>
-                      </Form.Item>
-                    </Col>
-                    {/*Delete Button*/}
-                    <Col sm={2} span={4} style={{ textAlign: 'right' }}>
-                      <MinusCircleTwoTone
-                        className='dynamic-delete-button'
-                        twoToneColor='red'
-                        onClick={() => remove(field.name)} />
-                    </Col>
-                  </Row>
-                ))}
-                {/*Custom error message*/}
-                <span id='display-actions-error' style={{ color: 'red', display: 'none' }}>
-                  Please add at least one action.
-                </span>
-                {/*Default error messages*/}
-                <Form.ErrorList errors={errors} />
-                {/*Add Part Button*/}
-                <Row>
-                  <Col span={24}>
-                    <Form.Item style={{ marginBottom: 0, marginTop: 16 }}>
-                      <Button
-                        type='dashed'
-                        onClick={() => add()}
-                        style={{ width: '100%' }}
-                        icon={<PlusOutlined />}>
-                        Add an Event
-                      </Button>
-                    </Form.Item>
-                  </Col>
-                </Row>
-              </div>
-            )}
-          </Form.List>
+              </Form.Item>
+            </Col>
+          </Row>
         </Form>
       </Modal>
     </div>
