@@ -93,10 +93,13 @@ export const ProductInventory = () => {
     return state;
   }
 
+  const getTableData = () => {
+    return getProducts().filter((row: any) => ! row.isCopy);
+  }
+
   const onSearch = (e : React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
   };
-
 
   return (
     <div>
@@ -113,7 +116,7 @@ export const ProductInventory = () => {
         }
       </Card>
       <Card style={{ display: getProducts().length > 0 ? 'block' : 'none' }}>
-        <ResponsiveTable values={getProducts()} columns={inventoryColumns} />
+        <ResponsiveTable values={getTableData()} columns={inventoryColumns} />
       </Card>
     </div>
   );
