@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Input } from 'antd';
-import { Line } from '@ant-design/charts';
 import { ResponsiveTable } from '../ResponsiveTable';
 import { MaterialsTimelineEntry } from '../../interfaces/MaterialsTimelineEntry';
 import axios from '../../plugins/Axios';
