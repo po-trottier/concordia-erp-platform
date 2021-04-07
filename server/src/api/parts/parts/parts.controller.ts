@@ -38,6 +38,7 @@ export class PartsController {
   /**
    * Route for building parts from materials
    *
+   * @param auth
    * @param locationId id of the location
    * @param buildOrders list of build orders for parts
    */
@@ -48,10 +49,11 @@ export class PartsController {
   )
   @Patch('build/:locationId')
   build(
+    @Headers('authorization') auth: string,
     @Param('locationId') locationId: string,
     @Body(ValidationPipe) buildOrders: BuildPartDto[],
   ) {
-    return this.partBuilderService.build(locationId, buildOrders);
+    return this.partBuilderService.build(auth, locationId, buildOrders);
   }
 
   @Roles(Role.ANY)
