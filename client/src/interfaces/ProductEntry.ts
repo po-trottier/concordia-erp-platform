@@ -1,3 +1,5 @@
+import React from 'react';
+
 export interface ProductEntry {
   id : string,
   name : string,
@@ -5,7 +7,7 @@ export interface ProductEntry {
   stock : number,
   parts : { partId : string, quantity : number }[],
   properties : { key : string, value : number }[],
-  build? : React.ReactNode
-  details? : React.ReactNode
-  actions? : React.ReactNode
+  build? : React.ReactNode,
+  details? : React.ReactNode,
+  actions? : React.ReactNode,
 }
