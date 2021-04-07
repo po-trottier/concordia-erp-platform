@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Card, Input } from 'antd';
 import { ResponsiveTable } from '../ResponsiveTable';
 import { ProductHistoryEntry } from '../../interfaces/ProductHistoryEntry';
 import { RootState } from '../../store/Store';
 import axios from '../../plugins/Axios';
 import Chart from "react-apexcharts";
+import {getChartState} from '../../store/slices/ChartSlice';
 
 const { Search } = Input;
 
@@ -19,6 +20,8 @@ const inventoryColumns = {
 
 export const ProductInventory = () => {
   const location = useSelector((state : RootState) => state.location.selected);
+  const dispatch = useDispatch();
+  const memes = useSelector((state : RootState) => state.chartSlice.meme);
 
   const emptyData : ProductHistoryEntry[] = [];
   const [products, setProducts] = useState(emptyData);
@@ -32,6 +35,8 @@ export const ProductInventory = () => {
           row.name = row.productId.name + (row.isEstimate ? ' (estimate)' : '');
         }
         setProducts(data);
+        dispatch(getChartState(data));
+        console.log(memes);
       });
   }, [location]);
 
@@ -50,55 +55,6 @@ export const ProductInventory = () => {
     return rows;
   };
 
-  const getChartState = () => {
-    const dashArray: number[] = [];
-    const series: any[] = [];
-    const colours: string[] = [];
-
-    const rows = getProducts();
-    const seriesNames: any = {};
-    rows.forEach((row: any) => {
-      if (! seriesNames[row.name])  {
-        seriesNames[row.name] = true;
-        series.push({
-          name: row.name,
-          data: []
-        });
-
-        if (row.isEstimate){
-          dashArray.push(5);
-        } else {
-          dashArray.push(0);
-          colours.push('#'+(Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0'));
-        }
-
-      }
-
-      const toAddTo = series.find((item: any) => item.name === row.name);
-      toAddTo.data.push({
-        x: row.date,
-        y: row.stock
-      });
-    });
-
-    const state = {
-      options: {
-        chart: {
-          id: "basic-bar"
-        },
-        xaxis: {
-          type: 'datetime',
-        },
-        stroke: {
-          dashArray: dashArray
-        },
-        colors: colours,
-      },
-      series: series
-    };
-    return state;
-  }
-
   const getTableData = () => {
     return getProducts().filter((row: any) => ! row.isCopy);
   }
@@ -115,10 +71,10 @@ export const ProductInventory = () => {
           onChange={onSearch}
           style={{ marginBottom: 18 }} />
         {
-          getProducts().length > 0 ?
-              <Chart {...getChartState()} type="line" height={350} />
-              :
-            <span>No product transactions were found.</span>
+          //getProducts().length > 0 ?
+          //    <Chart {...dispatch(getChartState(getProducts()))} type="line" height={350} />
+          //    :
+          //  <span>No product transactions were found.</span>
         }
       </Card>
       <Card style={{ display: getProducts().length > 0 ? 'block' : 'none' }}>
