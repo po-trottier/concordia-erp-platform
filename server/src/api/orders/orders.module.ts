@@ -12,14 +12,6 @@ import {
   ProductOrder,
   ProductOrderSchema,
 } from './schemas/product-orders.schema';
-import {
-  Material,
-  MaterialSchema,
-} from '../materials/materials/schemas/material.schema';
-import {
-  Product,
-  ProductSchema,
-} from '../products/products/schemas/products.schema';
 import { ProductOrdersService } from './product-orders.service';
 import { OrderDetailsService } from './order-details.service';
 import { MaterialsService } from '../materials/materials/materials.service';
@@ -27,6 +19,11 @@ import { ProductsService } from '../products/products/products.service';
 import { ProductsModule } from '../products/products.module';
 import { MaterialsModule } from '../materials/materials.module';
 import { PartsModule } from '../parts/parts.module';
+import { UsersModule } from '../users/users.module';
+import { EventsModule } from '../events/events.module';
+import { OrderListener } from '../../events/listeners/order.listener';
+import { ProductListener } from '../../events/listeners/product.listener';
+import { MaterialListener } from '../../events/listeners/material.listener';
 
 /**
  * Contains all logic and files related to finance
@@ -41,6 +38,9 @@ import { PartsModule } from '../parts/parts.module';
     MaterialsModule,
     // Required to fulfill dependencies
     PartsModule,
+    // Events Listener Dependency
+    UsersModule,
+    EventsModule,
     // ENV Support
     ConfigModule.forRoot({ validate, cache: true }),
   ],
@@ -51,6 +51,9 @@ import { PartsModule } from '../parts/parts.module';
     OrderDetailsService,
     MaterialsService,
     ProductsService,
+    OrderListener,
+    ProductListener,
+    MaterialListener,
   ],
 })
 export class OrdersModule {}

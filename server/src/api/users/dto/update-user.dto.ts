@@ -1,6 +1,6 @@
 import {
   IsEmail,
-  IsInt,
+  IsEnum,
   IsNotEmpty,
   IsOptional,
   IsString,
@@ -12,23 +12,23 @@ export class UpdateUserDto {
   @IsOptional()
   @IsNotEmpty()
   @IsString()
-  username: string;
+  username?: string;
 
   @IsOptional()
   @IsNotEmpty()
   @IsString()
-  firstName: string;
+  firstName?: string;
 
   @IsOptional()
   @IsNotEmpty()
   @IsString()
-  lastName: string;
+  lastName?: string;
 
   @IsOptional()
   @IsEmail()
   @IsNotEmpty()
   @IsString()
-  email: string;
+  email?: string;
 
   @IsOptional()
   @IsString()
@@ -36,9 +36,9 @@ export class UpdateUserDto {
     message:
       'The password needs to contain 1 uppercase character, 1 lowercase character, 1 number, 1 symbol, and be 8 characters long or more.',
   })
-  password: string;
+  password?: string;
 
   @IsOptional()
-  @IsInt()
-  role: Role;
+  @IsEnum(Role)
+  role?: Role;
 }

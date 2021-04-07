@@ -46,7 +46,7 @@ export const Income = () => {
       if (!m.isPaid || showPaid) {
         m.dateOrdered = m.dateOrdered.split('T')[0];
         m.dateDue = m.dateDue.split('T')[0];
-        m.customerName = m.customerId.name;
+        m.customerName = m.customerId ? m.customerId.name : undefined;
         m.isPaid = <Checkbox checked={m.isPaid} />;
         orders.push(m);
       }

@@ -1,5 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { Cron, CronExpression } from '@nestjs/schedule';
+import { isAfter, isSameDay } from 'date-fns';
 import { Model } from 'mongoose';
 import {
   MaterialOrder,
@@ -11,10 +14,12 @@ import { UpdateMaterialOrderDto } from './dto/update-material-order.dto';
 import { MaterialsService } from '../materials/materials/materials.service';
 import { UpdateMaterialStockDto } from '../materials/materials/dto/update-material-stock.dto';
 import { MaterialStockService } from '../materials/materials/material-stock.service';
+import { EventMap } from '../../events/common';
 
 @Injectable()
 export class MaterialOrdersService {
   constructor(
+    private emitter: EventEmitter2,
     @InjectModel(MaterialOrder.name)
     private materialOrderModel: Model<MaterialOrderDocument>,
     private readonly materialsService: MaterialsService,
@@ -78,6 +83,7 @@ export class MaterialOrdersService {
       await this.materialStockService.update(location, dtoArray);
     }
 
+    this.emitter.emit(EventMap.MATERIAL_ORDERED.id, createdOrders);
     return createdOrders;
   }
 
@@ -115,6 +121,34 @@ export class MaterialOrdersService {
       throw new NotFoundException(`material order with id ${id} not found`);
     } else {
       return orderResult;
+    }
+  }
+
+  @Cron(CronExpression.EVERY_DAY_AT_10AM)
+  async handlePayments() {
+    const unpaidOrders: MaterialOrderDocument[] = await this.materialOrderModel
+      .find({ isPaid: false })
+      .populate('materialId')
+      .exec();
+
+    const paidOrders: MaterialOrder[] = [];
+
+    for (const order of unpaidOrders) {
+      if (
+        isSameDay(new Date(), new Date(order.dateDue)) ||
+        isAfter(new Date(), new Date(order.dateDue))
+      ) {
+        const paidOrder = await this.materialOrderModel.findByIdAndUpdate(
+          order._id,
+          { $set: { isPaid: true } },
+          { new: true },
+        );
+        paidOrders.push(paidOrder);
+      }
+    }
+
+    if (paidOrders.length > 0) {
+      this.emitter.emit(EventMap.ACCOUNT_PAYABLE_PAID.id, paidOrders);
     }
   }
 }
