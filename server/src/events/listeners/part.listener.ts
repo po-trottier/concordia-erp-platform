@@ -111,7 +111,6 @@ export class PartListener {
         )}</p>`,
       });
     }
-    console.log(args)
     const audit : Audit = {
       module: Part.name,
       action: AuditActions.UPDATE,

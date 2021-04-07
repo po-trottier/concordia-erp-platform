@@ -18,6 +18,8 @@ import { MaterialStockService } from './materials/material-stock.service';
 import { LocationsModule } from '../locations/locations.module';
 import { validate } from '../../shared/env';
 import { PartsModule } from '../parts/parts.module';
+import {AuthModule} from "../auth/auth.module";
+import {AuditsModule} from "../audits/audits.module";
 
 /**
  * Contains all logic and files related to Materials
@@ -32,6 +34,8 @@ import { PartsModule } from '../parts/parts.module';
     // Avoid Circular Dependencies
     forwardRef(() => LocationsModule),
     forwardRef(() => PartsModule),
+    AuditsModule,
+    AuthModule,
     // ENV Support
     ConfigModule.forRoot({ validate, cache: true }),
   ],

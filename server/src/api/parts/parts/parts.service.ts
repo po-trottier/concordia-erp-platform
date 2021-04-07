@@ -99,7 +99,6 @@ export class PartsService {
     const token : UserToken = decoded;
 
     const part = this.validatePartFound(updatedPart, id);
-    console.log(part)
     this.emitter.emit(EventMap.PART_MODIFIED.id, {part, token});
     return part;
   }

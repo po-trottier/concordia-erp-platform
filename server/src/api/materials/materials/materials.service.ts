@@ -90,8 +90,9 @@ export class MaterialsService {
    * Deletes material by id using mongoose materialModel
    *
    * @param id string of the material's objectId
+   * @param auth
    */
-  async remove(id: string): Promise<Material> {
+  async remove(id: string, auth: string): Promise<Material> {
     // Make sure no parts depend on the material
     const dependantParts = await this.partModel.find({
       'materials.materialId': id,

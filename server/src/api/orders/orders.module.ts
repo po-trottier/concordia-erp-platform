@@ -24,6 +24,8 @@ import { EventsModule } from '../events/events.module';
 import { OrderListener } from '../../events/listeners/order.listener';
 import { ProductListener } from '../../events/listeners/product.listener';
 import { MaterialListener } from '../../events/listeners/material.listener';
+import {AuditsModule} from "../audits/audits.module";
+import {AuthModule} from "../auth/auth.module";
 
 /**
  * Contains all logic and files related to finance
@@ -41,6 +43,8 @@ import { MaterialListener } from '../../events/listeners/material.listener';
     // Events Listener Dependency
     UsersModule,
     EventsModule,
+    AuditsModule,
+    AuthModule,
     // ENV Support
     ConfigModule.forRoot({ validate, cache: true }),
   ],
