@@ -2,9 +2,21 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectModel } from '@nestjs/mongoose';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Model } from 'mongoose';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Product, ProductDocument } from './schemas/products.schema';
+import {
+  ProductStock,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  ProductStockDocument,
+} from './schemas/product-stock.schema';
+import {
+  ProductLog,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  ProductLogDocument,
+} from '../products-logs/schemas/product-log.schema';
+import { EventMap } from '../../../events/common';
 
 /**
  * Used by the ProductsController, handles product data storage and retrieval.
@@ -12,7 +24,13 @@ import { Product, ProductDocument } from './schemas/products.schema';
 @Injectable()
 export class ProductsService {
   constructor(
-    @InjectModel(Product.name) private productModel: Model<ProductDocument>,
+    private emitter: EventEmitter2,
+    @InjectModel(Product.name)
+    private productModel: Model<ProductDocument>,
+    @InjectModel(ProductLog.name)
+    private productLogModel: Model<ProductLogDocument>,
+    @InjectModel(ProductStock.name)
+    private productStockModel: Model<ProductStockDocument>,
   ) {}
 
   /**
@@ -22,9 +40,10 @@ export class ProductsService {
    */
   async create(createProductDto: CreateProductDto): Promise<Product> {
     const createdProduct = new this.productModel(createProductDto);
-    await createdProduct.save();
 
-    return createdProduct;
+    const product = await createdProduct.save();
+    this.emitter.emit(EventMap.PRODUCT_CREATED.id, product);
+    return product;
   }
 
   /**
@@ -60,7 +79,10 @@ export class ProductsService {
       { $set: { ...updateProductDto } },
       { new: true },
     );
-    return this.validateProductFound(updatedProduct, id);
+
+    const result = this.validateProductFound(updatedProduct, id);
+    this.emitter.emit(EventMap.PRODUCT_MODIFIED.id, result);
+    return result;
   }
 
   /**
@@ -69,8 +91,23 @@ export class ProductsService {
    * @param id string of the product's objectId
    */
   async remove(id: string) {
+    //delete all stock entries for the product
+    const stocks = await this.productStockModel.find({ productId: id });
+    for (const stock of stocks) {
+      await stock.delete();
+    }
+
+    //Remove the logs for this part
+    const logs = await this.productLogModel.find({ productId: id });
+    for (const log of logs) {
+      await log.delete();
+    }
+
     const deletedProduct = await this.productModel.findByIdAndDelete(id);
-    return this.validateProductFound(deletedProduct, id);
+
+    const result = this.validateProductFound(deletedProduct, id);
+    this.emitter.emit(EventMap.PRODUCT_DELETED.id, result);
+    return result;
   }
 
   /**

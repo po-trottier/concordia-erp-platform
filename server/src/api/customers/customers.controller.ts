@@ -19,24 +19,24 @@ import { Role } from '../roles/roles.enum';
 
 @Controller()
 export class CustomersController {
-  constructor(private readonly CustomersService: CustomersService) {}
+  constructor(private readonly customersService: CustomersService) {}
 
   @Roles(Role.SALESPERSON, Role.SYSTEM_ADMINISTRATOR)
   @Post()
   create(@Body(ValidationPipe) CreateCustomerDto: CreateCustomerDto) {
-    return this.CustomersService.create(CreateCustomerDto);
+    return this.customersService.create(CreateCustomerDto);
   }
 
   @Roles(Role.ANY)
   @Get()
   findAll() {
-    return this.CustomersService.findAll();
+    return this.customersService.findAll();
   }
 
   @Roles(Role.ANY)
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.CustomersService.findOne(id);
+    return this.customersService.findOne(id);
   }
 
   @Roles(Role.SALESPERSON, Role.SYSTEM_ADMINISTRATOR)
@@ -45,12 +45,12 @@ export class CustomersController {
     @Param('id') id: string,
     @Body(ValidationPipe) UpdateCustomerDto: UpdateCustomerDto,
   ) {
-    return this.CustomersService.update(id, UpdateCustomerDto);
+    return this.customersService.update(id, UpdateCustomerDto);
   }
 
   @Roles(Role.SALESPERSON, Role.SYSTEM_ADMINISTRATOR)
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.CustomersService.remove(id);
+    return this.customersService.remove(id);
   }
 }

@@ -4,6 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Model } from 'mongoose';
 import { CreateMaterialDto } from './dto/create-material.dto';
 import { UpdateMaterialDto } from './dto/update-material.dto';
@@ -21,6 +22,7 @@ import {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   MaterialLogDocument,
 } from '../materials-logs/schemas/material-log.schema';
+import { EventMap } from '../../../events/common';
 
 /**
  * Used by the MaterialsController, handles material data storage and retrieval.
@@ -28,6 +30,7 @@ import {
 @Injectable()
 export class MaterialsService {
   constructor(
+    private emitter: EventEmitter2,
     @InjectModel(Part.name)
     private partModel: Model<PartDocument>,
     @InjectModel(Material.name)
@@ -45,7 +48,10 @@ export class MaterialsService {
    */
   async create(createMaterialDto: CreateMaterialDto): Promise<Material> {
     const createdMaterial = new this.materialModel(createMaterialDto);
-    return await createdMaterial.save();
+
+    const material = await createdMaterial.save();
+    this.emitter.emit(EventMap.MATERIAL_CREATED.id, material);
+    return material;
   }
 
   /**
@@ -80,7 +86,10 @@ export class MaterialsService {
       { $set: { ...updateMaterialDto } },
       { new: true },
     );
-    return this.validateMaterialFound(updatedMaterial, id);
+
+    const result = this.validateMaterialFound(updatedMaterial, id);
+    this.emitter.emit(EventMap.MATERIAL_MODIFIED.id, result);
+    return result;
   }
 
   /**
@@ -112,7 +121,10 @@ export class MaterialsService {
     }
     // Remove the material
     const deletedMaterial = await this.materialModel.findByIdAndDelete(id);
-    return this.validateMaterialFound(deletedMaterial, id);
+
+    const result = this.validateMaterialFound(deletedMaterial, id);
+    this.emitter.emit(EventMap.MATERIAL_DELETED.id, result);
+    return result;
   }
 
   /**

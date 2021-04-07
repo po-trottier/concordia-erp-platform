@@ -8,12 +8,15 @@ import { PartStock, PartStockSchema } from './parts/schemas/part-stock.schema';
 import { PartLog, PartLogSchema } from './parts-logs/schemas/part-log.schema';
 import { PartLogsController } from './parts-logs/part-logs.controller';
 import { PartLogsService } from './parts-logs/part-logs.service';
-import { validate } from '../../shared/env';
 import { LocationsModule } from '../locations/locations.module';
 import { PartStockService } from './parts/part-stock.service';
 import { MaterialsModule } from '../materials/materials.module';
 import { PartBuilderService } from './parts/part-builder.service';
 import { ProductsModule } from '../products/products.module';
+import { PartListener } from '../../events/listeners/part.listener';
+import { UsersModule } from '../users/users.module';
+import { EventsModule } from '../events/events.module';
+import { validate } from '../../shared/env';
 
 /**
  * Contains all logic and files related to parts
@@ -25,10 +28,13 @@ import { ProductsModule } from '../products/products.module';
       { name: PartLog.name, schema: PartLogSchema },
       { name: PartStock.name, schema: PartStockSchema },
     ]),
-    LocationsModule,
     // Avoid Circular Dependencies
+    forwardRef(() => LocationsModule),
     forwardRef(() => MaterialsModule),
     forwardRef(() => ProductsModule),
+    // Events Listener Dependency
+    UsersModule,
+    EventsModule,
     // ENV Support
     ConfigModule.forRoot({ validate, cache: true }),
   ],
@@ -38,6 +44,7 @@ import { ProductsModule } from '../products/products.module';
     PartLogsService,
     PartStockService,
     PartBuilderService,
+    PartListener,
   ],
   exports: [PartsService, PartStockService, MongooseModule],
 })
