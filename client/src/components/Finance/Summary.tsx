@@ -55,7 +55,7 @@ export const Summary = () => {
   });
 
   const getChartData = () => {
-    const dataArray: any[] = summaryEntryData.map((row: any) => ({
+    const dataArray: {x: string, y: number}[] = summaryEntryData.map((row: SummaryEntry) => ({
       x: row.date,
       y: row.balance
     }));
