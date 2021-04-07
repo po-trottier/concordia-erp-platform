@@ -73,7 +73,7 @@ export class UsersService implements OnApplicationBootstrap {
 
     if (!createdUser.password) {
       const allowedChars =
-        'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#?!@$%^&*-';
+        'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#?!@$%&';
       const passwordLength = 14;
       const randomPassword = Array(passwordLength)
         .fill(allowedChars)
