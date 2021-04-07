@@ -18,7 +18,7 @@ import { chartSlice } from './slices/ChartSlice';
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['login', 'location', 'chartSlice'],
+  whitelist: ['login', 'location'],
   // whitelist contains the name of reducers that we want to persist
   transforms: [
     encryptTransform({

@@ -54,6 +54,10 @@ export const ProductInventory = () => {
 
     return rows;
   };
+  
+  const getChartData = () => {
+    return JSON.parse(JSON.stringify(chartData));
+  }
 
   const getTableData = () => {
     return getProducts().filter((row: any) => ! row.isCopy);
@@ -62,17 +66,6 @@ export const ProductInventory = () => {
   const onSearch = (e : React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
   };
-
-  const  options = {
-    chart: {
-      id: "basic-bar"
-    },
-          xaxis: {
-            type: "datetime"
-          },
-          stroke: chartData.stroke,
-          colors: ["#5d3ff1", "#256a6e"],
-        };
 
   return (
     <div>
@@ -83,7 +76,7 @@ export const ProductInventory = () => {
           style={{ marginBottom: 18 }} />
         {
           getProducts().length > 0 ?
-              <Chart options={options} series={chartData.series} type="line" height={350} />
+              <Chart options={getChartData().options} series={getChartData().series} type="line" height={350} />
               :
             <span>No product transactions were found.</span>
         }

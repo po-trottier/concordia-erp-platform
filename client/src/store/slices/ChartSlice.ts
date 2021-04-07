@@ -2,10 +2,16 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 const initialState : { chartState : any } = {chartState : {
   options: {
-    chart: {},
-    xaxis: {},
-    stroke: {},
-    colors: []
+    chart: {
+      id: "basic-bar"
+    },
+    xaxis: {
+      type: 'datetime',
+    },
+    stroke: {
+      dashArray: []
+    },
+    colors: [],
   },
   series: [],
 }};
