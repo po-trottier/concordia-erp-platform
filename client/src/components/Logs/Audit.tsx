@@ -145,7 +145,6 @@ export const Audit = () => {
         lineNum = 1;
       }
     });
-    console.log(lineNum);
     doc.save(fileName + '.pdf');
   }
 
