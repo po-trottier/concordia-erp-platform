@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "6eb14ccf-9af0-4be6-a98e-945a5f4cdbf5",
+		"_postman_id": "7d6a92ee-03b3-4956-b832-f827d4bd7159",
 		"name": "Epic Resource Planner",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -43,6 +43,64 @@
 							"path": [
 								"auth",
 								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Reset Password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"password\" : \"Password1!\"  \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/auth/forgot",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"forgot"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Forgot Password",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"password\" : \"Password1!\"  \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/auth/forgot/1234",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"forgot",
+								"1234"
 							]
 						}
 					},
