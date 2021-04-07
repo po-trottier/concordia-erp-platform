@@ -55,6 +55,7 @@ export const chartSlice = createSlice({
 
       console.log("meme");
       state.meme = {asdasdas: "masda"};
+      console.log(state.meme);
     },
   }
 });
