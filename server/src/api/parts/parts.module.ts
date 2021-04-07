@@ -17,6 +17,8 @@ import { PartListener } from '../../events/listeners/part.listener';
 import { UsersModule } from '../users/users.module';
 import { EventsModule } from '../events/events.module';
 import { validate } from '../../shared/env';
+import {AuthModule} from "../auth/auth.module";
+import {AuditsModule} from "../audits/audits.module";
 
 /**
  * Contains all logic and files related to parts
@@ -35,6 +37,8 @@ import { validate } from '../../shared/env';
     // Events Listener Dependency
     UsersModule,
     EventsModule,
+    AuthModule,
+    AuditsModule,
     // ENV Support
     ConfigModule.forRoot({ validate, cache: true }),
   ],

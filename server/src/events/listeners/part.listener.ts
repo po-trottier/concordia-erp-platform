@@ -6,11 +6,13 @@ import { Model } from 'mongoose';
 import { Event, EventDocument } from '../../api/events/schemas/events.schema';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { User, UserDocument } from '../../api/users/schemas/user.schema';
-import { PartDocument } from '../../api/parts/parts/schemas/part.schema';
+import {Part, PartDocument} from '../../api/parts/parts/schemas/part.schema';
 import { PartStockDocument } from '../../api/parts/parts/schemas/part-stock.schema';
 import { EventMap, getEmails } from '../common';
 import { Mail } from '../../shared/mail';
 import { CONTACT_EMAIL } from '../../shared/constants';
+import {UserToken} from "../../shared/user-token.interface";
+import {Audit, AuditDocument} from "../../api/audits/schemas/audits.schema";
 
 @Injectable()
 export class PartListener {
@@ -19,10 +21,11 @@ export class PartListener {
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
     @InjectModel(Event.name) private eventModel: Model<EventDocument>,
+    @InjectModel(Audit.name) private auditModel: Model<AuditDocument>,
   ) {}
 
   @OnEvent(EventMap.PART_CREATED.id)
-  async handlePartCreated(part: PartDocument) {
+  async handlePartCreated(args: {part: PartDocument, token: UserToken}) {
     const emails = await getEmails(
       EventMap.PART_CREATED,
       this.eventModel,
@@ -35,10 +38,14 @@ export class PartListener {
         from: CONTACT_EMAIL,
         subject: '[EPIC Resource Planner] New Part Created',
         html: `<p>A new part was created in your EPIC Resource Planner instance. The details are below:</p><p>${JSON.stringify(
-          part,
+          args.part,
         )}</p>`,
       });
     }
+
+    const document : AuditDocument = {module: Part.name, target: args.part.name}
+    const auditEntry = new this.auditModel(document)
+    await auditEntry.save();
 
     this.logger.log(
       'A part was created. ' + emails.length + ' user(s) notified.',

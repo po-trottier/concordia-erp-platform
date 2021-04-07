@@ -1,5 +1,6 @@
 import {
   Body,
+  Headers,
   Controller,
   Delete,
   Get,
@@ -28,8 +29,10 @@ export class PartsController {
 
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
   @Post()
-  create(@Body(ValidationPipe) createPartDto: CreatePartDto) {
-    return this.partsService.create(createPartDto);
+  create(
+    @Headers('authorization') auth: string,
+    @Body(ValidationPipe) createPartDto: CreatePartDto) {
+    return this.partsService.create(createPartDto, auth);
   }
 
   /**

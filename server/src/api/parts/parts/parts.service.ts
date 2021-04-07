@@ -3,6 +3,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import {JwtService} from "@nestjs/jwt";
 import { InjectModel } from '@nestjs/mongoose';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Model } from 'mongoose';
@@ -26,6 +27,7 @@ import {
   PartLogDocument,
 } from '../parts-logs/schemas/part-log.schema';
 import { EventMap } from '../../../events/common';
+import {UserToken} from "../../../shared/user-token.interface";
 
 /**
  * Used by the PartsController, handles part data storage and retrieval.
@@ -33,6 +35,7 @@ import { EventMap } from '../../../events/common';
 @Injectable()
 export class PartsService {
   constructor(
+    private jwtService: JwtService,
     private emitter: EventEmitter2,
     @InjectModel(Product.name)
     private productModel: Model<ProductDocument>,
@@ -48,12 +51,16 @@ export class PartsService {
    * Creates part using mongoose partModel
    *
    * @param createPartDto dto used to create parts
+   * @param auth
    */
-  async create(createPartDto: CreatePartDto): Promise<Part> {
+  async create(createPartDto: CreatePartDto, auth: string): Promise<Part> {
     const createdPart = new this.partModel(createPartDto);
 
+    const decoded: any = this.jwtService.decode(auth.substr(7));
+    const token : UserToken = decoded;
+
     const part = await createdPart.save();
-    this.emitter.emit(EventMap.PART_CREATED.id, part);
+    this.emitter.emit(EventMap.PART_CREATED.id, {part, token});
     return part;
   }
 
