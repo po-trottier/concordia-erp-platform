@@ -1,4 +1,5 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { UpdatePartStockDto } from '../../parts/parts/dto/update-part-stock.dto';
 import { UpdateProductStockDto } from './dto/update-product-stock.dto';
 import { BuildProductDto } from './dto/build-product.dto';
@@ -6,6 +7,7 @@ import { ProductsService } from './products.service';
 import { PartStockService } from '../../parts/parts/part-stock.service';
 import { ProductStockService } from './product-stock.service';
 import { Product } from './schemas/products.schema';
+import { EventMap } from '../../../events/common';
 
 /**
  * Used by the ProductsController, handles product data storage and retrieval.
@@ -13,6 +15,7 @@ import { Product } from './schemas/products.schema';
 @Injectable()
 export class ProductBuilderService {
   constructor(
+    private emitter: EventEmitter2,
     private readonly productsService: ProductsService,
     private readonly productStockService: ProductStockService,
     private readonly partStockService: PartStockService,
@@ -87,6 +90,8 @@ export class ProductBuilderService {
 
       buildResults = buildResults.concat(updatedStock);
     }
+
+    this.emitter.emit(EventMap.PRODUCT_BUILT.id, buildResults);
     return buildResults;
   }
 }

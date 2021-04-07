@@ -4,6 +4,9 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { Cron, CronExpression } from '@nestjs/schedule';
+import { isSameDay, isAfter } from 'date-fns';
 import { Model } from 'mongoose';
 import {
   ProductOrder,
@@ -15,10 +18,14 @@ import { UpdateProductOrderDto } from './dto/update-product-order.dto';
 import { ProductsService } from '../products/products/products.service';
 import { ProductStockService } from '../products/products/product-stock.service';
 import { UpdateProductStockDto } from '../products/products/dto/update-product-stock.dto';
+import { EventMap } from '../../events/common';
+import { Mail } from '../../shared/mail';
+import { CONTACT_EMAIL } from '../../shared/constants';
 
 @Injectable()
 export class ProductOrdersService {
   constructor(
+    private emitter: EventEmitter2,
     @InjectModel(ProductOrder.name)
     private productOrderModel: Model<ProductOrderDocument>,
     private readonly productsService: ProductsService,
@@ -100,6 +107,7 @@ export class ProductOrdersService {
       await this.productStockService.update(location, dtoArray);
     }
 
+    this.emitter.emit(EventMap.PRODUCT_SOLD.id, createdOrders);
     return createdOrders;
   }
 
@@ -144,5 +152,72 @@ export class ProductOrdersService {
     } else {
       return orderResult;
     }
+  }
+
+  @Cron(CronExpression.EVERY_DAY_AT_10AM)
+  async handlePayments() {
+    const unpaidOrders: any[] = await this.productOrderModel
+      .find({ isPaid: false })
+      .populate('customerId')
+      .populate('productId')
+      .exec();
+
+    const paidOrders: Map<string, ProductOrderDocument[]> = new Map();
+
+    for (const order of unpaidOrders) {
+      if (
+        isSameDay(new Date(), new Date(order.dateDue)) ||
+        isAfter(new Date(), new Date(order.dateDue))
+      ) {
+        await this.productOrderModel.findByIdAndUpdate(
+          order._id,
+          { $set: { isPaid: true } },
+          { new: true },
+        );
+        // Group the Orders by Customer Email
+        if (paidOrders.has(order.customerId.email)) {
+          paidOrders.set(
+            order.customerId.email,
+            paidOrders.get(order.customerId.email).concat(order),
+          );
+        } else {
+          paidOrders.set(order.customerId.email, [order]);
+        }
+      }
+    }
+
+    for (const [email, orders] of paidOrders.entries()) {
+      await Mail.instance.send({
+        to: email,
+        from: CONTACT_EMAIL,
+        subject: '[EPIC Resource Planner] Order Billing Confirmation',
+        html: ProductOrdersService.getEmailHtml(orders),
+      });
+
+      this.emitter.emit(EventMap.ACCOUNT_RECEIVABLE_PAID.id, { email, orders });
+    }
+  }
+
+  private static getEmailHtml(orders: any[]) {
+    let total = 0;
+    let html = `<p>Dear customer,</p><p>Your recent order has been billed. The details of your order are as follows:</p>`;
+
+    orders.forEach((order) => {
+      if (!order.productId) {
+        return;
+      }
+      total += order.amountDue;
+      html += `<ul>
+        <li>Product ID: ${order.productId.id}</li>
+        <li>Product Name: ${order.productId.name}</li>
+        <li>Quantity: ${order.quantity}</li>
+        <li>Amount Due: ${order.amountDue}$</li>
+        <li>Date Ordered: ${order.dateOrdered.toLocaleDateString('en-US')}</li>
+      </ul>`;
+    });
+
+    html += `<p><b>Total Due: ${total}$</b></p>`;
+
+    return html;
   }
 }

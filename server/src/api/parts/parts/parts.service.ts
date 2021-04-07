@@ -4,6 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Model } from 'mongoose';
 import { CreatePartDto } from './dto/create-part.dto';
 import { UpdatePartDto } from './dto/update-part.dto';
@@ -24,6 +25,7 @@ import {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   PartLogDocument,
 } from '../parts-logs/schemas/part-log.schema';
+import { EventMap } from '../../../events/common';
 
 /**
  * Used by the PartsController, handles part data storage and retrieval.
@@ -31,6 +33,7 @@ import {
 @Injectable()
 export class PartsService {
   constructor(
+    private emitter: EventEmitter2,
     @InjectModel(Product.name)
     private productModel: Model<ProductDocument>,
     @InjectModel(Part.name)
@@ -48,7 +51,10 @@ export class PartsService {
    */
   async create(createPartDto: CreatePartDto): Promise<Part> {
     const createdPart = new this.partModel(createPartDto);
-    return await createdPart.save();
+
+    const part = await createdPart.save();
+    this.emitter.emit(EventMap.PART_CREATED.id, part);
+    return part;
   }
 
   /**
@@ -81,7 +87,9 @@ export class PartsService {
       { new: true },
     );
 
-    return this.validatePartFound(updatedPart, id);
+    const result = this.validatePartFound(updatedPart, id);
+    this.emitter.emit(EventMap.PART_MODIFIED.id, result);
+    return result;
   }
 
   /**
@@ -117,7 +125,9 @@ export class PartsService {
 
     //Finally, remove the part
     const deletedPart = await this.partModel.findByIdAndDelete(id);
-    return this.validatePartFound(deletedPart, id);
+    const result = this.validatePartFound(deletedPart, id);
+    this.emitter.emit(EventMap.PART_DELETED.id, result);
+    return result;
   }
 
   /**

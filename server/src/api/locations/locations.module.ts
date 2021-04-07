@@ -4,10 +4,13 @@ import { LocationsService } from './locations.service';
 import { LocationsController } from './locations.controller';
 import { Location, LocationSchema } from './schemas/location.schema';
 import { ConfigModule } from '@nestjs/config';
-import { validate } from '../../shared/env';
 import { PartsModule } from '../parts/parts.module';
 import { MaterialsModule } from '../materials/materials.module';
 import { ProductsModule } from '../products/products.module';
+import { LocationListener } from '../../events/listeners/location.listener';
+import { UsersModule } from '../users/users.module';
+import { EventsModule } from '../events/events.module';
+import { validate } from '../../shared/env';
 
 /**
  * Contains all logic and files related to locations
@@ -21,11 +24,14 @@ import { ProductsModule } from '../products/products.module';
     forwardRef(() => MaterialsModule),
     forwardRef(() => PartsModule),
     forwardRef(() => ProductsModule),
+    // Events Listener Dependency
+    UsersModule,
+    EventsModule,
     // ENV Support
     ConfigModule.forRoot({ validate, cache: true }),
   ],
   controllers: [LocationsController],
-  providers: [LocationsService],
+  providers: [LocationsService, LocationListener],
   exports: [LocationsService],
 })
 export class LocationsModule {}

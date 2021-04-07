@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "6eb14ccf-9af0-4be6-a98e-945a5f4cdbf5",
+		"_postman_id": "217517db-848e-4e9d-a092-9adbdfa630c9",
 		"name": "Epic Resource Planner",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -43,6 +43,94 @@
 							"path": [
 								"auth",
 								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Reset Password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"password\" : \"Password1!\"  \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/auth/forgot",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"forgot"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Request Reset Link",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"test@test.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/auth/request",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"request"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Forgot Password",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"password\" : \"Password1!\"  \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/auth/forgot/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIiLCJpZCI6IjYwNmQ1ODA2ZDY0ODc0NmE2MGZkN2IyMiIsInJvbGVzIjo0LCJpYXQiOjE2MTc3Nzg3MjksImV4cCI6MTYxNzg2NTEyOX0.yPY7N2MpMUHpXOdEthtkIckd2hPm-kBy9r77iIiR6oA",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"forgot",
+								"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIiLCJpZCI6IjYwNmQ1ODA2ZDY0ODc0NmE2MGZkN2IyMiIsInJvbGVzIjo0LCJpYXQiOjE2MTc3Nzg3MjksImV4cCI6MTYxNzg2NTEyOX0.yPY7N2MpMUHpXOdEthtkIckd2hPm-kBy9r77iIiR6oA"
 							]
 						}
 					},
@@ -228,7 +316,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"eventId\": \"01F2G8C0VAKT3Z17PSPE0TTVJ2\",\n    \"userId\": [\"606ac40c46c1b47d380405ab\"]\n}",
+							"raw": "{\n    \"eventId\": \"ckn5l30au000h8s58lycm3s08\",\n    \"userId\": [\"606ac40c46c1b47d380405ab\"]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -276,7 +364,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"eventId\": [2, 4]\n}",
+							"raw": "{\n    \"role\": [2, 4]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -284,13 +372,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}/events/606ac6db7b6e1d6c6c9b84ef",
+							"raw": "{{url}}/events/606c0d6aa371bd79f0e35d4c",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"events",
-								"606ac6db7b6e1d6c6c9b84ef"
+								"606c0d6aa371bd79f0e35d4c"
 							]
 						}
 					},
