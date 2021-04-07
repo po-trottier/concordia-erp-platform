@@ -54,7 +54,7 @@ export const Logs = () => {
         </Menu.Item>
         <Menu.Item
         icon={<DropboxOutlined
-        style={{color: "#4E89FF"}}/>}
+        style={{color: "#4E89FF"}} />}
         onClick={open}
         disabled={isOpen}>
           Dropbox
