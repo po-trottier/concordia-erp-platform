@@ -1,4 +1,5 @@
 import React from 'react';
+import { jsPDF } from 'jspdf';
 import { Button, Card, Checkbox, DatePicker, Divider, Menu, Popover, Select, Typography } from 'antd';
 
 const { Option } = Select;
@@ -35,17 +36,138 @@ export const Audit = () => {
 
   const exportOptions = (
     <Menu>
-      <Menu.Item>
+      <Menu.Item onClick={() => exportPDF()}>
         PDF
       </Menu.Item>
-      <Menu.Item>
+      <Menu.Item onClick={() => exportCSV()}>
         CSV
-      </Menu.Item>
-      <Menu.Item>
-        TXT
       </Menu.Item>
     </Menu>
   );
+
+  const dummyData : any[] = [
+    {
+      date: new Date(),
+      author: "Radley",
+      action: "Create",
+      target: "15 tires"
+    },
+    {
+      date: new Date(),
+      author: "John",
+      action: "Deletes",
+      target: "15 tires"
+    },
+    {
+      date: new Date(),
+      author: "Radley",
+      action: "Create",
+      target: "15 tires"
+    },
+    {
+      date: new Date(),
+      author: "John",
+      action: "Deletes",
+      target: "15 tires"
+    },
+    {
+      date: new Date(),
+      author: "Radley",
+      action: "Create",
+      target: "15 tires"
+    },
+    {
+      date: new Date(),
+      author: "John",
+      action: "Deletes",
+      target: "15 tires"
+    },
+    {
+      date: new Date(),
+      author: "Radley",
+      action: "Create",
+      target: "15 tires"
+    },
+    {
+      date: new Date(),
+      author: "John",
+      action: "Deletes",
+      target: "15 tires"
+    },
+    {
+      date: new Date(),
+      author: "Radley",
+      action: "Create",
+      target: "15 tires"
+    },
+    {
+      date: new Date(),
+      author: "John",
+      action: "Deletes",
+      target: "15 tires"
+    },
+    {
+      date: new Date(),
+      author: "Radley",
+      action: "Create",
+      target: "15 tires"
+    },
+    {
+      date: new Date(),
+      author: "John",
+      action: "Deletes",
+      target: "15 tires"
+    },
+  ]
+
+  const exportPDF = () => {
+    const date = new Date();
+    const fileName = 'Audit-' + (date.toDateString() + ' ' + date.toLocaleTimeString()).replace(/\s/g, '-');
+    const doc = new jsPDF({
+      orientation: 'portrait',
+      unit: 'in',
+      format: [8.5, 11],
+    });
+    doc.setFontSize(16);
+    doc.text('Audit Generated ' + date.toDateString() + ' ' + date.toLocaleTimeString(), 1, 1);
+    let lineNum = 1.5;
+    doc.setFontSize(12);
+    dummyData.forEach((object : any) => {
+      const keys = Object.keys(object);
+      const values = Object.values(object);
+      keys.forEach((key : any, index : number) => {
+        doc.text(key.charAt(0).toUpperCase() + key.slice(1) + ': ' + values[index], 1, lineNum);
+        lineNum += 0.2;
+      });
+      lineNum += 0.3;
+      if (lineNum > 10){
+        doc.addPage([8.5, 11], 'portrait');
+        lineNum = 1;
+      }
+    });
+    doc.save(fileName + '.pdf');
+  }
+
+  const exportCSV = () => {
+    const date = new Date();
+    const fileName = 'Audit-' + (date.toDateString() + ' ' + date.toLocaleTimeString()).replace(/\s/g, '-');
+    const csvRows : any[] = [];
+    const headers = Object.keys(dummyData[0]);
+    csvRows.push(headers.join(',').toUpperCase());
+    dummyData.forEach((object : any) => {
+      const values = Object.values(object);
+      csvRows.push(values.join(','));
+    });
+    const file = new Blob([csvRows.join('\n')], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(file);
+    const a = document.createElement('a');
+    a.setAttribute('hidden', '');
+    a.setAttribute('href', url);
+    a.setAttribute('download', fileName + '.csv');
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }
 
   return (
     <div>
@@ -85,7 +207,7 @@ export const Audit = () => {
         <p style={style}>Select the products:</p>
         <Checkbox.Group options={productsOptions} />
       </Card>
-      <Popover content={exportOptions} title='Export Options' trigger='click'>
+      <Popover content={exportOptions} title='Save As' trigger='click'>
         <Button
           type='primary'
           onClick={e => e.preventDefault()}>
