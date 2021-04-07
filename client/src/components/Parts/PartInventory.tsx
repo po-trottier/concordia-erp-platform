@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Input } from 'antd';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { ResponsiveTable } from '../ResponsiveTable';
 import { PartHistoryEntry } from '../../interfaces/PartHistoryEntry';
 import { RootState } from '../../store/Store';
 import axios from '../../plugins/Axios';
 import Chart from "react-apexcharts";
-import { getChartState, getTableData } from "../../shared/predictions";
+import {getChartState} from '../../store/slices/ChartSlice';
 
 const { Search } = Input;
 
@@ -20,6 +20,8 @@ const inventoryColumns = {
 
 export const PartInventory = () => {
   const location = useSelector((state : RootState) => state.location.selected);
+  const dispatch = useDispatch();
+  const chartData = useSelector((state : RootState) => state.chart.chartState);
 
   const emptyData : PartHistoryEntry[] = [];
   const [partsData, setPartsData] = useState(emptyData);
@@ -32,6 +34,7 @@ export const PartInventory = () => {
         row.name = row.partId.name + (row.isEstimate ? ' (estimate)' : '');
       }
       setPartsData(data);
+      dispatch(getChartState(data));
     });
   }, [location]);
 
@@ -47,6 +50,15 @@ export const PartInventory = () => {
     return rows;
   };
 
+
+  const getChartData = () => {
+    return JSON.parse(JSON.stringify(chartData));
+  }
+
+  const getTableData = () => {
+    return getParts().filter((row: any) => ! row.isCopy);
+  }
+
   const onSearch = (e : React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
   };
@@ -59,14 +71,14 @@ export const PartInventory = () => {
           onChange={onSearch}
           style={{ marginBottom: 18 }} />
         {getParts().length > 0 ? (
-          <Chart {...getChartState(getParts())} type="line" height={350} />
+          <Chart {...getChartData()} type="line" height={350} />
         ) : (
           <span>No part transactions were found.</span>
         )}
       </Card>
       {getParts().length > 0 ? (
         <Card>
-          <ResponsiveTable values={getTableData(getParts())} columns={inventoryColumns} />
+          <ResponsiveTable values={getTableData()} columns={inventoryColumns} />
         </Card>
       ) : null}
     </div>

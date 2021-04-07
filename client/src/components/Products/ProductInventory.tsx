@@ -53,7 +53,7 @@ export const ProductInventory = () => {
 
     return rows;
   };
-  
+
   const getChartData = () => {
     return JSON.parse(JSON.stringify(chartData));
   }
@@ -75,7 +75,7 @@ export const ProductInventory = () => {
           style={{ marginBottom: 18 }} />
         {
           getProducts().length > 0 ?
-              <Chart options={getChartData().options} series={getChartData().series} type="line" height={350} />
+              <Chart {...getChartData()} type="line" height={350} />
               :
             <span>No product transactions were found.</span>
         }
