@@ -6,7 +6,8 @@ import { ProductHistoryEntry } from '../../interfaces/ProductHistoryEntry';
 import { RootState } from '../../store/Store';
 import axios from '../../plugins/Axios';
 import Chart from "react-apexcharts";
-import {getChartState} from '../../store/slices/ChartSlice';
+//import {getChartState} from '../../store/slices/ChartSlice';
+import { getChartState, getTableData } from "../../shared/predictions";
 
 const { Search } = Input;
 
@@ -21,7 +22,7 @@ const inventoryColumns = {
 export const ProductInventory = () => {
   const location = useSelector((state : RootState) => state.location.selected);
   const dispatch = useDispatch();
-  const chartData = useSelector((state : RootState) => state.chartSlice.chartState);
+//  const chartData = useSelector((state : RootState) => state.chartSlice.chartState);
 
   const emptyData : ProductHistoryEntry[] = [];
   const [products, setProducts] = useState(emptyData);
@@ -35,8 +36,8 @@ export const ProductInventory = () => {
           row.name = row.productId.name + (row.isEstimate ? ' (estimate)' : '');
         }
         setProducts(data);
-        dispatch(getChartState(data));
-        console.log(chartData);
+ //       dispatch(getChartState(data));
+ //       console.log(chartData);
       });
   }, [location]);
 
@@ -55,24 +56,9 @@ export const ProductInventory = () => {
     return rows;
   };
 
-  const getTableData = () => {
-    return getProducts().filter((row: any) => ! row.isCopy);
-  }
-
   const onSearch = (e : React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
   };
-
-  const  options = {
-    chart: {
-      id: "basic-bar"
-    },
-          xaxis: {
-            type: "datetime"
-          },
-          stroke: chartData.stroke,
-          colors: ["#5d3ff1", "#256a6e"],
-        };
 
   return (
     <div>
@@ -83,13 +69,13 @@ export const ProductInventory = () => {
           style={{ marginBottom: 18 }} />
         {
           getProducts().length > 0 ?
-              <Chart options={options} series={chartData.series} type="line" height={350} />
+              <Chart {...getChartState(getProducts())} type="line" height={350} />
               :
             <span>No product transactions were found.</span>
         }
       </Card>
       <Card style={{ display: getProducts().length > 0 ? 'block' : 'none' }}>
-        <ResponsiveTable values={getTableData()} columns={inventoryColumns} />
+        <ResponsiveTable values={getTableData(getProducts())} columns={inventoryColumns} />
       </Card>
     </div>
   );
