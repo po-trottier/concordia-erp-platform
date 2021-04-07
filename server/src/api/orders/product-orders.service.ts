@@ -162,7 +162,7 @@ export class ProductOrdersService {
       .populate('productId')
       .exec();
 
-    const paidOrders = new Map();
+    const paidOrders: Map<string, ProductOrderDocument[]> = new Map();
 
     for (const order of unpaidOrders) {
       if (
@@ -193,10 +193,8 @@ export class ProductOrdersService {
         subject: '[EPIC Resource Planner] Order Billing Confirmation',
         html: ProductOrdersService.getEmailHtml(orders),
       });
-    }
 
-    if (paidOrders.size > 0) {
-      this.emitter.emit(EventMap.ACCOUNT_RECEIVABLE_PAID.id, paidOrders);
+      this.emitter.emit(EventMap.ACCOUNT_RECEIVABLE_PAID.id, { email, orders });
     }
   }
 

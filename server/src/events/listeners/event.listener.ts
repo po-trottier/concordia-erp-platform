@@ -19,6 +19,25 @@ export class EventListener {
     @InjectModel(Event.name) private eventModel: Model<EventDocument>,
   ) {}
 
+  getEmailHTML(event: EventDocument, action: string) {
+    return `<p>An event was <b>${action}</b> in your EPIC Resource Planner instance. The details are below:</p>
+      <ul>
+        <li><b>ID:</b> ${event.id}</li>
+        <li><b>Event ID:</b> ${event.eventId}</li>
+        <li><b>Customer IDs:</b> ${
+          event.customerId && event.customerId.length > 0
+            ? event.customerId
+            : 'None'
+        }</li>
+        <li><b>User IDs:</b> ${
+          event.userId && event.userId.length > 0 ? event.userId : 'None'
+        }</li>
+        <li><b>Roles:</b> ${
+          event.role && event.role.length > 0 ? event.role : 'None'
+        }</li>
+      </ul>`;
+  }
+
   @OnEvent(EventMap.EVENT_CREATED.id)
   async handleEventCreated(event: EventDocument) {
     const emails = await getEmails(
@@ -32,9 +51,7 @@ export class EventListener {
         to: emails,
         from: CONTACT_EMAIL,
         subject: '[EPIC Resource Planner] New Event Created',
-        html: `<p>A new event was created in your EPIC Resource Planner instance. The details are below:</p><p>${JSON.stringify(
-          event,
-        )}</p>`,
+        html: this.getEmailHTML(event, 'created'),
       });
     }
 
@@ -56,9 +73,7 @@ export class EventListener {
         to: emails,
         from: CONTACT_EMAIL,
         subject: '[EPIC Resource Planner] Event Deleted',
-        html: `<p>An event was deleted in your EPIC Resource Planner instance. The details are below:</p><p>${JSON.stringify(
-          event,
-        )}</p>`,
+        html: this.getEmailHTML(event, 'deleted'),
       });
     }
 
@@ -80,9 +95,7 @@ export class EventListener {
         to: emails,
         from: CONTACT_EMAIL,
         subject: '[EPIC Resource Planner] Event Modified',
-        html: `<p>An event was modified in your EPIC Resource Planner instance. The details are below:</p><p>${JSON.stringify(
-          event,
-        )}</p>`,
+        html: this.getEmailHTML(event, 'modified'),
       });
     }
 

@@ -22,6 +22,7 @@ export class UserListener {
   getEmailHTML(user: UserDocument, action: string) {
     return `<p>A user was <b>${action}</b> in your EPIC Resource Planner instance. The details are below:</p>
       <ul>
+        <li><b>ID:</b> ${user.id}</li>
         <li><b>Username:</b> ${user.username}</li>
         <li><b>Email:</b> ${user.email}</li>
         <li><b>Name:</b> ${user.firstName} ${user.lastName}</li>
