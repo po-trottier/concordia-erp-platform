@@ -69,16 +69,17 @@ export class PartsController {
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
   @Patch(':id')
   update(
+    @Headers('authorization') auth: string,
     @Param('id') id: string,
     @Body(ValidationPipe) updatePartDto: UpdatePartDto,
   ) {
-    return this.partsService.update(id, updatePartDto);
+    return this.partsService.update(id, updatePartDto, auth);
   }
 
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.partsService.remove(id);
+  remove(@Param('id') id: string, @Headers('authorization') auth: string,) {
+    return this.partsService.remove(id, auth);
   }
 
   // STOCK ENDPOINTS

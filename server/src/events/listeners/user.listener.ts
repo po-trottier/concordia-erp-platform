@@ -18,7 +18,6 @@ export class UserListener {
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
     @InjectModel(Event.name) private eventModel: Model<EventDocument>,
-    @InjectModel(Audit.name) private auditModel: Model<AuditDocument>,
   ) {}
 
   @OnEvent(EventMap.USER_CREATED.id)

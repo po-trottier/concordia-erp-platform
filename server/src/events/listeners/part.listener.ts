@@ -1,18 +1,19 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { OnEvent } from '@nestjs/event-emitter';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import {Injectable, Logger} from '@nestjs/common';
+import {OnEvent} from '@nestjs/event-emitter';
+import {InjectModel} from '@nestjs/mongoose';
+import {Model} from 'mongoose';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Event, EventDocument } from '../../api/events/schemas/events.schema';
+import {Event, EventDocument} from '../../api/events/schemas/events.schema';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { User, UserDocument } from '../../api/users/schemas/user.schema';
+import {User, UserDocument} from '../../api/users/schemas/user.schema';
 import {Part, PartDocument} from '../../api/parts/parts/schemas/part.schema';
-import { PartStockDocument } from '../../api/parts/parts/schemas/part-stock.schema';
-import { EventMap, getEmails } from '../common';
-import { Mail } from '../../shared/mail';
-import { CONTACT_EMAIL } from '../../shared/constants';
+import {PartStockDocument} from '../../api/parts/parts/schemas/part-stock.schema';
+import {EventMap, getEmails} from '../common';
+import {Mail} from '../../shared/mail';
+import {CONTACT_EMAIL} from '../../shared/constants';
 import {UserToken} from "../../shared/user-token.interface";
 import {Audit, AuditDocument} from "../../api/audits/schemas/audits.schema";
+import {AuditActions} from "../../api/audits/audit.actions.enum";
 
 @Injectable()
 export class PartListener {
@@ -43,8 +44,14 @@ export class PartListener {
       });
     }
 
-    const document : AuditDocument = {module: Part.name, target: args.part.name}
-    const auditEntry = new this.auditModel(document)
+    const audit : Audit = {
+      module: Part.name,
+      action: AuditActions.CREATE,
+      date: new Date(Date.now()),
+      target: args.part.name,
+      author: args.token.username,
+    }
+    const auditEntry = new this.auditModel(audit)
     await auditEntry.save();
 
     this.logger.log(
@@ -53,7 +60,7 @@ export class PartListener {
   }
 
   @OnEvent(EventMap.PART_DELETED.id)
-  async handlePartDeleted(part: PartDocument) {
+  async handlePartDeleted(args: {part: PartDocument, token: UserToken}) {
     const emails = await getEmails(
       EventMap.PART_DELETED,
       this.eventModel,
@@ -66,10 +73,20 @@ export class PartListener {
         from: CONTACT_EMAIL,
         subject: '[EPIC Resource Planner] Part Deleted',
         html: `<p>A part was deleted in your EPIC Resource Planner instance. The details are below:</p><p>${JSON.stringify(
-          part,
+          args.part,
         )}</p>`,
       });
     }
+
+    const audit : Audit = {
+      module: Part.name,
+      action: AuditActions.DELETE,
+      date: new Date(Date.now()),
+      target: args.part.name,
+      author: args.token.username,
+    }
+    const auditEntry = new this.auditModel(audit)
+    await auditEntry.save();
 
     this.logger.log(
       'A part was deleted. ' + emails.length + ' user(s) notified.',
@@ -77,7 +94,7 @@ export class PartListener {
   }
 
   @OnEvent(EventMap.PART_MODIFIED.id)
-  async handlePartModified(part: PartDocument) {
+  async handlePartModified(args: {part: PartDocument, token: UserToken}) {
     const emails = await getEmails(
       EventMap.PART_MODIFIED,
       this.eventModel,
@@ -90,10 +107,20 @@ export class PartListener {
         from: CONTACT_EMAIL,
         subject: '[EPIC Resource Planner] Part Modified',
         html: `<p>A part was modified in your EPIC Resource Planner instance. The details are below:</p><p>${JSON.stringify(
-          part,
+          args.part,
         )}</p>`,
       });
     }
+    console.log(args)
+    const audit : Audit = {
+      module: Part.name,
+      action: AuditActions.UPDATE,
+      date: new Date(Date.now()),
+      target: args.part.name,
+      author: args.token.username,
+    }
+    const auditEntry = new this.auditModel(audit)
+    await auditEntry.save();
 
     this.logger.log(
       'A part was modified. ' + emails.length + ' user(s) notified.',

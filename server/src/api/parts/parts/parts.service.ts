@@ -86,25 +86,31 @@ export class PartsService {
    *
    * @param id string of the part's objectId
    * @param updatePartDto dto used to update parts
+   * @param auth
    */
-  async update(id: string, updatePartDto: UpdatePartDto): Promise<Part> {
+  async update(id: string, updatePartDto: UpdatePartDto, auth: string): Promise<Part> {
     const updatedPart = await this.partModel.findByIdAndUpdate(
       id,
       { $set: { ...updatePartDto } },
       { new: true },
     );
 
-    const result = this.validatePartFound(updatedPart, id);
-    this.emitter.emit(EventMap.PART_MODIFIED.id, result);
-    return result;
+    const decoded: any = this.jwtService.decode(auth.substr(7));
+    const token : UserToken = decoded;
+
+    const part = this.validatePartFound(updatedPart, id);
+    console.log(part)
+    this.emitter.emit(EventMap.PART_MODIFIED.id, {part, token});
+    return part;
   }
 
   /**
    * Deletes part by id using mongoose partModel
    *
    * @param id string of the part's objectId
+   * @param auth
    */
-  async remove(id: string): Promise<Part> {
+  async remove(id: string, auth: string): Promise<Part> {
     //make sure no product depends on the part
     const dependentProducts = await this.productModel.find({
       'parts.partId': id,
@@ -130,11 +136,14 @@ export class PartsService {
       await log.delete();
     }
 
+    const decoded: any = this.jwtService.decode(auth.substr(7));
+    const token : UserToken = decoded;
+
     //Finally, remove the part
     const deletedPart = await this.partModel.findByIdAndDelete(id);
-    const result = this.validatePartFound(deletedPart, id);
-    this.emitter.emit(EventMap.PART_DELETED.id, result);
-    return result;
+    const part = this.validatePartFound(deletedPart, id);
+    this.emitter.emit(EventMap.PART_DELETED.id, {part, token});
+    return part;
   }
 
   /**
