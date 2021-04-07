@@ -51,17 +51,17 @@ export const ForgotPasswordModal = () => {
         console.log("hello");
         setIsModalVisible(true);
         console.log(isModalVisible);
-      }} style={{width: '100%', justifyContent: 'center'}}>
+      }} style={{width: '100%', justifyContent: 'center', marginTop: 8}}>
         Forgot Password?
       </Button>
 
       <Modal title='Reset Password' visible={isModalVisible} onOk={form.submit} onCancel={handleCancel} style={{zIndex: 99999999999999}}>
         <Form form={form} onFinish={handleSubmit}>
           <Row align='middle' style={{ marginBottom: 16 }}>
-            <Col sm={3} span={9}>
+            <Col span={24}>
               <span>Email:</span>
             </Col>
-            <Col sm={20} span={15}>
+            <Col span={24}>
               <Form.Item
                 style={{ marginBottom: 0 }}
                 name='email'
