@@ -58,15 +58,15 @@ export const ForgotPasswordModal = () => {
       <Modal title='Reset Password' visible={isModalVisible} onOk={form.submit} onCancel={handleCancel} style={{zIndex: 99999999999999}}>
         <Form form={form} onFinish={handleSubmit}>
           <Row align='middle' style={{ marginBottom: 16 }}>
-            <Col sm={6} span={9}>
+            <Col sm={3} span={9}>
               <span>Email:</span>
             </Col>
-            <Col sm={18} span={15}>
+            <Col sm={20} span={15}>
               <Form.Item
                 style={{ marginBottom: 0 }}
                 name='email'
                 rules={[{ required: true, message: 'Please enter your email.' }]}>
-                <Input placeholder='Your email' />
+                <Input placeholder='Please enter your email' />
               </Form.Item>
             </Col>
           </Row>

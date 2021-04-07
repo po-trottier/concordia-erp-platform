@@ -98,7 +98,7 @@ export const Routes : Route[] = [
     path: '/reset-password',
     exact: false,
     title: 'Reset Password',
-    icon: 'rollback',
+    icon: 'lock',
     page: ResetPassword,
     auth: [Role.ANY]
   },

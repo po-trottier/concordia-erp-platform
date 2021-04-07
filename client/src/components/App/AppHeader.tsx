@@ -35,7 +35,7 @@ export const AppHeader = () => {
     }
   };
 
-  const changePassword = () => {
+  const resetPassword = () => {
     try {
       history.push('/reset-password');
     } catch (e) {
@@ -49,8 +49,8 @@ export const AppHeader = () => {
       <Menu.Item onClick={logOut}>
         Log Out
       </Menu.Item>
-      <Menu.Item onClick={changePassword}>
-        Change Password
+      <Menu.Item onClick={resetPassword}>
+        Reset Password
       </Menu.Item>
     </Menu>
   );
