@@ -46,11 +46,11 @@ export const AppHeader = () => {
 
   const dropdown = (
     <Menu>
-      <Menu.Item onClick={logOut}>
-        Log Out
+      <Menu.Item onClick={resetPassword} style={{ textAlign: 'center' }}>
+        Change Password
       </Menu.Item>
-      <Menu.Item onClick={resetPassword}>
-        Reset Password
+      <Menu.Item onClick={logOut} style={{ textAlign: 'center' }}>
+        Log Out
       </Menu.Item>
     </Menu>
   );

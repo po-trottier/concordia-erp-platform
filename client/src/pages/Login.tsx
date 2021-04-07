@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Card, Form, Layout, Typography} from 'antd';
+import {Card, Layout, Typography} from 'antd';
 
 import { LoginForm } from '../components/Login/LoginForm';
 import {ForgotPasswordModal} from "../components/Login/ForgotPasswordModal";
@@ -9,7 +9,7 @@ const { Content } = Layout;
 
 export const Login = () => {
   return (
-    <Layout id='app-content' className='site-layout ant-layout-sider' style={{ minHeight: '100vh', minWidth: '100%', marginLeft: 0 }}>
+    <Layout id='app-content' className='dark-background' style={{ minHeight: '100vh', minWidth: '100%', marginLeft: 0 }}>
       <Content className='robot-background'>
         <div className='app-centered-card'>
           <Card style={{ margin: '0 32px' }}>
