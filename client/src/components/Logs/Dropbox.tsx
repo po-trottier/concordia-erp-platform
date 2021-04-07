@@ -13,8 +13,8 @@ export const Dropbox = () => {
   const updated = useSelector((state : RootState) => state.dropbox.updated);
 
   const { open, isOpen } = useDropboxChooser({
-    appKey: 'bi2msqa4xuxy011',
-    chooserOptions: { multiselect: false, linkType: 'direct' },
+    appKey: process.env.REACT_APP_APP_KEY,
+    chooserOptions: { multiselect: false, linkType: 'preview' },
     onSelected: (files : any) => {
       handleSuccess(files);
     },
@@ -24,7 +24,7 @@ export const Dropbox = () => {
   });
 
   const dbx = new Dbx({
-    accessToken: 'oQ2YpqFmtFEAAAAAAAAAASVGkjlXl1afaVGSJsSPg0KeMdHWJFhH4p-Y4HkNltxm',
+    accessToken: process.env.REACT_APP_ACCESS_TOKEN,
     fetch: window.fetch.bind(window),
   });
 
