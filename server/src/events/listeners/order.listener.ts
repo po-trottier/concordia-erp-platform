@@ -21,6 +21,50 @@ export class OrderListener {
     @InjectModel(Event.name) private eventModel: Model<EventDocument>,
   ) {}
 
+  getPayableEmailHTML(orders: MaterialOrderDocument[]) {
+    let total = 0;
+    let html = `<p>Some accounts payable were <b>paid</b> in your EPIC Resource Planner instance. The details are below:</p>`;
+
+    orders.forEach((order: any) => {
+      total += order.amountDue;
+      html += `<ul>
+        <li>Product ID: ${order.materialId.id}</li>
+        <li>Product Name: ${order.materialId.name}</li>
+        <li>Quantity: ${order.quantity}</li>
+        <li>Amount Due: ${order.amountDue}$</li>
+        <li>Date Ordered: ${order.dateOrdered.toLocaleDateString('en-US')}</li>
+      </ul>`;
+    });
+
+    html += `<p><b>Total Paid: ${total}$</b></p>`;
+
+    return html;
+  }
+
+  getReceivableEmailHTML(args: {
+    email: string;
+    orders: ProductOrderDocument[];
+  }) {
+    let total = 0;
+    let html = `<p>An account receivable was <b>paid</b> in your EPIC Resource Planner instance. The details are below:</b>
+      <p><b>Customer Email:</b> ${args.email}</p>`;
+
+    args.orders.forEach((order: any) => {
+      total += order.amountDue;
+      html += `<ul>
+        <li>Product ID: ${order.productId.id}</li>
+        <li>Product Name: ${order.productId.name}</li>
+        <li>Quantity: ${order.quantity}</li>
+        <li>Amount Due: ${order.amountDue}$</li>
+        <li>Date Ordered: ${order.dateOrdered.toLocaleDateString('en-US')}</li>
+      </ul>`;
+    });
+
+    html += `<p><b>Total Paid: ${total}$</b></p>`;
+
+    return html;
+  }
+
   @OnEvent(EventMap.ACCOUNT_PAYABLE_PAID.id)
   async handleAccountPayable(orders: MaterialOrderDocument[]) {
     const emails = await getEmails(
@@ -34,9 +78,7 @@ export class OrderListener {
         to: emails,
         from: CONTACT_EMAIL,
         subject: '[EPIC Resource Planner] Account Payable Paid',
-        html: `<p>Accounts payable were paid in your EPIC Resource Planner instance. The details are below:</p><p>${JSON.stringify(
-          orders,
-        )}</p>`,
+        html: this.getPayableEmailHTML(orders),
       });
     }
 
@@ -46,7 +88,10 @@ export class OrderListener {
   }
 
   @OnEvent(EventMap.ACCOUNT_RECEIVABLE_PAID.id)
-  async handleAccountReceivable(orders: ProductOrderDocument[]) {
+  async handleAccountReceivable(args: {
+    email: string;
+    orders: ProductOrderDocument[];
+  }) {
     const emails = await getEmails(
       EventMap.ACCOUNT_RECEIVABLE_PAID,
       this.eventModel,
@@ -58,9 +103,7 @@ export class OrderListener {
         to: emails,
         from: CONTACT_EMAIL,
         subject: '[EPIC Resource Planner] Account Receivable Paid',
-        html: `<p>Accounts receivable were paid in your EPIC Resource Planner instance. The details are below:</p><p>${JSON.stringify(
-          orders,
-        )}</p>`,
+        html: this.getReceivableEmailHTML(args),
       });
     }
 

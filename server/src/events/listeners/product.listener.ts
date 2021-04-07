@@ -22,6 +22,60 @@ export class ProductListener {
     @InjectModel(Event.name) private eventModel: Model<EventDocument>,
   ) {}
 
+  getEmailHTML(product: ProductDocument, action: string) {
+    return `<p>A product was <b>${action}</b> in your EPIC Resource Planner instance. The details are below:</p>
+      <ul>
+        <li><b>ID:</b> ${product.id}</li>
+        <li><b>Name:</b> ${product.name}</li>
+        <li><b>Price:</b> ${product.price}</li>
+        <li><b>Parts:</b> ${product.parts.join(', ')}</li>
+        <li><b>Properties:</b> 
+          <ul>
+            ${product.properties.map(
+              (prop) => '<li><b>' + prop.key + ':</b> ' + prop.value + '</li>',
+            )}
+          </ul>
+        </li>
+      </ul>`;
+  }
+
+  getBuildEmailHTML(builds: ProductStockDocument[]) {
+    let html = `<p>Some products were <b>built</b> in your EPIC Resource Planner instance. The details are below:</p>`;
+
+    builds.forEach((build) => {
+      html += `<ul>
+          <li><b>ID:</b> ${build.id}</li>
+          <li><b>Product ID:</b> ${build.productId}</li>
+          <li><b>Quantity:</b> ${build.stock}</li>
+        </ul>`;
+    });
+
+    return html;
+  }
+
+  getOrderEmailHTML(orders: ProductOrderDocument[]) {
+    let total = 0;
+    let html = `<p>A product order was <b>placed</b> in your EPIC Resource Planner instance. The details are below:</p>`;
+
+    orders.forEach((order) => {
+      total += order.amountDue;
+      html += `<ul>
+          <li><b>ID:</b> ${order.id}</li>
+          <li><b>Name:</b> ${order.productId}</li>
+          <li><b>Quantity:</b> ${order.quantity}</li>
+          <li><b>Amount Due:</b> ${order.amountDue}$</li>
+          <li><b>Date Due:</b> ${order.dateDue.toLocaleDateString('en-US')}</li>
+          <li><b>Date Ordered:</b> ${order.dateOrdered.toLocaleDateString(
+            'en-US',
+          )}</li>
+        </ul>`;
+    });
+
+    html += `<p><b>Total Due: ${total}$</b></p>`;
+
+    return html;
+  }
+
   @OnEvent(EventMap.PRODUCT_CREATED.id)
   async handleProductCreated(product: ProductDocument) {
     const emails = await getEmails(
@@ -35,9 +89,7 @@ export class ProductListener {
         to: emails,
         from: CONTACT_EMAIL,
         subject: '[EPIC Resource Planner] New Product Created',
-        html: `<p>A new product was created in your EPIC Resource Planner instance. The details are below:</p><p>${JSON.stringify(
-          product,
-        )}</p>`,
+        html: this.getEmailHTML(product, 'created'),
       });
     }
 
@@ -59,9 +111,7 @@ export class ProductListener {
         to: emails,
         from: CONTACT_EMAIL,
         subject: '[EPIC Resource Planner] Product Deleted',
-        html: `<p>A product was deleted in your EPIC Resource Planner instance. The details are below:</p><p>${JSON.stringify(
-          product,
-        )}</p>`,
+        html: this.getEmailHTML(product, 'deleted'),
       });
     }
 
@@ -83,9 +133,7 @@ export class ProductListener {
         to: emails,
         from: CONTACT_EMAIL,
         subject: '[EPIC Resource Planner] Product Modified',
-        html: `<p>A product was modified in your EPIC Resource Planner instance. The details are below:</p><p>${JSON.stringify(
-          product,
-        )}</p>`,
+        html: this.getEmailHTML(product, 'modified'),
       });
     }
 
@@ -107,9 +155,7 @@ export class ProductListener {
         to: emails,
         from: CONTACT_EMAIL,
         subject: '[EPIC Resource Planner] Product Built',
-        html: `<p>One or more product was built in your EPIC Resource Planner instance. The details are below:</p><p>${JSON.stringify(
-          stocks,
-        )}</p>`,
+        html: this.getBuildEmailHTML(stocks),
       });
     }
 
@@ -131,9 +177,7 @@ export class ProductListener {
         to: emails,
         from: CONTACT_EMAIL,
         subject: '[EPIC Resource Planner] Product Sold',
-        html: `<p>One or more product was sold in your EPIC Resource Planner instance. The details are below:</p><p>${JSON.stringify(
-          orders,
-        )}</p>`,
+        html: this.getOrderEmailHTML(orders),
       });
     }
 
