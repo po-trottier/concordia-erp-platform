@@ -2,19 +2,15 @@ import { AuthController } from '../../../src/api/auth/auth.controller';
 import { AuthService } from '../../../src/api/auth/auth.service';
 import { LoginAuthDto } from '../../../src/api/auth/dto/login-auth.dto';
 import { UsersService } from '../../../src/api/users/users.service';
-import { UserDocument } from '../../../src/api/users/schemas/user.schema';
-import { Model } from 'mongoose';
 import { JwtService } from '@nestjs/jwt';
 
 describe('AuthController', () => {
   let authController: AuthController;
   let authService: AuthService;
   let usersService: UsersService;
-  let userDocumentModel: Model<UserDocument>;
   let jwtService: JwtService;
 
   beforeEach(async () => {
-    usersService = new UsersService(userDocumentModel);
     authService = new AuthService(usersService, jwtService);
     authController = new AuthController(authService);
   });
