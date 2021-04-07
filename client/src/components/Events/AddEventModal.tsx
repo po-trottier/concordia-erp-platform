@@ -17,7 +17,8 @@ export const AddEventModal = () => {
 
   const [form] = Form.useForm();
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [recipientType, setRecipientType] = useState('');
+  const [recipientType, setRecipientType] = useState('customers');
+  const [allInfoUpdated,setAllInfoUpdated] = useState(false);
 
   const emptyEventsData: EventDropdownEntry[] = [];
   const [eventsData, setEventsData] = useState(emptyEventsData);
@@ -57,15 +58,16 @@ export const AddEventModal = () => {
           const data: EventDropdownEntry[] = [];
           res.data.forEach((p: any) => {
             data.push({
-              id: p['_id'],
+              id: p.id,
               name: p.name
             });
           });
           setEventsData(data);
+          console.log(data);
         }
       })
       .catch(err => {
-        // message.error('Something went wrong while fetching the list of events.');
+        message.error('Something went wrong while fetching the list of events.');
         console.error(err);
       });
   }, [eventsUpdated]);
@@ -87,7 +89,7 @@ export const AddEventModal = () => {
         }
       })
       .catch(err => {
-        // message.error('Something went wrong while fetching the list of customers.');
+        message.error('Something went wrong while fetching the list of customers.');
         console.error(err);
       });
   }, [customersUpdated]);
@@ -109,7 +111,7 @@ export const AddEventModal = () => {
         }
       })
       .catch(err => {
-        // message.error('Something went wrong while fetching the list of users.');
+        message.error('Something went wrong while fetching the list of users.');
         console.error(err);
       });
   }, [usersUpdated]);
@@ -131,10 +133,10 @@ export const AddEventModal = () => {
       .then(() => {
         setIsModalVisible(false);
         form.resetFields();
-        message.success('User was added successfully.');
+        message.success('Event was added successfully.');
       })
       .catch((err) => {
-        message.error('Something went wrong while creating the user.');
+        message.error('Something went wrong while creating the Event.');
         console.error(err);
       })
       .finally(() => {
@@ -149,9 +151,6 @@ export const AddEventModal = () => {
 
   const handleRecipientChange = (e : RadioChangeEvent) => {
     form.resetFields(['customers','users','roles']);
-    // setCustomerId(emptyCustomerId);
-    // setUserId(emptyUserId);
-    // setRole(emptyRole);
     setRecipientType(e.target.value);
   };
 
@@ -253,6 +252,10 @@ export const AddEventModal = () => {
     }
   }
 
+  const updateEventId = (e: any) => {
+    setEventId(e);
+  }
+
   const updateCustomerId = (e: any) => {
     setCustomerId(e);
   }
@@ -316,7 +319,7 @@ export const AddEventModal = () => {
                   optionFilterProp='children'
                   onChange={ (e: any) =>setEventId(e) }>
                   {eventsData.map((event) => (
-                    <Option key={event.id} value={event.name}>
+                    <Option key={event.name} value={event.id}>
                       {event.name}
                     </Option>))}
                 </Select>
