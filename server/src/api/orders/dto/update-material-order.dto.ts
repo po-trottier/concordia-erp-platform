@@ -13,6 +13,7 @@ export class UpdateMaterialOrderDto {
   @IsString()
   materialId: string;
 
+  @IsOptional()
   @IsNotEmpty()
   @IsString()
   locationId: string;
@@ -34,6 +35,7 @@ export class UpdateMaterialOrderDto {
   @IsNotEmpty()
   dateDue: Date;
 
+  @IsOptional()
   @IsBoolean()
   isPaid: boolean;
 }

@@ -125,12 +125,11 @@ export class MaterialOrdersService {
   }
 
   @Cron(CronExpression.EVERY_DAY_AT_10AM)
-  async handleAccountsPayablePayments() {
-    const unpaidOrders: MaterialOrderDocument[] = await this.materialOrderModel.find(
-      {
-        isPaid: false,
-      },
-    );
+  async handlePayments() {
+    const unpaidOrders: MaterialOrderDocument[] = await this.materialOrderModel
+      .find({ isPaid: false })
+      .populate('materialId')
+      .exec();
 
     const paidOrders: MaterialOrder[] = [];
 
