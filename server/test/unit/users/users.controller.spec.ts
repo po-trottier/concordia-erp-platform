@@ -5,6 +5,7 @@ import { UpdateUserDto } from '../../../src/api/users/dto/update-user.dto';
 import { Role } from '../../../src/api/roles/roles.enum';
 import { Model } from 'mongoose';
 import { User, UserDocument } from '../../../src/api/users/schemas/user.schema';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 describe('UsersController', () => {
   jest.setTimeout(30000);
@@ -12,6 +13,7 @@ describe('UsersController', () => {
   let usersController: UsersController;
   let usersService: UsersService;
   let userDocumentModel: Model<UserDocument>;
+  let emitter: EventEmitter2;
 
   const dummyUser: User = {
     firstName: 'System',
@@ -23,7 +25,7 @@ describe('UsersController', () => {
   };
 
   beforeEach(() => {
-    usersService = new UsersService(userDocumentModel);
+    usersService = new UsersService(emitter, userDocumentModel);
     usersController = new UsersController(usersService);
   });
 
@@ -58,7 +60,6 @@ describe('UsersController', () => {
       newUser.firstName = result.firstName;
       newUser.lastName = result.lastName;
       newUser.username = result.username;
-      newUser.password = result.password;
       (newUser.email = result.email),
         (newUser.role = Role.SYSTEM_ADMINISTRATOR);
 

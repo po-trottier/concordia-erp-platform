@@ -1,14 +1,15 @@
 import { AuthService } from '../../../src/api/auth/auth.service';
-import { UsersService } from '../../../src/api/users/users.service';
+import { UserDocument } from '../../../src/api/users/schemas/user.schema';
 import { JwtService } from '@nestjs/jwt';
+import { Model } from 'mongoose';
 
 describe('AuthService', () => {
   let authService: AuthService;
-  let usersService: UsersService;
+  let userDocument: Model<UserDocument>;
   let jwtService: JwtService;
 
   beforeEach(async () => {
-    authService = new AuthService(usersService, jwtService);
+    authService = new AuthService(userDocument, jwtService);
   });
 
   it('should be defined', () => {
