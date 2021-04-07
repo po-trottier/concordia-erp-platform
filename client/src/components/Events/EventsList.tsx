@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button, Card, Input } from 'antd';
 import { EventEntry } from '../../interfaces/EventEntry';
 import { getRoleString } from '../../router/Roles';
 import { ResponsiveTable } from '../ResponsiveTable';
+import { RootState } from '../../store/Store';
+import { setListenerList } from '../../store/slices/ListenerListSlice';
+import { setEventList } from '../../store/slices/EventListSlice';
 import axios from '../../plugins/Axios';
 
 const { Search } = Input;
@@ -14,29 +18,30 @@ enum RecipientTypes {
 }
 
 export const EventsList = () => {
-  const emptyEvents : { name : string, id : string }[] = [];
-  const emptyListeners : EventEntry[] = [];
-  const [eventList, setEventList] = useState(emptyEvents);
-  const [listenerList, setListenerList] = useState(emptyListeners);
+  const dispatch = useDispatch();
+
+  const listeners = useSelector((state : RootState) => state.listenerList.list);
+  const events = useSelector((state : RootState) => state.eventList.list);
+
   const [updated, setUpdated] = useState(false);
   const [searchValue, setSearchValue] = useState('');
 
   useEffect(() => {
     setUpdated(true);
     axios.get('events').then(({ data }) => {
-      setListenerList(data);
+      dispatch(setListenerList(data));
     });
     axios.get('events/all').then(({ data }) => {
-      setEventList(data);
+      dispatch(setEventList(data));
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updated]);
 
   const getEvents = () => {
-    let clone = JSON.parse(JSON.stringify(listenerList));
+    let clone = JSON.parse(JSON.stringify(listeners));
 
     clone.forEach((l : EventEntry) => {
-      const event = eventList.find((e) => e.id === l.eventId);
+      const event = events.find((e : any) => e.id === l.eventId);
       l.eventName = event ? event.name : undefined;
 
       if (l.customerId && l.customerId.length > 0) {
@@ -63,6 +68,7 @@ export const EventsList = () => {
           break;
       }
 
+      // TODO: Open Edit Modal Here onClick
       l.actions = (
         <Button
           size='small'
