@@ -1,6 +1,14 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-const initialState : { meme : any } = {meme : {asdasdas: ''}};
+const initialState : { chartState : any } = {chartState : {
+  options: {
+    chart: {},
+    xaxis: {},
+    stroke: {},
+    colors: []
+  },
+  series: [],
+}};
 
 export const chartSlice = createSlice({
   name: 'chart',
@@ -53,9 +61,7 @@ export const chartSlice = createSlice({
         series: series
       };
 
-      console.log("meme");
-      state.meme = {asdasdas: "masda"};
-      console.log(state.meme);
+      state.chartState = memes;
     },
   }
 });

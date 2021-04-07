@@ -21,7 +21,7 @@ const inventoryColumns = {
 export const ProductInventory = () => {
   const location = useSelector((state : RootState) => state.location.selected);
   const dispatch = useDispatch();
-  const memes = useSelector((state : RootState) => state.chartSlice.meme);
+  const chartData = useSelector((state : RootState) => state.chartSlice.chartState);
 
   const emptyData : ProductHistoryEntry[] = [];
   const [products, setProducts] = useState(emptyData);
@@ -36,7 +36,7 @@ export const ProductInventory = () => {
         }
         setProducts(data);
         dispatch(getChartState(data));
-        console.log(memes);
+        console.log(chartData);
       });
   }, [location]);
 
@@ -63,6 +63,17 @@ export const ProductInventory = () => {
     setSearchValue(e.target.value);
   };
 
+  const  options = {
+    chart: {
+      id: "basic-bar"
+    },
+          xaxis: {
+            type: "datetime"
+          },
+          stroke: chartData.stroke,
+          colors: ["#5d3ff1", "#256a6e"],
+        };
+
   return (
     <div>
       <Card style={{ margin: '24px 0' }}>
@@ -71,10 +82,10 @@ export const ProductInventory = () => {
           onChange={onSearch}
           style={{ marginBottom: 18 }} />
         {
-          //getProducts().length > 0 ?
-          //    <Chart {...dispatch(getChartState(getProducts()))} type="line" height={350} />
-          //    :
-          //  <span>No product transactions were found.</span>
+          getProducts().length > 0 ?
+              <Chart options={options} series={chartData.series} type="line" height={350} />
+              :
+            <span>No product transactions were found.</span>
         }
       </Card>
       <Card style={{ display: getProducts().length > 0 ? 'block' : 'none' }}>
