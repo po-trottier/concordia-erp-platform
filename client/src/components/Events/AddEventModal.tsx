@@ -23,15 +23,6 @@ export const AddEventModal = () => {
   const [eventsData, setEventsData] = useState(emptyEventsData);
   const [eventsUpdated, setEventsUpdated] = useState(false);
 
-  const emptyChosenCustomers: String[] = [];
-  const [chosenCustomers, setChosenCustomers] = useState(emptyChosenCustomers);
-
-  const emptyChosenUsers: String[] = [];
-  const [chosenUsers, setChosenUsers] = useState(emptyChosenUsers);
-
-  const emptyChosenRoles: Role[] = [];
-  const [chosenRoles, setChosenRoles] = useState(emptyChosenRoles);
-
   const emptyCustomersData: CustomerDropdownEntry[] = [];
   const [customersData, setCustomersData] = useState(emptyCustomersData);
   const [customersUpdated, setCustomersUpdated] = useState(false);
@@ -42,6 +33,17 @@ export const AddEventModal = () => {
 
   const emptyRolesData: Role[] = [];
   const [rolesData, setRolesData] = useState(emptyRolesData);
+
+  const [eventId, setEventId] = useState('') ;
+
+  const emptyCustomerId: String[] = [];
+  const [customerId, setCustomerId] = useState(emptyCustomerId);
+
+  const emptyUserId: String[] = [];
+  const [userId, setUserId] = useState(emptyUserId);
+
+  const emptyRole: Role[] = [];
+  const [role, setRole] = useState(emptyRole);
 
 
   const [loading, setLoading] = useState(false);
@@ -114,29 +116,30 @@ export const AddEventModal = () => {
 
   const addEvent = () => {
     const newEvent = {
-      chosenCustomers,
-      chosenUsers,
-      chosenRoles
+      eventId,
+      role,
+      userId,
+      customerId
     }
 
     console.log('New Event: ');
     console.log(newEvent);
 
     setLoading(true);
-    // axios
-    //   .post('/events', newEvent)
-    //   .then(() => {
-    //     setIsModalVisible(false);
-    //     form.resetFields();
-    //     message.success('User was added successfully.');
-    //   })
-    //   .catch((err) => {
-    //     message.error('Something went wrong while creating the user.');
-    //     console.error(err);
-    //   })
-    //   .finally(() => {
-    //     setLoading(false);
-    //   });
+    axios
+      .post('/events', newEvent)
+      .then(() => {
+        setIsModalVisible(false);
+        form.resetFields();
+        message.success('User was added successfully.');
+      })
+      .catch((err) => {
+        message.error('Something went wrong while creating the user.');
+        console.error(err);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   const handleCancel = () => {
@@ -146,9 +149,9 @@ export const AddEventModal = () => {
 
   const handleRecipientChange = (e : RadioChangeEvent) => {
     form.resetFields(['customers','users','roles']);
-    // setChosenCustomers(emptyChosenCustomers);
-    // setChosenUsers(emptyChosenUsers);
-    // setChosenRoles(emptyChosenRoles);
+    // setCustomerId(emptyCustomerId);
+    // setUserId(emptyUserId);
+    // setRole(emptyRole);
     setRecipientType(e.target.value);
   };
 
@@ -172,7 +175,7 @@ export const AddEventModal = () => {
               style={{ width: '100%', display: 'inline-table' }}
               placeholder='Select 1 or more users'
               optionFilterProp='children'
-              onChange={ (e: any) =>updateChosenUsers(e) }>
+              onChange={ (e: any) =>updateUserId(e) }>
               {usersData.map((user) => (
                 <Option key={user.id} value={user.id}>
                   {user.username}
@@ -200,7 +203,7 @@ export const AddEventModal = () => {
                   style={{ width: '100%', display: 'inline-table' }}
                   placeholder='Select 1 or more roles'
                   optionFilterProp='children'
-                  onChange={ (e: any) =>updateChosenRoles(e) }>
+                  onChange={ (e: any) =>updateRole(e) }>
                   {
                     Object.keys(Role).map((rkey, rval) => {
                       if (isFinite(Number(rkey))) {
@@ -237,7 +240,7 @@ export const AddEventModal = () => {
                 style={{ width: '100%', display: 'inline-table' }}
                 placeholder='Select 1 or more customers'
                 optionFilterProp='children'
-                onChange={ (e: any) =>updateChosenCustomers(e) }>
+                onChange={ (e: any) =>updateCustomerId(e) }>
                 {customersData.map((customer) => (
                   <Option key={customer.id} value={customer.id}>
                     {customer.name}
@@ -250,16 +253,16 @@ export const AddEventModal = () => {
     }
   }
 
-  const updateChosenCustomers = (e: any) => {
-    setChosenCustomers(e);
+  const updateCustomerId = (e: any) => {
+    setCustomerId(e);
   }
 
-  const updateChosenUsers = (e: any) => {
-    setChosenUsers(e);
+  const updateUserId = (e: any) => {
+    setUserId(e);
   }
 
-  const updateChosenRoles = (e: any) => {
-    setChosenRoles(e);
+  const updateRole = (e: any) => {
+    setRole(e);
   }
   const hideActionsError = () => {
     const actionsError = document.getElementById('display-actions-error');
@@ -311,7 +314,7 @@ export const AddEventModal = () => {
                   style={{ width: '100%', display: 'inline-table' }}
                   placeholder='Select an action'
                   optionFilterProp='children'
-                  onChange={hideActionsError}>
+                  onChange={ (e: any) =>setEventId(e) }>
                   {eventsData.map((event) => (
                     <Option key={event.id} value={event.name}>
                       {event.name}
