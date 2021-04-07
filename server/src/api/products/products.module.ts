@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import {
@@ -19,6 +19,9 @@ import { LocationsModule } from '../locations/locations.module';
 import { PartsModule } from '../parts/parts.module';
 import { ProductStockService } from './products/product-stock.service';
 import { ProductBuilderService } from './products/product-builder.service';
+import { UsersModule } from '../users/users.module';
+import { EventsModule } from '../events/events.module';
+import { ProductListener } from '../../events/listeners/product.listener';
 
 @Module({
   imports: [
@@ -27,8 +30,11 @@ import { ProductBuilderService } from './products/product-builder.service';
       { name: ProductLog.name, schema: ProductLogSchema },
       { name: ProductStock.name, schema: ProductStockSchema },
     ]),
-    LocationsModule,
-    PartsModule,
+    forwardRef(() => LocationsModule),
+    forwardRef(() => PartsModule),
+    // Events Listener Dependency
+    UsersModule,
+    EventsModule,
     // ENV Support
     ConfigModule.forRoot({ validate, cache: true }),
   ],
@@ -38,7 +44,8 @@ import { ProductBuilderService } from './products/product-builder.service';
     ProductLogsService,
     ProductStockService,
     ProductBuilderService,
+    ProductListener,
   ],
-  exports: [ProductStockService],
+  exports: [ProductsService, ProductStockService, MongooseModule],
 })
 export class ProductsModule {}

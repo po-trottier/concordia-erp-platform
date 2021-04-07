@@ -1,5 +1,5 @@
-import { ApiService } from '../../src/api/api.service';
-import { ApiController } from '../../src/api/api.controller';
+import { ApiService } from '../../src/api/api/api.service';
+import { ApiController } from '../../src/api/api/api.controller';
 
 describe('ApiController', () => {
   let apiController: ApiController;

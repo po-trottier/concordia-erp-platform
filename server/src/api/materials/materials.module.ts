@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { MaterialsService } from './materials/materials.service';
@@ -16,6 +16,10 @@ import { MaterialLogsController } from './materials-logs/material-logs.controlle
 import { MaterialLogsService } from './materials-logs/material-logs.service';
 import { MaterialStockService } from './materials/material-stock.service';
 import { LocationsModule } from '../locations/locations.module';
+import { PartsModule } from '../parts/parts.module';
+import { MaterialListener } from '../../events/listeners/material.listener';
+import { UsersModule } from '../users/users.module';
+import { EventsModule } from '../events/events.module';
 import { validate } from '../../shared/env';
 
 /**
@@ -28,12 +32,22 @@ import { validate } from '../../shared/env';
       { name: MaterialLog.name, schema: MaterialLogSchema },
       { name: MaterialStock.name, schema: MaterialStockSchema },
     ]),
-    LocationsModule,
+    // Avoid Circular Dependencies
+    forwardRef(() => LocationsModule),
+    forwardRef(() => PartsModule),
+    // Events Listener Dependency
+    UsersModule,
+    EventsModule,
     // ENV Support
     ConfigModule.forRoot({ validate, cache: true }),
   ],
   controllers: [MaterialLogsController, MaterialsController],
-  providers: [MaterialsService, MaterialLogsService, MaterialStockService],
-  exports: [MaterialsService, MaterialLogsService, MaterialStockService],
+  providers: [
+    MaterialsService,
+    MaterialLogsService,
+    MaterialStockService,
+    MaterialListener,
+  ],
+  exports: [MaterialsService, MaterialStockService, MongooseModule],
 })
 export class MaterialsModule {}

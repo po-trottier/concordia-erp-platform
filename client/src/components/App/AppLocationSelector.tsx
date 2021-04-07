@@ -101,13 +101,19 @@ export const AppLocationSelector = (props : HTMLProps<HTMLDivElement>) => {
   };
 
   const removeLocation = async (id : string) => {
-    await axios.delete('/locations/' + id);
     const clone = JSON.parse(JSON.stringify(locations));
     const i = clone.findIndex((loc : LocationEntry) => loc._id === id);
-    if (i >= 0) {
-      clone.splice(i, 1);
-    }
-    setLocations(clone);
+    Modal.confirm({
+      async onOk () {
+        await axios.delete('/locations/' + id);
+        if (i >= 0) {
+          clone.splice(i, 1);
+        }
+        setLocations(clone);
+      },
+      title: 'Remove a Location',
+      content: 'Are you sure you want to remove the "' + locations[i].name + '" location? Any stock found at this location will also be removed.',
+    })
   };
 
   const editLocation = async (location : LocationEntry) => {

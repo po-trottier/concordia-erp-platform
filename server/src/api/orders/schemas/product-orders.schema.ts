@@ -1,5 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema as mongooseSchema } from 'mongoose';
+import { Customer } from '../../customers/schemas/customers.schema';
+import { Product } from '../../products/products/schemas/products.schema';
 
 export type ProductOrderDocument = ProductOrder & Document;
 
@@ -10,7 +12,7 @@ export type ProductOrderDocument = ProductOrder & Document;
 export class ProductOrder {
   @Prop({
     type: mongooseSchema.Types.ObjectId,
-    ref: 'Customer',
+    ref: Customer.name,
     required: true,
     index: true,
   })
@@ -18,7 +20,7 @@ export class ProductOrder {
 
   @Prop({
     type: mongooseSchema.Types.ObjectId,
-    ref: 'Product',
+    ref: Product.name,
     required: true,
     index: true,
   })

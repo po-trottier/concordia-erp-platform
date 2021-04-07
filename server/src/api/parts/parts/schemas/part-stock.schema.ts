@@ -1,5 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema as mongooseSchema } from 'mongoose';
+import { Part } from './part.schema';
+import { Location } from '../../../locations/schemas/location.schema';
 
 export type PartStockDocument = PartStock & Document;
 
@@ -10,7 +12,7 @@ export type PartStockDocument = PartStock & Document;
 export class PartStock {
   @Prop({
     type: mongooseSchema.Types.ObjectId,
-    ref: 'Part',
+    ref: Part.name,
     required: true,
     index: true,
   })
@@ -18,7 +20,7 @@ export class PartStock {
 
   @Prop({
     type: mongooseSchema.Types.ObjectId,
-    ref: 'Location',
+    ref: Location.name,
     required: true,
     index: true,
   })

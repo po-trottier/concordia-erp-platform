@@ -1,10 +1,751 @@
 {
 	"info": {
-		"_postman_id": "aa7414df-1af3-4d3d-9daf-40c01bfaadf0",
+		"_postman_id": "6eb14ccf-9af0-4be6-a98e-945a5f4cdbf5",
 		"name": "Epic Resource Planner",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201){",
+									"    pm.environment.set(\"JWT\", pm.response.json().token);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"admin\", \r\n    \"password\": \"Password1!\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/auth/login",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Customers",
+			"item": [
+				{
+					"name": "Get customer",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/customers",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get customer by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/customers/6050f5606d28266ed73700a4",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"customers",
+								"6050f5606d28266ed73700a4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create customer",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Montreal\",\n    \"email\": \"Montreal@city.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/customers",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete customer by id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/customer/60220fd37d5a1f2c5a6d9778",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"customer",
+								"60220fd37d5a1f2c5a6d9778"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update customer by id",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"City of Montreal\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/customers/6050f5606d28266ed73700a4",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"customers",
+								"6050f5606d28266ed73700a4"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Events",
+			"item": [
+				{
+					"name": "Get events list",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/events/all",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"events",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get events",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/events",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"events"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get event by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/events/606ab02cb1c9166558ee0c00",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"events",
+								"606ab02cb1c9166558ee0c00"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create event",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"eventId\": \"ckn5l30au000h8s58lycm3s08\",\n    \"userId\": [\"606ac40c46c1b47d380405ab\"]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/events",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"events"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete event by id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/events/60220fd37d5a1f2c5a6d9778",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"events",
+								"60220fd37d5a1f2c5a6d9778"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update event by id",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"role\": [2, 4]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/events/606c0d6aa371bd79f0e35d4c",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"events",
+								"606c0d6aa371bd79f0e35d4c"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Finance",
+			"item": [
+				{
+					"name": "Get Finance Entries",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/finance",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"finance"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Finance Entry by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/finance/60245c2d2816ce3290065c38",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"finance",
+								"60245c2d2816ce3290065c38"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Finance Entry",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Pink bike tassels\",\n    \"description\": \"makes it go faster\",\n    \"stock\": 70000\n}"
+						},
+						"url": {
+							"raw": "{{url}}/finance",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"finance"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Finance Entry by Id",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"stock\": 4\n}"
+						},
+						"url": {
+							"raw": "{{url}}/finance/6023033e12523415393afc0f",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"finance",
+								"6023033e12523415393afc0f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Finance Entry",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/finance/60220fd37d5a1f2c5a6d9778",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"finance",
+								"60220fd37d5a1f2c5a6d9778"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Locations",
+			"item": [
+				{
+					"name": "Get locations",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/locations",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"locations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get location by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/locations/60245c2d2816ce3290065c38",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"locations",
+								"60245c2d2816ce3290065c38"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create location",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Montreal\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/locations",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"locations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete location by id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/locations/60220fd37d5a1f2c5a6d9778",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"locations",
+								"60220fd37d5a1f2c5a6d9778"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update location by id",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Toronto\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/locations/6036fa7f0981691472cb1855",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"locations",
+								"6036fa7f0981691472cb1855"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Materials",
+			"item": [
+				{
+					"name": "Materials",
+					"item": [
+						{
+							"name": "Get materials",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/materials",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"materials"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get material by id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/materials/60245c2d2816ce3290065c38",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"materials",
+										"60245c2d2816ce3290065c38"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create material",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Titanium\",\r\n    \"description\": \"great for when the frame enters the atmosphere\",\r\n    \"stock\": 5,\r\n    \"density\": 10,\r\n    \"vendorName\": \"US Military\",\r\n    \"price\": 4500,\r\n    \"image\": \"kk\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/materials",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"materials"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update material by ID",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"price\":421\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/materials/60370af46eb5f44900b72081",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"materials",
+										"60370af46eb5f44900b72081"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete material",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/materials/606801f03c5b6033b0bb2064",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"materials",
+										"606801f03c5b6033b0bb2064"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Material Logs",
+					"item": [
+						{
+							"name": "Get materials logs",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/materials/logs/604fffcaaab3a61d1cf65d28",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"materials",
+										"logs",
+										"604fffcaaab3a61d1cf65d28"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get material log by material id and location id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/materials/logs/6052cd93a54ab130087d5af7/606801f03c5b6033b0bb2064",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"materials",
+										"logs",
+										"6052cd93a54ab130087d5af7",
+										"606801f03c5b6033b0bb2064"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Material Stock",
+					"item": [
+						{
+							"name": "Update material stock by material id and location id",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "[\n    {\n        \"materialId\": \"604eaa8a4be3294198d036d3\",\n        \"stockUsed\": 50,\n        \"stockBought\": 325\n    }\n]",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/materials/stock/604eaa804be3294198d036d2",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"materials",
+										"stock",
+										"604eaa804be3294198d036d2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get material stock by material id and location id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/materials/stock/6052cd93a54ab130087d5af7/606801f03c5b6033b0bb2064",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"materials",
+										"stock",
+										"6052cd93a54ab130087d5af7",
+										"606801f03c5b6033b0bb2064"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get material stocks at a location",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/materials/stock/604eaa804be3294198d036d2",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"materials",
+										"stock",
+										"604eaa804be3294198d036d2"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
 		{
 			"name": "Orders",
 			"item": [
@@ -310,6 +1051,243 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
+									"raw": "{\n    \"name\": \"Pink bike tassels\",\n    \"description\": \"makes it go faster\",\n    \"materials\": [\n        { \"materialId\": \"604fdd0d1ae15c1bf0779aeb\", \"quantity\": 1 }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/parts",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"parts"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update part by id",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Pink bike ASS\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/parts/6036fa7f0981691472cb1855",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"parts",
+										"6036fa7f0981691472cb1855"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete part by id",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{url}}/parts/60220fd37d5a1f2c5a6d9778",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"parts",
+										"60220fd37d5a1f2c5a6d9778"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Part Logs",
+					"item": [
+						{
+							"name": "Get parts logs",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/parts/logs/604eaa804be3294198d036d2",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"parts",
+										"logs",
+										"604eaa804be3294198d036d2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get part log by part id, location id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/parts/logs/604eaa804be3294198d036d2/604fdd471ae15c1bf0779aec",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"parts",
+										"logs",
+										"604eaa804be3294198d036d2",
+										"604fdd471ae15c1bf0779aec"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Part Stock",
+					"item": [
+						{
+							"name": "Update part stock by part id and location id",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"stockBuilt\": 1500,\n    \"stockUsed\": 600\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/parts/stock/604eaa804be3294198d036d2/604fdd471ae15c1bf0779aec",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"parts",
+										"stock",
+										"604eaa804be3294198d036d2",
+										"604fdd471ae15c1bf0779aec"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get part stocks at a location",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/parts/stock/604569e1a9aad81bc8accc07",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"parts",
+										"stock",
+										"604569e1a9aad81bc8accc07"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get part stock by part id and location id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/parts/6045b523a65c8c10cb12bee7/stock/604569e1a9aad81bc8accc07",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"parts",
+										"6045b523a65c8c10cb12bee7",
+										"stock",
+										"604569e1a9aad81bc8accc07"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Parts",
+			"item": [
+				{
+					"name": "Parts",
+					"item": [
+						{
+							"name": "Get parts",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/parts",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"parts"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get part by id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/parts/604583485eca8e26ab01107f",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"parts",
+										"604583485eca8e26ab01107f"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create part",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
 									"raw": "{\n    \"name\": \"Pink bike tassels\",\n    \"description\": \"makes it go faster\",\n    \"stock\": 70000\n}",
 									"options": {
 										"raw": {
@@ -496,279 +1474,6 @@
 							"response": []
 						}
 					]
-				}
-			]
-		},
-		{
-			"name": "Finance",
-			"item": [
-				{
-					"name": "Get Finance Entries",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/finance",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"finance"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Finance Entry by id",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/finance/60245c2d2816ce3290065c38",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"finance",
-								"60245c2d2816ce3290065c38"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Create Finance Entry",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"name\": \"Pink bike tassels\",\n    \"description\": \"makes it go faster\",\n    \"stock\": 70000\n}"
-						},
-						"url": {
-							"raw": "{{url}}/finance",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"finance"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update Finance Entry by Id",
-					"request": {
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"stock\": 4\n}"
-						},
-						"url": {
-							"raw": "{{url}}/finance/6023033e12523415393afc0f",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"finance",
-								"6023033e12523415393afc0f"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete Finance Entry",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/finance/60220fd37d5a1f2c5a6d9778",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"finance",
-								"60220fd37d5a1f2c5a6d9778"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Auth",
-			"item": [
-				{
-					"name": "Login",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"if (pm.response.code === 201){",
-									"    pm.environment.set(\"JWT\", pm.response.json().token);",
-									"}"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"admin\", \r\n    \"password\": \"Password1!\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{url}}/auth/login",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"auth",
-								"login"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Users",
-			"item": [
-				{
-					"name": "Get users",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "",
-								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIiLCJpZCI6IjYwMmYxMDQwM2M0MTAyNWRmNGE3NzcwMyIsInJvbGVzIjo0LCJpYXQiOjE2MTM3NDA2ODIsImV4cCI6MTY0NTI3NjY4Mn0.MDtn-AGo-_5GQw7ctUDcgWfZIUzV4evHYMf2rJNyI5k",
-								"type": "text",
-								"disabled": true
-							}
-						],
-						"url": {
-							"raw": "{{url}}/users",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"users"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get user by id",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/users/user",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"users",
-								"user"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Create user",
-					"request": {
-						"auth": {
-							"type": "oauth2",
-							"oauth2": [
-								{
-									"key": "addTokenTo",
-									"value": "header",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"user\",\r\n    \"password\": \"Jr:6sh[3F}`^ns\",\r\n    \"name\": \"Tom Cruz\",\r\n    \"role\": 4\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{url}}/users",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"users"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update user by id",
-					"request": {
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"password\": \"password\"\r\n}"
-						},
-						"url": {
-							"raw": "{{url}}/users/user",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"users",
-								"user"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete part by id",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "{{url}}/users/user",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"users",
-								"user"
-							]
-						}
-					},
-					"response": []
 				}
 			]
 		},
@@ -1045,521 +1750,58 @@
 			]
 		},
 		{
-			"name": "Parts",
+			"name": "Users",
 			"item": [
 				{
-					"name": "Parts",
-					"item": [
-						{
-							"name": "Get parts",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{url}}/parts",
-									"host": [
-										"{{url}}"
-									],
-									"path": [
-										"parts"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Get part by id",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{url}}/parts/604583485eca8e26ab01107f",
-									"host": [
-										"{{url}}"
-									],
-									"path": [
-										"parts",
-										"604583485eca8e26ab01107f"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Create part",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"name\": \"Pink bike tassels\",\n    \"description\": \"makes it go faster\",\n    \"materials\": [\n        { \"materialId\": \"604fdd0d1ae15c1bf0779aeb\", \"quantity\": 1 }\n    ]\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{url}}/parts",
-									"host": [
-										"{{url}}"
-									],
-									"path": [
-										"parts"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Update part by id",
-							"request": {
-								"method": "PATCH",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"name\": \"Pink bike ASS\"\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{url}}/parts/6036fa7f0981691472cb1855",
-									"host": [
-										"{{url}}"
-									],
-									"path": [
-										"parts",
-										"6036fa7f0981691472cb1855"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Delete part by id",
-							"request": {
-								"method": "DELETE",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
-								"url": {
-									"raw": "{{url}}/parts/60220fd37d5a1f2c5a6d9778",
-									"host": [
-										"{{url}}"
-									],
-									"path": [
-										"parts",
-										"60220fd37d5a1f2c5a6d9778"
-									]
-								}
-							},
-							"response": []
-						}
-					]
-				},
-				{
-					"name": "Part Logs",
-					"item": [
-						{
-							"name": "Get parts logs",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{url}}/parts/logs/604eaa804be3294198d036d2",
-									"host": [
-										"{{url}}"
-									],
-									"path": [
-										"parts",
-										"logs",
-										"604eaa804be3294198d036d2"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Get part log by part id, location id",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{url}}/parts/logs/604eaa804be3294198d036d2/604fdd471ae15c1bf0779aec",
-									"host": [
-										"{{url}}"
-									],
-									"path": [
-										"parts",
-										"logs",
-										"604eaa804be3294198d036d2",
-										"604fdd471ae15c1bf0779aec"
-									]
-								}
-							},
-							"response": []
-						}
-					]
-				},
-				{
-					"name": "Part Stock",
-					"item": [
-						{
-							"name": "Update part stock by part id and location id",
-							"request": {
-								"method": "PATCH",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"stockBuilt\": 1500,\n    \"stockUsed\": 600\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{url}}/parts/stock/604eaa804be3294198d036d2/604fdd471ae15c1bf0779aec",
-									"host": [
-										"{{url}}"
-									],
-									"path": [
-										"parts",
-										"stock",
-										"604eaa804be3294198d036d2",
-										"604fdd471ae15c1bf0779aec"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Get part stocks at a location",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{url}}/parts/stock/604569e1a9aad81bc8accc07",
-									"host": [
-										"{{url}}"
-									],
-									"path": [
-										"parts",
-										"stock",
-										"604569e1a9aad81bc8accc07"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Get part stock by part id and location id",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{url}}/parts/6045b523a65c8c10cb12bee7/stock/604569e1a9aad81bc8accc07",
-									"host": [
-										"{{url}}"
-									],
-									"path": [
-										"parts",
-										"6045b523a65c8c10cb12bee7",
-										"stock",
-										"604569e1a9aad81bc8accc07"
-									]
-								}
-							},
-							"response": []
-						}
-					]
-				}
-			]
-		},
-		{
-			"name": "Materials",
-			"item": [
-				{
-					"name": "Materials",
-					"item": [
-						{
-							"name": "Get materials",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{url}}/materials",
-									"host": [
-										"{{url}}"
-									],
-									"path": [
-										"materials"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Get material by id",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{url}}/materials/60245c2d2816ce3290065c38",
-									"host": [
-										"{{url}}"
-									],
-									"path": [
-										"materials",
-										"60245c2d2816ce3290065c38"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Create material",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"name\": \"Titanium\",\r\n    \"description\": \"great for when the frame enters the atmosphere\",\r\n    \"stock\": 5,\r\n    \"density\": 10,\r\n    \"vendorName\": \"US Military\",\r\n    \"price\": 4500,\r\n    \"image\": \"kk\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{url}}/materials",
-									"host": [
-										"{{url}}"
-									],
-									"path": [
-										"materials"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Update material by ID",
-							"request": {
-								"method": "PATCH",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"price\":421\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{url}}/materials/60370af46eb5f44900b72081",
-									"host": [
-										"{{url}}"
-									],
-									"path": [
-										"materials",
-										"60370af46eb5f44900b72081"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Delete material",
-							"request": {
-								"method": "DELETE",
-								"header": [],
-								"url": {
-									"raw": "{{url}}/materials/60345637fb095c1370323654",
-									"host": [
-										"{{url}}"
-									],
-									"path": [
-										"materials",
-										"60345637fb095c1370323654"
-									]
-								}
-							},
-							"response": []
-						}
-					]
-				},
-				{
-					"name": "Material Logs",
-					"item": [
-						{
-							"name": "Get materials logs",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{url}}/materials/logs/604fffcaaab3a61d1cf65d28",
-									"host": [
-										"{{url}}"
-									],
-									"path": [
-										"materials",
-										"logs",
-										"604fffcaaab3a61d1cf65d28"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Get material log by material id, location id and date",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{url}}/materials/logs/60469ddae84e51169f6d5621/604569e1a9aad81bc8accc07/2021-03-08T05:00:00.000Z",
-									"host": [
-										"{{url}}"
-									],
-									"path": [
-										"materials",
-										"logs",
-										"60469ddae84e51169f6d5621",
-										"604569e1a9aad81bc8accc07",
-										"2021-03-08T05:00:00.000Z"
-									]
-								}
-							},
-							"response": []
-						}
-					]
-				},
-				{
-					"name": "Material Stock",
-					"item": [
-						{
-							"name": "Update material stock by material id and location id",
-							"request": {
-								"method": "PATCH",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "[\n    {\n        \"materialId\": \"604eaa8a4be3294198d036d3\",\n        \"stockUsed\": 50,\n        \"stockBought\": 325\n    }\n]",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{url}}/materials/stock/604eaa804be3294198d036d2",
-									"host": [
-										"{{url}}"
-									],
-									"path": [
-										"materials",
-										"stock",
-										"604eaa804be3294198d036d2"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Get material stock by material id and location id",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{url}}/materials/stock/604eaa804be3294198d036d2/604eaa8a4be3294198d036d3",
-									"host": [
-										"{{url}}"
-									],
-									"path": [
-										"materials",
-										"stock",
-										"604eaa804be3294198d036d2",
-										"604eaa8a4be3294198d036d3"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Get material stocks at a location",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{url}}/materials/stock/604eaa804be3294198d036d2",
-									"host": [
-										"{{url}}"
-									],
-									"path": [
-										"materials",
-										"stock",
-										"604eaa804be3294198d036d2"
-									]
-								}
-							},
-							"response": []
-						}
-					]
-				}
-			]
-		},
-		{
-			"name": "Locations",
-			"item": [
-				{
-					"name": "Get locations",
+					"name": "Get users",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIiLCJpZCI6IjYwMmYxMDQwM2M0MTAyNWRmNGE3NzcwMyIsInJvbGVzIjo0LCJpYXQiOjE2MTM3NDA2ODIsImV4cCI6MTY0NTI3NjY4Mn0.MDtn-AGo-_5GQw7ctUDcgWfZIUzV4evHYMf2rJNyI5k",
+								"type": "text",
+								"disabled": true
+							}
+						],
 						"url": {
-							"raw": "{{url}}/locations",
+							"raw": "{{url}}/users",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
-								"locations"
+								"users"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Get location by id",
+					"name": "Get user by id",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{url}}/locations/60245c2d2816ce3290065c38",
+							"raw": "{{url}}/users/user",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
-								"locations",
-								"60245c2d2816ce3290065c38"
+								"users",
+								"user"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Create location",
+					"name": "Create user",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Montreal\"\n}",
+							"raw": "{\r\n    \"username\": \"user\",\r\n    \"firstName\": \"Tom\",\r\n    \"lastName\": \"Cruz\",\r\n    \"email\": \"test@test.com\",\r\n    \"role\": 4\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1567,19 +1809,41 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}/locations",
+							"raw": "{{url}}/users",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
-								"locations"
+								"users"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Delete location by id",
+					"name": "Update user by id",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"password\": \"password\"\r\n}"
+						},
+						"url": {
+							"raw": "{{url}}/users/user",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users",
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete part by id",
 					"request": {
 						"method": "DELETE",
 						"header": [],
@@ -1588,155 +1852,13 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{url}}/locations/60220fd37d5a1f2c5a6d9778",
+							"raw": "{{url}}/users/user",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
-								"locations",
-								"60220fd37d5a1f2c5a6d9778"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update location by id",
-					"request": {
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"name\": \"Toronto\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{url}}/locations/6036fa7f0981691472cb1855",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"locations",
-								"6036fa7f0981691472cb1855"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Customers",
-			"item": [
-				{
-					"name": "Get customer",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/customers",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"customers"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get customer by id",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/customers/6050f5606d28266ed73700a4",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"customers",
-								"6050f5606d28266ed73700a4"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Create customer",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"name\": \"Montreal\",\n    \"email\": \"Montreal@city.com\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{url}}/customers",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"customers"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete customer by id",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "{{url}}/customer/60220fd37d5a1f2c5a6d9778",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"customer",
-								"60220fd37d5a1f2c5a6d9778"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update customer by id",
-					"request": {
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"name\": \"City of Montreal\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{url}}/customers/6050f5606d28266ed73700a4",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"customers",
-								"6050f5606d28266ed73700a4"
+								"users",
+								"user"
 							]
 						}
 					},

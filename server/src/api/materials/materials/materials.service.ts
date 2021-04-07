@@ -1,10 +1,28 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Model } from 'mongoose';
 import { CreateMaterialDto } from './dto/create-material.dto';
 import { UpdateMaterialDto } from './dto/update-material.dto';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Material, MaterialDocument } from './schemas/material.schema';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { Part, PartDocument } from '../../parts/parts/schemas/part.schema';
+import {
+  MaterialStock,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  MaterialStockDocument,
+} from './schemas/material-stock.schema';
+import {
+  MaterialLog,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  MaterialLogDocument,
+} from '../materials-logs/schemas/material-log.schema';
+import { EventMap } from '../../../events/common';
 
 /**
  * Used by the MaterialsController, handles material data storage and retrieval.
@@ -12,7 +30,15 @@ import { Material, MaterialDocument } from './schemas/material.schema';
 @Injectable()
 export class MaterialsService {
   constructor(
-    @InjectModel(Material.name) private materialModel: Model<MaterialDocument>,
+    private emitter: EventEmitter2,
+    @InjectModel(Part.name)
+    private partModel: Model<PartDocument>,
+    @InjectModel(Material.name)
+    private materialModel: Model<MaterialDocument>,
+    @InjectModel(MaterialLog.name)
+    private materialLogModel: Model<MaterialLogDocument>,
+    @InjectModel(MaterialStock.name)
+    private materialStockModel: Model<MaterialStockDocument>,
   ) {}
 
   /**
@@ -22,7 +48,10 @@ export class MaterialsService {
    */
   async create(createMaterialDto: CreateMaterialDto): Promise<Material> {
     const createdMaterial = new this.materialModel(createMaterialDto);
-    return await createdMaterial.save();
+
+    const material = await createdMaterial.save();
+    this.emitter.emit(EventMap.MATERIAL_CREATED.id, material);
+    return material;
   }
 
   /**
@@ -57,7 +86,10 @@ export class MaterialsService {
       { $set: { ...updateMaterialDto } },
       { new: true },
     );
-    return this.validateMaterialFound(updatedMaterial, id);
+
+    const result = this.validateMaterialFound(updatedMaterial, id);
+    this.emitter.emit(EventMap.MATERIAL_MODIFIED.id, result);
+    return result;
   }
 
   /**
@@ -66,8 +98,33 @@ export class MaterialsService {
    * @param id string of the material's objectId
    */
   async remove(id: string): Promise<Material> {
+    // Make sure no parts depend on the material
+    const dependantParts = await this.partModel.find({
+      'materials.materialId': id,
+    });
+    if (dependantParts.length > 0) {
+      throw new ForbiddenException(
+        'One or more parts (' +
+          dependantParts.map((p: Part) => p.name).join(', ') +
+          ') use the material you are trying to delete.',
+      );
+    }
+    // Remove all stock entries for that material
+    const stocks = await this.materialStockModel.find({ materialId: id });
+    for (const stock of stocks) {
+      await stock.delete();
+    }
+    // Remove all logs for that material
+    const logs = await this.materialLogModel.find({ materialId: id });
+    for (const log of logs) {
+      await log.delete();
+    }
+    // Remove the material
     const deletedMaterial = await this.materialModel.findByIdAndDelete(id);
-    return this.validateMaterialFound(deletedMaterial, id);
+
+    const result = this.validateMaterialFound(deletedMaterial, id);
+    this.emitter.emit(EventMap.MATERIAL_DELETED.id, result);
+    return result;
   }
 
   /**

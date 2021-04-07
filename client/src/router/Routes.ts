@@ -6,6 +6,7 @@ import { Materials } from '../pages/Materials';
 import { Customers } from '../pages/Customers';
 import { Finances } from '../pages/Finances';
 import { Logs } from '../pages/Logs';
+import { Events } from '../pages/Events';
 
 import { Route } from '../interfaces/Route';
 import { Role } from './Roles';
@@ -83,6 +84,14 @@ export const Routes : Route[] = [
     title: 'Users',
     icon: 'user',
     page: Users,
+    auth: [Role.SYSTEM_ADMINISTRATOR]
+  },
+  {
+    path: '/events',
+    exact: false,
+    title: 'Events',
+    icon: 'notification',
+    page: Events,
     auth: [Role.SYSTEM_ADMINISTRATOR]
   },
   {
