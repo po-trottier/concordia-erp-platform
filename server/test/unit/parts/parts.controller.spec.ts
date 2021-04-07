@@ -17,6 +17,7 @@ import {
   PartStock,
   PartStockDocument,
 } from '../../../src/api/parts/parts/schemas/part-stock.schema';
+import { ProductDocument } from '../../../src/api/products/products/schemas/products.schema';
 import { PartLogDocument } from '../../../src/api/parts/parts-logs/schemas/part-log.schema';
 import { LocationDocument } from '../../../src/api/locations/schemas/location.schema';
 import { MaterialsService } from '../../../src/api/materials/materials/materials.service';
@@ -25,6 +26,9 @@ import { MaterialStockService } from '../../../src/api/materials/materials/mater
 import { MaterialStockDocument } from '../../../src/api/materials/materials/schemas/material-stock.schema';
 import { MaterialLogsService } from '../../../src/api/materials/materials-logs/material-logs.service';
 import { MaterialLogDocument } from '../../../src/api/materials/materials-logs/schemas/material-log.schema';
+import { ProductStockDocument } from '../../../src/api/products/products/schemas/product-stock.schema';
+import { ProductLogDocument } from '../../../src/api/products/products-logs/schemas/product-log.schema';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 describe('PartsController', () => {
   let partsController: PartsController;
@@ -33,16 +37,20 @@ describe('PartsController', () => {
   let locationsService: LocationsService;
   let partStockService: PartStockService;
   let partLogDocument: Model<PartLogDocument>;
-  let locationDocument: Model<LocationDocument>;
-  let partsDocumentModel: Model<PartDocument>;
-  let partStockDocument: Model<PartStockDocument>;
   let materialService: MaterialsService;
   let materialDocument: Model<MaterialDocument>;
   let materialStockService: MaterialStockService;
-  let materialStockDocument: Model<MaterialStockDocument>;
   let materialLogsService: MaterialLogsService;
-  let materialLogDocument: Model<MaterialLogDocument>;
   let partBuilderService: PartBuilderService;
+  let locationDocument: Model<LocationDocument>;
+  let materialStockDocument: Model<MaterialStockDocument>;
+  let partStockDocument: Model<PartStockDocument>;
+  let productStockDocument: Model<ProductStockDocument>;
+  let materialLogDocument: Model<MaterialLogDocument>;
+  let partsDocument: Model<PartDocument>;
+  let productLogDocument: Model<ProductLogDocument>;
+  let productDocument: Model<ProductDocument>;
+  let emitter: EventEmitter2;
 
   const dummyPart: Part = {
     name: 'Handlebar',
@@ -56,16 +64,37 @@ describe('PartsController', () => {
   };
 
   beforeEach(async () => {
-    partsService = new PartsService(partsDocumentModel);
+    partsService = new PartsService(
+      emitter,
+      productDocument,
+      partsDocument,
+      partLogDocument,
+      partStockDocument
+    );
     partLogsService = new PartLogsService(partLogDocument);
-    locationsService = new LocationsService(locationDocument);
+    locationsService = new LocationsService(
+      emitter,
+      locationDocument,
+      materialStockDocument,
+      partStockDocument,
+      productStockDocument,
+      materialLogDocument,
+      partLogDocument,
+      productLogDocument
+    );
     partStockService = new PartStockService(
       partStockDocument,
       partsService,
       partLogsService,
       locationsService,
     );
-    materialService = new MaterialsService(materialDocument);
+    materialService = new MaterialsService(
+      emitter,
+      partsDocument,
+      materialDocument,
+      materialLogDocument,
+      materialStockDocument
+    );
     materialLogsService = new MaterialLogsService(materialLogDocument);
     materialStockService = new MaterialStockService(
       materialStockDocument,
@@ -73,7 +102,7 @@ describe('PartsController', () => {
       materialLogsService,
       locationsService
     );
-    partBuilderService = new PartBuilderService(partsService, materialStockService, partStockService);
+    partBuilderService = new PartBuilderService(emitter, partsService, materialStockService, partStockService);
     partsController = new PartsController(partsService, partStockService, partBuilderService);
   });
 
