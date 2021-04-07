@@ -30,20 +30,30 @@ export const chartSlice = createSlice({
       const seriesNames: any = {};
       rows.forEach((row: any) => {
         if (! seriesNames[row.name])  {
-          seriesNames[row.name] = true;
-          series.push({
+          // create series
+          const newSeries = {
             name: row.name,
             data: []
-          });
+          }
+          seriesNames[row.name] = true;
 
           if (row.isEstimate){
-            dashArray.push(5);
+            for (let i = 0; i < series.length ; i++) {
+              if (series[i].name === row.name.substring(0, row.name.length - 11)) {
+                series.splice(i+1, 0, newSeries);
+                dashArray.splice(i+1, 0, 5);
+                colours.splice(i+1, 0, colours[i]);
+                break;
+              }
+            }
           } else {
+            series.push(newSeries);
             dashArray.push(0);
             colours.push('#'+(Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0'));
           }
         }
 
+        // add x-y pair to series
         series.find((item: any) => item.name === row.name).data.push({
           x: row.date,
           y: row.stock
