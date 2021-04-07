@@ -4,7 +4,7 @@ import { FunnelPlotTwoTone, SafetyCertificateTwoTone, DropboxOutlined } from '@a
 
 import { Audit } from '../components/Logs/Audit';
 import { LogList } from '../components/Logs/LogList';
-import { Dropbox } from '../components/Logs/Dropbox';
+import { useDropboxChooser } from 'use-dropbox-chooser';
 
 export const Logs = () => {
 
@@ -20,12 +20,28 @@ export const Logs = () => {
         return <Audit />;
       case 'logs':
         return <LogList />;
-      case 'dropbox':
-        return <Dropbox />;
       default:
         return <Audit />;
     }
   };
+
+  const { open, isOpen } = useDropboxChooser({
+    appKey: process.env.REACT_APP_APP_KEY,
+    chooserOptions: { multiselect: false, linkType: 'preview' },
+    onSelected: (files : any) => {
+      handleSuccess(files);
+    }
+  });
+
+  const handleSuccess = (files : any[]) => {
+    const a = document.createElement('a');
+    a.setAttribute('hidden', '');
+    a.setAttribute('href', files[0].link);
+    a.setAttribute('target', '_blank');
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }
 
   return (
     <div>
@@ -36,7 +52,11 @@ export const Logs = () => {
         <Menu.Item key='logs' icon={<SafetyCertificateTwoTone twoToneColor='#eb2f96' />}>
           All Logs
         </Menu.Item>
-        <Menu.Item key='dropbox' icon={<DropboxOutlined style={{color: "#4E89FF"}}/>}>
+        <Menu.Item
+        icon={<DropboxOutlined
+        style={{color: "#4E89FF"}}/>}
+        onClick={open}
+        disabled={isOpen}>
           Dropbox
         </Menu.Item>
       </Menu>
