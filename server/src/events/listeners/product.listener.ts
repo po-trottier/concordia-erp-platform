@@ -6,12 +6,16 @@ import { Model } from 'mongoose';
 import { Event, EventDocument } from '../../api/events/schemas/events.schema';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { User, UserDocument } from '../../api/users/schemas/user.schema';
-import { ProductDocument } from '../../api/products/products/schemas/products.schema';
+import {Product, ProductDocument} from '../../api/products/products/schemas/products.schema';
 import { ProductStockDocument } from '../../api/products/products/schemas/product-stock.schema';
 import { ProductOrderDocument } from '../../api/orders/schemas/product-orders.schema';
 import { EventMap, getEmails } from '../common';
 import { Mail } from '../../shared/mail';
 import { CONTACT_EMAIL } from '../../shared/constants';
+import {AuditActions} from "../../api/audits/audit.actions.enum";
+import {Material, MaterialDocument} from "../../api/materials/materials/schemas/material.schema";
+import {UserToken} from "../../shared/user-token.interface";
+import {Audit, AuditDocument} from "../../api/audits/schemas/audits.schema";
 
 @Injectable()
 export class ProductListener {
@@ -20,6 +24,7 @@ export class ProductListener {
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
     @InjectModel(Event.name) private eventModel: Model<EventDocument>,
+    @InjectModel(Audit.name) private auditModel: Model<AuditDocument>,
   ) {}
 
   getEmailHTML(product: ProductDocument, action: string) {
@@ -77,7 +82,7 @@ export class ProductListener {
   }
 
   @OnEvent(EventMap.PRODUCT_CREATED.id)
-  async handleProductCreated(product: ProductDocument) {
+  async handleProductCreated(args: {product: ProductDocument, token: UserToken}) {
     const emails = await getEmails(
       EventMap.PRODUCT_CREATED,
       this.eventModel,
@@ -89,9 +94,11 @@ export class ProductListener {
         to: emails,
         from: CONTACT_EMAIL,
         subject: '[EPIC Resource Planner] New Product Created',
-        html: this.getEmailHTML(product, 'created'),
+        html: this.getEmailHTML(args.product, 'created'),
       });
     }
+
+    await this.createAudit(AuditActions.CREATE, args.product, args.token);
 
     this.logger.log(
       'A product was created. ' + emails.length + ' user(s) notified.',
@@ -99,7 +106,7 @@ export class ProductListener {
   }
 
   @OnEvent(EventMap.PRODUCT_DELETED.id)
-  async handleProductDeleted(product: ProductDocument) {
+  async handleProductDeleted(args: {product: ProductDocument, token: UserToken}) {
     const emails = await getEmails(
       EventMap.PRODUCT_DELETED,
       this.eventModel,
@@ -111,9 +118,11 @@ export class ProductListener {
         to: emails,
         from: CONTACT_EMAIL,
         subject: '[EPIC Resource Planner] Product Deleted',
-        html: this.getEmailHTML(product, 'deleted'),
+        html: this.getEmailHTML(args.product, 'deleted'),
       });
     }
+
+    await this.createAudit(AuditActions.DELETE, args.product, args.token);
 
     this.logger.log(
       'A product was deleted. ' + emails.length + ' user(s) notified.',
@@ -121,7 +130,7 @@ export class ProductListener {
   }
 
   @OnEvent(EventMap.PRODUCT_MODIFIED.id)
-  async handleProductModified(product: ProductDocument) {
+  async handleProductModified(args: {product: ProductDocument, token: UserToken}) {
     const emails = await getEmails(
       EventMap.PRODUCT_MODIFIED,
       this.eventModel,
@@ -133,9 +142,11 @@ export class ProductListener {
         to: emails,
         from: CONTACT_EMAIL,
         subject: '[EPIC Resource Planner] Product Modified',
-        html: this.getEmailHTML(product, 'modified'),
+        html: this.getEmailHTML(args.product, 'modified'),
       });
     }
+
+    await this.createAudit(AuditActions.UPDATE, args.product, args.token);
 
     this.logger.log(
       'A product was modified. ' + emails.length + ' user(s) notified.',
@@ -184,5 +195,17 @@ export class ProductListener {
     this.logger.log(
       'A product was sold. ' + emails.length + ' user(s) notified.',
     );
+  }
+
+  async createAudit(action: AuditActions, product: ProductDocument, token: UserToken){
+    const audit : Audit = {
+      module: Product.name,
+      action: action,
+      date: new Date(Date.now()),
+      target: product.name,
+      author: token.username,
+    }
+    const auditEntry = new this.auditModel(audit)
+    await auditEntry.save();
   }
 }

@@ -1,5 +1,6 @@
 import {
   Body,
+  Headers,
   Controller,
   Delete,
   Get,
@@ -31,12 +32,13 @@ export class ProductsController {
 
   /**
    * Handles POST requests to create products
+   * @param auth
    * @param createProductDto
    */
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
   @Post()
-  create(@Body(ValidationPipe) createProductDto: CreateProductDto) {
-    return this.productsService.create(createProductDto);
+  create(@Headers('authorization') auth: string, @Body(ValidationPipe) createProductDto: CreateProductDto) {
+    return this.productsService.create(createProductDto, auth);
   }
 
   /**
@@ -61,15 +63,17 @@ export class ProductsController {
   /**
    * Handles PATCH request to update an existing product by id
    * @param id
+   * @param auth
    * @param updateProductDto
    */
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
   @Patch(':id')
   update(
     @Param('id') id: string,
+    @Headers('authorization') auth: string,
     @Body(ValidationPipe) updateProductDto: UpdateProductDto,
   ) {
-    return this.productsService.update(id, updateProductDto);
+    return this.productsService.update(id, auth, updateProductDto);
   }
 
   /**
@@ -94,11 +98,12 @@ export class ProductsController {
   /**
    * Handles DELETE requests to remove an existing product by id
    * @param id
+   * @param auth
    */
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.productsService.remove(id);
+  remove(@Param('id') id: string, @Headers('authorization') auth: string,) {
+    return this.productsService.remove(id, auth);
   }
 
   // STOCK ENDPOINTS

@@ -22,6 +22,8 @@ import { ProductBuilderService } from './products/product-builder.service';
 import { UsersModule } from '../users/users.module';
 import { EventsModule } from '../events/events.module';
 import { ProductListener } from '../../events/listeners/product.listener';
+import {AuthModule} from "../auth/auth.module";
+import {AuditsModule} from "../audits/audits.module";
 
 @Module({
   imports: [
@@ -35,6 +37,8 @@ import { ProductListener } from '../../events/listeners/product.listener';
     // Events Listener Dependency
     UsersModule,
     EventsModule,
+    AuthModule,
+    AuditsModule,
     // ENV Support
     ConfigModule.forRoot({ validate, cache: true }),
   ],
