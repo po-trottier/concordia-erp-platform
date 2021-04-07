@@ -22,15 +22,12 @@ export const AddEventModal = () => {
 
   const emptyEventsData: EventDropdownEntry[] = [];
   const [eventsData, setEventsData] = useState(emptyEventsData);
-  const [eventsUpdated, setEventsUpdated] = useState(false);
 
   const emptyCustomersData: CustomerDropdownEntry[] = [];
   const [customersData, setCustomersData] = useState(emptyCustomersData);
-  const [customersUpdated, setCustomersUpdated] = useState(false);
 
   const emptyUsersData: UserDropdownEntry[] = [];
   const [usersData, setUsersData] = useState(emptyUsersData);
-  const [usersUpdated, setUsersUpdated] = useState(false);
 
   const emptyRolesData: Role[] = [];
   const [rolesData, setRolesData] = useState(emptyRolesData);
@@ -49,9 +46,11 @@ export const AddEventModal = () => {
 
   const [loading, setLoading] = useState(false);
 
-  //get the events
+  
   useEffect(() => {
-    setEventsUpdated(true);
+    setAllInfoUpdated(true);
+
+    //get the events
     axios.get('/events/all')
       .then((res) => {
         if (res && res.data) {
@@ -63,19 +62,15 @@ export const AddEventModal = () => {
             });
           });
           setEventsData(data);
-          console.log(data);
         }
       })
       .catch(err => {
         message.error('Something went wrong while fetching the list of events.');
         console.error(err);
       });
-  }, [eventsUpdated]);
 
-  //get the customers
-  useEffect(() => {
-    setCustomersUpdated(true);
-    axios.get('/customers')
+      //get the customers
+      axios.get('/customers')
       .then((res) => {
         if (res && res.data) {
           const data: CustomerDropdownEntry[] = [];
@@ -92,12 +87,9 @@ export const AddEventModal = () => {
         message.error('Something went wrong while fetching the list of customers.');
         console.error(err);
       });
-  }, [customersUpdated]);
 
-  //get the users
-  useEffect(() => {
-    setUsersUpdated(true);
-    axios.get('/users')
+      //get the users
+      axios.get('/users')
       .then((res) => {
         if (res && res.data) {
           const data: UserDropdownEntry[] = [];
@@ -114,7 +106,7 @@ export const AddEventModal = () => {
         message.error('Something went wrong while fetching the list of users.');
         console.error(err);
       });
-  }, [usersUpdated]);
+  }, [allInfoUpdated]);
 
   const addEvent = () => {
     let newEvent: any;
@@ -133,9 +125,6 @@ export const AddEventModal = () => {
           newEvent = { eventId, customerId };
           break;
     }
-
-    console.log('New Event: ');
-    console.log(newEvent);
 
     setLoading(true);
     axios
@@ -257,7 +246,6 @@ export const AddEventModal = () => {
               </Form.Item>
             </Col>
           </Row>);
-        break;
     }
   }
 
@@ -349,7 +337,7 @@ export const AddEventModal = () => {
                 style={{ marginBottom: 0 }}
                 name='recipient'
                 rules={[{ required: true, message: 'Please select a group for this event.' }]}>
-                <Radio.Group name="recipient" defaultValue={'customers'} onChange={handleRecipientChange}>
+                <Radio.Group name="recipient" onChange={handleRecipientChange}>
                   <Radio value={'customers'}>Customers</Radio>
                   <Radio value={'users'}>Users</Radio>
                   <Radio value={'roles'}>Roles</Radio>
