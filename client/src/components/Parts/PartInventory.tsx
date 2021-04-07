@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Input } from 'antd';
-import { Line } from '@ant-design/charts';
 import { useSelector } from 'react-redux';
 import { ResponsiveTable } from '../ResponsiveTable';
 import { PartHistoryEntry } from '../../interfaces/PartHistoryEntry';
 import { RootState } from '../../store/Store';
 import axios from '../../plugins/Axios';
+import Chart from "react-apexcharts";
+import { getChartState, getTableData } from "../../shared/predictions";
 
 const { Search } = Input;
 
@@ -27,10 +28,8 @@ export const PartInventory = () => {
   useEffect(() => {
     axios.get('parts/logs/' + location).then(async ({ data }) => {
       for (const row of data) {
-        row.date = new Date(row.date).toLocaleDateString();
-        if (row.isEstimate)
-          row.date = row.date + ' (estimate)';
-        row.name = row.partId.name;
+        row.date = row.date.substring(0,10);
+        row.name = row.partId.name + (row.isEstimate ? ' (estimate)' : '');
       }
       setPartsData(data);
     });
@@ -60,19 +59,14 @@ export const PartInventory = () => {
           onChange={onSearch}
           style={{ marginBottom: 18 }} />
         {getParts().length > 0 ? (
-          <Line
-            data={getParts()}
-            xField='date'
-            yField='stock'
-            seriesField='name'
-            style={{ marginBottom: '48px' }} />
+          <Chart {...getChartState(getParts())} type="line" height={350} />
         ) : (
           <span>No part transactions were found.</span>
         )}
       </Card>
       {getParts().length > 0 ? (
         <Card>
-          <ResponsiveTable values={getParts()} columns={inventoryColumns} />
+          <ResponsiveTable values={getTableData(getParts())} columns={inventoryColumns} />
         </Card>
       ) : null}
     </div>
