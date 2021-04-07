@@ -26,7 +26,7 @@ export const Logs = () => {
   };
 
   const { open, isOpen } = useDropboxChooser({
-    appKey: process.env.REACT_APP_APP_KEY,
+    appKey: process.env.REACT_APP_DROPBOX_KEY,
     chooserOptions: { multiselect: false, linkType: 'preview' },
     onSelected: (files : any) => {
       handleSuccess(files);

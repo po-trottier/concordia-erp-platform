@@ -23,7 +23,7 @@ const persistConfig = {
   // whitelist contains the name of reducers that we want to persist
   transforms: [
     encryptTransform({
-      secretKey: 'A2esCQW4z4N2MT5n',
+      secretKey: process.env.REACT_APP_PERSIST_KEY || 'MewjZa95PDxjg4Ez',
       onError: (error) => {
         console.error(error);
       },
