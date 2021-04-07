@@ -11,6 +11,7 @@ import { MaterialOrderDocument } from '../../api/orders/schemas/material-orders.
 import { EventMap, getEmails } from '../common';
 import { Mail } from '../../shared/mail';
 import { CONTACT_EMAIL } from '../../shared/constants';
+import {Audit, AuditDocument} from "../../api/audits/schemas/audits.schema";
 
 @Injectable()
 export class MaterialListener {
@@ -19,6 +20,7 @@ export class MaterialListener {
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
     @InjectModel(Event.name) private eventModel: Model<EventDocument>,
+    @InjectModel(Audit.name) private auditModel: Model<AuditDocument>,
   ) {}
 
   @OnEvent(EventMap.MATERIAL_CREATED.id)
@@ -28,6 +30,8 @@ export class MaterialListener {
       this.eventModel,
       this.userModel,
     );
+    this.jwtService.decode(auth.substr(7));
+
 
     if (emails.length > 0) {
       await Mail.instance.send({

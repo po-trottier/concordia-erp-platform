@@ -9,6 +9,7 @@ import { User, UserDocument } from '../../api/users/schemas/user.schema';
 import { EventMap, getEmails } from '../common';
 import { Mail } from '../../shared/mail';
 import { CONTACT_EMAIL } from '../../shared/constants';
+import {Audit, AuditDocument} from "../../api/audits/schemas/audits.schema";
 
 @Injectable()
 export class UserListener {
@@ -17,6 +18,7 @@ export class UserListener {
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
     @InjectModel(Event.name) private eventModel: Model<EventDocument>,
+    @InjectModel(Audit.name) private auditModel: Model<AuditDocument>,
   ) {}
 
   @OnEvent(EventMap.USER_CREATED.id)

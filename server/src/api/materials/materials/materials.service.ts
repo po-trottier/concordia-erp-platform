@@ -21,6 +21,7 @@ import {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   MaterialLogDocument,
 } from '../materials-logs/schemas/material-log.schema';
+import {Audit, AuditDocument} from "../../audits/schemas/audits.schema";
 
 /**
  * Used by the MaterialsController, handles material data storage and retrieval.
@@ -36,6 +37,8 @@ export class MaterialsService {
     private materialLogModel: Model<MaterialLogDocument>,
     @InjectModel(MaterialStock.name)
     private materialStockModel: Model<MaterialStockDocument>,
+    @InjectModel(Audit.name)
+    private auditModel: Model<AuditDocument>,
   ) {}
 
   /**
@@ -45,6 +48,8 @@ export class MaterialsService {
    */
   async create(createMaterialDto: CreateMaterialDto): Promise<Material> {
     const createdMaterial = new this.materialModel(createMaterialDto);
+    // const createdAudit = new this.auditModel();
+    // await createdAudit.save();
     return await createdMaterial.save();
   }
 
