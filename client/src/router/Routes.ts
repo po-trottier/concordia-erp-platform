@@ -101,6 +101,5 @@ export const Routes : Route[] = [
     icon: 'bars',
     page: Logs,
     auth: [Role.SYSTEM_ADMINISTRATOR]
-  },
-
+  }
 ];

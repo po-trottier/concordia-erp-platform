@@ -38,7 +38,6 @@ export const ForgotPasswordModal = () => {
         style={{ width: '100%', justifyContent: 'center', marginTop: 8 }}>
         Forgot Password?
       </Button>
-
       <Modal
         title='Reset Password'
         style={{ maxWidth: 400 }}
