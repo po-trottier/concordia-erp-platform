@@ -6,7 +6,6 @@ import { ProductHistoryEntry } from '../../interfaces/ProductHistoryEntry';
 import { RootState } from '../../store/Store';
 import axios from '../../plugins/Axios';
 import Chart from "react-apexcharts";
-//import {getChartState} from '../../store/slices/ChartSlice';
 import { getChartState, getTableData } from "../../shared/predictions";
 
 const { Search } = Input;
@@ -22,7 +21,6 @@ const inventoryColumns = {
 export const ProductInventory = () => {
   const location = useSelector((state : RootState) => state.location.selected);
   const dispatch = useDispatch();
-//  const chartData = useSelector((state : RootState) => state.chartSlice.chartState);
 
   const emptyData : ProductHistoryEntry[] = [];
   const [products, setProducts] = useState(emptyData);
@@ -36,8 +34,6 @@ export const ProductInventory = () => {
           row.name = row.productId.name + (row.isEstimate ? ' (estimate)' : '');
         }
         setProducts(data);
- //       dispatch(getChartState(data));
- //       console.log(chartData);
       });
   }, [location]);
 
