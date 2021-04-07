@@ -119,6 +119,7 @@ export const AddEventModal = () => {
       chosenRoles
     }
 
+    console.log('New Event: ');
     console.log(newEvent);
 
     setLoading(true);
