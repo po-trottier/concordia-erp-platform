@@ -1,3 +1,4 @@
+import React from 'react';
 import { CustomerEntry } from './CustomerEntry';
 import { UserEntry } from './UserEntry';
 import { Role } from '../router/Roles';
@@ -7,5 +8,9 @@ export interface EventEntry {
   eventId : string,
   customerId : CustomerEntry[],
   userId :UserEntry[],
-  role? : Role[],
+  role : Role[],
+  eventName? : string,
+  recipientType? : string,
+  recipients? : string,
+  actions? : React.ReactNode,
 }

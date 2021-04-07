@@ -25,6 +25,29 @@ export class PartListener {
     @InjectModel(Audit.name) private auditModel: Model<AuditDocument>,
   ) {}
 
+  getEmailHTML(part: PartDocument, action: string) {
+    return `<p>A part was <b>${action}</b> in your EPIC Resource Planner instance. The details are below:</p>
+      <ul>
+        <li><b>ID:</b> ${part.id}</li>
+        <li><b>Name:</b> ${part.name}</li>
+        <li><b>Materials:</b> ${part.materials.join(', ')}</li>
+      </ul>`;
+  }
+
+  getBuildEmailHTML(builds: PartStockDocument[]) {
+    let html = `<p>Some parts were <b>built</b> in your EPIC Resource Planner instance. The details are below:</p>`;
+
+    builds.forEach((build) => {
+      html += `<ul>
+          <li><b>ID:</b> ${build.id}</li>
+          <li><b>Part ID:</b> ${build.partId}</li>
+          <li><b>Quantity:</b> ${build.stock}</li>
+        </ul>`;
+    });
+
+    return html;
+  }
+
   @OnEvent(EventMap.PART_CREATED.id)
   async handlePartCreated(args: {part: PartDocument, token: UserToken}) {
     const emails = await getEmails(
@@ -38,9 +61,8 @@ export class PartListener {
         to: emails,
         from: CONTACT_EMAIL,
         subject: '[EPIC Resource Planner] New Part Created',
-        html: `<p>A new part was created in your EPIC Resource Planner instance. The details are below:</p><p>${JSON.stringify(
-          args.part,
-        )}</p>`,
+
+        html: this.getEmailHTML(args.part, 'created'),
       });
     }
 
@@ -72,9 +94,7 @@ export class PartListener {
         to: emails,
         from: CONTACT_EMAIL,
         subject: '[EPIC Resource Planner] Part Deleted',
-        html: `<p>A part was deleted in your EPIC Resource Planner instance. The details are below:</p><p>${JSON.stringify(
-          args.part,
-        )}</p>`,
+        html: this.getEmailHTML(args.part, 'deleted'),
       });
     }
 
@@ -106,9 +126,7 @@ export class PartListener {
         to: emails,
         from: CONTACT_EMAIL,
         subject: '[EPIC Resource Planner] Part Modified',
-        html: `<p>A part was modified in your EPIC Resource Planner instance. The details are below:</p><p>${JSON.stringify(
-          args.part,
-        )}</p>`,
+        html: this.getEmailHTML(args.part, 'modified'),
       });
     }
     const audit : Audit = {
@@ -139,9 +157,7 @@ export class PartListener {
         to: emails,
         from: CONTACT_EMAIL,
         subject: '[EPIC Resource Planner] Part Built',
-        html: `<p>One or more part was built in your EPIC Resource Planner instance. The details are below:</p><p>${JSON.stringify(
-          stocks,
-        )}</p>`,
+        html: this.getBuildEmailHTML(stocks),
       });
     }
 

@@ -16,10 +16,14 @@ import { MaterialLogsController } from './materials-logs/material-logs.controlle
 import { MaterialLogsService } from './materials-logs/material-logs.service';
 import { MaterialStockService } from './materials/material-stock.service';
 import { LocationsModule } from '../locations/locations.module';
-import { validate } from '../../shared/env';
 import { PartsModule } from '../parts/parts.module';
 import {AuthModule} from "../auth/auth.module";
+import { MaterialListener } from '../../events/listeners/material.listener';
+import { UsersModule } from '../users/users.module';
+import { EventsModule } from '../events/events.module';
+import { validate } from '../../shared/env';
 import {AuditsModule} from "../audits/audits.module";
+
 
 /**
  * Contains all logic and files related to Materials
@@ -36,11 +40,19 @@ import {AuditsModule} from "../audits/audits.module";
     forwardRef(() => PartsModule),
     AuditsModule,
     AuthModule,
+    // Events Listener Dependency
+    UsersModule,
+    EventsModule,
     // ENV Support
     ConfigModule.forRoot({ validate, cache: true }),
   ],
   controllers: [MaterialLogsController, MaterialsController],
-  providers: [MaterialsService, MaterialLogsService, MaterialStockService],
+  providers: [
+    MaterialsService,
+    MaterialLogsService,
+    MaterialStockService,
+    MaterialListener,
+  ],
   exports: [MaterialsService, MaterialStockService, MongooseModule],
 })
 export class MaterialsModule {}

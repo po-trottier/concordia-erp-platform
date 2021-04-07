@@ -20,6 +20,15 @@ export class CustomerListener {
     @InjectModel(Event.name) private eventModel: Model<EventDocument>,
   ) {}
 
+  getEmailHTML(customer: CustomerDocument, action: string) {
+    return `<p>A customer was <b>${action}</b> in your EPIC Resource Planner instance. The details are below:</p>
+      <ul>
+        <li><b>ID:</b> ${customer.id}</li>
+        <li><b>Name:</b> ${customer.name}</li>
+        <li><b>Email:</b> ${customer.email}</li>
+      </ul>`;
+  }
+
   @OnEvent(EventMap.CUSTOMER_CREATED.id)
   async handleCustomerCreated(customer: CustomerDocument) {
     const emails = await getEmails(
@@ -33,9 +42,7 @@ export class CustomerListener {
         to: emails,
         from: CONTACT_EMAIL,
         subject: '[EPIC Resource Planner] New Customer Created',
-        html: `<p>A new customer was created in your EPIC Resource Planner instance. The details are below:</p><p>${JSON.stringify(
-          customer,
-        )}</p>`,
+        html: this.getEmailHTML(customer, 'created'),
       });
     }
 
@@ -57,9 +64,7 @@ export class CustomerListener {
         to: emails,
         from: CONTACT_EMAIL,
         subject: '[EPIC Resource Planner] Customer Deleted',
-        html: `<p>A customer was deleted in your EPIC Resource Planner instance. The details are below:</p><p>${JSON.stringify(
-          customer,
-        )}</p>`,
+        html: this.getEmailHTML(customer, 'deleted'),
       });
     }
 
@@ -81,9 +86,7 @@ export class CustomerListener {
         to: emails,
         from: CONTACT_EMAIL,
         subject: '[EPIC Resource Planner] Customer Modified',
-        html: `<p>A customer was modified in your EPIC Resource Planner instance. The details are below:</p><p>${JSON.stringify(
-          customer,
-        )}</p>`,
+        html: this.getEmailHTML(customer, 'modified'),
       });
     }
 

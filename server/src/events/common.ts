@@ -79,5 +79,6 @@ export const getEmails = async (
     }
   }
 
-  return emails;
+  const uniqueSet = new Set(emails);
+  return [...uniqueSet];
 };

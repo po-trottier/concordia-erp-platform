@@ -18,6 +18,7 @@ export class UpdateProductOrderDto {
   @IsString()
   productId: string;
 
+  @IsOptional()
   @IsNotEmpty()
   @IsString()
   locationId: string;
@@ -39,6 +40,7 @@ export class UpdateProductOrderDto {
   @IsNotEmpty()
   dateDue: Date;
 
+  @IsOptional()
   @IsBoolean()
   isPaid: boolean;
 }

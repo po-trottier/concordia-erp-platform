@@ -155,49 +155,69 @@ export class ProductOrdersService {
   }
 
   @Cron(CronExpression.EVERY_DAY_AT_10AM)
-  async handleAccountsReceivablePayments() {
+  async handlePayments() {
     const unpaidOrders: any[] = await this.productOrderModel
-      .find({
-        isPaid: false,
-      })
+      .find({ isPaid: false })
       .populate('customerId')
       .populate('productId')
       .exec();
 
-    const paidOrders: ProductOrder[] = [];
+    const paidOrders: Map<string, ProductOrderDocument[]> = new Map();
 
     for (const order of unpaidOrders) {
       if (
         isSameDay(new Date(), new Date(order.dateDue)) ||
         isAfter(new Date(), new Date(order.dateDue))
       ) {
-        const paidOrder = await this.productOrderModel.findByIdAndUpdate(
+        await this.productOrderModel.findByIdAndUpdate(
           order._id,
           { $set: { isPaid: true } },
           { new: true },
         );
-
-        await Mail.instance.send({
-          to: order.customerId.email,
-          from: CONTACT_EMAIL,
-          subject: 'Bicycle purchase billing confirmation',
-          html: `<h3>Dear ${order.customerId.name}, </h3>
-          <p>Your recent bicycle order has been billed to you. The details of your order are as follows:</p><p>${JSON.stringify(
-            {
-              product: order.productId.name,
-              quantity: order.quantity,
-              amountDue: order.amountDue,
-              dateOrdered: order.dateOrdered,
-            },
-          )}</p>`,
-        });
-
-        paidOrders.push(paidOrder);
+        // Group the Orders by Customer Email
+        if (paidOrders.has(order.customerId.email)) {
+          paidOrders.set(
+            order.customerId.email,
+            paidOrders.get(order.customerId.email).concat(order),
+          );
+        } else {
+          paidOrders.set(order.customerId.email, [order]);
+        }
       }
     }
 
-    if (paidOrders.length > 0) {
-      this.emitter.emit(EventMap.ACCOUNT_RECEIVABLE_PAID.id, paidOrders);
+    for (const [email, orders] of paidOrders.entries()) {
+      await Mail.instance.send({
+        to: email,
+        from: CONTACT_EMAIL,
+        subject: '[EPIC Resource Planner] Order Billing Confirmation',
+        html: ProductOrdersService.getEmailHtml(orders),
+      });
+
+      this.emitter.emit(EventMap.ACCOUNT_RECEIVABLE_PAID.id, { email, orders });
     }
+  }
+
+  private static getEmailHtml(orders: any[]) {
+    let total = 0;
+    let html = `<p>Dear customer,</p><p>Your recent order has been billed. The details of your order are as follows:</p>`;
+
+    orders.forEach((order) => {
+      if (!order.productId) {
+        return;
+      }
+      total += order.amountDue;
+      html += `<ul>
+        <li>Product ID: ${order.productId.id}</li>
+        <li>Product Name: ${order.productId.name}</li>
+        <li>Quantity: ${order.quantity}</li>
+        <li>Amount Due: ${order.amountDue}$</li>
+        <li>Date Ordered: ${order.dateOrdered.toLocaleDateString('en-US')}</li>
+      </ul>`;
+    });
+
+    html += `<p><b>Total Due: ${total}$</b></p>`;
+
+    return html;
   }
 }

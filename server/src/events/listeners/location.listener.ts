@@ -20,6 +20,14 @@ export class LocationListener {
     @InjectModel(Event.name) private eventModel: Model<EventDocument>,
   ) {}
 
+  getEmailHTML(location: LocationDocument, action: string) {
+    return `<p>A location was <b>${action}</b> in your EPIC Resource Planner instance. The details are below:</p>
+      <ul>
+        <li><b>ID:</b> ${location.id}</li>
+        <li><b>Name:</b> ${location.name}</li>
+      </ul>`;
+  }
+
   @OnEvent(EventMap.LOCATION_CREATED.id)
   async handleLocationCreated(location: LocationDocument) {
     const emails = await getEmails(
@@ -33,9 +41,7 @@ export class LocationListener {
         to: emails,
         from: CONTACT_EMAIL,
         subject: '[EPIC Resource Planner] New Location Created',
-        html: `<p>A new location was created in your EPIC Resource Planner instance. The details are below:</p><p>${JSON.stringify(
-          location,
-        )}</p>`,
+        html: this.getEmailHTML(location, 'created'),
       });
     }
 
@@ -57,9 +63,7 @@ export class LocationListener {
         to: emails,
         from: CONTACT_EMAIL,
         subject: '[EPIC Resource Planner] Location Deleted',
-        html: `<p>A location was deleted in your EPIC Resource Planner instance. The details are below:</p><p>${JSON.stringify(
-          location,
-        )}</p>`,
+        html: this.getEmailHTML(location, 'deleted'),
       });
     }
 
@@ -81,9 +85,7 @@ export class LocationListener {
         to: emails,
         from: CONTACT_EMAIL,
         subject: '[EPIC Resource Planner] Location Modified',
-        html: `<p>A location was modified in your EPIC Resource Planner instance. The details are below:</p><p>${JSON.stringify(
-          location,
-        )}</p>`,
+        html: this.getEmailHTML(location, 'modified'),
       });
     }
 

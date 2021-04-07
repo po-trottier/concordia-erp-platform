@@ -26,6 +26,41 @@ export class MaterialListener {
     @InjectModel(Audit.name) private auditModel: Model<AuditDocument>,
   ) {}
 
+  getEmailHTML(material: MaterialDocument, action: string) {
+    return `<p>A material was <b>${action}</b> in your EPIC Resource Planner instance. The details are below:</p>
+      <ul>
+        <li><b>ID:</b> ${material.id}</li>
+        <li><b>Name:</b> ${material.name}</li>
+        <li><b>Density:</b> ${material.density}</li>
+        <li><b>Vendor:</b> ${material.vendorName}</li>
+        <li><b>Price:</b> ${material.price}</li>
+        <li><b>Image:</b><img src='${material.image}' alt='Material' width='32' height='32'/></li>
+      </ul>`;
+  }
+
+  getOrderEmailHTML(orders: MaterialOrderDocument[]) {
+    let total = 0;
+    let html = `<p>A material order was <b>placed</b> in your EPIC Resource Planner instance. The details are below:</p>`;
+
+    orders.forEach((order) => {
+      total += order.amountDue;
+      html += `<ul>
+          <li><b>ID:</b> ${order.id}</li>
+          <li><b>Name:</b> ${order.materialId}</li>
+          <li><b>Quantity:</b> ${order.quantity}</li>
+          <li><b>Amount Due:</b> ${order.amountDue}$</li>
+          <li><b>Date Due:</b> ${order.dateDue.toLocaleDateString('en-US')}</li>
+          <li><b>Date Ordered:</b> ${order.dateOrdered.toLocaleDateString(
+            'en-US',
+          )}</li>
+        </ul>`;
+    });
+
+    html += `<p><b>Total Due: ${total}$</b></p>`;
+
+    return html;
+  }
+
   @OnEvent(EventMap.MATERIAL_CREATED.id)
   async handleMaterialCreated(args: {material: MaterialDocument, token: UserToken}) {
     const emails = await getEmails(
@@ -40,9 +75,7 @@ export class MaterialListener {
         to: emails,
         from: CONTACT_EMAIL,
         subject: '[EPIC Resource Planner] New Material Created',
-        html: `<p>A new material was created in your EPIC Resource Planner instance. The details are below:</p><p>${JSON.stringify(
-          args.material,
-        )}</p>`,
+        html: this.getEmailHTML(args.material, 'created'),
       });
     }
 
@@ -66,9 +99,7 @@ export class MaterialListener {
         to: emails,
         from: CONTACT_EMAIL,
         subject: '[EPIC Resource Planner] Material Deleted',
-        html: `<p>A material was deleted in your EPIC Resource Planner instance. The details are below:</p><p>${JSON.stringify(
-          args.material,
-        )}</p>`,
+        html: this.getEmailHTML(args.material, 'deleted'),
       });
     }
 
@@ -92,9 +123,7 @@ export class MaterialListener {
         to: emails,
         from: CONTACT_EMAIL,
         subject: '[EPIC Resource Planner] Material Modified',
-        html: `<p>A material was modified in your EPIC Resource Planner instance. The details are below:</p><p>${JSON.stringify(
-          args.material,
-        )}</p>`,
+        html: this.getEmailHTML(args.material, 'modified'),
       });
     }
 
@@ -118,9 +147,7 @@ export class MaterialListener {
         to: emails,
         from: CONTACT_EMAIL,
         subject: '[EPIC Resource Planner] Material Ordered',
-        html: `<p>One or more material was ordered in your EPIC Resource Planner instance. The details are below:</p><p>${JSON.stringify(
-          orders,
-        )}</p>`,
+        html: this.getOrderEmailHTML(orders),
       });
     }
 
