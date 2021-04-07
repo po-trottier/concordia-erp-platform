@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addFile, removeFile } from '../../store/slices/DropboxSlice';
 import { ResponsiveTable } from '../ResponsiveTable';
 import { Dropbox as Dbx } from 'dropbox';
-//import DropboxChooser from 'react-dropbox-chooser';
 import { useDropboxChooser } from 'use-dropbox-chooser';
 
 export const Dropbox = () => {
@@ -22,7 +21,7 @@ export const Dropbox = () => {
     onCanceled: () => {
       getFiles();
     }
-  })
+  });
 
   const dbx = new Dbx({
     accessToken: 'oQ2YpqFmtFEAAAAAAAAAASVGkjlXl1afaVGSJsSPg0KeMdHWJFhH4p-Y4HkNltxm',
@@ -112,18 +111,8 @@ export const Dropbox = () => {
       style={{marginTop: 16}}
       onClick={open}
       disabled={isOpen}>
-        Choose from Dropbox
+        Open Dropbox
       </Button>
-      {/* <DropboxChooser
-        appKey={'bi2msqa4xuxy011'}
-        multiselect={false}
-        success={handleSuccess}
-        cancel={getFiles}
-        extensions={['.pdf', '.csv']}>
-          <Button type='primary' style={{marginTop: 16}}>
-            Open Dropbox Chooser
-          </Button>
-      </DropboxChooser> */}
     </div>
   );
 }
