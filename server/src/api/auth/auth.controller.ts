@@ -12,6 +12,7 @@ import { Public } from '../../shared/public';
 import { Roles } from '../roles/roles.decorator';
 import { Role } from '../roles/roles.enum';
 import { PasswordResetDto } from './dto/password-reset.dto';
+import { PasswordForgottenDto } from './dto/password-forgotten.dto';
 
 @Controller()
 export class AuthController {
@@ -21,6 +22,12 @@ export class AuthController {
   @Post('login')
   login(@Body(ValidationPipe) dto: LoginAuthDto) {
     return this.authService.login(dto);
+  }
+
+  @Public()
+  @Post('request')
+  generate(@Body(ValidationPipe) dto: PasswordForgottenDto) {
+    return this.authService.generate(dto);
   }
 
   @Public()

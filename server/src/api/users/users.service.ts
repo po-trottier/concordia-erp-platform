@@ -26,7 +26,7 @@ export class UsersService implements OnApplicationBootstrap {
 
   constructor(
     private emitter: EventEmitter2,
-    @InjectModel(User.name) private userModel: Model<UserDocument>
+    @InjectModel(User.name) private userModel: Model<UserDocument>,
   ) {}
 
   async onApplicationBootstrap(): Promise<void> {
@@ -35,9 +35,9 @@ export class UsersService implements OnApplicationBootstrap {
 
   // Create default user if he doesn't exist
   async createDefaultUser(): Promise<void> {
-    const admin = await this.findOneInternal(DEFAULT_USER);
+    const admin = await this.userModel.findOne({ username: DEFAULT_USER });
     if (!admin) {
-      const user : any = new CreateUserDto();
+      const user: any = new CreateUserDto();
       user.username = DEFAULT_USER;
       user.firstName = 'Administrator';
       user.lastName = 'Person';
@@ -51,26 +51,16 @@ export class UsersService implements OnApplicationBootstrap {
     }
   }
 
-  // To be used internally only as it leaks the password hash!
-  async findOneInternal(username: string): Promise<User> {
-    return this.userModel.findOne({ username });
-  }
-
-  // To be used internally only as it leaks the password hash!
-  async updateInternal(id: string, dto: UpdateUserDto): Promise<User> {
-    return this.userModel.findByIdAndUpdate(id, { ...dto }, { new: true });
-  }
-
   async create(dto: CreateUserDto): Promise<User> | undefined {
     const account = dto;
     account.username = account.username.trim().toLowerCase();
     account.email = account.email.trim().toLowerCase();
-    if (await this.findOneInternal(account.username)) {
+    if (await this.userModel.findOne({ username: account.username })) {
       throw new ConflictException(
         'A user with the same username already exists.',
       );
     }
-    if (await this.findOneInternal(account.email)) {
+    if (await this.userModel.findOne({ email: account.email })) {
       throw new ConflictException('A user with the same email already exists.');
     }
 
