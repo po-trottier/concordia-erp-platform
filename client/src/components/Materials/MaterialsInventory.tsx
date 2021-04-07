@@ -6,6 +6,8 @@ import { MaterialsTimelineEntry } from '../../interfaces/MaterialsTimelineEntry'
 import axios from '../../plugins/Axios';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/Store';
+import Chart from "react-apexcharts";
+import { getChartState, getTableData } from "../../shared/predictions";
 
 const { Search } = Input;
 
@@ -28,10 +30,8 @@ export const MaterialsInventory = () => {
     axios.get('materials/logs/' + location)
       .then(async ({ data }) => {
         for (const row of data) {
-          row.date = new Date(row.date).toLocaleDateString();
-          if (row.isEstimate)
-            row.date = row.date + ' (estimate)';
-          row.name = row.materialId.name;
+          row.date = row.date.substring(0,10);
+          row.name = row.materialId.name + (row.isEstimate ? ' (estimate)' : '');
         }
         setMaterialsData(data);
       });
@@ -64,18 +64,14 @@ export const MaterialsInventory = () => {
           onChange={onSearch}
           style={{ marginBottom: 18 }} />
         {getMaterials().length > 0 ?
-          <Line
-            data={getMaterials()}
-            xField='date'
-            yField='stock'
-            seriesField='name'
-            style={{ marginBottom: '48px' }} /> :
+          <Chart {...getChartState(getMaterials())} type="line" height={350} />
+          :
           <span>No material transactions were found.</span>
         }
       </Card>
       {getMaterials().length > 0 ?
       <Card>
-        <ResponsiveTable values={getMaterials()} columns={inventoryColumns} />
+        <ResponsiveTable values={getTableData(getMaterials())} columns={inventoryColumns} />
       </Card> : null
       }
     </div>
