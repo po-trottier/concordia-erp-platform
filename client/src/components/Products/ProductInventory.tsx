@@ -53,6 +53,7 @@ export const ProductInventory = () => {
   const getChartState = () => {
     const dashArray: number[] = [];
     const series: any[] = [];
+    const colours: string[] = [];
 
     const rows = getProducts();
     const seriesNames: any = {};
@@ -63,10 +64,14 @@ export const ProductInventory = () => {
           name: row.name,
           data: []
         });
-        if (row.isEstimate)
+
+        if (row.isEstimate){
           dashArray.push(5);
-        else
+        } else {
           dashArray.push(0);
+          colours.push('#'+(Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0'));
+        }
+
       }
 
       const toAddTo = series.find((item: any) => item.name === row.name);
@@ -87,6 +92,7 @@ export const ProductInventory = () => {
         stroke: {
           dashArray: dashArray
         },
+        colors: colours,
       },
       series: series
     };
