@@ -5,6 +5,7 @@ import {
   OnApplicationBootstrap,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Model } from 'mongoose';
 import { DEFAULT_LOCATION } from '../../shared/constants';
 import { CreateLocationDto } from './dto/create-location.dto';
@@ -41,6 +42,7 @@ import {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   ProductLogDocument,
 } from '../products/products-logs/schemas/product-log.schema';
+import { EventMap } from '../../events/common';
 
 /**
  * Used by the LocationsController, handles location data storage and retrieval.
@@ -50,6 +52,7 @@ export class LocationsService implements OnApplicationBootstrap {
   private readonly logger = new Logger(LocationsService.name);
 
   constructor(
+    private emitter: EventEmitter2,
     @InjectModel(Location.name)
     private locationModel: Model<LocationDocument>,
     @InjectModel(MaterialStock.name)
@@ -89,7 +92,10 @@ export class LocationsService implements OnApplicationBootstrap {
    */
   async create(createLocationDto: CreateLocationDto): Promise<Location> {
     const createdLocation = new this.locationModel(createLocationDto);
-    return await createdLocation.save();
+
+    const location = await createdLocation.save();
+    this.emitter.emit(EventMap.LOCATION_CREATED.id, location);
+    return location;
   }
 
   /**
@@ -125,7 +131,9 @@ export class LocationsService implements OnApplicationBootstrap {
       { new: true },
     );
 
-    return this.validateLocationFound(updatedLocation, id);
+    const result = this.validateLocationFound(updatedLocation, id);
+    this.emitter.emit(EventMap.LOCATION_MODIFIED.id, result);
+    return result;
   }
 
   /**
@@ -168,7 +176,9 @@ export class LocationsService implements OnApplicationBootstrap {
 
     // Delete the actual location
     const deletedLocation = await this.locationModel.findByIdAndDelete(id);
-    return this.validateLocationFound(deletedLocation, id);
+    const result = this.validateLocationFound(deletedLocation, id);
+    this.emitter.emit(EventMap.LOCATION_DELETED.id, result);
+    return result;
   }
 
   /**

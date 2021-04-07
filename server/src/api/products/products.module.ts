@@ -19,6 +19,9 @@ import { LocationsModule } from '../locations/locations.module';
 import { PartsModule } from '../parts/parts.module';
 import { ProductStockService } from './products/product-stock.service';
 import { ProductBuilderService } from './products/product-builder.service';
+import { UsersModule } from '../users/users.module';
+import { EventsModule } from '../events/events.module';
+import { ProductListener } from '../../events/listeners/product.listener';
 
 @Module({
   imports: [
@@ -29,6 +32,9 @@ import { ProductBuilderService } from './products/product-builder.service';
     ]),
     forwardRef(() => LocationsModule),
     forwardRef(() => PartsModule),
+    // Events Listener Dependency
+    UsersModule,
+    EventsModule,
     // ENV Support
     ConfigModule.forRoot({ validate, cache: true }),
   ],
@@ -38,6 +44,7 @@ import { ProductBuilderService } from './products/product-builder.service';
     ProductLogsService,
     ProductStockService,
     ProductBuilderService,
+    ProductListener,
   ],
   exports: [ProductsService, ProductStockService, MongooseModule],
 })

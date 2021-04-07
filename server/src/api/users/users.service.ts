@@ -7,6 +7,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Model } from 'mongoose';
 import { hash } from 'bcryptjs';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -17,12 +18,16 @@ import { DEFAULT_USER } from '../../shared/constants';
 import { User, UserDocument } from './schemas/user.schema';
 import { Mail } from '../../shared/mail';
 import { CONTACT_EMAIL } from '../../shared/constants';
+import { EventMap } from '../../events/common';
 
 @Injectable()
 export class UsersService implements OnApplicationBootstrap {
   private readonly logger = new Logger(UsersService.name);
 
-  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
+  constructor(
+    private emitter: EventEmitter2,
+    @InjectModel(User.name) private userModel: Model<UserDocument>
+  ) {}
 
   async onApplicationBootstrap(): Promise<void> {
     await this.createDefaultUser();
@@ -83,7 +88,7 @@ export class UsersService implements OnApplicationBootstrap {
           to: createdUser.email,
           from: CONTACT_EMAIL,
           subject: '[EPIC Resource Planner] New User Password',
-          html: `<p>The new password for username: <strong>${createdUser.username}</strong> is <strong>${randomPassword}</strong>. We encourage you to reset that password when first logging in.</p>`,
+          html: `<p>The new password for username: <strong>${createdUser.username}</strong> is:</p><p><strong>${randomPassword}</strong></p><p>We encourage you to reset that password when first logging in.</p>`,
         })
         .then(() => {
           return {
@@ -96,7 +101,8 @@ export class UsersService implements OnApplicationBootstrap {
     }
 
     const user = await createdUser.save();
-    return this.validateUserFound(user, user.username);
+    this.emitter.emit(EventMap.USER_CREATED.id, user);
+    return user;
   }
 
   async findAll(): Promise<User[]> {
@@ -139,7 +145,10 @@ export class UsersService implements OnApplicationBootstrap {
       { ...user },
       { new: true },
     );
-    return this.validateUserFound(updatedUser, user.username);
+
+    const result = this.validateUserFound(updatedUser, user.username);
+    this.emitter.emit(EventMap.USER_MODIFIED.id, result);
+    return result;
   }
 
   async remove(username: string): Promise<User> {
@@ -148,7 +157,10 @@ export class UsersService implements OnApplicationBootstrap {
       throw new UnauthorizedException('You cannot delete the default user.');
     }
     const deletedUser = await this.userModel.findOneAndDelete({ username });
-    return this.validateUserFound(deletedUser, username);
+
+    const result = this.validateUserFound(deletedUser, username);
+    this.emitter.emit(EventMap.USER_DELETED.id, result);
+    return result;
   }
 
   validateUserFound(userResult: any, username: string) {
