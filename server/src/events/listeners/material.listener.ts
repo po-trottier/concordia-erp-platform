@@ -159,7 +159,7 @@ export class MaterialListener {
   async createAudit(action: AuditActions, material: MaterialDocument, token: UserToken){
     const audit : Audit = {
       module: Material.name,
-      action: AuditActions.CREATE,
+      action: action,
       date: new Date(Date.now()),
       target: material.name,
       author: token.username,
