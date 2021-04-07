@@ -73,7 +73,7 @@ export class UsersService implements OnApplicationBootstrap {
 
     if (!createdUser.password) {
       const allowedChars =
-        'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#?!@$%^&*-';
+        'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#?!@$%&';
       const passwordLength = 14;
       const randomPassword = Array(passwordLength)
         .fill(allowedChars)
@@ -88,7 +88,7 @@ export class UsersService implements OnApplicationBootstrap {
           to: createdUser.email,
           from: CONTACT_EMAIL,
           subject: '[EPIC Resource Planner] New User Password',
-          html: `<p>The new password for username: <strong>${createdUser.username}</strong> is:</p><p><strong>${randomPassword}</strong></p><p>We encourage you to reset that password when first logging in.</p>`,
+          html: `<p>The new password for username <strong>${createdUser.username}</strong> is:</p><p><strong>${randomPassword}</strong></p><p>We encourage you to reset that password when first logging in.</p>`,
         })
         .then(() => {
           return {
@@ -101,6 +101,7 @@ export class UsersService implements OnApplicationBootstrap {
     }
 
     const user = await createdUser.save();
+    user.password = undefined;
     this.emitter.emit(EventMap.USER_CREATED.id, user);
     return user;
   }
