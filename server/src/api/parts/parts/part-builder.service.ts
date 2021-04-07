@@ -1,4 +1,5 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { UpdateMaterialStockDto } from '../../materials/materials/dto/update-material-stock.dto';
 import { UpdatePartStockDto } from './dto/update-part-stock.dto';
 import { BuildPartDto } from './dto/build-part.dto';
@@ -7,6 +8,7 @@ import { MaterialStockService } from '../../materials/materials/material-stock.s
 import { PartStockService } from './part-stock.service';
 import { Part } from './schemas/part.schema';
 import { PartStock } from './schemas/part-stock.schema';
+import { EventMap } from '../../../events/common';
 
 /**
  * Used by the PartsController, handles part data storage and retrieval.
@@ -14,6 +16,7 @@ import { PartStock } from './schemas/part-stock.schema';
 @Injectable()
 export class PartBuilderService {
   constructor(
+    private emitter: EventEmitter2,
     private readonly partsService: PartsService,
     private readonly materialStockService: MaterialStockService,
     private readonly partStockService: PartStockService,
@@ -89,6 +92,7 @@ export class PartBuilderService {
       buildResults = buildResults.concat(updatedStock);
     }
 
+    this.emitter.emit(EventMap.PART_BUILT.id, buildResults);
     return buildResults;
   }
 }

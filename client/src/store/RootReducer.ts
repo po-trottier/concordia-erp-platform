@@ -11,6 +11,8 @@ import { productListSlice } from './slices/ProductListSlice';
 import { partListSlice } from './slices/PartListSlice';
 import { materialListSlice } from './slices/MaterialListSlice';
 import { customerListSlice } from './slices/CustomerListSlice';
+import { eventListSlice } from './slices/EventListSlice';
+import { listenerListSlice } from './slices/ListenerListSlice';
 import { materialQuantitiesSlice } from './slices/MaterialQuantitiesSlice';
 import { locationSlice } from './slices/LocationSlice';
 
@@ -38,6 +40,8 @@ const rootReducer = combineReducers({
   partList: partListSlice.reducer,
   materialList: materialListSlice.reducer,
   customerList: customerListSlice.reducer,
+  eventList: eventListSlice.reducer,
+  listenerList: listenerListSlice.reducer,
   materialQuantities: materialQuantitiesSlice.reducer,
   location: locationSlice.reducer,
 });

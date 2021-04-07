@@ -1,0 +1,12 @@
+{
+  "name": "epic",
+  "version": "0.0.1",
+  "description": "EPIC Resource Planner",
+  "author": "A bunch of Concordia students",
+  "private": true,
+  "license": "UNLICENSED",
+  "scripts": {
+    "lock": "node --experimental-modules scripts/lock.mjs",
+    "unlock": "node --experimental-modules scripts/unlock.mjs"
+  }
+}

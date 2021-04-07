@@ -1,10 +1,8 @@
-import {
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectModel } from '@nestjs/mongoose';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Model } from 'mongoose';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Product, ProductDocument } from './schemas/products.schema';
@@ -18,6 +16,7 @@ import {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   ProductLogDocument,
 } from '../products-logs/schemas/product-log.schema';
+import { EventMap } from '../../../events/common';
 
 /**
  * Used by the ProductsController, handles product data storage and retrieval.
@@ -25,6 +24,7 @@ import {
 @Injectable()
 export class ProductsService {
   constructor(
+    private emitter: EventEmitter2,
     @InjectModel(Product.name)
     private productModel: Model<ProductDocument>,
     @InjectModel(ProductLog.name)
@@ -40,9 +40,10 @@ export class ProductsService {
    */
   async create(createProductDto: CreateProductDto): Promise<Product> {
     const createdProduct = new this.productModel(createProductDto);
-    await createdProduct.save();
 
-    return createdProduct;
+    const product = await createdProduct.save();
+    this.emitter.emit(EventMap.PRODUCT_CREATED.id, product);
+    return product;
   }
 
   /**
@@ -78,7 +79,10 @@ export class ProductsService {
       { $set: { ...updateProductDto } },
       { new: true },
     );
-    return this.validateProductFound(updatedProduct, id);
+
+    const result = this.validateProductFound(updatedProduct, id);
+    this.emitter.emit(EventMap.PRODUCT_MODIFIED.id, result);
+    return result;
   }
 
   /**
@@ -100,7 +104,10 @@ export class ProductsService {
     }
 
     const deletedProduct = await this.productModel.findByIdAndDelete(id);
-    return this.validateProductFound(deletedProduct, id);
+
+    const result = this.validateProductFound(deletedProduct, id);
+    this.emitter.emit(EventMap.PRODUCT_DELETED.id, result);
+    return result;
   }
 
   /**

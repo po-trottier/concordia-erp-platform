@@ -7,6 +7,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Model } from 'mongoose';
 import { hash } from 'bcryptjs';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -17,12 +18,16 @@ import { DEFAULT_USER } from '../../shared/constants';
 import { User, UserDocument } from './schemas/user.schema';
 import { Mail } from '../../shared/mail';
 import { CONTACT_EMAIL } from '../../shared/constants';
+import { EventMap } from '../../events/common';
 
 @Injectable()
 export class UsersService implements OnApplicationBootstrap {
   private readonly logger = new Logger(UsersService.name);
 
-  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
+  constructor(
+    private emitter: EventEmitter2,
+    @InjectModel(User.name) private userModel: Model<UserDocument>,
+  ) {}
 
   async onApplicationBootstrap(): Promise<void> {
     await this.createDefaultUser();
@@ -30,9 +35,9 @@ export class UsersService implements OnApplicationBootstrap {
 
   // Create default user if he doesn't exist
   async createDefaultUser(): Promise<void> {
-    const admin = await this.findOneInternal(DEFAULT_USER);
+    const admin = await this.userModel.findOne({ username: DEFAULT_USER });
     if (!admin) {
-      const user : any = new CreateUserDto();
+      const user: any = new CreateUserDto();
       user.username = DEFAULT_USER;
       user.firstName = 'Administrator';
       user.lastName = 'Person';
@@ -46,21 +51,16 @@ export class UsersService implements OnApplicationBootstrap {
     }
   }
 
-  // To be used internally only as it leaks the password hash!
-  async findOneInternal(username: string): Promise<User> {
-    return this.userModel.findOne({ username });
-  }
-
   async create(dto: CreateUserDto): Promise<User> | undefined {
     const account = dto;
     account.username = account.username.trim().toLowerCase();
     account.email = account.email.trim().toLowerCase();
-    if (await this.findOneInternal(account.username)) {
+    if (await this.userModel.findOne({ username: account.username })) {
       throw new ConflictException(
         'A user with the same username already exists.',
       );
     }
-    if (await this.findOneInternal(account.email)) {
+    if (await this.userModel.findOne({ email: account.email })) {
       throw new ConflictException('A user with the same email already exists.');
     }
 
@@ -68,7 +68,7 @@ export class UsersService implements OnApplicationBootstrap {
 
     if (!createdUser.password) {
       const allowedChars =
-        'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#?!@$%^&*-';
+        'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#?!@$%&';
       const passwordLength = 14;
       const randomPassword = Array(passwordLength)
         .fill(allowedChars)
@@ -83,7 +83,7 @@ export class UsersService implements OnApplicationBootstrap {
           to: createdUser.email,
           from: CONTACT_EMAIL,
           subject: '[EPIC Resource Planner] New User Password',
-          html: `<p>The new password for username: <strong>${createdUser.username}</strong> is <strong>${randomPassword}</strong>. We encourage you to reset that password when first logging in.</p>`,
+          html: `<p>The new password for username <strong>${createdUser.username}</strong> is:</p><p><strong>${randomPassword}</strong></p><p>We encourage you to reset that password when first logging in.</p>`,
         })
         .then(() => {
           return {
@@ -96,7 +96,9 @@ export class UsersService implements OnApplicationBootstrap {
     }
 
     const user = await createdUser.save();
-    return this.validateUserFound(user, user.username);
+    user.password = undefined;
+    this.emitter.emit(EventMap.USER_CREATED.id, user);
+    return user;
   }
 
   async findAll(): Promise<User[]> {
@@ -139,7 +141,10 @@ export class UsersService implements OnApplicationBootstrap {
       { ...user },
       { new: true },
     );
-    return this.validateUserFound(updatedUser, user.username);
+
+    const result = this.validateUserFound(updatedUser, user.username);
+    this.emitter.emit(EventMap.USER_MODIFIED.id, result);
+    return result;
   }
 
   async remove(username: string): Promise<User> {
@@ -148,7 +153,10 @@ export class UsersService implements OnApplicationBootstrap {
       throw new UnauthorizedException('You cannot delete the default user.');
     }
     const deletedUser = await this.userModel.findOneAndDelete({ username });
-    return this.validateUserFound(deletedUser, username);
+
+    const result = this.validateUserFound(deletedUser, username);
+    this.emitter.emit(EventMap.USER_DELETED.id, result);
+    return result;
   }
 
   validateUserFound(userResult: any, username: string) {
