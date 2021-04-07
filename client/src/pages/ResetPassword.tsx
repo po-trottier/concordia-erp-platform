@@ -1,9 +1,17 @@
 import React, {useState} from 'react';
 import {Button, Col, Form, Input, message, Row, Card} from "antd";
 import axios from "../plugins/Axios";
+import {useLocation} from "react-router-dom";
+import {useSelector} from "react-redux";
+import {RootState} from "../store/Store";
 
 
 export const ResetPassword = () => {
+
+  const location = useLocation();
+  const token = location.search ?  new URLSearchParams(location.search).get('token') : '';
+
+  const user = useSelector((state : RootState) => state.login.user);
 
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmedPassword] = useState('');
@@ -29,6 +37,7 @@ export const ResetPassword = () => {
 
   return (
     <div>
+      {user.isLoggedIn ? <h1>{token}</h1> : null}
       <Card>
       <Form>
         <Card>

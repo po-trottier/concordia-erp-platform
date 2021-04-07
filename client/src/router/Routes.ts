@@ -6,7 +6,6 @@ import { Materials } from '../pages/Materials';
 import { Customers } from '../pages/Customers';
 import { Finances } from '../pages/Finances';
 import { Logs } from '../pages/Logs';
-import { ResetPassword } from "../pages/ResetPassword";
 import { Events } from '../pages/Events';
 
 import { Route } from '../interfaces/Route';
@@ -103,12 +102,5 @@ export const Routes : Route[] = [
     page: Logs,
     auth: [Role.SYSTEM_ADMINISTRATOR]
   },
-  {
-    path: '/reset-password',
-    exact: false,
-    title: 'Reset Password',
-    icon: 'lock',
-    page: ResetPassword,
-    auth: [Role.ANY]
-  },
+
 ];
