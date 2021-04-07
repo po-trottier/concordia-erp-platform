@@ -35,9 +35,21 @@ export const AppHeader = () => {
     }
   };
 
+  const resetPassword = () => {
+    try {
+      history.push('/reset-password');
+    } catch (e) {
+      message.error('Something went wrong while redirecting you to the change password page.');
+      console.error(e);
+    }
+  };
+
   const dropdown = (
     <Menu>
-      <Menu.Item onClick={logOut}>
+      <Menu.Item onClick={resetPassword} style={{ textAlign: 'center' }}>
+        Change Password
+      </Menu.Item>
+      <Menu.Item onClick={logOut} style={{ textAlign: 'center' }}>
         Log Out
       </Menu.Item>
     </Menu>

@@ -10,17 +10,13 @@ const __dirname = path.dirname(__filename);
 const hashAlgorithm = 'sha256';
 const cipherAlgorithm = 'aes256';
 
-const encryptFile = (filePath, password, dirPath = null) => {
+const encryptFile = (envPath, filePath, password) => {
   // normalize file paths
-  let envDir = path.normalize(__dirname);
-  if (dirPath) {
-    envDir = path.normalize(dirPath);
-  }
-  filePath = path.normalize(filePath);
+  const encryptedFile = path.normalize(filePath);
+  envPath = path.normalize(envPath);
 
   // shrink file
-  const encryptedFile = path.join(envDir, '../../.env.enc');
-  const fileData = fs.readFileSync(filePath, 'utf8');
+  const fileData = fs.readFileSync(envPath, 'utf8');
   const gzipped = Buffer.from(fileData, 'utf8').toString('base64');
 
   // encrypt
@@ -72,10 +68,16 @@ export const decrypt = (password) => {
   try {
     password = String(password).trim();
 
-    const encryptedFile = path.join(__dirname, '../../.env.enc');
-    const envFile = path.join(__dirname, '../../.env');
+    const encryptedFileServer = path.join(__dirname, '../../server/.env.enc');
+    const envFileServer = path.join(__dirname, '../../server/.env');
 
-    return decryptFile(encryptedFile, envFile, password);
+    const encryptedFileClient = path.join(__dirname, '../../client/.env.enc');
+    const envFileClient = path.join(__dirname, '../../client/.env');
+
+    const server = decryptFile(encryptedFileServer, envFileServer, password);
+    const client = decryptFile(encryptedFileClient, envFileClient, password);
+
+    return { server, client }
   } catch (error) {
     return null;
   }
@@ -85,9 +87,16 @@ export const encrypt = (password) => {
   try {
     password = String(password).trim();
 
-    const envFile = path.join(__dirname, '../../.env');
+    const envFileServer = path.join(__dirname, '../../server/.env');
+    const encryptedFileServer = path.join(__dirname, '../../server/.env.enc');
 
-    return encryptFile(envFile, password);
+    const envFileClient = path.join(__dirname, '../../client/.env');
+    const encryptedFileClient = path.join(__dirname, '../../client/.env.enc');
+
+    const server = encryptFile(envFileServer, encryptedFileServer, password);
+    const client = encryptFile(envFileClient, encryptedFileClient, password);
+
+    return { server, client }
   } catch (error) {
     console.log(error);
     return null;

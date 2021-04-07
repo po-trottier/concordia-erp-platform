@@ -10,6 +10,7 @@ import { AppFooter } from './AppFooter';
 import { Login } from '../../pages/Login';
 import { RootState } from '../../store/Store';
 import axios from '../../plugins/Axios';
+import {ResetPassword} from "../../pages/ResetPassword";
 
 export const App = () => {
   // Set axios header on app startup
@@ -18,16 +19,23 @@ export const App = () => {
     axios.defaults.headers.common['Authorization'] = 'Bearer ' + user.token;
   }
 
-  const location = useLocation();
-  return location.pathname === '/login' ?
-    <Login /> : (
-      <Layout style={{ minHeight: '100vh' }}>
-        <AppMenu />
-        <Layout id='app-content' className='site-layout app-layout'>
-          <AppHeader />
-          <AppContent />
-          <AppFooter />
+  const getLayout = (path: string) => {
+    switch (path){
+      case '/login' : return <Login />
+      case '/reset-password' : return <ResetPassword />
+      default : return (
+        <Layout style={{ minHeight: '100vh' }}>
+          <AppMenu />
+          <Layout id='app-content' className='site-layout app-layout'>
+            <AppHeader />
+            <AppContent />
+            <AppFooter />
+          </Layout>
         </Layout>
-      </Layout>
-    );
+      );
+    }
+  }
+
+  const location = useLocation();
+  return getLayout(location.pathname);
 };

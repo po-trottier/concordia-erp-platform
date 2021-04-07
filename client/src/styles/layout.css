@@ -3,6 +3,10 @@
   transition: all 0.2s ease;
 }
 
+.dark-background {
+  background: #001529;
+}
+
 .app-logo {
   height: 64px;
   width: 100%;
@@ -27,7 +31,7 @@
 }
 
 .app-centered-card {
-  max-width: 400px;
+  max-width: 450px;
   width: 100%;
   position: absolute;
   top: 50%;
