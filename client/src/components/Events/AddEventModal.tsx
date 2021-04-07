@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Modal, Select, Form, Row, Col, Input, InputNumber, Radio, RadioChangeEvent, message } from 'antd';
-import { MinusCircleTwoTone, PlusOutlined } from '@ant-design/icons';
 import { useDispatch } from 'react-redux';
 
-//import { addEventEntry } from '../../store/slices/EventListSlice';
+import { addEventEntry } from '../../store/slices/EventListSlice';
 import { EventDropdownEntry } from '../../interfaces/EventDropdownEntry';
 import { CustomerDropdownEntry } from '../../interfaces/CustomerDropdownEntry';
 import { UserDropdownEntry } from '../../interfaces/UserDropdownEntry';
@@ -130,6 +129,7 @@ export const AddEventModal = () => {
     axios
       .post('/events', newEvent)
       .then(() => {
+        dispatch(addEventEntry(newEvent));
         setIsModalVisible(false);
         form.resetFields();
         message.success('Event was added successfully.');
