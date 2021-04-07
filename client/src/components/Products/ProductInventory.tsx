@@ -21,6 +21,7 @@ const inventoryColumns = {
 export const ProductInventory = () => {
   const location = useSelector((state : RootState) => state.location.selected);
   const dispatch = useDispatch();
+  const chartData = useSelector((state : RootState) => state.chart.chartState);
 
   const emptyData : ProductHistoryEntry[] = [];
   const [products, setProducts] = useState(emptyData);
@@ -34,6 +35,7 @@ export const ProductInventory = () => {
           row.name = row.productId.name + (row.isEstimate ? ' (estimate)' : '');
         }
         setProducts(data);
+        dispatch(getChartState(getProducts()));
       });
   }, [location]);
 
@@ -52,6 +54,10 @@ export const ProductInventory = () => {
     return rows;
   };
 
+  const getChartData = () => {
+    return JSON.parse(JSON.stringify(chartData));
+  }
+
   const onSearch = (e : React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
   };
@@ -65,7 +71,7 @@ export const ProductInventory = () => {
           style={{ marginBottom: 18 }} />
         {
           getProducts().length > 0 ?
-              <Chart {...getChartState(getProducts())} type="line" height={350} />
+              <Chart options={getChartData().options} series={getChartData().series} type="line" height={350} />
               :
             <span>No product transactions were found.</span>
         }
