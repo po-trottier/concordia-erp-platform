@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Modal, Select, Form, Row, Col, Input, InputNumber, Radio, RadioChangeEvent } from 'antd';
+import { Button, Modal, Select, Form, Row, Col, Input, InputNumber, Radio, RadioChangeEvent, message } from 'antd';
 import { MinusCircleTwoTone, PlusOutlined } from '@ant-design/icons';
 import { useDispatch } from 'react-redux';
 
@@ -17,25 +17,31 @@ export const AddEventModal = () => {
 
   const [form] = Form.useForm();
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [eventsUpdated, setEventsUpdated] = useState(false);
-  const [customersUpdated, setCustomersUpdated] = useState(false);
-  const [usersUpdated, setUsersUpdated] = useState(false);
-
   const [recipientType, setRecipientType] = useState('');
-
-  const [userIdList, setUserIdList] = useState(['']);
 
   const emptyEventsData: EventDropdownEntry[] = [];
   const [eventsData, setEventsData] = useState(emptyEventsData);
+  const [eventsUpdated, setEventsUpdated] = useState(false);
+
+  const emptyChosenCustomers: String[] = [];
+  const [chosenCustomers, setChosenCustomers] = useState(emptyChosenCustomers);
+
+  const emptyChosenUsers: String[] = [];
+  const [chosenUsers, setChosenUsers] = useState(emptyChosenUsers);
+
+  const emptyChosenRoles: Role[] = [];
+  const [chosenRoles, setChosenRoles] = useState(emptyChosenRoles);
 
   const emptyCustomersData: CustomerDropdownEntry[] = [];
   const [customersData, setCustomersData] = useState(emptyCustomersData);
+  const [customersUpdated, setCustomersUpdated] = useState(false);
 
   const emptyUsersData: UserDropdownEntry[] = [];
   const [usersData, setUsersData] = useState(emptyUsersData);
+  const [usersUpdated, setUsersUpdated] = useState(false);
 
   const emptyRolesData: Role[] = [];
-  const [roles, setRoles] = useState(emptyRolesData);
+  const [rolesData, setRolesData] = useState(emptyRolesData);
 
 
   const [loading, setLoading] = useState(false);
@@ -108,17 +114,17 @@ export const AddEventModal = () => {
 
   const addEvent = () => {
     const newEvent = {
-      customersData,
-      usersData,
-      roles
+      chosenCustomers,
+      chosenUsers,
+      chosenRoles
     }
+
+    console.log(newEvent);
 
     setLoading(true);
     // axios
     //   .post('/events', newEvent)
     //   .then(() => {
-    //     // what to do with Dispatch?
-    //     // dispatch(addEventEntry(newEvent));
     //     setIsModalVisible(false);
     //     form.resetFields();
     //     message.success('User was added successfully.');
@@ -138,6 +144,10 @@ export const AddEventModal = () => {
   };
 
   const handleRecipientChange = (e : RadioChangeEvent) => {
+    form.resetFields(['customers','users','roles']);
+    // setChosenCustomers(emptyChosenCustomers);
+    // setChosenUsers(emptyChosenUsers);
+    // setChosenRoles(emptyChosenRoles);
     setRecipientType(e.target.value);
   };
 
@@ -161,7 +171,7 @@ export const AddEventModal = () => {
               style={{ width: '100%', display: 'inline-table' }}
               placeholder='Select 1 or more users'
               optionFilterProp='children'
-              onChange={hideActionsError}>
+              onChange={ (e: any) =>updateChosenUsers(e) }>
               {usersData.map((user) => (
                 <Option key={user.id} value={user.id}>
                   {user.username}
@@ -189,7 +199,7 @@ export const AddEventModal = () => {
                   style={{ width: '100%', display: 'inline-table' }}
                   placeholder='Select 1 or more roles'
                   optionFilterProp='children'
-                  onChange={hideActionsError}>
+                  onChange={ (e: any) =>updateChosenRoles(e) }>
                   {
                     Object.keys(Role).map((rkey, rval) => {
                       if (isFinite(Number(rkey))) {
@@ -226,7 +236,7 @@ export const AddEventModal = () => {
                 style={{ width: '100%', display: 'inline-table' }}
                 placeholder='Select 1 or more customers'
                 optionFilterProp='children'
-                onChange={hideActionsError}>
+                onChange={ (e: any) =>updateChosenCustomers(e) }>
                 {customersData.map((customer) => (
                   <Option key={customer.id} value={customer.id}>
                     {customer.name}
@@ -239,6 +249,17 @@ export const AddEventModal = () => {
     }
   }
 
+  const updateChosenCustomers = (e: any) => {
+    setChosenCustomers(e);
+  }
+
+  const updateChosenUsers = (e: any) => {
+    setChosenUsers(e);
+  }
+
+  const updateChosenRoles = (e: any) => {
+    setChosenRoles(e);
+  }
   const hideActionsError = () => {
     const actionsError = document.getElementById('display-actions-error');
     if (actionsError) {
