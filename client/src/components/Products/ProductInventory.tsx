@@ -6,7 +6,7 @@ import { ProductHistoryEntry } from '../../interfaces/ProductHistoryEntry';
 import { RootState } from '../../store/Store';
 import axios from '../../plugins/Axios';
 import Chart from "react-apexcharts";
-import { getChartState, getTableData } from "../../shared/predictions";
+import {getChartState} from '../../store/slices/ChartSlice';
 
 const { Search } = Input;
 
@@ -35,7 +35,7 @@ export const ProductInventory = () => {
           row.name = row.productId.name + (row.isEstimate ? ' (estimate)' : '');
         }
         setProducts(data);
-        dispatch(getChartState(getProducts()));
+        dispatch(getChartState(data));
       });
   }, [location]);
 
@@ -53,9 +53,13 @@ export const ProductInventory = () => {
 
     return rows;
   };
-
+  
   const getChartData = () => {
     return JSON.parse(JSON.stringify(chartData));
+  }
+
+  const getTableData = () => {
+    return getProducts().filter((row: any) => ! row.isCopy);
   }
 
   const onSearch = (e : React.ChangeEvent<HTMLInputElement>) => {
@@ -77,7 +81,7 @@ export const ProductInventory = () => {
         }
       </Card>
       <Card style={{ display: getProducts().length > 0 ? 'block' : 'none' }}>
-        <ResponsiveTable values={getTableData(getProducts())} columns={inventoryColumns} />
+        <ResponsiveTable values={getTableData()} columns={inventoryColumns} />
       </Card>
     </div>
   );

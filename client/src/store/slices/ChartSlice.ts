@@ -21,7 +21,6 @@ export const chartSlice = createSlice({
   initialState,
   reducers: {
     getChartState: (state, {payload}: PayloadAction<any>) => {
-      console.log(payload);
       const rows = payload;
 
       const dashArray: number[] = [];
