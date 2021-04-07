@@ -30,6 +30,10 @@ import { ProductLogsService } from '../../../src/api/products/products-logs/prod
 import { ProductLogDocument } from '../../../src/api/products/products-logs/schemas/product-log.schema';
 import { LocationsService } from '../../../src/api/locations/locations.service';
 import { LocationDocument } from '../../../src/api/locations/schemas/location.schema';
+import { PartLogDocument } from '../../../src/api/parts/parts-logs/schemas/part-log.schema';
+import { PartStockDocument } from 'src/api/parts/parts/schemas/part-stock.schema';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { PartDocument } from 'src/api/parts/parts/schemas/part.schema';
 
 describe('OrdersController', () => {
   let ordersController: OrdersController;
@@ -42,6 +46,7 @@ describe('OrdersController', () => {
   let materialOrderDocument: Model<MaterialOrderDocument>;
   let materialDocumentModel: Model<MaterialDocument>;
   let productDocument: Model<ProductDocument>;
+  let partDocument: Model<PartDocument>;
 
   let materialStockService: MaterialStockService;
   let materialStockDocument: Model<MaterialStockDocument>;
@@ -54,6 +59,10 @@ describe('OrdersController', () => {
 
   let locationsService: LocationsService;
   let locationDocument: Model<LocationDocument>;
+
+  let partLogDocument: Model<PartLogDocument>;
+  let partStockDocument: Model<PartStockDocument>;
+  let emitter: EventEmitter2;
 
   const dummyMaterialOrder: MaterialOrder = {
     amountDue: 5000,
@@ -75,20 +84,37 @@ describe('OrdersController', () => {
   };
 
   beforeEach(async () => {
-    locationsService = new LocationsService(locationDocument);
-    materialService = new MaterialsService(materialDocumentModel);
+    locationsService = new LocationsService(
+      emitter,
+      locationDocument,
+      materialStockDocument,
+      partStockDocument,
+      productStockDocument,
+      materialLogDocument,
+      partLogDocument,
+      productLogDocument
+    );
+    materialService = new MaterialsService(
+      emitter,
+      partDocument,
+      materialDocumentModel,
+      materialLogDocument,
+      materialStockDocument
+    );
     materialLogsService = new MaterialLogsService(materialLogDocument);
     materialStockService = new MaterialStockService(materialStockDocument, materialService, materialLogsService, locationsService);
     materialOrdersService = new MaterialOrdersService(
+      emitter,
       materialOrderDocument,
       materialService,
       materialStockService
     );
-    productsService = new ProductsService(productDocument);
+    productsService = new ProductsService(emitter, productDocument, productLogDocument, productStockDocument);
     productLogsService = new ProductLogsService(productLogDocument);
     productLogsService = new ProductLogsService(productLogDocument);
     productStockService = new ProductStockService(productStockDocument, productsService, productLogsService, locationsService);
     productOrdersService = new ProductOrdersService(
+      emitter,
       productOrderDocument,
       productsService,
       productStockService

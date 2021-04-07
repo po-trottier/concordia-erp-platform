@@ -9,8 +9,13 @@ import { ProductLogsService } from '../../../src/api/products/products-logs/prod
 import { ProductLogDocument } from '../../../src/api/products/products-logs/schemas/product-log.schema';
 import { LocationDocument } from '../../../src/api/locations/schemas/location.schema';
 import { LocationsService } from '../../../src/api/locations/locations.service';
+import { PartStockDocument } from '../../../src/api/parts/parts/schemas/part-stock.schema';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { PartLogDocument } from '../../../src/api/parts/parts-logs/schemas/part-log.schema';
+import { MaterialStockDocument } from 'src/api/materials/materials/schemas/material-stock.schema';
+import { MaterialLogDocument } from 'src/api/materials/materials-logs/schemas/material-log.schema';
 
-describe('ProductsService', () => {
+describe('ProductOrdersService', () => {
   let productsService: ProductsService;
   let productDocument: Model<ProductDocument>;
   let productOrdersService: ProductOrdersService;
@@ -21,18 +26,31 @@ describe('ProductsService', () => {
   let productLogDocument: Model<ProductLogDocument>;
   let locationsService: LocationsService;
   let locationDocument: Model<LocationDocument>;
+  let emitter: EventEmitter2;
+  let partLogDocument: Model<PartLogDocument>;
+  let materialStockDocument: Model<MaterialStockDocument>;
+  let partStockDocument: Model<PartStockDocument>;
+  let materialLogDocument: Model<MaterialLogDocument>;
 
-  beforeEach(async () => {
-    productsService = new ProductsService(productDocument);
-    productLogsService = new ProductLogsService(productLogDocument);
-    locationsService = new LocationsService(locationDocument);
-    productStockService = new ProductStockService(productStockDocument, productsService, productLogsService, locationsService);
-    productOrdersService = new ProductOrdersService(
-      productOrderDocument,
-      productsService,
-      productStockService
-    );
-  });
+  productsService = new ProductsService(emitter, productDocument, productLogDocument, productStockDocument);
+  productLogsService = new ProductLogsService(productLogDocument);
+  locationsService = new LocationsService(
+    emitter,
+    locationDocument,
+    materialStockDocument,
+    partStockDocument,
+    productStockDocument,
+    materialLogDocument,
+    partLogDocument,
+    productLogDocument
+  );
+  productStockService = new ProductStockService(productStockDocument, productsService, productLogsService, locationsService);
+  productOrdersService = new ProductOrdersService(
+    emitter,
+    productOrderDocument,
+    productsService,
+    productStockService
+  );
 
   it('should be defined', () => {
     expect(productOrdersService).toBeDefined();
