@@ -19,6 +19,6 @@ import { validate } from '../../shared/env';
   ],
   controllers: [AuditsController],
   providers: [AuditsService],
-  exports: [AuditsService],
+  exports: [AuditsService, MongooseModule],
 })
 export class AuditsModule {}

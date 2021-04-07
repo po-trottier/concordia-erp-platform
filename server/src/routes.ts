@@ -9,6 +9,7 @@ import { OrdersModule } from './api/orders/orders.module';
 import { LocationsModule } from './api/locations/locations.module';
 import { CustomersModule } from './api/customers/customers.module';
 import { EventsModule } from './api/events/events.module';
+import {AuditsModule} from "./api/audits/audits.module";
 
 export const routes: Routes = [
   {
@@ -18,6 +19,10 @@ export const routes: Routes = [
       {
         path: '/auth',
         module: AuthModule,
+      },
+      {
+        path: '/audits',
+        module: AuditsModule,
       },
       {
         path: '/parts',
