@@ -24,6 +24,9 @@ import { PartStockService } from '../../../src/api/parts/parts/part-stock.servic
 import { PartDocument } from '../../../src/api/parts/parts/schemas/part.schema';
 import { PartLogDocument } from '../../../src/api/parts/parts-logs/schemas/part-log.schema';
 import { PartStockDocument } from '../../../src/api/parts/parts/schemas/part-stock.schema';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { MaterialStockDocument } from 'src/api/materials/materials/schemas/material-stock.schema';
+import { MaterialLogDocument } from 'src/api/materials/materials-logs/schemas/material-log.schema';
 
 describe('ProductsController', () => {
   let productsController: ProductsController;
@@ -42,6 +45,9 @@ describe('ProductsController', () => {
   let partLogDocument: Model<PartLogDocument>;
   let partsDocumentModel: Model<PartDocument>;
   let partStockDocument: Model<PartStockDocument>;
+  let materialStockDocument: Model<MaterialStockDocument>;
+  let materialLogDocument: Model<MaterialLogDocument>;
+  let emitter: EventEmitter2;
 
   const dummyProduct: Product = {
     name: 'Canondale Bike',
@@ -57,18 +63,26 @@ describe('ProductsController', () => {
   };
 
   beforeEach(async () => {
-    partsService = new PartsService(partsDocumentModel);
+    partsService = new PartsService(emitter, productDocument, partsDocumentModel, partLogDocument, partStockDocument);
     partLogsService = new PartLogsService(partLogDocument);
-    locationsService = new LocationsService(locationDocument);
+    locationsService = new LocationsService(
+      emitter,
+      locationDocument,
+      materialStockDocument,
+      partStockDocument,
+      productStockDocument,
+      materialLogDocument,
+      partLogDocument,
+      productLogDocument
+    );
     partStockService = new PartStockService(
       partStockDocument,
       partsService,
       partLogsService,
       locationsService,
     );
-    productsService = new ProductsService(productDocument);
+    productsService = new ProductsService(emitter, productDocument, productLogDocument, productStockDocument);
     productLogsService = new ProductLogsService(productLogDocument);
-    locationsService = new LocationsService(locationDocument);
     productStockService = new ProductStockService(
       productStockDocument,
       productsService,
@@ -76,6 +90,7 @@ describe('ProductsController', () => {
       locationsService,
     );
     productBuilderService = new ProductBuilderService(
+      emitter,
       productsService,
       productStockService,
       partStockService,
