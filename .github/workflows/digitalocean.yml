@@ -24,10 +24,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Unlock ENV File
-        run: |
-          cd server
-          npm ci
-          npm run unlock ${{ secrets.ENV_PASSWORD }}
+        run: npm run unlock ${{ secrets.ENV_PASSWORD }}
       - name: Copy Docker Compose Config + ENV File
         uses: appleboy/scp-action@master
         with:
