@@ -27,7 +27,7 @@ export const OrderMaterialButtons = () => {
 				const material = materials.find(
 					(m: MaterialEntry) => materialQuantity.materialId === m._id
 				);
-				const dateOrdered = new Date(2021, 5, 1);
+				const dateOrdered = new Date();
 				order.push({
 					materialId: material._id,
 					quantity: materialQuantity.quantity,

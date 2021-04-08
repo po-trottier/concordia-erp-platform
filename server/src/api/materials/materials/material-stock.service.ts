@@ -119,7 +119,7 @@ export class MaterialStockService {
           stock: updatedStock.stock,
           stockBought,
           stockUsed,
-          date: parse(format(new Date(2021, 5, 1), 'd/M/y'), 'dd/MM/yyyy', new Date()),
+          date: parse(format(new Date(), 'd/M/y'), 'dd/MM/yyyy', new Date()),
         };
 
         await this.materialLogsService.update(updateMaterialLogDto);
