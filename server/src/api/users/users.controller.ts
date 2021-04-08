@@ -1,5 +1,6 @@
 import {
   Body,
+  Headers,
   Controller,
   Delete,
   Get,
@@ -20,11 +21,11 @@ export class UsersController {
 
   @Roles(Role.SYSTEM_ADMINISTRATOR)
   @Post()
-  create(@Body(ValidationPipe) dto: CreateUserDto) {
+  create(@Headers('authorization') auth: string, @Body(ValidationPipe) dto: CreateUserDto) {
     const body = dto;
     body.username = body.username.trim().toLowerCase();
     body.email = body.email.trim().toLowerCase();
-    return this.usersService.create(body);
+    return this.usersService.create(auth, body);
   }
 
   @Roles(Role.SYSTEM_ADMINISTRATOR)
@@ -42,15 +43,16 @@ export class UsersController {
   @Roles(Role.SYSTEM_ADMINISTRATOR)
   @Patch(':username')
   async update(
+    @Headers('authorization') auth: string,
     @Param('username') username: string,
     @Body(ValidationPipe) dto: UpdateUserDto,
   ) {
-    return this.usersService.update(username.trim().toLowerCase(), dto);
+    return this.usersService.update(auth, username.trim().toLowerCase(), dto);
   }
 
   @Roles(Role.SYSTEM_ADMINISTRATOR)
   @Delete(':username')
-  remove(@Param('username') username: string) {
-    return this.usersService.remove(username.trim().toLowerCase());
+  remove(@Headers('authorization') auth: string, @Param('username') username: string) {
+    return this.usersService.remove(auth, username.trim().toLowerCase());
   }
 }

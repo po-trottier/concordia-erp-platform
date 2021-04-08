@@ -10,6 +10,9 @@ import { EventMap, getEmails } from '../common';
 import { Mail } from '../../shared/mail';
 import { CONTACT_EMAIL } from '../../shared/constants';
 import {Audit, AuditDocument} from "../../api/audits/schemas/audits.schema";
+import {AuditActions} from "../../api/audits/audit.actions.enum";
+import {Product, ProductDocument} from "../../api/products/products/schemas/products.schema";
+import {UserToken} from "../../shared/user-token.interface";
 
 @Injectable()
 export class UserListener {
@@ -18,6 +21,7 @@ export class UserListener {
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
     @InjectModel(Event.name) private eventModel: Model<EventDocument>,
+    @InjectModel(Audit.name) private auditModel: Model<AuditDocument>,
   ) {}
 
   getEmailHTML(user: UserDocument, action: string) {
@@ -32,7 +36,7 @@ export class UserListener {
   }
 
   @OnEvent(EventMap.USER_CREATED.id)
-  async handleUserCreated(user: UserDocument) {
+  async handleUserCreated(args:{user: UserDocument, token: UserToken}) {
     const emails = await getEmails(
       EventMap.USER_CREATED,
       this.eventModel,
@@ -44,9 +48,11 @@ export class UserListener {
         to: emails,
         from: CONTACT_EMAIL,
         subject: '[EPIC Resource Planner] New User Created',
-        html: this.getEmailHTML(user, 'created'),
+        html: this.getEmailHTML(args.user, 'created'),
       });
     }
+
+    await this.createAudit(AuditActions.CREATE, args.user, args.token);
 
     this.logger.log(
       'A user was created. ' + emails.length + ' user(s) notified.',
@@ -54,7 +60,7 @@ export class UserListener {
   }
 
   @OnEvent(EventMap.USER_DELETED.id)
-  async handleUserDeleted(user: UserDocument) {
+  async handleUserDeleted(args:{user: UserDocument, token: UserToken}) {
     const emails = await getEmails(
       EventMap.USER_DELETED,
       this.eventModel,
@@ -66,9 +72,11 @@ export class UserListener {
         to: emails,
         from: CONTACT_EMAIL,
         subject: '[EPIC Resource Planner] User Deleted',
-        html: this.getEmailHTML(user, 'deleted'),
+        html: this.getEmailHTML(args.user, 'deleted'),
       });
     }
+
+    await this.createAudit(AuditActions.DELETE, args.user, args.token);
 
     this.logger.log(
       'A user was deleted. ' + emails.length + ' user(s) notified.',
@@ -76,7 +84,7 @@ export class UserListener {
   }
 
   @OnEvent(EventMap.USER_MODIFIED.id)
-  async handleUserModified(user: UserDocument) {
+  async handleUserModified(args:{user: UserDocument, token: UserToken}) {
     const emails = await getEmails(
       EventMap.USER_MODIFIED,
       this.eventModel,
@@ -88,12 +96,26 @@ export class UserListener {
         to: emails,
         from: CONTACT_EMAIL,
         subject: '[EPIC Resource Planner] User Modified',
-        html: this.getEmailHTML(user, 'modified'),
+        html: this.getEmailHTML(args.user, 'modified'),
       });
     }
+
+    await this.createAudit(AuditActions.UPDATE, args.user, args.token);
 
     this.logger.log(
       'A user was modified. ' + emails.length + ' user(s) notified.',
     );
+  }
+
+  async createAudit(action: AuditActions, user: UserDocument, token: UserToken){
+    const audit : Audit = {
+      module: User.name,
+      action: action,
+      date: new Date(Date.now()),
+      target: user.firstName + ' ' + user.lastName,
+      author: token.username,
+    }
+    const auditEntry = new this.auditModel(audit)
+    await auditEntry.save();
   }
 }

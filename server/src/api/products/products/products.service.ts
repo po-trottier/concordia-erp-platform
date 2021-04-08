@@ -45,6 +45,8 @@ export class ProductsService {
   async create(createProductDto: CreateProductDto, auth: string): Promise<Product> {
     const createdProduct = new this.productModel(createProductDto);
 
+    console.log(auth);
+
     const decoded: any = this.jwtService.decode(auth.substr(7));
     const token : UserToken = decoded;
 
