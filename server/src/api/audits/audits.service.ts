@@ -5,6 +5,7 @@ import {CreateAuditDto} from './dto/create-audit.dto';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import {Audit, AuditDocument} from './schemas/audits.schema';
 import {AuditActions} from "./audit.actions.enum";
+import {Modules} from "./modules.enum";
 
 /**
  * Used by the AuditsController, handles audit data storage and retrieval.
@@ -52,6 +53,10 @@ export class AuditsService {
     }
 
     return this.auditModel.find().and(andList);
+  }
+
+  async findModules(): Promise<string[]> {
+    return Modules;
   }
 
   /**

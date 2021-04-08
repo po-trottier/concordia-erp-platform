@@ -13,7 +13,6 @@ export const LogList = () => {
     setUpdated(true);
     axios.get('/audits')
       .then((res) => {
-        console.log(res)
         const rowsToDisplay: LogEntry[] = []
         res.data.forEach( (entry: AuditDocument) => {
           rowsToDisplay.push({

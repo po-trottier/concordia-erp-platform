@@ -6,6 +6,8 @@ import axios from "../../plugins/Axios";
 import {setUserList} from "../../store/slices/UserListSlice";
 import {RootState} from "../../store/Store";
 import {UserEntry} from "../../interfaces/UserEntry";
+import {LogEntry} from "../../interfaces/LogEntry";
+import {AuditDocument} from "../../../../server/dist/api/audits/schemas/audits.schema";
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
@@ -14,6 +16,8 @@ const { Title } = Typography;
 export const Audit = () => {
   const dispatch = useDispatch();
   const userList = useSelector((state : RootState) => state.userList.list);
+  const emptyModules: string[] = []
+  const [modules, setModules] = useState(emptyModules);
   const [updated, setUpdated] = useState(false);
   const [actionFilter, setActionFilter] = useState([]);
   const [securityFilter, setSecurityFilter] = useState([]);
@@ -36,14 +40,14 @@ export const Audit = () => {
     axios.get('users').then(({ data }) => {
       dispatch(setUserList(data));
     });
+    axios.get('/audits/modules')
+      .then((res) => {
+        setModules(res.data);
+      })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updated]);
 
   const actionOptions = ['Create', 'Modify', 'Delete'];
-  const securityOptions = ['Successful Login', 'Failed Login'];
-  const materialsOptions = ['Steel', 'Titanium', 'Rubber', 'Lubricant'];
-  const partsOptions = ['Frames', 'Tires', 'Handlebars', 'Chains'];
-  const productsOptions = ['Hybrid Bike', 'Street Bike', 'Mountain Bike'];
 
   const style = {
     marginBottom: 4,
@@ -203,27 +207,25 @@ export const Audit = () => {
   return (
     <div>
       <Card style={{ margin: '24px 0' }}>
-        <Title level={4}>Global Filters</Title>
+        <Title level={4}>Filters</Title>
+        <p style={style}>All filters are optional, use them to filter out the logs you do not need.</p>
         <p style={style}>Select the kind of action to query:</p>
         <Checkbox.Group onChange={(e : any) => setActionFilter(e)} options={actionOptions} />
         <p style={style}>Select the time range for which to query:</p>
         <RangePicker
           onChange={(e : any) => setDates(e)}
-          style={{ maxWidth: 400 }}
+          style={{ width: 400 }}
           showTime={{ format: 'HH:mm' }}
           format='YYYY-MM-DD HH:mm' />
 
-        <Divider />
-
-        <Title level={4}>User Filters</Title>
-        <p style={style}>Select the users to query:</p>
+        <p style={style}>Select the author(s) of the changes:</p>
         <Select
           style={{ width: 400 }}
           onChange={(e : any) => setUserFilter(e)}
           showSearch
           allowClear
           mode='multiple'
-          placeholder='Select users'
+          placeholder='Select author(s)'
           optionFilterProp='children'>
           {
             userList.map((user: UserEntry) => (
@@ -235,18 +237,29 @@ export const Audit = () => {
             )
           }
         </Select>
-        <p style={style}>Select the kind of action to query:</p>
-        <Checkbox.Group onChange={(e : any) => setSecurityFilter(e)} options={securityOptions} />
 
-        <Divider />
-
-        <Title level={4}>Inventory Filters</Title>
-        <p style={style}>Select the materials to query:</p>
-        <Checkbox.Group onChange={(e : any) => setMaterialFilter(e)} options={materialsOptions} />
-        <p style={style}>Select the product parts to query:</p>
-        <Checkbox.Group onChange={(e : any) => setPartFilter(e)} options={partsOptions} />
-        <p style={style}>Select the products:</p>
-        <Checkbox.Group onChange={(e : any) => setProductFilter(e)} options={productsOptions} />
+        <p style={style}>Select the module(s) to query:</p>
+        <Select
+          style={{ width: 400 }}
+          onChange={(e : any) => setUserFilter(e)}
+          showSearch
+          allowClear
+          mode='multiple'
+          placeholder='Select module(s)'
+          optionFilterProp='children'>
+          {
+            modules.map((module: string) => (
+              <Option
+                key={module}
+                value={module}>
+                {module}
+              </Option>)
+            )
+          }
+        </Select>
+        {/*when the module is selected the option appears*/}
+        {/*<p style={style}>Select the product parts to query:</p>*/}
+        {/*<Checkbox.Group onChange={(e : any) => setPartFilter(e)} options={partsOptions} />*/}
       </Card>
       <Popover content={exportOptions} title='Save As' trigger='click'>
         <Button

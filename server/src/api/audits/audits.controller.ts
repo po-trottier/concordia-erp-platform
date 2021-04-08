@@ -32,6 +32,12 @@ export class AuditsController {
     return this.auditsService.findAll();
   }
 
+  @Roles(Role.SYSTEM_ADMINISTRATOR)
+  @Get('/modules')
+  findEvents() {
+    return this.auditsService.findModules();
+  }
+
   @Roles(Role.ANY)
   @Get(':filter')
   find(@Query() query: QueryAuditDto) {
