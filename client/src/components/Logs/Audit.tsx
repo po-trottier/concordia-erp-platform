@@ -56,7 +56,7 @@ export const Audit = () => {
       <Menu.Item onClick={() => exportPDF()}>
         PDF
       </Menu.Item>
-      <Menu.Item onClick={() => getAudit()}>
+      <Menu.Item onClick={() => exportCSV()}>
         CSV
       </Menu.Item>
     </Menu>
@@ -139,6 +139,7 @@ export const Audit = () => {
   ]
 
   const exportPDF = async() => {
+    getAudit();
     const date = new Date();
     const fileName = 'Audit-' + (date.toDateString() + ' ' + date.toLocaleTimeString()).replace(/\s/g, '-');
     const doc = new jsPDF({
@@ -167,7 +168,7 @@ export const Audit = () => {
   }
 
   const exportCSV = async() => {
-    const data = await getAudit();
+    getAudit();
     const date = new Date();
     const fileName = 'Audit-' + (date.toDateString() + ' ' + date.toLocaleTimeString()).replace(/\s/g, '-');
     const csvRows : any[] = [];
