@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { UpdatePartLogDto } from './dto/update-part-log.dto';
+import { addPredictions } from '../../../shared/predictions';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { PartLog, PartLogDocument } from './schemas/part-log.schema';
 
@@ -19,10 +20,13 @@ export class PartLogsService {
    * Retrieves all partLog entries using mongoose partLogModel
    */
   async findAll(locationId: string): Promise<PartLog[]> {
-    return await this.partLogModel
+    const parts = await this.partLogModel
       .find({ locationId })
+      .sort('date')
+      .sort('partId')
       .populate('partId')
       .exec();
+    return addPredictions(parts, 'partId');
   }
 
   /**
