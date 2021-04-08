@@ -43,6 +43,7 @@ import {
   ProductLogDocument,
 } from '../products/products-logs/schemas/product-log.schema';
 import { EventMap } from '../../events/common';
+import {JwtService} from "@nestjs/jwt";
 
 /**
  * Used by the LocationsController, handles location data storage and retrieval.
@@ -52,6 +53,7 @@ export class LocationsService implements OnApplicationBootstrap {
   private readonly logger = new Logger(LocationsService.name);
 
   constructor(
+    private jwtService: JwtService,
     private emitter: EventEmitter2,
     @InjectModel(Location.name)
     private locationModel: Model<LocationDocument>,
@@ -88,9 +90,10 @@ export class LocationsService implements OnApplicationBootstrap {
   /**
    * Creates location using mongoose locationModel
    *
+   * @param auth
    * @param createLocationDto dto used to create locations
    */
-  async create(createLocationDto: CreateLocationDto): Promise<Location> {
+  async create(auth: string, createLocationDto: CreateLocationDto): Promise<Location> {
     const createdLocation = new this.locationModel(createLocationDto);
 
     const location = await createdLocation.save();
