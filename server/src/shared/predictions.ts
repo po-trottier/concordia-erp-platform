@@ -8,57 +8,40 @@ export const addPredictions = (rows: any, id: string) => {
     } else if (buffer[buffer.length - 1][id] === row[id]) {
       buffer.push(row);
     } else {
-      predictions.push(getCopy(buffer[buffer.length - 1], id));
-      predictions.push(getPredictionValue(buffer[0], buffer[buffer.length - 1], id));
+      predictions.push(getCopy(buffer[buffer.length - 1]));
+      predictions.push(getPredictionValue(buffer[0], buffer[buffer.length - 1]));
       buffer = [row];
     }
   }
 
-  console.log(predictions);
   return [...rows, ...predictions];
 };
 
-const getPredictionValue = (start, end, id) => {
+const getPredictionValue = (start, end) => {
   // actual logic to calculate predictedStock;
   const firstDate = new Date(start.date);
   const lastDate = new Date(end.date);
   const endOfYear = new Date(new Date().getFullYear(), 11, 31);
   const daysBetween = calculateDiffInDays(firstDate, lastDate);
   const daysTillEnd = calculateDiffInDays(lastDate, endOfYear);
-  const predictedStockMultiplier =
-    (end.stock - start.stock) / daysBetween;
+  const predictedStockMultiplier = (end.stock - start.stock) / daysBetween;
   const predictedStock = predictedStockMultiplier * daysTillEnd;
-  const stockDifference = predictedStock - end.stock;
 
   // creating prediction row
-  const prediction = {
-    _id: end._id,
-    date: endOfYear.toLocaleString().split(',')[0],
-    locationId: end.locationId,
-    stockBuilt: stockDifference > 0 ? stockDifference : 0,
-    stockUsed: stockDifference < 0 ? -stockDifference : 0,
-    stock: predictedStock,
-    isEstimate: true,
-  };
-  prediction[id] = end[id];
-  if (id === 'materialId')
-    prediction['stockBought'] = prediction.stockBuilt;
-  return prediction;
+  const prediction = JSON.parse(JSON.stringify(end));
+  prediction.date = endOfYear.toLocaleString().split(',')[0];
+  prediction.stockBuilt = 0;
+  prediction.stockUsed = 0;
+  prediction.stock = predictedStock;
+  prediction.isEstimate = true;
 
+  return prediction;
 };
 
-const getCopy = (row, id) => {
-  const copy = {
-    _id: row._id,
-    date: row.date,
-    locationId: row.locationId,
-    stockBuilt: row.stockBuilt,
-    stockUsed: row.stockUsed,
-    stock: row.stock,
-    isEstimate: true,
-    isCopy: true
-  }
-  copy[id] = row[id];
+const getCopy = (row) => {
+  const copy = JSON.parse(JSON.stringify(row));
+  copy.isEstimate = true;
+  copy.isCopy = true;
 
   return copy
 }
