@@ -26,6 +26,7 @@ export class MaterialLogsService {
     const materials = await this.materialLogModel
       .find({ locationId })
       .sort('date')
+      .sort('materialId')
       .populate('materialId')
       .exec();
     return addPredictions(materials, 'materialId');

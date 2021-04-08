@@ -23,6 +23,7 @@ export class PartLogsService {
     const parts = await this.partLogModel
       .find({ locationId })
       .sort('date')
+      .sort('partId')
       .populate('partId')
       .exec();
     return addPredictions(parts, 'partId');

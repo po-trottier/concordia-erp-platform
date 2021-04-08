@@ -1,6 +1,6 @@
 export const addPredictions = (rows: any, id: string) => {
   const predictions: any[] = [];
-  const buffer: any[] = [];
+  let buffer: any[] = [];
 
   for (const row of rows) {
     if (buffer.length < 1) {
@@ -8,9 +8,11 @@ export const addPredictions = (rows: any, id: string) => {
     } else if (buffer[buffer.length - 1][id] === row[id]) {
       buffer.push(row);
     } else {
+      predictions.push(buffer[buffer.length - 1]);
       predictions.push(
         getPredictionValue(buffer[0], buffer[buffer.length - 1]),
       );
+      buffer = [row];
     }
   }
 

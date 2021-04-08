@@ -23,6 +23,7 @@ export class ProductLogsService {
     const products = await this.productLogModel
       .find({ locationId })
       .sort('date')
+      .sort('productId')
       .populate('productId')
       .exec();
     return addPredictions(products, 'productId');
