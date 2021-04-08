@@ -1,5 +1,4 @@
-export interface SummaryEntry
-{
-  date: string,
-  balance: number
+export interface SummaryEntry {
+  date : string,
+  balance : number
 }
