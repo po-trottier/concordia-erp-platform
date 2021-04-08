@@ -15,6 +15,21 @@ export const Audit = () => {
   const dispatch = useDispatch();
   const userList = useSelector((state : RootState) => state.userList.list);
   const [updated, setUpdated] = useState(false);
+  const [actionFilter, setActionFilter] = useState([]);
+  const [securityFilter, setSecurityFilter] = useState([]);
+  const [materialFilter, setMaterialFilter] = useState([]);
+  const [partFilter, setPartFilter] = useState([]);
+  const [productFilter, setProductFilter] = useState([]);
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+  const [userFilter, setUserFilter] = useState([]);
+
+  const setDates = (e : any) => {
+    if (e) {
+      setStartDate(e[0]._d);
+      setEndDate(e[1]._d);
+    }
+  }
 
   useEffect(() => {
     setUpdated(true);
@@ -23,7 +38,6 @@ export const Audit = () => {
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updated]);
-
 
   const actionOptions = ['Create', 'Modify', 'Delete'];
   const securityOptions = ['Successful Login', 'Failed Login'];
@@ -119,11 +133,13 @@ export const Audit = () => {
       date: new Date(),
       author: "John",
       action: "Deletes",
-      target: "15 tires"
+      target: "15 tires",
+      something: 'helllloooo',
     },
   ]
 
-  const exportPDF = () => {
+  const exportPDF = async() => {
+    getAudit();
     const date = new Date();
     const fileName = 'Audit-' + (date.toDateString() + ' ' + date.toLocaleTimeString()).replace(/\s/g, '-');
     const doc = new jsPDF({
@@ -151,7 +167,8 @@ export const Audit = () => {
     doc.save(fileName + '.pdf');
   }
 
-  const exportCSV = () => {
+  const exportCSV = async() => {
+    getAudit();
     const date = new Date();
     const fileName = 'Audit-' + (date.toDateString() + ' ' + date.toLocaleTimeString()).replace(/\s/g, '-');
     const csvRows : any[] = [];
@@ -172,14 +189,26 @@ export const Audit = () => {
     document.body.removeChild(a);
   }
 
+  const getAudit = () => {
+    console.log(actionFilter);
+    console.log(startDate);
+    console.log(endDate);
+    console.log(userFilter);
+    console.log(securityFilter);
+    console.log(materialFilter);
+    console.log(partFilter);
+    console.log(productFilter);
+  }
+
   return (
     <div>
       <Card style={{ margin: '24px 0' }}>
         <Title level={4}>Global Filters</Title>
         <p style={style}>Select the kind of action to query:</p>
-        <Checkbox.Group options={actionOptions} />
+        <Checkbox.Group onChange={(e : any) => setActionFilter(e)} options={actionOptions} />
         <p style={style}>Select the time range for which to query:</p>
         <RangePicker
+          onChange={(e : any) => setDates(e)}
           style={{ maxWidth: 400 }}
           showTime={{ format: 'HH:mm' }}
           format='YYYY-MM-DD HH:mm' />
@@ -190,6 +219,7 @@ export const Audit = () => {
         <p style={style}>Select the users to query:</p>
         <Select
           style={{ width: 400 }}
+          onChange={(e : any) => setUserFilter(e)}
           showSearch
           allowClear
           mode='multiple'
@@ -206,17 +236,17 @@ export const Audit = () => {
           }
         </Select>
         <p style={style}>Select the kind of action to query:</p>
-        <Checkbox.Group options={securityOptions} />
+        <Checkbox.Group onChange={(e : any) => setSecurityFilter(e)} options={securityOptions} />
 
         <Divider />
 
         <Title level={4}>Inventory Filters</Title>
         <p style={style}>Select the materials to query:</p>
-        <Checkbox.Group options={materialsOptions} />
+        <Checkbox.Group onChange={(e : any) => setMaterialFilter(e)} options={materialsOptions} />
         <p style={style}>Select the product parts to query:</p>
-        <Checkbox.Group options={partsOptions} />
+        <Checkbox.Group onChange={(e : any) => setPartFilter(e)} options={partsOptions} />
         <p style={style}>Select the products:</p>
-        <Checkbox.Group options={productsOptions} />
+        <Checkbox.Group onChange={(e : any) => setProductFilter(e)} options={productsOptions} />
       </Card>
       <Popover content={exportOptions} title='Save As' trigger='click'>
         <Button
