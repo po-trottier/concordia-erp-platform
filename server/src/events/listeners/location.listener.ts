@@ -6,14 +6,17 @@ import { Model } from 'mongoose';
 import { Event, EventDocument } from '../../api/events/schemas/events.schema';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { User, UserDocument } from '../../api/users/schemas/user.schema';
-import {Location, LocationDocument} from '../../api/locations/schemas/location.schema';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { Audit, AuditDocument } from '../../api/audits/schemas/audits.schema';
+import {
+  Location,
+  LocationDocument,
+} from '../../api/locations/schemas/location.schema';
+import { UserToken } from '../../shared/user-token.interface';
 import { EventMap, getEmails } from '../common';
 import { Mail } from '../../shared/mail';
 import { CONTACT_EMAIL } from '../../shared/constants';
-import {Audit, AuditDocument} from "../../api/audits/schemas/audits.schema";
-import {AuditActions} from "../../api/audits/audit.actions.enum";
-import {Part, PartDocument} from "../../api/parts/parts/schemas/part.schema";
-import {UserToken} from "../../shared/user-token.interface";
+import { AuditActions } from '../../api/audits/enums/audit-actions.enum';
 
 @Injectable()
 export class LocationListener {
@@ -34,7 +37,10 @@ export class LocationListener {
   }
 
   @OnEvent(EventMap.LOCATION_CREATED.id)
-  async handleLocationCreated(args:{location: LocationDocument, token: UserToken}) {
+  async handleLocationCreated(args: {
+    location: LocationDocument;
+    token: UserToken;
+  }) {
     const emails = await getEmails(
       EventMap.LOCATION_CREATED,
       this.eventModel,
@@ -58,7 +64,10 @@ export class LocationListener {
   }
 
   @OnEvent(EventMap.LOCATION_DELETED.id)
-  async handleLocationDeleted(args:{location: LocationDocument, token: UserToken}) {
+  async handleLocationDeleted(args: {
+    location: LocationDocument;
+    token: UserToken;
+  }) {
     const emails = await getEmails(
       EventMap.LOCATION_DELETED,
       this.eventModel,
@@ -82,7 +91,10 @@ export class LocationListener {
   }
 
   @OnEvent(EventMap.LOCATION_MODIFIED.id)
-  async handleLocationModified(args:{location: LocationDocument, token: UserToken}) {
+  async handleLocationModified(args: {
+    location: LocationDocument;
+    token: UserToken;
+  }) {
     const emails = await getEmails(
       EventMap.LOCATION_MODIFIED,
       this.eventModel,
@@ -105,15 +117,19 @@ export class LocationListener {
     );
   }
 
-  async createAudit(action: AuditActions, location: LocationDocument, token: UserToken){
-    const audit : Audit = {
+  async createAudit(
+    action: AuditActions,
+    location: LocationDocument,
+    token: UserToken,
+  ) {
+    const audit: Audit = {
       module: Location.name,
       action: action,
       date: new Date(Date.now()),
       target: location.name,
       author: token.username,
-    }
-    const auditEntry = new this.auditModel(audit)
+    };
+    const auditEntry = new this.auditModel(audit);
     await auditEntry.save();
   }
 }

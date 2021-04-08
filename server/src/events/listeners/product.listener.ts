@@ -6,16 +6,19 @@ import { Model } from 'mongoose';
 import { Event, EventDocument } from '../../api/events/schemas/events.schema';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { User, UserDocument } from '../../api/users/schemas/user.schema';
-import {Product, ProductDocument} from '../../api/products/products/schemas/products.schema';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { Audit, AuditDocument } from '../../api/audits/schemas/audits.schema';
+import {
+  Product,
+  ProductDocument,
+} from '../../api/products/products/schemas/products.schema';
 import { ProductStockDocument } from '../../api/products/products/schemas/product-stock.schema';
 import { ProductOrderDocument } from '../../api/orders/schemas/product-orders.schema';
+import { UserToken } from '../../shared/user-token.interface';
 import { EventMap, getEmails } from '../common';
 import { Mail } from '../../shared/mail';
 import { CONTACT_EMAIL } from '../../shared/constants';
-import {AuditActions} from "../../api/audits/audit.actions.enum";
-import {Material, MaterialDocument} from "../../api/materials/materials/schemas/material.schema";
-import {UserToken} from "../../shared/user-token.interface";
-import {Audit, AuditDocument} from "../../api/audits/schemas/audits.schema";
+import { AuditActions } from '../../api/audits/enums/audit-actions.enum';
 
 @Injectable()
 export class ProductListener {
@@ -82,7 +85,10 @@ export class ProductListener {
   }
 
   @OnEvent(EventMap.PRODUCT_CREATED.id)
-  async handleProductCreated(args: {product: ProductDocument, token: UserToken}) {
+  async handleProductCreated(args: {
+    product: ProductDocument;
+    token: UserToken;
+  }) {
     const emails = await getEmails(
       EventMap.PRODUCT_CREATED,
       this.eventModel,
@@ -106,7 +112,10 @@ export class ProductListener {
   }
 
   @OnEvent(EventMap.PRODUCT_DELETED.id)
-  async handleProductDeleted(args: {product: ProductDocument, token: UserToken}) {
+  async handleProductDeleted(args: {
+    product: ProductDocument;
+    token: UserToken;
+  }) {
     const emails = await getEmails(
       EventMap.PRODUCT_DELETED,
       this.eventModel,
@@ -130,7 +139,10 @@ export class ProductListener {
   }
 
   @OnEvent(EventMap.PRODUCT_MODIFIED.id)
-  async handleProductModified(args: {product: ProductDocument, token: UserToken}) {
+  async handleProductModified(args: {
+    product: ProductDocument;
+    token: UserToken;
+  }) {
     const emails = await getEmails(
       EventMap.PRODUCT_MODIFIED,
       this.eventModel,
@@ -197,15 +209,19 @@ export class ProductListener {
     );
   }
 
-  async createAudit(action: AuditActions, product: ProductDocument, token: UserToken){
-    const audit : Audit = {
+  async createAudit(
+    action: AuditActions,
+    product: ProductDocument,
+    token: UserToken,
+  ) {
+    const audit: Audit = {
       module: Product.name,
       action: action,
       date: new Date(Date.now()),
       target: product.name,
       author: token.username,
-    }
-    const auditEntry = new this.auditModel(audit)
+    };
+    const auditEntry = new this.auditModel(audit);
     await auditEntry.save();
   }
 }

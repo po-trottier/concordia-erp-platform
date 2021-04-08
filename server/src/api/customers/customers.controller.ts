@@ -24,7 +24,10 @@ export class CustomersController {
 
   @Roles(Role.SALESPERSON, Role.SYSTEM_ADMINISTRATOR)
   @Post()
-  create(@Headers('authorization') auth: string, @Body(ValidationPipe) CreateCustomerDto: CreateCustomerDto) {
+  create(
+    @Headers('authorization') auth: string,
+    @Body(ValidationPipe) CreateCustomerDto: CreateCustomerDto,
+  ) {
     return this.customersService.create(auth, CreateCustomerDto);
   }
 

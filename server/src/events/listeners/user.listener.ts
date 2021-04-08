@@ -10,9 +10,10 @@ import { EventMap, getEmails } from '../common';
 import { Mail } from '../../shared/mail';
 import { CONTACT_EMAIL } from '../../shared/constants';
 import {Audit, AuditDocument} from "../../api/audits/schemas/audits.schema";
-import {AuditActions} from "../../api/audits/audit.actions.enum";
 import {Product, ProductDocument} from "../../api/products/products/schemas/products.schema";
 import {UserToken} from "../../shared/user-token.interface";
+import {AuditActions} from "../../api/audits/enums/audit-actions.enum";
+
 
 @Injectable()
 export class UserListener {

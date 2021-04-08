@@ -1,5 +1,4 @@
-import {IsOptional, IsString} from "class-validator";
-import {AuditActions} from "../audit.actions.enum";
+import { IsDate, IsOptional, IsString } from 'class-validator';
 
 export class QueryAuditDto {
   @IsString()
@@ -18,9 +17,11 @@ export class QueryAuditDto {
   @IsOptional()
   author: string;
 
+  @IsDate()
   @IsOptional()
   before: Date;
 
+  @IsDate()
   @IsOptional()
   after: Date;
 }

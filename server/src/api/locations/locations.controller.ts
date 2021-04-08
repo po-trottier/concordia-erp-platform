@@ -21,7 +21,10 @@ export class LocationsController {
 
   @Roles(Role.SYSTEM_ADMINISTRATOR)
   @Post()
-  create(@Headers('authorization') auth: string, @Body(ValidationPipe) createLocationDto: CreateLocationDto) {
+  create(
+    @Headers('authorization') auth: string,
+    @Body(ValidationPipe) createLocationDto: CreateLocationDto,
+  ) {
     return this.locationsService.create(auth, createLocationDto);
   }
 

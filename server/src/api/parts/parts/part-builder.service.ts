@@ -1,5 +1,6 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { JwtService } from '@nestjs/jwt';
 import { UpdateMaterialStockDto } from '../../materials/materials/dto/update-material-stock.dto';
 import { UpdatePartStockDto } from './dto/update-part-stock.dto';
 import { BuildPartDto } from './dto/build-part.dto';
@@ -9,8 +10,7 @@ import { PartStockService } from './part-stock.service';
 import { Part } from './schemas/part.schema';
 import { PartStock } from './schemas/part-stock.schema';
 import { EventMap } from '../../../events/common';
-import {JwtService} from "@nestjs/jwt";
-import {UserToken} from "../../../shared/user-token.interface";
+import { UserToken } from '../../../shared/user-token.interface';
 
 /**
  * Used by the PartsController, handles part data storage and retrieval.
@@ -98,9 +98,9 @@ export class PartBuilderService {
     }
 
     const decoded: any = this.jwtService.decode(auth.substr(7));
-    const token : UserToken = decoded;
+    const token: UserToken = decoded;
 
-    this.emitter.emit(EventMap.PART_BUILT.id, {buildResults, token});
+    this.emitter.emit(EventMap.PART_BUILT.id, { buildResults, token });
     return buildResults;
   }
 }

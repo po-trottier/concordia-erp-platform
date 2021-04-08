@@ -11,8 +11,8 @@ import { LocationListener } from '../../events/listeners/location.listener';
 import { UsersModule } from '../users/users.module';
 import { EventsModule } from '../events/events.module';
 import { validate } from '../../shared/env';
-import {AuthModule} from "../auth/auth.module";
-import {AuditsModule} from "../audits/audits.module";
+import { AuthModule } from '../auth/auth.module';
+import { AuditsModule } from '../audits/audits.module';
 
 /**
  * Contains all logic and files related to locations

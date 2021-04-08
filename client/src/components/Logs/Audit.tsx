@@ -1,13 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import { jsPDF } from 'jspdf';
-import { Button, Card, Checkbox, DatePicker, Divider, Menu, Popover, Select, Typography } from 'antd';
+import { Button, Card, Checkbox, DatePicker, Menu, Popover, Select, Typography } from 'antd';
 import {useDispatch, useSelector} from "react-redux";
 import axios from "../../plugins/Axios";
 import {setUserList} from "../../store/slices/UserListSlice";
 import {RootState} from "../../store/Store";
 import {UserEntry} from "../../interfaces/UserEntry";
-import {LogEntry} from "../../interfaces/LogEntry";
-import {AuditDocument} from "../../../../server/dist/api/audits/schemas/audits.schema";
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;

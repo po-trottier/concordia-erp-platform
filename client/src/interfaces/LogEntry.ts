@@ -1,7 +1,7 @@
 export interface LogEntry {
   module : string,
+  date : string,
   action : string,
-  date   : string,
-  target : string,
   author : string,
+  target : string,
 }

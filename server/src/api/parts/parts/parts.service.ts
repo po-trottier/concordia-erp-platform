@@ -3,7 +3,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import {JwtService} from "@nestjs/jwt";
+import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Model } from 'mongoose';
@@ -26,8 +26,8 @@ import {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   PartLogDocument,
 } from '../parts-logs/schemas/part-log.schema';
+import { UserToken } from '../../../shared/user-token.interface';
 import { EventMap } from '../../../events/common';
-import {UserToken} from "../../../shared/user-token.interface";
 
 /**
  * Used by the PartsController, handles part data storage and retrieval.
@@ -57,10 +57,10 @@ export class PartsService {
     const createdPart = new this.partModel(createPartDto);
 
     const decoded: any = this.jwtService.decode(auth.substr(7));
-    const token : UserToken = decoded;
+    const token: UserToken = decoded;
 
     const part = await createdPart.save();
-    this.emitter.emit(EventMap.PART_CREATED.id, {part, token});
+    this.emitter.emit(EventMap.PART_CREATED.id, { part, token });
     return part;
   }
 
@@ -88,7 +88,11 @@ export class PartsService {
    * @param updatePartDto dto used to update parts
    * @param auth
    */
-  async update(id: string, updatePartDto: UpdatePartDto, auth: string): Promise<Part> {
+  async update(
+    id: string,
+    updatePartDto: UpdatePartDto,
+    auth: string,
+  ): Promise<Part> {
     const updatedPart = await this.partModel.findByIdAndUpdate(
       id,
       { $set: { ...updatePartDto } },
@@ -96,10 +100,10 @@ export class PartsService {
     );
 
     const decoded: any = this.jwtService.decode(auth.substr(7));
-    const token : UserToken = decoded;
+    const token: UserToken = decoded;
 
     const part = this.validatePartFound(updatedPart, id);
-    this.emitter.emit(EventMap.PART_MODIFIED.id, {part, token});
+    this.emitter.emit(EventMap.PART_MODIFIED.id, { part, token });
     return part;
   }
 
@@ -136,12 +140,12 @@ export class PartsService {
     }
 
     const decoded: any = this.jwtService.decode(auth.substr(7));
-    const token : UserToken = decoded;
+    const token: UserToken = decoded;
 
     //Finally, remove the part
     const deletedPart = await this.partModel.findByIdAndDelete(id);
     const part = this.validatePartFound(deletedPart, id);
-    this.emitter.emit(EventMap.PART_DELETED.id, {part, token});
+    this.emitter.emit(EventMap.PART_DELETED.id, { part, token });
     return part;
   }
 
