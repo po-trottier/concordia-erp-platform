@@ -38,6 +38,7 @@ export const ProductInventory = () => {
         setProducts(data);
         dispatch(getChartState(data));
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location]);
 
   const getProducts = () => {
@@ -76,8 +77,7 @@ export const ProductInventory = () => {
           style={{ marginBottom: 18 }} />
         {
           getProducts().length > 0 ?
-            <Chart {...getChartData()} type='line' height={350} />
-            :
+            <Chart {...getChartData()} type='line' height={350} /> :
             <span>No product transactions were found.</span>
         }
       </Card>

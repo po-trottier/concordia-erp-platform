@@ -37,6 +37,7 @@ export const PartInventory = () => {
       setPartsData(data);
       dispatch(getChartState(data));
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location]);
 
   const getParts = () => {
@@ -70,11 +71,10 @@ export const PartInventory = () => {
           placeholder='Search for a part transaction'
           onChange={onSearch}
           style={{ marginBottom: 18 }} />
-        {getParts().length > 0 ? (
-          <Chart {...getChartData()} type='line' height={350} />
-        ) : (
+        {getParts().length > 0 ?
+          <Chart {...getChartData()} type='line' height={350} /> :
           <span>No part transactions were found.</span>
-        )}
+        }
       </Card>
       {getParts().length > 0 ? (
         <Card>

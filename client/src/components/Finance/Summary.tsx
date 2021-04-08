@@ -62,12 +62,8 @@ export const Summary = () => {
 
     return {
       options: {
-        chart: {
-          id: 'basic-bar'
-        },
-        xaxis: {
-          type: 'datetime',
-        },
+        chart: { id: 'basic-bar' },
+        xaxis: { type: 'datetime' },
       },
       series: [{
         name: 'balance',

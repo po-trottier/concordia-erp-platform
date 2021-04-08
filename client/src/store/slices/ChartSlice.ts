@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import seedrandom from 'seedrandom';
 
 const initialState : { chartState : any } = {
   chartState: {
@@ -24,7 +25,8 @@ export const chartSlice = createSlice({
       const colours : string[] = [];
 
       const seriesNames : any = {};
-      rows.forEach((row : any) => {
+      for (let i = 0; i < rows.length; i++) {
+        const row = rows[i];
         if (!seriesNames[row.name]) {
           // create series if it doesn't exist
           const newSeries = {
@@ -34,18 +36,19 @@ export const chartSlice = createSlice({
           seriesNames[row.name] = true;
 
           if (row.isEstimate) {
-            for (let i = 0; i < series.length; i++) {
-              if (series[i].name === row.name.substring(0, row.name.length - 11)) {
-                series.splice(i + 1, 0, newSeries);
-                dashArray.splice(i + 1, 0, 5);
-                colours.splice(i + 1, 0, colours[i]);
+            for (let j = 0; j < series.length; j++) {
+              if (series[j].name === row.name.substring(0, row.name.length - 11)) {
+                series.splice(j + 1, 0, newSeries);
+                dashArray.splice(j + 1, 0, 5);
+                colours.splice(j + 1, 0, colours[j]);
                 break;
               }
             }
           } else {
+            // Using seedrandom so we have a predictable seed to use
+            colours.push('#' + (seedrandom('x' + i)() * 0xFFFFFF << 0).toString(16).padStart(6, '0'));
             series.push(newSeries);
             dashArray.push(0);
-            colours.push('#' + (Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0'));
           }
         }
 
@@ -54,7 +57,7 @@ export const chartSlice = createSlice({
           x: row.date,
           y: row.stock
         });
-      });
+      }
 
       state.chartState = {
         options: {

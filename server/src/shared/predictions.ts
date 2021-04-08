@@ -1,3 +1,5 @@
+import { differenceInCalendarDays } from 'date-fns';
+
 export const addPredictions = (rows: any, id: string) => {
   const predictions: any[] = [];
   let buffer: any[] = [];
@@ -18,27 +20,29 @@ export const addPredictions = (rows: any, id: string) => {
 };
 
 const buildPredictions = (predictions, buffer) => {
-    if (buffer.length > 1) {
-      predictions.push(getCopy(buffer[buffer.length - 1]));
-      predictions.push(getPredictionValue(buffer[0], buffer[buffer.length - 1]));
-    }
-}
+  if (buffer.length > 1) {
+    predictions.push(getCopy(buffer[buffer.length - 1]));
+    predictions.push(getPredictionValue(buffer[0], buffer[buffer.length - 1]));
+  }
+};
 
 const getPredictionValue = (start, end) => {
-  // actual logic to calculate predictedStock;
+  // aCalculate predicted stock;
   const firstDate = new Date(start.date);
   const lastDate = new Date(end.date);
   const endOfYear = new Date(new Date().getFullYear(), 11, 31);
-  const daysBetween = calculateDiffInDays(firstDate, lastDate);
-  const daysTillEnd = calculateDiffInDays(lastDate, endOfYear);
-  const predictedStockMultiplier = (end.stock - start.stock) / daysBetween;
-  const predictedStock = predictedStockMultiplier * daysTillEnd;
 
-  // creating prediction row
+  const daysBetween = Math.abs(differenceInCalendarDays(firstDate, lastDate));
+  const daysTillEnd = Math.abs(differenceInCalendarDays(lastDate, endOfYear));
+
+  const multiplier = (end.stock - start.stock) / daysBetween;
+  const predictedStock = end.stock + multiplier * daysTillEnd;
+
+  // Create prediction row
   const prediction = JSON.parse(JSON.stringify(end));
-  prediction.date = endOfYear.toLocaleString().split(',')[0];
-  prediction.stockBuilt = 0;
-  prediction.stockUsed = 0;
+  prediction.date = endOfYear;
+  prediction.stockBuilt = 'N/A';
+  prediction.stockUsed = 'N/A';
   prediction.stock = predictedStock;
   prediction.isEstimate = true;
 
@@ -49,12 +53,5 @@ const getCopy = (row) => {
   const copy = JSON.parse(JSON.stringify(row));
   copy.isEstimate = true;
   copy.isCopy = true;
-
-  return copy
-}
-
-const calculateDiffInDays = (dateA: Date, dateB: Date) => {
-  const differenceInTime = dateA.getTime() - dateB.getTime();
-  const differenceInDays = Math.round(differenceInTime / (1000 * 3600 * 24));
-  return Math.abs(differenceInDays);
+  return copy;
 };
