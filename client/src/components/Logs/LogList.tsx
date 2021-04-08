@@ -1,38 +1,48 @@
-import React from 'react';
-import { Button } from 'antd';
-
+import React, {useEffect, useState} from 'react';
+import {Button, message} from 'antd';
 import { LogEntry } from '../../interfaces/LogEntry';
 import { ResponsiveTable } from '../ResponsiveTable';
-
+import axios from '../../plugins/Axios';
+import {AuditDocument} from "../../../../server/dist/api/audits/schemas/audits.schema";
 export const LogList = () => {
+  const emptyData : LogEntry[] = []
+  const [rows, setRows] = useState(emptyData);
+  const [updated, setUpdated] = useState(false);
+
+  useEffect(() => {
+    setUpdated(true);
+    axios.get('/audits')
+      .then((res) => {
+        console.log(res)
+        const rowsToDisplay: LogEntry[] = []
+        res.data.forEach( (entry: AuditDocument) => {
+          rowsToDisplay.push({
+            module : entry.module,
+            action : entry.action,
+            date   : entry.date.toString(),
+            target : entry.target,
+            author : entry.author,
+          })});
+        setRows(rowsToDisplay);
+      })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [updated]);
 
   function getRows() {
-    const rows : LogEntry[] = [{
-      date: (new Date(2021, 1, 31, 12, 57)).toString(),
-      action: 'Create',
-      author: 'Mike',
-      target: '15 tires'
-    },
-      {
-        date: (new Date(2021, 1, 31, 12, 54)).toString(),
-        action: 'Login Success',
-        author: 'Mike',
-        target: 'self'
-      }
-    ];
     return rows;
   }
 
   const getColumns = () => ({
-    date: 'Date',
-    action: 'Action',
-    author: 'Author',
-    target: 'Target'
+    module : 'Module',
+    action : 'Action',
+    date   : 'Date',
+    target : 'Target',
+    author : 'Author',
   });
 
   return (
     <div style={{ paddingTop: 24 }}>
-      <ResponsiveTable values={getRows()} columns={getColumns()} />
+      <ResponsiveTable values={rows} columns={getColumns()} />
       <Button type='ghost' style={{ float: 'right', marginTop: 24 }}>
         Clear Logs
       </Button>
