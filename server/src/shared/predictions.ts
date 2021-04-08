@@ -36,12 +36,13 @@ const getPredictionValue = (start, end) => {
   const daysTillEnd = Math.abs(differenceInCalendarDays(lastDate, endOfYear));
 
   const multiplier = (end.stock - start.stock) / daysBetween;
-  const predictedStock = end.stock + multiplier * daysTillEnd;
+  const predictedStock = Math.round(end.stock + multiplier * daysTillEnd);
 
   // Create prediction row
   const prediction = JSON.parse(JSON.stringify(end));
   prediction.date = endOfYear;
   prediction.stockBuilt = 'N/A';
+  prediction.stockBought = 'N/A';
   prediction.stockUsed = 'N/A';
   prediction.stock = predictedStock;
   prediction.isEstimate = true;

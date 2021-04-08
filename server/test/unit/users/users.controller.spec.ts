@@ -6,6 +6,7 @@ import { Role } from '../../../src/api/roles/roles.enum';
 import { Model } from 'mongoose';
 import { User, UserDocument } from '../../../src/api/users/schemas/user.schema';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { JwtService } from '@nestjs/jwt';
 
 describe('UsersController', () => {
   jest.setTimeout(30000);
@@ -14,6 +15,7 @@ describe('UsersController', () => {
   let usersService: UsersService;
   let userDocumentModel: Model<UserDocument>;
   let emitter: EventEmitter2;
+  let jwtService: JwtService;
 
   const dummyUser: User = {
     firstName: 'System',
@@ -24,8 +26,10 @@ describe('UsersController', () => {
     role: 4,
   };
 
+  const auth : string = 'auth123';
+
   beforeEach(() => {
-    usersService = new UsersService(emitter, userDocumentModel);
+    usersService = new UsersService(jwtService, emitter, userDocumentModel);
     usersController = new UsersController(usersService);
   });
 
@@ -67,7 +71,7 @@ describe('UsersController', () => {
         .spyOn(usersService, 'create')
         .mockImplementation(async () => await result);
 
-      expect(await usersController.create(newUser)).toBe(result);
+      expect(await usersController.create(auth, newUser)).toBe(result);
     });
   });
 
@@ -79,7 +83,7 @@ describe('UsersController', () => {
         .spyOn(usersService, 'remove')
         .mockImplementation(async () => await result);
 
-      expect(await usersController.remove(result.username)).toBe(result);
+      expect(await usersController.remove(auth, result.username)).toBe(result);
     });
   });
 
@@ -99,7 +103,7 @@ describe('UsersController', () => {
         .spyOn(usersService, 'update')
         .mockImplementation(async () => await result);
 
-      expect(await usersController.update(result.username, updatedUser)).toBe(
+      expect(await usersController.update(auth, result.username, updatedUser)).toBe(
         result,
       );
     });

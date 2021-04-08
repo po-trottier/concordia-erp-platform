@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<manufactured location="604cee081ba2430c10eeee6b">
+<manufactured location="606ee77526b8379acc7c7538">
     <parts>
-        <part id="606bc081d6fbd22f2c3ceafc" stockBuilt="2" />
-        <part id="606bc091d6fbd22f2c3ceafd" stockBuilt="4" />
-        <part id="606bc09bd6fbd22f2c3ceafe" stockBuilt="3"/>
+        <part id="606ee82626b83763d77c7548" stockBuilt="4" />
+        <part id="606ee83326b83763187c754a" stockBuilt="2" />
+        <part id="606ee84c26b837f2287c754c" stockBuilt="1"/>
     </parts>
     <products>
-        <product id="606bc0bdd6fbd22f2c3ceb00" stockBuilt="1" />
-        <product id="606bc0acd6fbd22f2c3ceaff" stockBuilt="2" />
+        <product id="606ee88d26b83728037c754e" stockBuilt="1" />
     </products>
 </manufactured>

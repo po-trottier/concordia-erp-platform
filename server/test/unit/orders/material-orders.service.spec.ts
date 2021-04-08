@@ -15,6 +15,7 @@ import { PartLogDocument } from '../../../src/api/parts/parts-logs/schemas/part-
 import { PartDocument } from 'src/api/parts/parts/schemas/part.schema';
 import { ProductStockDocument } from 'src/api/products/products/schemas/product-stock.schema';
 import { ProductLogDocument } from 'src/api/products/products-logs/schemas/product-log.schema';
+import { JwtService } from '@nestjs/jwt';
 
 describe('MaterialOrdersService', () => {
   let materialsService: MaterialsService;
@@ -33,8 +34,10 @@ describe('MaterialOrdersService', () => {
   let productStockDocument: Model<ProductStockDocument>;
   let productLogDocument: Model<ProductLogDocument>;
   let partStockDocument: Model<PartStockDocument>;
+  let jwtService: JwtService;
 
   materialsService = new MaterialsService(
+    jwtService,
     emitter,
     partDocument,
     materialDocument,
@@ -43,6 +46,7 @@ describe('MaterialOrdersService', () => {
   );
   materialLogsService = new MaterialLogsService(materialLogDocument);
   locationsService = new LocationsService(
+    jwtService,
     emitter,
     locationDocument,
     materialStockDocument,
@@ -54,6 +58,7 @@ describe('MaterialOrdersService', () => {
   );
   materialStockService = new MaterialStockService(materialStockDocument, materialsService, materialLogsService, locationsService);
   materialOrdersService = new MaterialOrdersService(
+    jwtService,
     emitter,
     materialOrderDocument,
     materialsService,

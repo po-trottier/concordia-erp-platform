@@ -10,11 +10,11 @@ if len(sys.argv) > 1:
         baseURL = 'https://erp.p-o.me/'
 
 
-partId = '6051597e09e2ae2dc1019adf'
+partId = '606ee82626b83763d77c7548'
 
 token = erp_authenticate.authenticate(baseURL + "api/auth/login")
 
-locationId = '604cee081ba2430c10eeee6b'
+locationId = '606ee77526b8379acc7c7538'
 buildApi = 'api/parts/build/' + locationId
 url = baseURL + buildApi
 

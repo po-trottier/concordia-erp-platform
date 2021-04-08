@@ -21,6 +21,7 @@ import { PartLogDocument } from 'src/api/parts/parts-logs/schemas/part-log.schem
 import { ProductStockDocument } from 'src/api/products/products/schemas/product-stock.schema';
 import { PartStockDocument } from 'src/api/parts/parts/schemas/part-stock.schema';
 import { ProductLogDocument } from 'src/api/products/products-logs/schemas/product-log.schema';
+import { JwtService } from '@nestjs/jwt';
 
 describe('MaterialsController', () => {
   let materialController: MaterialsController;
@@ -38,6 +39,7 @@ describe('MaterialsController', () => {
   let productStockDocument: Model<ProductStockDocument>;
   let partLogDocument: Model<PartLogDocument>;
   let productLogDocument: Model<ProductLogDocument>;
+  let jwtService: JwtService;
 
   const dummyMaterial: Material = {
     name: 'Steel',
@@ -53,9 +55,12 @@ describe('MaterialsController', () => {
     stock: 50,
   };
 
+  const auth : string = 'auth123';
+
   beforeEach(async () => {
     materialLogsService = new MaterialLogsService(materialLogDocument);
     materialService = new MaterialsService(
+      jwtService,
       emitter,
       partDocument,
       materialDocument,
@@ -63,6 +68,7 @@ describe('MaterialsController', () => {
       materialStockDocument
     );
     locationsService = new LocationsService(
+      jwtService,
       emitter,
       locationDocument,
       materialStockDocument,
@@ -122,7 +128,7 @@ describe('MaterialsController', () => {
         .spyOn(materialService, 'create')
         .mockImplementation(async () => await result);
 
-      expect(await materialController.create(newMaterial)).toBe(result);
+      expect(await materialController.create(auth, newMaterial)).toBe(result);
     });
   });
 
@@ -134,7 +140,7 @@ describe('MaterialsController', () => {
         .spyOn(materialService, 'remove')
         .mockImplementation(async () => await result);
 
-      expect(await materialController.remove(result.name)).toBe(result);
+      expect(await materialController.remove(auth, result.name)).toBe(result);
     });
   });
 
@@ -154,7 +160,7 @@ describe('MaterialsController', () => {
         .mockImplementation(async () => await result);
 
       expect(
-        await materialController.update(result.name, updatedMaterial),
+        await materialController.update(auth, result.name, updatedMaterial),
       ).toBe(result);
     });
   });
