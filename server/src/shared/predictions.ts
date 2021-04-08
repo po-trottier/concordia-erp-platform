@@ -8,12 +8,20 @@ export const addPredictions = (rows: any, id: string) => {
     } else if (buffer[buffer.length - 1][id] === row[id]) {
       buffer.push(row);
     } else {
-      predictions.push(getCopy(buffer[buffer.length - 1]));
-      predictions.push(getPredictionValue(buffer[0], buffer[buffer.length - 1]));
+      if (buffer.length > 1) {
+        predictions.push(getCopy(buffer[buffer.length - 1]));
+        predictions.push(getPredictionValue(buffer[0], buffer[buffer.length - 1]));
+      }
       buffer = [row];
     }
   }
+  if (buffer.length > 1){
+      predictions.push(getCopy(buffer[buffer.length - 1]));
+      predictions.push(getPredictionValue(buffer[0], buffer[buffer.length - 1]));
+  }
 
+  console.log(buffer);
+  console.log(predictions);
   return [...rows, ...predictions];
 };
 
