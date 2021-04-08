@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Input } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
+import { Card, Input } from 'antd';
+import axios from '../../plugins/Axios';
+import Chart from 'react-apexcharts';
 import { ResponsiveTable } from '../ResponsiveTable';
 import { PartHistoryEntry } from '../../interfaces/PartHistoryEntry';
 import { RootState } from '../../store/Store';
-import axios from '../../plugins/Axios';
-import Chart from "react-apexcharts";
-import {getChartState} from '../../store/slices/ChartSlice';
+import { getChartState } from '../../store/slices/ChartSlice';
 
 const { Search } = Input;
 
@@ -19,8 +19,9 @@ const inventoryColumns = {
 };
 
 export const PartInventory = () => {
-  const location = useSelector((state : RootState) => state.location.selected);
   const dispatch = useDispatch();
+
+  const location = useSelector((state : RootState) => state.location.selected);
   const chartData = useSelector((state : RootState) => state.chart.chartState);
 
   const emptyData : PartHistoryEntry[] = [];
@@ -30,7 +31,7 @@ export const PartInventory = () => {
   useEffect(() => {
     axios.get('parts/logs/' + location).then(async ({ data }) => {
       for (const row of data) {
-        row.date = row.date.substring(0,10);
+        row.date = row.date.substring(0, 10);
         row.name = row.partId.name + (row.isEstimate ? ' (estimate)' : '');
       }
       setPartsData(data);
@@ -50,14 +51,13 @@ export const PartInventory = () => {
     return rows;
   };
 
-
   const getChartData = () => {
     return JSON.parse(JSON.stringify(chartData));
-  }
+  };
 
   const getTableData = () => {
-    return getParts().filter((row: any) => ! row.isCopy);
-  }
+    return getParts().filter((row : any) => !row.isCopy);
+  };
 
   const onSearch = (e : React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
@@ -71,7 +71,7 @@ export const PartInventory = () => {
           onChange={onSearch}
           style={{ marginBottom: 18 }} />
         {getParts().length > 0 ? (
-          <Chart {...getChartData()} type="line" height={350} />
+          <Chart {...getChartData()} type='line' height={350} />
         ) : (
           <span>No part transactions were found.</span>
         )}

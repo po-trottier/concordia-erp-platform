@@ -2,9 +2,9 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { UpdatePartLogDto } from './dto/update-part-log.dto';
+import { addPredictions } from '../../../shared/predictions';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { PartLog, PartLogDocument } from './schemas/part-log.schema';
-import { addPredictions } from '../../../shared/predictions';
 
 /**
  * Handles partLog data storage and retrieval.
