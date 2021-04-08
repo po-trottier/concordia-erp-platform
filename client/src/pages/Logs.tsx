@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Menu } from 'antd';
-import { FunnelPlotTwoTone, SafetyCertificateTwoTone } from '@ant-design/icons';
+import { FunnelPlotTwoTone, SafetyCertificateTwoTone, DropboxOutlined } from '@ant-design/icons';
 
 import { Audit } from '../components/Logs/Audit';
 import { LogList } from '../components/Logs/LogList';
+import { useDropboxChooser } from 'use-dropbox-chooser';
 
 export const Logs = () => {
 
@@ -24,6 +25,24 @@ export const Logs = () => {
     }
   };
 
+  const { open, isOpen } = useDropboxChooser({
+    appKey: process.env.REACT_APP_DROPBOX_KEY,
+    chooserOptions: { multiselect: false, linkType: 'preview' },
+    onSelected: (files : any) => {
+      handleSuccess(files);
+    }
+  });
+
+  const handleSuccess = (files : any[]) => {
+    const a = document.createElement('a');
+    a.setAttribute('hidden', '');
+    a.setAttribute('href', files[0].link);
+    a.setAttribute('target', '_blank');
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }
+
   return (
     <div>
       <Menu onClick={updateState} defaultSelectedKeys={['audit']} mode='horizontal'>
@@ -32,6 +51,13 @@ export const Logs = () => {
         </Menu.Item>
         <Menu.Item key='logs' icon={<SafetyCertificateTwoTone twoToneColor='#eb2f96' />}>
           All Logs
+        </Menu.Item>
+        <Menu.Item
+        icon={<DropboxOutlined
+        style={{color: "#4E89FF"}} />}
+        onClick={open}
+        disabled={isOpen}>
+          Dropbox
         </Menu.Item>
       </Menu>
       {renderSection()}
