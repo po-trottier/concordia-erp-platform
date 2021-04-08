@@ -44,6 +44,7 @@ import {
 } from '../products/products-logs/schemas/product-log.schema';
 import { EventMap } from '../../events/common';
 import {JwtService} from "@nestjs/jwt";
+import {UserToken} from "../../shared/user-token.interface";
 
 /**
  * Used by the LocationsController, handles location data storage and retrieval.
@@ -80,7 +81,7 @@ export class LocationsService implements OnApplicationBootstrap {
     if (!locations || locations.length < 1) {
       const location = new CreateLocationDto();
       location.name = DEFAULT_LOCATION;
-      await this.create(location);
+      await new this.locationModel(location).save();
       this.logger.log('Default location was created successfully');
     } else {
       this.logger.warn('Default location already exits');
@@ -96,8 +97,11 @@ export class LocationsService implements OnApplicationBootstrap {
   async create(auth: string, createLocationDto: CreateLocationDto): Promise<Location> {
     const createdLocation = new this.locationModel(createLocationDto);
 
+    const decoded: any = this.jwtService.decode(auth.substr(7));
+    const token : UserToken = decoded;
+
     const location = await createdLocation.save();
-    this.emitter.emit(EventMap.LOCATION_CREATED.id, location);
+    this.emitter.emit(EventMap.LOCATION_CREATED.id, {location, token});
     return location;
   }
 
@@ -125,6 +129,7 @@ export class LocationsService implements OnApplicationBootstrap {
    * @param updateLocationDto dto used to update locations
    */
   async update(
+    auth: string,
     id: string,
     updateLocationDto: UpdateLocationDto,
   ): Promise<Location> {
@@ -134,17 +139,21 @@ export class LocationsService implements OnApplicationBootstrap {
       { new: true },
     );
 
-    const result = this.validateLocationFound(updatedLocation, id);
-    this.emitter.emit(EventMap.LOCATION_MODIFIED.id, result);
-    return result;
+    const decoded: any = this.jwtService.decode(auth.substr(7));
+    const token : UserToken = decoded;
+
+    const location = this.validateLocationFound(updatedLocation, id);
+    this.emitter.emit(EventMap.LOCATION_MODIFIED.id, {location, token});
+    return location;
   }
 
   /**
    * Deletes location by id using mongoose locationModel
    *
+   * @param auth
    * @param id string of the location's objectId
    */
-  async remove(id: string): Promise<Location> {
+  async remove(auth: string, id: string): Promise<Location> {
     // Remove all stock entries for that location
     const materialStock = await this.materialStockModel.find({
       locationId: id,
@@ -177,11 +186,14 @@ export class LocationsService implements OnApplicationBootstrap {
     });
     for (const log of productLog) await log.delete();
 
+    const decoded: any = this.jwtService.decode(auth.substr(7));
+    const token : UserToken = decoded;
+
     // Delete the actual location
     const deletedLocation = await this.locationModel.findByIdAndDelete(id);
-    const result = this.validateLocationFound(deletedLocation, id);
-    this.emitter.emit(EventMap.LOCATION_DELETED.id, result);
-    return result;
+    const location = this.validateLocationFound(deletedLocation, id);
+    this.emitter.emit(EventMap.LOCATION_DELETED.id, {location, token});
+    return location;
   }
 
   /**
