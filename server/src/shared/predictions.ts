@@ -8,22 +8,21 @@ export const addPredictions = (rows: any, id: string) => {
     } else if (buffer[buffer.length - 1][id] === row[id]) {
       buffer.push(row);
     } else {
-      if (buffer.length > 1) {
-        predictions.push(getCopy(buffer[buffer.length - 1]));
-        predictions.push(getPredictionValue(buffer[0], buffer[buffer.length - 1]));
-      }
+      buildPredictions(predictions, buffer);
       buffer = [row];
     }
   }
-  if (buffer.length > 1){
-      predictions.push(getCopy(buffer[buffer.length - 1]));
-      predictions.push(getPredictionValue(buffer[0], buffer[buffer.length - 1]));
-  }
+  buildPredictions(predictions, buffer);
 
-  console.log(buffer);
-  console.log(predictions);
   return [...rows, ...predictions];
 };
+
+const buildPredictions = (predictions, buffer) => {
+    if (buffer.length > 1) {
+      predictions.push(getCopy(buffer[buffer.length - 1]));
+      predictions.push(getPredictionValue(buffer[0], buffer[buffer.length - 1]));
+    }
+}
 
 const getPredictionValue = (start, end) => {
   // actual logic to calculate predictedStock;
