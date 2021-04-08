@@ -1,16 +1,14 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { EventEmitter2 } from '@nestjs/event-emitter';
-import { Model } from 'mongoose';
-import { CreateEventDto } from './dto/create-event.dto';
-import { UpdateEventDto } from './dto/update-event.dto';
+import {BadRequestException, Injectable, NotFoundException,} from '@nestjs/common';
+import {InjectModel} from '@nestjs/mongoose';
+import {EventEmitter2} from '@nestjs/event-emitter';
+import {Model} from 'mongoose';
+import {CreateEventDto} from './dto/create-event.dto';
+import {UpdateEventDto} from './dto/update-event.dto';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Event, EventDocument } from './schemas/events.schema';
-import { EventMap } from '../../events/common';
+import {Event, EventDocument} from './schemas/events.schema';
+import {EventMap} from '../../events/common';
+import {JwtService} from "@nestjs/jwt";
+import {UserToken} from "../../shared/user-token.interface";
 
 /**
  * Used by the EventsController, handles event data storage and retrieval.
@@ -18,6 +16,7 @@ import { EventMap } from '../../events/common';
 @Injectable()
 export class EventsService {
   constructor(
+    private jwtService: JwtService,
     private emitter: EventEmitter2,
     @InjectModel(Event.name) private eventModel: Model<EventDocument>,
   ) {}
@@ -50,15 +49,19 @@ export class EventsService {
   /**
    * Creates event using mongoose eventModel
    *
+   * @param auth
    * @param createEventDto dto used to create events
    */
-  async create(createEventDto: CreateEventDto): Promise<Event> {
+  async create(auth: string, createEventDto: CreateEventDto): Promise<Event> {
     const createdEvent = new this.eventModel(
       this.validateRecipients(createEventDto, true),
     );
 
+    const decoded: any = this.jwtService.decode(auth.substr(7));
+    const token : UserToken = decoded;
+
     const event = await createdEvent.save();
-    this.emitter.emit(EventMap.EVENT_CREATED.id, event);
+    this.emitter.emit(EventMap.EVENT_CREATED.id, {event, token});
     return event;
   }
 
@@ -108,10 +111,11 @@ export class EventsService {
   /**
    * Updates event by id using mongoose eventModel
    *
+   * @param auth
    * @param id string of the event's objectId
    * @param updateEventDto dto used to update events
    */
-  async update(id: string, updateEventDto: UpdateEventDto): Promise<Event> {
+  async update(auth: string, id: string, updateEventDto: UpdateEventDto): Promise<Event> {
     // Make sure we only ever have 1 "to" field max
 
     const updatedEvent = await this.eventModel
@@ -124,22 +128,29 @@ export class EventsService {
       .populate('customerId')
       .exec();
 
-    const result = this.validateEventFound(updatedEvent, id);
-    this.emitter.emit(EventMap.EVENT_MODIFIED.id, result);
-    return result;
+    const decoded: any = this.jwtService.decode(auth.substr(7));
+    const token : UserToken = decoded;
+
+    const event = this.validateEventFound(updatedEvent, id);
+    this.emitter.emit(EventMap.EVENT_MODIFIED.id, {event, token});
+    return event;
   }
 
   /**
    * Deletes event by id using mongoose eventModel
    *
+   * @param auth
    * @param id string of the event's objectId
    */
-  async remove(id: string): Promise<Event> {
+  async remove(auth: string, id: string): Promise<Event> {
     const deletedEvent = await this.eventModel.findByIdAndDelete(id);
 
-    const result = this.validateEventFound(deletedEvent, id);
-    this.emitter.emit(EventMap.EVENT_DELETED.id, result);
-    return result;
+    const decoded: any = this.jwtService.decode(auth.substr(7));
+    const token : UserToken = decoded;
+
+    const event = this.validateEventFound(deletedEvent, id);
+    this.emitter.emit(EventMap.EVENT_DELETED.id, {event, token});
+    return event;
   }
 
   /**
@@ -154,8 +165,7 @@ export class EventsService {
     } else {
       if (eventResult.userId.length > 0) {
         for (const user of eventResult.userId) {
-          const obj: any = user;
-          obj.password = undefined;
+          user.password = undefined;
         }
       }
       return eventResult;

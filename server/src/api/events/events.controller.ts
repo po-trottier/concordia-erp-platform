@@ -1,5 +1,6 @@
 import {
   Body,
+  Headers,
   Controller,
   Delete,
   Get,
@@ -22,8 +23,8 @@ export class EventsController {
 
   @Roles(Role.SYSTEM_ADMINISTRATOR)
   @Post()
-  create(@Body(ValidationPipe) CreateEventDto: CreateEventDto) {
-    return this.eventsService.create(CreateEventDto);
+  create(@Headers('authorization') auth: string, @Body(ValidationPipe) CreateEventDto: CreateEventDto) {
+    return this.eventsService.create(auth, CreateEventDto);
   }
 
   @Roles(Role.SYSTEM_ADMINISTRATOR)
@@ -47,15 +48,16 @@ export class EventsController {
   @Roles(Role.SYSTEM_ADMINISTRATOR)
   @Patch(':id')
   update(
+    @Headers('authorization') auth: string,
     @Param('id') id: string,
     @Body(ValidationPipe) UpdateEventDto: UpdateEventDto,
   ) {
-    return this.eventsService.update(id, UpdateEventDto);
+    return this.eventsService.update(auth, id, UpdateEventDto);
   }
 
   @Roles(Role.SYSTEM_ADMINISTRATOR)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.eventsService.remove(id);
+  remove(@Headers('authorization') auth: string, @Param('id') id: string) {
+    return this.eventsService.remove(auth, id);
   }
 }
