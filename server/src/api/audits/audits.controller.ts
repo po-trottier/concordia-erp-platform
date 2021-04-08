@@ -4,7 +4,7 @@ import {
   Delete,
   Get,
   Param,
-  Post,
+  Post, Query,
   ValidationPipe,
 } from '@nestjs/common';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -14,6 +14,7 @@ import { CreateAuditDto } from './dto/create-audit.dto';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Roles } from '../roles/roles.decorator';
 import { Role } from '../roles/roles.enum';
+import {QueryAuditDto} from "./dto/query-audit.dto";
 
 @Controller()
 export class AuditsController {
@@ -29,6 +30,13 @@ export class AuditsController {
   @Get()
   findAll() {
     return this.auditsService.findAll();
+  }
+
+  @Roles(Role.ANY)
+  @Get(':filter')
+  find(@Query() query: QueryAuditDto) {
+    console.log(query)
+    return this.auditsService.find(query);
   }
 
   @Roles(Role.ANY)

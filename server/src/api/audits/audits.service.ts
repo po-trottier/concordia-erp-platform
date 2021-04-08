@@ -1,9 +1,10 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { CreateAuditDto } from './dto/create-audit.dto';
+import {Injectable, NotFoundException} from '@nestjs/common';
+import {InjectModel} from '@nestjs/mongoose';
+import {Model} from 'mongoose';
+import {CreateAuditDto} from './dto/create-audit.dto';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Audit, AuditDocument } from './schemas/audits.schema';
+import {Audit, AuditDocument} from './schemas/audits.schema';
+import {AuditActions} from "./audit.actions.enum";
 
 /**
  * Used by the AuditsController, handles audit data storage and retrieval.
@@ -22,6 +23,35 @@ export class AuditsService {
   async create(createAuditDto: CreateAuditDto): Promise<Audit> {
     const createdAudit = new this.auditModel(createAuditDto);
     return await createdAudit.save();
+  }
+
+  /**
+   * Retrieves all audits using mongoose auditModel
+   */
+  async find(query): Promise<Audit[]> {
+    let modules = [];
+    let actions = [];
+    let targets = [];
+    let authors = [];
+    let andList = [];
+    if (query.module){
+      query.module.split(',').forEach( (module) => {modules.push({'module': module})})
+      andList.push({$or: modules});
+    }
+    if (query.action){
+      query.action.split(',').forEach( (action) => {actions.push({'action': action})})
+      andList.push({$or: actions});
+    }
+    if (query.target){
+      query.target.split(',').forEach( (target) => {targets.push({'target': target})})
+      andList.push({$or: targets});
+    }
+    if (query.author){
+      query.author.split(',').forEach( (author) => {authors.push({'author': author})})
+      andList.push({$or: authors});
+    }
+
+    return this.auditModel.find().and(andList);
   }
 
   /**
