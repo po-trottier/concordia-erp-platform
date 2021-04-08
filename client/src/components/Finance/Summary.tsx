@@ -16,7 +16,7 @@ export const Summary = () => {
 
   useEffect(() => {
     setUpdated(true);
-    axios.get('/orders/summary ')
+    axios.get('/orders/summary')
       .then((res) => {
         if (res && res.data) {
           const data : SummaryEntry[] = [];

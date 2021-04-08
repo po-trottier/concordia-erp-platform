@@ -27,13 +27,13 @@ export const chartSlice = createSlice({
       const seriesNames : any = {};
       for (let i = 0; i < rows.length; i++) {
         const row = rows[i];
-        if (!seriesNames[row.name]) {
+        if (!seriesNames[row._id + row.name]) {
           // create series if it doesn't exist
           const newSeries = {
             name: row.name,
             data: []
           };
-          seriesNames[row.name] = true;
+          seriesNames[row._id + row.name] = true;
 
           if (row.isEstimate) {
             for (let j = 0; j < series.length; j++) {
