@@ -4,8 +4,8 @@ import requests
 import erp_authenticate
 
 baseURL = 'http://localhost:5500/'
-if len(sys.argv) > 1:
-    if sys.argv[1] == "prod":
+if len(sys.argv) > 2:
+    if sys.argv[2] == "prod":
         baseURL = 'https://erp.p-o.me/'
 
 token = erp_authenticate.authenticate(baseURL + "api/auth/login")
@@ -34,14 +34,13 @@ if __name__ == "__main__":
         partId = part.attrib['id']
         stockBuilt = part.attrib['stockBuilt']
         partsToBuild.append({'partId': partId, 'stockBuilt': stockBuilt})
-
     response = requests.patch(baseURL + "api/parts/build/" + location, json=partsToBuild, headers=headersAPI, verify=False)
-    print(response.content)
+    print(response)
 
     for product in root.find('products').findall('product'):
         productId = product.attrib['id']
         stockBuilt = product.attrib['stockBuilt']
-        productsToBuild.append({'productsId': partId, 'stockBuilt': stockBuilt})
+        productsToBuild.append({'productId': productId, 'stockBuilt': stockBuilt})
 
     response = requests.patch(baseURL + "api/products/build/" + location, json=productsToBuild, headers=headersAPI, verify=False)
-    print(response.content)
+    print(response)
