@@ -5,6 +5,7 @@ import { PartStockDocument } from '../../../src/api/parts/parts/schemas/part-sto
 import { ProductDocument } from '../../../src/api/products/products/schemas/products.schema';
 import { PartLogDocument } from '../../../src/api/parts/parts-logs/schemas/part-log.schema';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { JwtService } from '@nestjs/jwt';
 
 describe('PartsService', () => {
   let partsService: PartsService;
@@ -13,9 +14,11 @@ describe('PartsService', () => {
   let partsDocument: Model<PartDocument>;
   let productDocument: Model<ProductDocument>;
   let emitter: EventEmitter2;
+  let jwtService: JwtService;
 
   beforeEach(async () => {
     partsService = new PartsService(
+      jwtService,
       emitter,
       productDocument,
       partsDocument,

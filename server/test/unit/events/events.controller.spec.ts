@@ -5,12 +5,14 @@ import { UpdateEventDto } from '../../../src/api/events/dto/update-event.dto';
 import { EventDocument, Event } from '../../../src/api/events/schemas/events.schema';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Model } from 'mongoose';
+import { JwtService } from '@nestjs/jwt';
 
 describe('EventsController', () => {
   let eventsController: EventsController;
   let eventsService: EventsService;
   let eventDocument: Model<EventDocument>;
   let emitter: EventEmitter2;
+  let jwtService: JwtService;
 
   const dummyEvent : Event = {
     eventId: 'event123',
@@ -19,8 +21,10 @@ describe('EventsController', () => {
     role: [1],
   }
 
+  const auth : string = 'auth123';
+
   beforeEach(async () => {
-    eventsService = new EventsService(emitter, eventDocument);
+    eventsService = new EventsService(jwtService, emitter, eventDocument);
     eventsController = new EventsController(eventsService);
   });
 
@@ -38,7 +42,7 @@ describe('EventsController', () => {
         .spyOn(eventsService, 'create')
         .mockImplementation(async () => await result);
 
-      expect(await eventsController.create(createEventDto)).toBe(result);
+      expect(await eventsController.create(auth, createEventDto)).toBe(result);
     });
   });
 
@@ -92,7 +96,7 @@ describe('EventsController', () => {
         .spyOn(eventsService, 'update')
         .mockImplementation(async () => await result);
 
-      expect(await eventsController.update(dummyEvent.eventId, updateEventDto)).toBe(result);
+      expect(await eventsController.update(auth, dummyEvent.eventId, updateEventDto)).toBe(result);
     });
   });
 
@@ -104,7 +108,7 @@ describe('EventsController', () => {
         .spyOn(eventsService, 'remove')
         .mockImplementation(async () => await result);
 
-      expect(await eventsController.remove(dummyEvent.eventId)).toBe(result);
+      expect(await eventsController.remove(auth, dummyEvent.eventId)).toBe(result);
     });
   });
 });

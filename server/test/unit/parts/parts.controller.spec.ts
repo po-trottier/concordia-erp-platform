@@ -29,6 +29,7 @@ import { MaterialLogDocument } from '../../../src/api/materials/materials-logs/s
 import { ProductStockDocument } from '../../../src/api/products/products/schemas/product-stock.schema';
 import { ProductLogDocument } from '../../../src/api/products/products-logs/schemas/product-log.schema';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { JwtService } from '@nestjs/jwt';
 
 describe('PartsController', () => {
   let partsController: PartsController;
@@ -51,6 +52,7 @@ describe('PartsController', () => {
   let productLogDocument: Model<ProductLogDocument>;
   let productDocument: Model<ProductDocument>;
   let emitter: EventEmitter2;
+  let jwtService: JwtService;
 
   const dummyPart: Part = {
     name: 'Handlebar',
@@ -63,8 +65,11 @@ describe('PartsController', () => {
     stock: 50,
   };
 
+  const auth : string = 'auth123';
+
   beforeEach(async () => {
     partsService = new PartsService(
+      jwtService,
       emitter,
       productDocument,
       partsDocument,
@@ -73,6 +78,7 @@ describe('PartsController', () => {
     );
     partLogsService = new PartLogsService(partLogDocument);
     locationsService = new LocationsService(
+      jwtService,
       emitter,
       locationDocument,
       materialStockDocument,
@@ -89,6 +95,7 @@ describe('PartsController', () => {
       locationsService,
     );
     materialService = new MaterialsService(
+      jwtService,
       emitter,
       partsDocument,
       materialDocument,
@@ -102,7 +109,13 @@ describe('PartsController', () => {
       materialLogsService,
       locationsService
     );
-    partBuilderService = new PartBuilderService(emitter, partsService, materialStockService, partStockService);
+    partBuilderService = new PartBuilderService(
+      jwtService,
+      emitter,
+      partsService,
+      materialStockService,
+      partStockService
+    );
     partsController = new PartsController(partsService, partStockService, partBuilderService);
   });
 
@@ -141,7 +154,7 @@ describe('PartsController', () => {
         .spyOn(partBuilderService, 'build')
         .mockImplementation(async () => await result);
 
-      expect(await partsController.build(dummyPartStock.locationId, [newPartStock])).toBe(result);
+      expect(await partsController.build(auth, dummyPartStock.locationId, [newPartStock])).toBe(result);
     });
   });
 
@@ -157,7 +170,7 @@ describe('PartsController', () => {
         .spyOn(partsService, 'create')
         .mockImplementation(async () => await result);
 
-      expect(await partsController.create(newPart)).toBe(result);
+      expect(await partsController.create(auth, newPart)).toBe(result);
     });
   });
 
@@ -169,7 +182,7 @@ describe('PartsController', () => {
         .spyOn(partsService, 'remove')
         .mockImplementation(async () => await result);
 
-      expect(await partsController.remove(result.name)).toBe(result);
+      expect(await partsController.remove(auth, result.name)).toBe(result);
     });
   });
 
@@ -185,7 +198,7 @@ describe('PartsController', () => {
         .spyOn(partsService, 'update')
         .mockImplementation(async () => await result);
 
-      expect(await partsController.update(result.name, updatedPart)).toBe(
+      expect(await partsController.update(auth, result.name, updatedPart)).toBe(
         result,
       );
     });

@@ -27,6 +27,7 @@ import { PartStockDocument } from '../../../src/api/parts/parts/schemas/part-sto
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { MaterialStockDocument } from 'src/api/materials/materials/schemas/material-stock.schema';
 import { MaterialLogDocument } from 'src/api/materials/materials-logs/schemas/material-log.schema';
+import { JwtService } from '@nestjs/jwt';
 
 describe('ProductsController', () => {
   let productsController: ProductsController;
@@ -48,6 +49,7 @@ describe('ProductsController', () => {
   let partsDocument: Model<PartDocument>;
   let productLogDocument: Model<ProductLogDocument>;
   let emitter: EventEmitter2;
+  let jwtService: JwtService;
 
   const dummyProduct: Product = {
     name: 'Canondale Bike',
@@ -62,10 +64,20 @@ describe('ProductsController', () => {
     stock: 50,
   };
 
+  const auth : string = 'auth123';
+
   beforeEach(async () => {
-    partsService = new PartsService(emitter, productDocument, partsDocument, partLogDocument, partStockDocument);
+    partsService = new PartsService(
+      jwtService,
+      emitter,
+      productDocument,
+      partsDocument,
+      partLogDocument,
+      partStockDocument
+    );
     partLogsService = new PartLogsService(partLogDocument);
     locationsService = new LocationsService(
+      jwtService,
       emitter,
       locationDocument,
       materialStockDocument,
@@ -81,7 +93,13 @@ describe('ProductsController', () => {
       partLogsService,
       locationsService,
     );
-    productsService = new ProductsService(emitter, productDocument, productLogDocument, productStockDocument);
+    productsService = new ProductsService(
+      jwtService,
+      emitter,
+      productDocument,
+      productLogDocument,
+      productStockDocument
+    );
     productLogsService = new ProductLogsService(productLogDocument);
     productStockService = new ProductStockService(
       productStockDocument,
@@ -139,7 +157,7 @@ describe('ProductsController', () => {
         .spyOn(productsService, 'create')
         .mockImplementation(async () => await result);
 
-      expect(await productsController.create(newProduct)).toBe(result);
+      expect(await productsController.create(auth, newProduct)).toBe(result);
     });
   });
 
@@ -176,7 +194,7 @@ describe('ProductsController', () => {
         .spyOn(productsService, 'remove')
         .mockImplementation(async () => await result);
 
-      expect(await productsController.remove(result.name)).toBe(result);
+      expect(await productsController.remove(auth, result.name)).toBe(result);
     });
   });
 
@@ -194,7 +212,7 @@ describe('ProductsController', () => {
         .spyOn(productsService, 'update')
         .mockImplementation(async () => await result);
 
-      expect(await productsController.update(result.name, updatedProduct)).toBe(
+      expect(await productsController.update(auth, result.name, updatedProduct)).toBe(
         result,
       );
     });

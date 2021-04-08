@@ -34,6 +34,7 @@ import { PartLogDocument } from '../../../src/api/parts/parts-logs/schemas/part-
 import { PartStockDocument } from 'src/api/parts/parts/schemas/part-stock.schema';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { PartDocument } from 'src/api/parts/parts/schemas/part.schema';
+import { JwtService } from '@nestjs/jwt';
 
 describe('OrdersController', () => {
   let ordersController: OrdersController;
@@ -63,6 +64,7 @@ describe('OrdersController', () => {
   let partLogDocument: Model<PartLogDocument>;
   let partStockDocument: Model<PartStockDocument>;
   let emitter: EventEmitter2;
+  let jwtService: JwtService;
 
   const dummyMaterialOrder: MaterialOrder = {
     amountDue: 5000,
@@ -83,8 +85,11 @@ describe('OrdersController', () => {
     isPaid: false,
   };
 
+  const auth : string = 'auth123';
+
   beforeEach(async () => {
     locationsService = new LocationsService(
+      jwtService,
       emitter,
       locationDocument,
       materialStockDocument,
@@ -95,6 +100,7 @@ describe('OrdersController', () => {
       productLogDocument
     );
     materialService = new MaterialsService(
+      jwtService,
       emitter,
       partDocument,
       materialDocumentModel,
@@ -102,18 +108,31 @@ describe('OrdersController', () => {
       materialStockDocument
     );
     materialLogsService = new MaterialLogsService(materialLogDocument);
-    materialStockService = new MaterialStockService(materialStockDocument, materialService, materialLogsService, locationsService);
+    materialStockService = new MaterialStockService(
+      materialStockDocument,
+      materialService,
+      materialLogsService,
+      locationsService
+    );
     materialOrdersService = new MaterialOrdersService(
+      jwtService,
       emitter,
       materialOrderDocument,
       materialService,
       materialStockService
     );
-    productsService = new ProductsService(emitter, productDocument, productLogDocument, productStockDocument);
+    productsService = new ProductsService(
+      jwtService,
+      emitter,
+      productDocument,
+      productLogDocument,
+      productStockDocument
+    );
     productLogsService = new ProductLogsService(productLogDocument);
     productLogsService = new ProductLogsService(productLogDocument);
     productStockService = new ProductStockService(productStockDocument, productsService, productLogsService, locationsService);
     productOrdersService = new ProductOrdersService(
+      jwtService,
       emitter,
       productOrderDocument,
       productsService,
@@ -144,7 +163,7 @@ describe('OrdersController', () => {
         .mockImplementation(async () => await result);
 
       expect(
-        await ordersController.createMaterialOrder(newMaterialOrderList),
+        await ordersController.createMaterialOrder(auth, newMaterialOrderList),
       ).toBe(result);
     });
   });
@@ -250,7 +269,7 @@ describe('OrdersController', () => {
         .mockImplementation(async () => await result);
 
       expect(
-        await ordersController.createProductOrder(newProductOrderList),
+        await ordersController.createProductOrder(auth, newProductOrderList),
       ).toBe(result);
     });
   });

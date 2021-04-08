@@ -11,6 +11,7 @@ import { PartStockDocument } from '../../../src/api/parts/parts/schemas/part-sto
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { MaterialStockDocument } from 'src/api/materials/materials/schemas/material-stock.schema';
 import { MaterialLogDocument } from 'src/api/materials/materials-logs/schemas/material-log.schema';
+import { JwtService } from '@nestjs/jwt';
 
 describe('LocationsController', () => {
   let locationsController: LocationsController;
@@ -23,13 +24,17 @@ describe('LocationsController', () => {
   let materialLogDocument: Model<MaterialLogDocument>;
   let productLogDocument: Model<ProductLogDocument>;
   let emitter: EventEmitter2;
+  let jwtService: JwtService ;
 
   const dummyLocation: Location = {
     name: 'Montreal Warehouse',
   };
 
+  const auth : string = 'auth123';
+
   beforeEach(() => {
     locationsService = new LocationsService(
+      jwtService,
       emitter,
       locationDocument,
       materialStockDocument,
@@ -76,7 +81,7 @@ describe('LocationsController', () => {
         .spyOn(locationsService, 'create')
         .mockImplementation(async () => await result);
 
-      expect(await locationsController.create(newLocation)).toBe(result);
+      expect(await locationsController.create(auth, newLocation)).toBe(result);
     });
   });
 
@@ -88,7 +93,7 @@ describe('LocationsController', () => {
         .spyOn(locationsService, 'remove')
         .mockImplementation(async () => await result);
 
-      expect(await locationsController.remove('123')).toBe(result);
+      expect(await locationsController.remove(auth, '123')).toBe(result);
     });
   });
 
@@ -103,7 +108,7 @@ describe('LocationsController', () => {
         .spyOn(locationsService, 'update')
         .mockImplementation(async () => await result);
 
-      expect(await locationsController.update('123', newLocation)).toBe(result);
+      expect(await locationsController.update(auth, '123', newLocation)).toBe(result);
     });
   });
 });

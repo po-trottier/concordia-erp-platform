@@ -8,20 +8,24 @@ import {
 } from '../../../src/api/customers/schemas/customers.schema';
 import { Model } from 'mongoose';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { JwtService } from '@nestjs/jwt';
 
 describe('CustomersController', () => {
   let customersController: CustomersController;
   let customersService: CustomersService;
   let customerDocument: Model<CustomerDocument>;
   let emitter: EventEmitter2;
-
+  let jwtService: JwtService;
+  
   const dummyCustomer: Customer = {
     name: 'Sports Expert',
     email: 'sportsexpert@sports.com',
   };
 
+  const auth : string = 'auth123';
+
   beforeEach(() => {
-    customersService = new CustomersService(emitter, customerDocument);
+    customersService = new CustomersService(jwtService, emitter, customerDocument);
     customersController = new CustomersController(customersService);
   });
 
@@ -60,7 +64,7 @@ describe('CustomersController', () => {
         .spyOn(customersService, 'create')
         .mockImplementation(async () => await result);
 
-      expect(await customersController.create(newCustomer)).toBe(result);
+      expect(await customersController.create(auth, newCustomer)).toBe(result);
     });
   });
 
@@ -72,7 +76,7 @@ describe('CustomersController', () => {
         .spyOn(customersService, 'remove')
         .mockImplementation(async () => await result);
 
-      expect(await customersController.remove('123')).toBe(result);
+      expect(await customersController.remove(auth, '123')).toBe(result);
     });
   });
 
@@ -87,7 +91,7 @@ describe('CustomersController', () => {
         .spyOn(customersService, 'update')
         .mockImplementation(async () => await result);
 
-      expect(await customersController.update('123', newLocation)).toBe(result);
+      expect(await customersController.update(auth, '123', newLocation)).toBe(result);
     });
   });
 });
