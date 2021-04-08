@@ -7,11 +7,13 @@ import {
   CustomerDocument,
 } from '../../../src/api/customers/schemas/customers.schema';
 import { Model } from 'mongoose';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 describe('CustomersController', () => {
   let customersController: CustomersController;
   let customersService: CustomersService;
   let customerDocument: Model<CustomerDocument>;
+  let emitter: EventEmitter2;
 
   const dummyCustomer: Customer = {
     name: 'Sports Expert',
@@ -19,7 +21,7 @@ describe('CustomersController', () => {
   };
 
   beforeEach(() => {
-    customersService = new CustomersService(customerDocument);
+    customersService = new CustomersService(emitter, customerDocument);
     customersController = new CustomersController(customersService);
   });
 

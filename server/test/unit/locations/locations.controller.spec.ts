@@ -1,24 +1,44 @@
 import { LocationsController } from '../../../src/api/locations/locations.controller';
-import { LocationsService } from '../../../src/api/locations/locations.service';
 import { CreateLocationDto } from '../../../src/api/locations/dto/create-location.dto';
 import { UpdateLocationDto } from '../../../src/api/locations/dto/update-location.dto';
 import { Model } from 'mongoose';
-import {
-  Location,
-  LocationDocument,
-} from '../../../src/api/locations/schemas/location.schema';
+import { ProductStockDocument } from '../../../src/api/products/products/schemas/product-stock.schema';
+import { ProductLogDocument } from '../../../src/api/products/products-logs/schemas/product-log.schema';
+import { LocationDocument, Location } from '../../../src/api/locations/schemas/location.schema';
+import { LocationsService } from '../../../src/api/locations/locations.service';
+import { PartLogDocument } from '../../../src/api/parts/parts-logs/schemas/part-log.schema';
+import { PartStockDocument } from '../../../src/api/parts/parts/schemas/part-stock.schema';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { MaterialStockDocument } from 'src/api/materials/materials/schemas/material-stock.schema';
+import { MaterialLogDocument } from 'src/api/materials/materials-logs/schemas/material-log.schema';
 
-describe('FinanceController', () => {
+describe('LocationsController', () => {
   let locationsController: LocationsController;
   let locationsService: LocationsService;
+  let partLogDocument: Model<PartLogDocument>;
   let locationDocument: Model<LocationDocument>;
+  let materialStockDocument: Model<MaterialStockDocument>;
+  let partStockDocument: Model<PartStockDocument>;
+  let productStockDocument: Model<ProductStockDocument>;
+  let materialLogDocument: Model<MaterialLogDocument>;
+  let productLogDocument: Model<ProductLogDocument>;
+  let emitter: EventEmitter2;
 
   const dummyLocation: Location = {
     name: 'Montreal Warehouse',
   };
 
   beforeEach(() => {
-    locationsService = new LocationsService(locationDocument);
+    locationsService = new LocationsService(
+      emitter,
+      locationDocument,
+      materialStockDocument,
+      partStockDocument,
+      productStockDocument,
+      materialLogDocument,
+      partLogDocument,
+      productLogDocument
+    );
     locationsController = new LocationsController(locationsService);
   });
 
