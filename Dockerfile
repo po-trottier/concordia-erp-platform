@@ -4,7 +4,14 @@ FROM node:latest AS builder
 ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}
 
+ARG ENV_TOKEN
+ENV ENV_TOKEN=${ENV_TOKEN}
+
 WORKDIR /srv/webapp
+
+# Unlock the ENV variables
+COPY ./package*.json ./
+RUN npm run unlock ${ENV_TOKEN}
 
 # Build the client
 COPY ./client/package*.json ./client/
