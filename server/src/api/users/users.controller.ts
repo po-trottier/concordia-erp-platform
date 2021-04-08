@@ -21,7 +21,10 @@ export class UsersController {
 
   @Roles(Role.SYSTEM_ADMINISTRATOR)
   @Post()
-  create(@Headers('authorization') auth: string, @Body(ValidationPipe) dto: CreateUserDto) {
+  create(
+    @Headers('authorization') auth: string,
+    @Body(ValidationPipe) dto: CreateUserDto,
+  ) {
     const body = dto;
     body.username = body.username.trim().toLowerCase();
     body.email = body.email.trim().toLowerCase();
@@ -52,7 +55,10 @@ export class UsersController {
 
   @Roles(Role.SYSTEM_ADMINISTRATOR)
   @Delete(':username')
-  remove(@Headers('authorization') auth: string, @Param('username') username: string) {
+  remove(
+    @Headers('authorization') auth: string,
+    @Param('username') username: string,
+  ) {
     return this.usersService.remove(auth, username.trim().toLowerCase());
   }
 }

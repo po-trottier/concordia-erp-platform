@@ -146,7 +146,10 @@ export class MaterialListener {
   }
 
   @OnEvent(EventMap.MATERIAL_ORDERED.id)
-  async handleMaterialOrdered(orders: MaterialOrderDocument[]) {
+  async handleMaterialOrdered(args: {
+    orders: MaterialOrderDocument[];
+    token: UserToken;
+  }) {
     const emails = await getEmails(
       EventMap.MATERIAL_ORDERED,
       this.eventModel,
@@ -158,9 +161,19 @@ export class MaterialListener {
         to: emails,
         from: CONTACT_EMAIL,
         subject: '[EPIC Resource Planner] Material Ordered',
-        html: this.getOrderEmailHTML(orders),
+        html: this.getOrderEmailHTML(args.orders),
       });
     }
+
+    const audit: Audit = {
+      module: Material.name,
+      action: AuditActions.CREATE,
+      date: new Date(Date.now()),
+      target: args.orders[0].materialId,
+      author: args.token.username,
+    };
+    const auditEntry = new this.auditModel(audit);
+    await auditEntry.save();
 
     this.logger.log(
       'A material was ordered. ' + emails.length + ' user(s) notified.',

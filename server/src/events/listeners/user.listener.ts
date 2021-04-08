@@ -9,11 +9,9 @@ import { User, UserDocument } from '../../api/users/schemas/user.schema';
 import { EventMap, getEmails } from '../common';
 import { Mail } from '../../shared/mail';
 import { CONTACT_EMAIL } from '../../shared/constants';
-import {Audit, AuditDocument} from "../../api/audits/schemas/audits.schema";
-import {Product, ProductDocument} from "../../api/products/products/schemas/products.schema";
-import {UserToken} from "../../shared/user-token.interface";
-import {AuditActions} from "../../api/audits/enums/audit-actions.enum";
-
+import { Audit, AuditDocument } from '../../api/audits/schemas/audits.schema';
+import { UserToken } from '../../shared/user-token.interface';
+import { AuditActions } from '../../api/audits/enums/audit-actions.enum';
 
 @Injectable()
 export class UserListener {
@@ -37,7 +35,7 @@ export class UserListener {
   }
 
   @OnEvent(EventMap.USER_CREATED.id)
-  async handleUserCreated(args:{user: UserDocument, token: UserToken}) {
+  async handleUserCreated(args: { user: UserDocument; token: UserToken }) {
     const emails = await getEmails(
       EventMap.USER_CREATED,
       this.eventModel,
@@ -61,7 +59,7 @@ export class UserListener {
   }
 
   @OnEvent(EventMap.USER_DELETED.id)
-  async handleUserDeleted(args:{user: UserDocument, token: UserToken}) {
+  async handleUserDeleted(args: { user: UserDocument; token: UserToken }) {
     const emails = await getEmails(
       EventMap.USER_DELETED,
       this.eventModel,
@@ -85,7 +83,7 @@ export class UserListener {
   }
 
   @OnEvent(EventMap.USER_MODIFIED.id)
-  async handleUserModified(args:{user: UserDocument, token: UserToken}) {
+  async handleUserModified(args: { user: UserDocument; token: UserToken }) {
     const emails = await getEmails(
       EventMap.USER_MODIFIED,
       this.eventModel,
@@ -108,15 +106,19 @@ export class UserListener {
     );
   }
 
-  async createAudit(action: AuditActions, user: UserDocument, token: UserToken){
-    const audit : Audit = {
+  async createAudit(
+    action: AuditActions,
+    user: UserDocument,
+    token: UserToken,
+  ) {
+    const audit: Audit = {
       module: User.name,
       action: action,
       date: new Date(Date.now()),
       target: user.firstName + ' ' + user.lastName,
       author: token.username,
-    }
-    const auditEntry = new this.auditModel(audit)
+    };
+    const auditEntry = new this.auditModel(audit);
     await auditEntry.save();
   }
 }

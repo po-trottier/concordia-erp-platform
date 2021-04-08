@@ -7,8 +7,8 @@ import { ConfigModule } from '@nestjs/config';
 import { validate } from '../../shared/env';
 import { EventsModule } from '../events/events.module';
 import { UserListener } from '../../events/listeners/user.listener';
-import {AuthModule} from "../auth/auth.module";
-import {AuditsModule} from "../audits/audits.module";
+import { AuthModule } from '../auth/auth.module';
+import { AuditsModule } from '../audits/audits.module';
 
 @Module({
   imports: [

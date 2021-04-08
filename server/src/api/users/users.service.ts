@@ -8,6 +8,7 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { JwtService } from '@nestjs/jwt';
 import { Model } from 'mongoose';
 import { hash } from 'bcryptjs';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -19,8 +20,7 @@ import { User, UserDocument } from './schemas/user.schema';
 import { Mail } from '../../shared/mail';
 import { CONTACT_EMAIL } from '../../shared/constants';
 import { EventMap } from '../../events/common';
-import {UserToken} from "../../shared/user-token.interface";
-import {JwtService} from "@nestjs/jwt";
+import { UserToken } from '../../shared/user-token.interface';
 
 @Injectable()
 export class UsersService implements OnApplicationBootstrap {
@@ -47,11 +47,14 @@ export class UsersService implements OnApplicationBootstrap {
       user.email = 'admin@null.com';
       user.role = Role.SYSTEM_ADMINISTRATOR;
       user.password = await hash(process.env.DEFAULT_PASSWORD, 16);
-      await this.create(this.jwtService.sign({
-        username: 'system',
-        id: '666',
-        role: Role.SYSTEM_ADMINISTRATOR,
-      }),user);
+      await this.create(
+        this.jwtService.sign({
+          username: 'SYSTEM',
+          id: '1',
+          role: Role.SYSTEM_ADMINISTRATOR,
+        }),
+        user,
+      );
       this.logger.log('Default user was created successfully');
     } else {
       this.logger.warn('Default user already exits');
@@ -103,11 +106,11 @@ export class UsersService implements OnApplicationBootstrap {
     }
 
     const decoded: any = this.jwtService.decode(auth.substr(7));
-    const token : UserToken = decoded;
+    const token: UserToken = decoded;
 
     const user = await createdUser.save();
     user.password = undefined;
-    this.emitter.emit(EventMap.USER_CREATED.id, {user, token});
+    this.emitter.emit(EventMap.USER_CREATED.id, { user, token });
     return user;
   }
 
@@ -124,7 +127,11 @@ export class UsersService implements OnApplicationBootstrap {
     return this.validateUserFound(user, username);
   }
 
-  async update(auth: string, username: string, dto: UpdateUserDto): Promise<User> {
+  async update(
+    auth: string,
+    username: string,
+    dto: UpdateUserDto,
+  ): Promise<User> {
     // Trim & Lowercase to make search not case-sensitive
     const newUser = dto;
     if (newUser.username) {
@@ -153,10 +160,10 @@ export class UsersService implements OnApplicationBootstrap {
     );
 
     const decoded: any = this.jwtService.decode(auth.substr(7));
-    const token : UserToken = decoded;
+    const token: UserToken = decoded;
 
     const user = this.validateUserFound(updatedUser, newUser.username);
-    this.emitter.emit(EventMap.USER_MODIFIED.id, {user, token});
+    this.emitter.emit(EventMap.USER_MODIFIED.id, { user, token });
     return user;
   }
 
@@ -168,10 +175,10 @@ export class UsersService implements OnApplicationBootstrap {
     const deletedUser = await this.userModel.findOneAndDelete({ username });
 
     const decoded: any = this.jwtService.decode(auth.substr(7));
-    const token : UserToken = decoded;
+    const token: UserToken = decoded;
 
     const user = this.validateUserFound(deletedUser, username);
-    this.emitter.emit(EventMap.USER_DELETED.id, {user, token});
+    this.emitter.emit(EventMap.USER_DELETED.id, { user, token });
     return user;
   }
 

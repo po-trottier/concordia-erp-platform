@@ -166,7 +166,10 @@ export class ProductListener {
   }
 
   @OnEvent(EventMap.PRODUCT_BUILT.id)
-  async handleProductBuilt(stocks: ProductStockDocument[]) {
+  async handleProductBuilt(args: {
+    orders: ProductStockDocument[];
+    token: UserToken;
+  }) {
     const emails = await getEmails(
       EventMap.PRODUCT_BUILT,
       this.eventModel,
@@ -178,9 +181,19 @@ export class ProductListener {
         to: emails,
         from: CONTACT_EMAIL,
         subject: '[EPIC Resource Planner] Product Built',
-        html: this.getBuildEmailHTML(stocks),
+        html: this.getBuildEmailHTML(args.orders),
       });
     }
+
+    const audit: Audit = {
+      module: Product.name,
+      action: AuditActions.CREATE,
+      date: new Date(Date.now()),
+      target: args.orders[0].productId,
+      author: args.token.username,
+    };
+    const auditEntry = new this.auditModel(audit);
+    await auditEntry.save();
 
     this.logger.log(
       'A product was built. ' + emails.length + ' user(s) notified.',

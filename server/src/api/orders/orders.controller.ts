@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Headers,
   Param,
   Patch,
   Post,
@@ -32,10 +33,12 @@ export class OrdersController {
   @Roles(Role.SYSTEM_ADMINISTRATOR, Role.INVENTORY_MANAGER)
   @Post('materials')
   createMaterialOrder(
+    @Headers('authorization') auth: string,
     @Body(ValidationPipe)
     createMaterialOrderDto: CreateMaterialOrderDto[],
   ) {
     return this.materialOrderService.createMaterialOrder(
+      auth,
       createMaterialOrderDto,
     );
   }
@@ -70,9 +73,10 @@ export class OrdersController {
   @Roles(Role.SYSTEM_ADMINISTRATOR, Role.SALESPERSON)
   @Post('products')
   createProductOrder(
+    @Headers('authorization') auth: string,
     @Body(ValidationPipe) createProductOrderDto: CreateProductOrderDto[],
   ) {
-    return this.productOrderService.create(createProductOrderDto);
+    return this.productOrderService.create(auth, createProductOrderDto);
   }
 
   @Roles(Role.ANY)
