@@ -1,4 +1,4 @@
 export interface PartOrderItem {
-  partId: string;
-  stockBuilt: number;
+  partId : string;
+  stockBuilt : number;
 }

@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Col, Form, message, Modal, Radio, RadioChangeEvent, Row, Select } from 'antd';
 import { useDispatch } from 'react-redux';
-import { addListenerEntry } from '../../store/slices/ListenerListSlice';
+import { updateListenerEntry, removeListenerEntry } from '../../store/slices/ListenerListSlice';
 import { EventDropdownEntry } from '../../interfaces/EventDropdownEntry';
 import { CustomerDropdownEntry } from '../../interfaces/CustomerDropdownEntry';
 import { UserDropdownEntry } from '../../interfaces/UserDropdownEntry';
+import { EventEntry } from '../../interfaces/EventEntry';
 import { getRoleString, Role } from '../../router/Roles';
 import axios from '../../plugins/Axios';
 
 const { Option } = Select;
 
-export const AddEventModal = () => {
+export const EditEventModal = (props: { event: EventEntry }) => {
   const dispatch = useDispatch();
 
   const [form] = Form.useForm();
@@ -22,7 +23,7 @@ export const AddEventModal = () => {
   const emptyEventsData : EventDropdownEntry[] = [];
   const emptyCustomersData : CustomerDropdownEntry[] = [];
   const emptyUsersData : UserDropdownEntry[] = [];
-  const [recipientType, setRecipientType] = useState('customers');
+  const [recipientType, setRecipientType] = useState(props.event.recipientType);
   const [eventsData, setEventsData] = useState(emptyEventsData);
   const [customersData, setCustomersData] = useState(emptyCustomersData);
   const [usersData, setUsersData] = useState(emptyUsersData);
@@ -87,23 +88,40 @@ export const AddEventModal = () => {
       });
   }, [updated]);
 
-  const addEvent = (values : any) => {
+  const editEvent = (values : any) => {
     const body = values;
     delete body.recipient;
 
     setLoading(true);
-    axios
-      .post('/events', body)
+    axios.patch('/events/' + props.event._id, body)
       .then(({ data }) => {
-        message.success('The event was added successfully.');
-        dispatch(addListenerEntry(data));
+        message.success('The event was edited successfully.');
         handleCancel();
+        dispatch(updateListenerEntry({
+          id: props.event._id,
+          newListener: data
+        }));
       })
       .catch((err) => {
-        message.error('Something went wrong while creating the event.');
+        message.error('Something went wrong while editing the event.');
         console.error(err);
       })
       .finally(() => {
+        setLoading(false);
+      });
+  };
+
+  const deleteEvent = () => {
+    setLoading(true);
+    axios.delete('/events/' + props.event._id)
+      .then(() => {
+        message.success('The event was removed successfully.');
+        handleCancel();
+        dispatch(removeListenerEntry(props.event._id));
+      })
+      .catch((err) => {
+        message.error('Something went wrong while removing the event.');
+        console.error(err);
         setLoading(false);
       });
   };
@@ -120,14 +138,14 @@ export const AddEventModal = () => {
 
   const renderRecipientField = () => {
     let dropdownOffset = 0;
-    let text = '';
     let field = '';
+    let initial = [];
     let data;
 
-    switch (recipientType) {
+    switch (recipientType?.toLowerCase()) {
       case 'users':
-        text = 'Users:';
         field = 'userId';
+        initial = props.event.userId.map((u : any) => u._id);
         data = usersData.map((user) => (
           <Option key={user.id} value={user.id}>
             {user.username}
@@ -136,8 +154,8 @@ export const AddEventModal = () => {
         break;
 
       case 'customers':
-        text = 'Customers:'
         field = 'customerId'
+        initial = props.event.customerId.map((c) => c._id);
         data = customersData.map((customer) => (
           <Option key={customer.id} value={customer.id}>
             {customer.name}
@@ -146,8 +164,8 @@ export const AddEventModal = () => {
         break;
 
       case 'roles':
-        text = 'Roles:'
         field = 'role'
+        initial = props.event.role;
         data = Object.keys(Role).map((key, val) => {
           if (isFinite(Number(key))) {
             dropdownOffset++;
@@ -164,18 +182,19 @@ export const AddEventModal = () => {
     return (
       <Row align='middle' style={{ marginBottom: 16 }}>
         <Col sm={6} span={9}>
-          <span>{text}</span>
+          <span>{recipientType}:</span>
         </Col>
         <Col sm={18} span={15}>
           <Form.Item
             style={{ marginBottom: 0 }}
             name={field}
-            rules={[{ required: true, message: 'Please select ' + recipientType + '.' }]}>
+            rules={[{ required: true, message: 'Please select ' + recipientType?.toLowerCase() + '.' }]}>
             <Select
               mode='multiple'
               showSearch
+              defaultValue={initial}
               style={{ width: '100%', display: 'inline-table' }}
-              placeholder={'Select 1 or more ' + recipientType}
+              placeholder={'Select 1 or more ' + recipientType?.toLowerCase()}
               optionFilterProp='children'>
               { data }
             </Select>
@@ -188,23 +207,48 @@ export const AddEventModal = () => {
   return (
     <div>
       <Button
-        type='primary'
-        style={{ marginTop: 16 }}
-        onClick={() => setVisible(true)}>
-        Add a new Event
+        size='small'
+        type='ghost'
+        style={{ width: 60 }}
+        onClick={() => {
+          setRecipientType(props.event.recipientType);
+          setVisible(true);
+        }}>
+        Edit
       </Button>
       <Modal
         title='Add New Event'
         visible={visible}
         confirmLoading={loading}
-        onOk={form.submit}
-        onCancel={handleCancel}>
+        onCancel={handleCancel}
+        footer={[
+          <Button
+            key='delete'
+            type='dashed'
+            style={{ float: 'left' }}
+            onClick={() => deleteEvent()}>
+            Remove
+          </Button>,
+          <Button
+            key='cancel'
+            type='ghost'
+            onClick={handleCancel}>
+            Cancel
+          </Button>,
+          <Button
+            key='submit'
+            type='primary'
+            onClick={() => form.submit()}>
+            OK
+          </Button>
+        ]}>
         <Form
           form={form}
-          onFinish={addEvent}
+          onFinish={editEvent}
           style={{ marginBottom: '-24px', width: '100%', maxWidth: '500px' }}
           initialValues={{
-            'recipient': recipientType
+            'eventId': props.event.eventId,
+            'recipient': props.event.recipientType?.toLocaleLowerCase(),
           }}>
           {/*Action/Event Field*/}
           <Row align='middle' style={{ marginBottom: 16 }}>

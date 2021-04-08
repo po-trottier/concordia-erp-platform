@@ -57,7 +57,8 @@ export class EventsService {
       this.validateRecipients(createEventDto, true),
     );
 
-    const event = await createdEvent.save();
+    let event = await createdEvent.save();
+    event = await event.populate('userId').populate('customerId').execPopulate();
     this.emitter.emit(EventMap.EVENT_CREATED.id, event);
     return event;
   }

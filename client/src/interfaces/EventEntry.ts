@@ -7,7 +7,7 @@ export interface EventEntry {
   _id : string,
   eventId : string,
   customerId : CustomerEntry[],
-  userId :UserEntry[],
+  userId : UserEntry[],
   role : Role[],
   eventName? : string,
   recipientType? : string,

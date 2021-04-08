@@ -24,16 +24,18 @@ export class EventListener {
       <ul>
         <li><b>ID:</b> ${event.id}</li>
         <li><b>Event ID:</b> ${event.eventId}</li>
-        <li><b>Customer IDs:</b> ${
+        <li><b>Customer:</b> ${
           event.customerId && event.customerId.length > 0
-            ? event.customerId
+            ? event.customerId.map((u: any) => u.name).join(', ')
             : 'None'
         }</li>
-        <li><b>User IDs:</b> ${
-          event.userId && event.userId.length > 0 ? event.userId : 'None'
+        <li><b>Users:</b> ${
+          event.userId && event.userId.length > 0
+            ? event.userId.map((u: any) => u.username).join(', ')
+            : 'None'
         }</li>
         <li><b>Roles:</b> ${
-          event.role && event.role.length > 0 ? event.role : 'None'
+          event.role && event.role.length > 0 ? event.role.join(', ') : 'None'
         }</li>
       </ul>`;
   }
