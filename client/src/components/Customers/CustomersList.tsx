@@ -115,11 +115,11 @@ export const CustomersList = () => {
 				onChange={onSearch}
 				style={{ marginBottom: 18 }}
 			/>
-			{getCustomers().length > 0 ? (
-				<ResponsiveTable values={getCustomers()} columns={getColumns()} />
-			) : (
-				<span>No customers were found.</span>
-			)}
+			{
+				getCustomers().length > 0 ? (
+					<ResponsiveTable values={getCustomers()} columns={getColumns()} />
+				) : <span>No customers were found.</span>
+			}
 		</Card>
 	);
 };
