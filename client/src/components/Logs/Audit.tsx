@@ -206,7 +206,7 @@ export const Audit = () => {
     <div>
       <Card style={{ margin: '24px 0' }}>
         <Title level={4}>Filters</Title>
-        <p style={style}>All filters are optional, use them to filter out the logs you do not need.</p>
+        <p>All filters are optional, use them to filter out the logs you do not need.</p>
         <p style={style}>Select the kind of action to query:</p>
         <Checkbox.Group onChange={(e : any) => setActionFilter(e)} options={actionOptions} />
         <p style={style}>Select the time range for which to query:</p>
@@ -215,7 +215,6 @@ export const Audit = () => {
           style={{ width: 400 }}
           showTime={{ format: 'HH:mm' }}
           format='YYYY-MM-DD HH:mm' />
-
         <p style={style}>Select the author(s) of the changes:</p>
         <Select
           style={{ width: 400 }}
@@ -235,7 +234,6 @@ export const Audit = () => {
             )
           }
         </Select>
-
         <p style={style}>Select the module(s) to query:</p>
         <Select
           style={{ width: 400 }}
