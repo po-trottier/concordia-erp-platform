@@ -37,7 +37,10 @@ export class ProductsController {
    */
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
   @Post()
-  create(@Headers('authorization') auth: string, @Body(ValidationPipe) createProductDto: CreateProductDto) {
+  create(
+    @Headers('authorization') auth: string,
+    @Body(ValidationPipe) createProductDto: CreateProductDto,
+  ) {
     return this.productsService.create(createProductDto, auth);
   }
 
@@ -102,7 +105,7 @@ export class ProductsController {
    */
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
   @Delete(':id')
-  remove(@Param('id') id: string, @Headers('authorization') auth: string,) {
+  remove(@Param('id') id: string, @Headers('authorization') auth: string) {
     return this.productsService.remove(id, auth);
   }
 

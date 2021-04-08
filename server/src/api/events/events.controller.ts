@@ -23,12 +23,15 @@ export class EventsController {
 
   @Roles(Role.SYSTEM_ADMINISTRATOR)
   @Post()
-  create(@Headers('authorization') auth: string, @Body(ValidationPipe) CreateEventDto: CreateEventDto) {
+  create(
+    @Headers('authorization') auth: string,
+    @Body(ValidationPipe) CreateEventDto: CreateEventDto,
+  ) {
     return this.eventsService.create(auth, CreateEventDto);
   }
 
   @Roles(Role.SYSTEM_ADMINISTRATOR)
-  @Get('/all')
+  @Get('all')
   findEvents() {
     return this.eventsService.findEvents();
   }

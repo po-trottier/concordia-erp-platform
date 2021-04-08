@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { JwtService } from '@nestjs/jwt';
 import { Model } from 'mongoose';
 import { CreateMaterialDto } from './dto/create-material.dto';
 import { UpdateMaterialDto } from './dto/update-material.dto';
@@ -23,8 +24,7 @@ import {
   MaterialLogDocument,
 } from '../materials-logs/schemas/material-log.schema';
 import { EventMap } from '../../../events/common';
-import {UserToken} from "../../../shared/user-token.interface";
-import {JwtService} from "@nestjs/jwt";
+import { UserToken } from '../../../shared/user-token.interface';
 
 /**
  * Used by the MaterialsController, handles material data storage and retrieval.
@@ -50,14 +50,17 @@ export class MaterialsService {
    * @param createMaterialDto dto used to create materials
    * @param auth
    */
-  async create(createMaterialDto: CreateMaterialDto, auth: string): Promise<Material> {
+  async create(
+    createMaterialDto: CreateMaterialDto,
+    auth: string,
+  ): Promise<Material> {
     const createdMaterial = new this.materialModel(createMaterialDto);
 
     const decoded: any = this.jwtService.decode(auth.substr(7));
-    const token : UserToken = decoded;
+    const token: UserToken = decoded;
 
     const material = await createdMaterial.save();
-    this.emitter.emit(EventMap.MATERIAL_CREATED.id, {material, token});
+    this.emitter.emit(EventMap.MATERIAL_CREATED.id, { material, token });
     return material;
   }
 
@@ -88,7 +91,7 @@ export class MaterialsService {
   async update(
     id: string,
     updateMaterialDto: UpdateMaterialDto,
-    auth: string
+    auth: string,
   ): Promise<Material> {
     const updatedMaterial = await this.materialModel.findByIdAndUpdate(
       id,
@@ -97,10 +100,10 @@ export class MaterialsService {
     );
 
     const decoded: any = this.jwtService.decode(auth.substr(7));
-    const token : UserToken = decoded;
+    const token: UserToken = decoded;
 
     const material = this.validateMaterialFound(updatedMaterial, id);
-    this.emitter.emit(EventMap.MATERIAL_MODIFIED.id, {material, token});
+    this.emitter.emit(EventMap.MATERIAL_MODIFIED.id, { material, token });
     return material;
   }
 
@@ -136,10 +139,10 @@ export class MaterialsService {
     const deletedMaterial = await this.materialModel.findByIdAndDelete(id);
 
     const decoded: any = this.jwtService.decode(auth.substr(7));
-    const token : UserToken = decoded;
+    const token: UserToken = decoded;
 
     const material = this.validateMaterialFound(deletedMaterial, id);
-    this.emitter.emit(EventMap.MATERIAL_DELETED.id, {material, token});
+    this.emitter.emit(EventMap.MATERIAL_DELETED.id, { material, token });
     return material;
   }
 

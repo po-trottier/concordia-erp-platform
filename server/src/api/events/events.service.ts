@@ -1,14 +1,18 @@
-import {BadRequestException, Injectable, NotFoundException,} from '@nestjs/common';
-import {InjectModel} from '@nestjs/mongoose';
-import {EventEmitter2} from '@nestjs/event-emitter';
-import {Model} from 'mongoose';
-import {CreateEventDto} from './dto/create-event.dto';
-import {UpdateEventDto} from './dto/update-event.dto';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { JwtService } from '@nestjs/jwt';
+import { Model } from 'mongoose';
+import { CreateEventDto } from './dto/create-event.dto';
+import { UpdateEventDto } from './dto/update-event.dto';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import {Event, EventDocument} from './schemas/events.schema';
-import {EventMap} from '../../events/common';
-import {JwtService} from "@nestjs/jwt";
-import {UserToken} from "../../shared/user-token.interface";
+import { Event, EventDocument } from './schemas/events.schema';
+import { UserToken } from '../../shared/user-token.interface';
+import { EventMap } from '../../events/common';
 
 /**
  * Used by the EventsController, handles event data storage and retrieval.
@@ -58,10 +62,10 @@ export class EventsService {
     );
 
     const decoded: any = this.jwtService.decode(auth.substr(7));
-    const token : UserToken = decoded;
+    const token: UserToken = decoded;
 
     const event = await createdEvent.save();
-    this.emitter.emit(EventMap.EVENT_CREATED.id, {event, token});
+    this.emitter.emit(EventMap.EVENT_CREATED.id, { event, token });
     return event;
   }
 
@@ -115,7 +119,11 @@ export class EventsService {
    * @param id string of the event's objectId
    * @param updateEventDto dto used to update events
    */
-  async update(auth: string, id: string, updateEventDto: UpdateEventDto): Promise<Event> {
+  async update(
+    auth: string,
+    id: string,
+    updateEventDto: UpdateEventDto,
+  ): Promise<Event> {
     // Make sure we only ever have 1 "to" field max
 
     const updatedEvent = await this.eventModel
@@ -129,10 +137,10 @@ export class EventsService {
       .exec();
 
     const decoded: any = this.jwtService.decode(auth.substr(7));
-    const token : UserToken = decoded;
+    const token: UserToken = decoded;
 
     const event = this.validateEventFound(updatedEvent, id);
-    this.emitter.emit(EventMap.EVENT_MODIFIED.id, {event, token});
+    this.emitter.emit(EventMap.EVENT_MODIFIED.id, { event, token });
     return event;
   }
 
@@ -146,10 +154,10 @@ export class EventsService {
     const deletedEvent = await this.eventModel.findByIdAndDelete(id);
 
     const decoded: any = this.jwtService.decode(auth.substr(7));
-    const token : UserToken = decoded;
+    const token: UserToken = decoded;
 
     const event = this.validateEventFound(deletedEvent, id);
-    this.emitter.emit(EventMap.EVENT_DELETED.id, {event, token});
+    this.emitter.emit(EventMap.EVENT_DELETED.id, { event, token });
     return event;
   }
 

@@ -17,13 +17,12 @@ import { MaterialLogsService } from './materials-logs/material-logs.service';
 import { MaterialStockService } from './materials/material-stock.service';
 import { LocationsModule } from '../locations/locations.module';
 import { PartsModule } from '../parts/parts.module';
-import {AuthModule} from "../auth/auth.module";
+import { AuthModule } from '../auth/auth.module';
+import { AuditsModule } from '../audits/audits.module';
 import { MaterialListener } from '../../events/listeners/material.listener';
 import { UsersModule } from '../users/users.module';
 import { EventsModule } from '../events/events.module';
 import { validate } from '../../shared/env';
-import {AuditsModule} from "../audits/audits.module";
-
 
 /**
  * Contains all logic and files related to Materials
@@ -38,11 +37,11 @@ import {AuditsModule} from "../audits/audits.module";
     // Avoid Circular Dependencies
     forwardRef(() => LocationsModule),
     forwardRef(() => PartsModule),
+    // Events Listener Dependency
     AuditsModule,
     AuthModule,
-    // Events Listener Dependency
-    UsersModule,
     EventsModule,
+    UsersModule,
     // ENV Support
     ConfigModule.forRoot({ validate, cache: true }),
   ],

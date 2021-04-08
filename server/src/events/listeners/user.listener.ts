@@ -9,7 +9,6 @@ import { User, UserDocument } from '../../api/users/schemas/user.schema';
 import { EventMap, getEmails } from '../common';
 import { Mail } from '../../shared/mail';
 import { CONTACT_EMAIL } from '../../shared/constants';
-import {Audit, AuditDocument} from "../../api/audits/schemas/audits.schema";
 
 @Injectable()
 export class UserListener {

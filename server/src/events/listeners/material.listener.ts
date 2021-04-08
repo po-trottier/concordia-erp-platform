@@ -1,20 +1,23 @@
-import {Injectable, Logger} from '@nestjs/common';
-import {OnEvent} from '@nestjs/event-emitter';
-import {InjectModel} from '@nestjs/mongoose';
-import {Model} from 'mongoose';
+import { Injectable, Logger } from '@nestjs/common';
+import { OnEvent } from '@nestjs/event-emitter';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import {Event, EventDocument} from '../../api/events/schemas/events.schema';
+import { Event, EventDocument } from '../../api/events/schemas/events.schema';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import {User, UserDocument} from '../../api/users/schemas/user.schema';
-import {Material, MaterialDocument} from '../../api/materials/materials/schemas/material.schema';
-import {MaterialOrderDocument} from '../../api/orders/schemas/material-orders.schema';
-import {EventMap, getEmails} from '../common';
-import {Mail} from '../../shared/mail';
-import {CONTACT_EMAIL} from '../../shared/constants';
-import {Audit, AuditDocument} from "../../api/audits/schemas/audits.schema";
-import {UserToken} from "../../shared/user-token.interface";
-import {AuditActions} from "../../api/audits/audit.actions.enum";
-
+import { User, UserDocument } from '../../api/users/schemas/user.schema';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { Audit, AuditDocument } from '../../api/audits/schemas/audits.schema';
+import {
+  Material,
+  MaterialDocument,
+} from '../../api/materials/materials/schemas/material.schema';
+import { MaterialOrderDocument } from '../../api/orders/schemas/material-orders.schema';
+import { UserToken } from '../../shared/user-token.interface';
+import { EventMap, getEmails } from '../common';
+import { Mail } from '../../shared/mail';
+import { CONTACT_EMAIL } from '../../shared/constants';
+import { AuditActions } from '../../api/audits/enums/audit-actions.enum';
 
 @Injectable()
 export class MaterialListener {
@@ -62,13 +65,15 @@ export class MaterialListener {
   }
 
   @OnEvent(EventMap.MATERIAL_CREATED.id)
-  async handleMaterialCreated(args: {material: MaterialDocument, token: UserToken}) {
+  async handleMaterialCreated(args: {
+    material: MaterialDocument;
+    token: UserToken;
+  }) {
     const emails = await getEmails(
       EventMap.MATERIAL_CREATED,
       this.eventModel,
       this.userModel,
     );
-
 
     if (emails.length > 0) {
       await Mail.instance.send({
@@ -87,7 +92,10 @@ export class MaterialListener {
   }
 
   @OnEvent(EventMap.MATERIAL_DELETED.id)
-  async handleMaterialDeleted(args: {material: MaterialDocument, token: UserToken}) {
+  async handleMaterialDeleted(args: {
+    material: MaterialDocument;
+    token: UserToken;
+  }) {
     const emails = await getEmails(
       EventMap.MATERIAL_DELETED,
       this.eventModel,
@@ -111,7 +119,10 @@ export class MaterialListener {
   }
 
   @OnEvent(EventMap.MATERIAL_MODIFIED.id)
-  async handleMaterialModified(args: {material: MaterialDocument, token: UserToken}) {
+  async handleMaterialModified(args: {
+    material: MaterialDocument;
+    token: UserToken;
+  }) {
     const emails = await getEmails(
       EventMap.MATERIAL_MODIFIED,
       this.eventModel,
@@ -156,15 +167,19 @@ export class MaterialListener {
     );
   }
 
-  async createAudit(action: AuditActions, material: MaterialDocument, token: UserToken){
-    const audit : Audit = {
+  async createAudit(
+    action: AuditActions,
+    material: MaterialDocument,
+    token: UserToken,
+  ) {
+    const audit: Audit = {
       module: Material.name,
       action: action,
       date: new Date(Date.now()),
       target: material.name,
       author: token.username,
-    }
-    const auditEntry = new this.auditModel(audit)
+    };
+    const auditEntry = new this.auditModel(audit);
     await auditEntry.save();
   }
 }

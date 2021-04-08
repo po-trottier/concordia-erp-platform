@@ -26,7 +26,10 @@ export class MaterialsController {
 
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
   @Post()
-  create(@Headers('authorization') auth: string,@Body(ValidationPipe) createMaterialDto: CreateMaterialDto) {
+  create(
+    @Headers('authorization') auth: string,
+    @Body(ValidationPipe) createMaterialDto: CreateMaterialDto,
+  ) {
     return this.materialsService.create(createMaterialDto, auth);
   }
 

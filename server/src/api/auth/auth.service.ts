@@ -13,7 +13,7 @@ import { LoginAuthDto } from './dto/login-auth.dto';
 import { PasswordResetDto } from './dto/password-reset.dto';
 import { UpdateUserDto } from '../users/dto/update-user.dto';
 import { PasswordForgottenDto } from './dto/password-forgotten.dto';
-import { UserToken } from '../../shared/UserToken';
+import { UserToken } from '../../shared/user-token.interface';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Mail } from '../../shared/mail';

@@ -22,8 +22,8 @@ import { ProductBuilderService } from './products/product-builder.service';
 import { UsersModule } from '../users/users.module';
 import { EventsModule } from '../events/events.module';
 import { ProductListener } from '../../events/listeners/product.listener';
-import {AuthModule} from "../auth/auth.module";
-import {AuditsModule} from "../audits/audits.module";
+import { AuthModule } from '../auth/auth.module';
+import { AuditsModule } from '../audits/audits.module';
 
 @Module({
   imports: [

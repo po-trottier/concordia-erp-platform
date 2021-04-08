@@ -1,20 +1,20 @@
-import {Injectable, Logger} from '@nestjs/common';
-import {OnEvent} from '@nestjs/event-emitter';
-import {InjectModel} from '@nestjs/mongoose';
-import {Model} from 'mongoose';
+import { Injectable, Logger } from '@nestjs/common';
+import { OnEvent } from '@nestjs/event-emitter';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import {Event, EventDocument} from '../../api/events/schemas/events.schema';
+import { Event, EventDocument } from '../../api/events/schemas/events.schema';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import {User, UserDocument} from '../../api/users/schemas/user.schema';
-import {Part, PartDocument} from '../../api/parts/parts/schemas/part.schema';
-import {PartStockDocument} from '../../api/parts/parts/schemas/part-stock.schema';
-import {EventMap, getEmails} from '../common';
-import {Mail} from '../../shared/mail';
-import {CONTACT_EMAIL} from '../../shared/constants';
-import {UserToken} from "../../shared/user-token.interface";
-import {Audit, AuditDocument} from "../../api/audits/schemas/audits.schema";
-import {AuditActions} from "../../api/audits/audit.actions.enum";
-import {Material, MaterialDocument} from "../../api/materials/materials/schemas/material.schema";
+import { User, UserDocument } from '../../api/users/schemas/user.schema';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { Audit, AuditDocument } from '../../api/audits/schemas/audits.schema';
+import { Part, PartDocument } from '../../api/parts/parts/schemas/part.schema';
+import { PartStockDocument } from '../../api/parts/parts/schemas/part-stock.schema';
+import { UserToken } from '../../shared/user-token.interface';
+import { EventMap, getEmails } from '../common';
+import { Mail } from '../../shared/mail';
+import { CONTACT_EMAIL } from '../../shared/constants';
+import { AuditActions } from '../../api/audits/enums/audit-actions.enum';
 
 @Injectable()
 export class PartListener {
@@ -50,7 +50,7 @@ export class PartListener {
   }
 
   @OnEvent(EventMap.PART_CREATED.id)
-  async handlePartCreated(args: {part: PartDocument, token: UserToken}) {
+  async handlePartCreated(args: { part: PartDocument; token: UserToken }) {
     const emails = await getEmails(
       EventMap.PART_CREATED,
       this.eventModel,
@@ -75,7 +75,7 @@ export class PartListener {
   }
 
   @OnEvent(EventMap.PART_DELETED.id)
-  async handlePartDeleted(args: {part: PartDocument, token: UserToken}) {
+  async handlePartDeleted(args: { part: PartDocument; token: UserToken }) {
     const emails = await getEmails(
       EventMap.PART_DELETED,
       this.eventModel,
@@ -99,7 +99,7 @@ export class PartListener {
   }
 
   @OnEvent(EventMap.PART_MODIFIED.id)
-  async handlePartModified(args: {part: PartDocument, token: UserToken}) {
+  async handlePartModified(args: { part: PartDocument; token: UserToken }) {
     const emails = await getEmails(
       EventMap.PART_MODIFIED,
       this.eventModel,
@@ -123,7 +123,10 @@ export class PartListener {
   }
 
   @OnEvent(EventMap.PART_BUILT.id)
-  async handlePartBuilt(args: {buildResults: PartStockDocument[], token: UserToken}) {
+  async handlePartBuilt(args: {
+    buildResults: PartStockDocument[];
+    token: UserToken;
+  }) {
     const emails = await getEmails(
       EventMap.PART_BUILT,
       this.eventModel,
@@ -144,15 +147,19 @@ export class PartListener {
     );
   }
 
-  async createAudit(action: AuditActions, part: PartDocument, token: UserToken){
-    const audit : Audit = {
+  async createAudit(
+    action: AuditActions,
+    part: PartDocument,
+    token: UserToken,
+  ) {
+    const audit: Audit = {
       module: Part.name,
       action: action,
       date: new Date(Date.now()),
       target: part.name,
       author: token.username,
-    }
-    const auditEntry = new this.auditModel(audit)
+    };
+    const auditEntry = new this.auditModel(audit);
     await auditEntry.save();
   }
 }

@@ -3,6 +3,7 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { JwtService } from '@nestjs/jwt';
 import { Model } from 'mongoose';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Product, ProductDocument } from './schemas/products.schema';
@@ -16,9 +17,8 @@ import {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   ProductLogDocument,
 } from '../products-logs/schemas/product-log.schema';
+import { UserToken } from '../../../shared/user-token.interface';
 import { EventMap } from '../../../events/common';
-import {JwtService} from "@nestjs/jwt";
-import {UserToken} from "../../../shared/user-token.interface";
 
 /**
  * Used by the ProductsController, handles product data storage and retrieval.
@@ -42,14 +42,17 @@ export class ProductsService {
    * @param createProductDto dto used to create products
    * @param auth
    */
-  async create(createProductDto: CreateProductDto, auth: string): Promise<Product> {
+  async create(
+    createProductDto: CreateProductDto,
+    auth: string,
+  ): Promise<Product> {
     const createdProduct = new this.productModel(createProductDto);
 
     const decoded: any = this.jwtService.decode(auth.substr(7));
-    const token : UserToken = decoded;
+    const token: UserToken = decoded;
 
     const product = await createdProduct.save();
-    this.emitter.emit(EventMap.PRODUCT_CREATED.id, {product,token});
+    this.emitter.emit(EventMap.PRODUCT_CREATED.id, { product, token });
     return product;
   }
 
@@ -90,10 +93,10 @@ export class ProductsService {
     );
 
     const decoded: any = this.jwtService.decode(auth.substr(7));
-    const token : UserToken = decoded;
+    const token: UserToken = decoded;
 
     const product = this.validateProductFound(updatedProduct, id);
-    this.emitter.emit(EventMap.PRODUCT_MODIFIED.id, {product, token});
+    this.emitter.emit(EventMap.PRODUCT_MODIFIED.id, { product, token });
     return product;
   }
 
@@ -119,10 +122,10 @@ export class ProductsService {
     const deletedProduct = await this.productModel.findByIdAndDelete(id);
 
     const decoded: any = this.jwtService.decode(auth.substr(7));
-    const token : UserToken = decoded;
+    const token: UserToken = decoded;
 
     const product = this.validateProductFound(deletedProduct, id);
-    this.emitter.emit(EventMap.PRODUCT_DELETED.id, {product, token});
+    this.emitter.emit(EventMap.PRODUCT_DELETED.id, { product, token });
     return product;
   }
 

@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { JwtService } from '@nestjs/jwt';
 import { Model } from 'mongoose';
 import { DEFAULT_LOCATION } from '../../shared/constants';
 import { CreateLocationDto } from './dto/create-location.dto';
@@ -42,9 +43,8 @@ import {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   ProductLogDocument,
 } from '../products/products-logs/schemas/product-log.schema';
+import { UserToken } from '../../shared/user-token.interface';
 import { EventMap } from '../../events/common';
-import {JwtService} from "@nestjs/jwt";
-import {UserToken} from "../../shared/user-token.interface";
 
 /**
  * Used by the LocationsController, handles location data storage and retrieval.
@@ -94,14 +94,17 @@ export class LocationsService implements OnApplicationBootstrap {
    * @param auth
    * @param createLocationDto dto used to create locations
    */
-  async create(auth: string, createLocationDto: CreateLocationDto): Promise<Location> {
+  async create(
+    auth: string,
+    createLocationDto: CreateLocationDto,
+  ): Promise<Location> {
     const createdLocation = new this.locationModel(createLocationDto);
 
     const decoded: any = this.jwtService.decode(auth.substr(7));
-    const token : UserToken = decoded;
+    const token: UserToken = decoded;
 
     const location = await createdLocation.save();
-    this.emitter.emit(EventMap.LOCATION_CREATED.id, {location, token});
+    this.emitter.emit(EventMap.LOCATION_CREATED.id, { location, token });
     return location;
   }
 
@@ -140,10 +143,10 @@ export class LocationsService implements OnApplicationBootstrap {
     );
 
     const decoded: any = this.jwtService.decode(auth.substr(7));
-    const token : UserToken = decoded;
+    const token: UserToken = decoded;
 
     const location = this.validateLocationFound(updatedLocation, id);
-    this.emitter.emit(EventMap.LOCATION_MODIFIED.id, {location, token});
+    this.emitter.emit(EventMap.LOCATION_MODIFIED.id, { location, token });
     return location;
   }
 
@@ -187,12 +190,12 @@ export class LocationsService implements OnApplicationBootstrap {
     for (const log of productLog) await log.delete();
 
     const decoded: any = this.jwtService.decode(auth.substr(7));
-    const token : UserToken = decoded;
+    const token: UserToken = decoded;
 
     // Delete the actual location
     const deletedLocation = await this.locationModel.findByIdAndDelete(id);
     const location = this.validateLocationFound(deletedLocation, id);
-    this.emitter.emit(EventMap.LOCATION_DELETED.id, {location, token});
+    this.emitter.emit(EventMap.LOCATION_DELETED.id, { location, token });
     return location;
   }
 

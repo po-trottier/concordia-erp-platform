@@ -31,7 +31,8 @@ export class PartsController {
   @Post()
   create(
     @Headers('authorization') auth: string,
-    @Body(ValidationPipe) createPartDto: CreatePartDto) {
+    @Body(ValidationPipe) createPartDto: CreatePartDto,
+  ) {
     return this.partsService.create(createPartDto, auth);
   }
 
@@ -80,7 +81,7 @@ export class PartsController {
 
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
   @Delete(':id')
-  remove(@Param('id') id: string, @Headers('authorization') auth: string,) {
+  remove(@Param('id') id: string, @Headers('authorization') auth: string) {
     return this.partsService.remove(id, auth);
   }
 

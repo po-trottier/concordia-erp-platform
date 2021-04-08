@@ -7,8 +7,8 @@ import { Event, EventSchema } from './schemas/events.schema';
 import { EventListener } from '../../events/listeners/event.listener';
 import { UsersModule } from '../users/users.module';
 import { validate } from '../../shared/env';
-import {AuthModule} from "../auth/auth.module";
-import {AuditsModule} from "../audits/audits.module";
+import { AuthModule } from '../auth/auth.module';
+import { AuditsModule } from '../audits/audits.module';
 
 /**
  * Contains all logic and files related to Event
@@ -20,7 +20,7 @@ import {AuditsModule} from "../audits/audits.module";
     forwardRef(() => UsersModule),
     forwardRef(() => AuthModule),
     forwardRef(() => AuditsModule),
-        // ENV Support
+    // ENV Support
     ConfigModule.forRoot({ validate, cache: true }),
   ],
   controllers: [EventsController],

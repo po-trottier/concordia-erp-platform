@@ -1,14 +1,14 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { JwtService } from '@nestjs/jwt';
 import { Model } from 'mongoose';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Customer, CustomerDocument } from './schemas/customers.schema';
+import { UserToken } from '../../shared/user-token.interface';
 import { EventMap } from '../../events/common';
-import {JwtService} from "@nestjs/jwt";
-import {UserToken} from "../../shared/user-token.interface";
 
 /**
  * Used by the CustomersController, handles customer data storage and retrieval.
@@ -27,14 +27,17 @@ export class CustomersService {
    * @param auth
    * @param createCustomerDto dto used to create customers
    */
-  async create(auth: string, createCustomerDto: CreateCustomerDto): Promise<Customer> {
+  async create(
+    auth: string,
+    createCustomerDto: CreateCustomerDto,
+  ): Promise<Customer> {
     const createdCustomer = new this.customerModel(createCustomerDto);
 
     const decoded: any = this.jwtService.decode(auth.substr(7));
-    const token : UserToken = decoded;
+    const token: UserToken = decoded;
 
     const customer = await createdCustomer.save();
-    this.emitter.emit(EventMap.CUSTOMER_CREATED.id, {customer, token});
+    this.emitter.emit(EventMap.CUSTOMER_CREATED.id, { customer, token });
     return customer;
   }
 
@@ -74,10 +77,10 @@ export class CustomersService {
     );
 
     const decoded: any = this.jwtService.decode(auth.substr(7));
-    const token : UserToken = decoded;
+    const token: UserToken = decoded;
 
     const customer = this.validateCustomerFound(updatedCustomer, id);
-    this.emitter.emit(EventMap.CUSTOMER_MODIFIED.id, {customer, token});
+    this.emitter.emit(EventMap.CUSTOMER_MODIFIED.id, { customer, token });
     return customer;
   }
 
@@ -91,10 +94,10 @@ export class CustomersService {
     const deletedCustomer = await this.customerModel.findByIdAndDelete(id);
 
     const decoded: any = this.jwtService.decode(auth.substr(7));
-    const token : UserToken = decoded;
+    const token: UserToken = decoded;
 
     const customer = this.validateCustomerFound(deletedCustomer, id);
-    this.emitter.emit(EventMap.CUSTOMER_DELETED.id, {customer, token});
+    this.emitter.emit(EventMap.CUSTOMER_DELETED.id, { customer, token });
     return customer;
   }
 

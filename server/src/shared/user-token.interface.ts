@@ -1,4 +1,4 @@
-import {Role} from "../api/roles/roles.enum";
+import { Role } from '../api/roles/roles.enum';
 
 export interface UserToken {
   username: string;
