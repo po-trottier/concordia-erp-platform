@@ -11,6 +11,7 @@ WORKDIR /srv/webapp
 
 # Unlock the ENV variables
 COPY ./package*.json ./
+COPY ./scripts/ ./scripts/
 RUN npm run unlock ${ENV_TOKEN}
 
 # Build the client
