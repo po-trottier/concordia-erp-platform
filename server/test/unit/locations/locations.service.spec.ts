@@ -8,6 +8,7 @@ import { PartStockDocument } from '../../../src/api/parts/parts/schemas/part-sto
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { MaterialStockDocument } from 'src/api/materials/materials/schemas/material-stock.schema';
 import { MaterialLogDocument } from 'src/api/materials/materials-logs/schemas/material-log.schema';
+import { JwtService } from '@nestjs/jwt';
 
 describe('LocationsService', () => {
   let locationsService: LocationsService;
@@ -19,9 +20,11 @@ describe('LocationsService', () => {
   let materialLogDocument: Model<MaterialLogDocument>;
   let productLogDocument: Model<ProductLogDocument>;
   let emitter: EventEmitter2;
+  let jwtService: JwtService ;
 
   beforeEach(() => {
     locationsService = new LocationsService(
+      jwtService,
       emitter,
       locationDocument,
       materialStockDocument,
