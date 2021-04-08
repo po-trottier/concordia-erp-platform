@@ -4,20 +4,32 @@ FROM node:latest AS builder
 ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}
 
+ARG ENV_TOKEN
+ENV ENV_TOKEN=${ENV_TOKEN}
+
 WORKDIR /srv/webapp
+
+# Copy the ENV scripts
+COPY ./package*.json ./
+COPY ./scripts/ ./scripts/
 
 # Build the client
 COPY ./client/package*.json ./client/
 RUN cd client && npm ci
 COPY ./client/ ./client/
-RUN cd client && npm run build
 
-# Build the server
+# Copy the server
 RUN npm install -g @nestjs/cli
 COPY ./server/package*.json ./server/
 RUN cd server && npm ci
 COPY ./server/ ./server/
+
+# Unlock the environment variables 
+RUN npm run unlock ${ENV_TOKEN}
+
+# Build the projects
 RUN cd server && npm run build
+RUN cd client && npm run build
 
 # Run the built image on the lightweight node alpine
 FROM node:alpine
