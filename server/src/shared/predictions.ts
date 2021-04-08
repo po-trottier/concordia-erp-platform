@@ -1,17 +1,17 @@
-export const addPredictions = (rows: any, IdKey: string) => {
+export const addPredictions = (rows: any, id: string) => {
   const seen: any[] = [];
   const predictionsToAdd: any[] = [];
 
   for (let left = 0; left < rows.length - 1; left++) {
     // already done prediction for this product, move on
-    if (seen.includes(rows[left][IdKey])) {
+    if (seen.includes(rows[left][id])) {
       continue;
     }
 
     // calculate the prediction if possible
-    seen.push(rows[left][IdKey]);
+    seen.push(rows[left][id]);
     for (let right = rows.length - 1; left < right; right--) {
-      if (rows[right][IdKey] === rows[left][IdKey]) {
+      if (rows[right][id] === rows[left][id]) {
         const firstDate = new Date(rows[left].date);
         const lastDate = new Date(rows[right].date);
         const endOfYear = new Date(new Date().getFullYear(), 11, 31);
@@ -33,8 +33,8 @@ export const addPredictions = (rows: any, IdKey: string) => {
           stock: predictedStock,
           isEstimate: true,
         };
-        predictionRow[IdKey] = rows[right][IdKey];
-        if (IdKey === 'materialId')
+        predictionRow[id] = rows[right][id];
+        if (id === 'materialId')
           predictionRow['stockBought'] = predictionRow.stockBuilt;
         predictionsToAdd.push(predictionRow);
 
@@ -47,9 +47,10 @@ export const addPredictions = (rows: any, IdKey: string) => {
           stockUsed: rows[right].stockUsed,
           stock: rows[right].stock,
           isEstimate: true,
-          isCopy: true
-        }
-        copyRow[IdKey] = rows[right][IdKey];
+          isCopy: true,
+        };
+
+        copyRow[id] = rows[right][id];
         predictionsToAdd.push(copyRow);
         break;
       }
