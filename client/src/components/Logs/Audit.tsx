@@ -22,6 +22,7 @@ export const Audit = () => {
   const [productFilter, setProductFilter] = useState([]);
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
+  const [userFilter, setUserFilter] = useState([]);
 
   const setDates = (e : any) => {
     if (e) {
@@ -189,12 +190,13 @@ export const Audit = () => {
 
   const getAudit = () => {
     console.log(actionFilter);
+    console.log(startDate);
+    console.log(endDate);
+    console.log(userFilter);
     console.log(securityFilter);
     console.log(materialFilter);
     console.log(partFilter);
     console.log(productFilter);
-    console.log(startDate);
-    console.log(endDate);
   }
 
   return (
@@ -216,6 +218,7 @@ export const Audit = () => {
         <p style={style}>Select the users to query:</p>
         <Select
           style={{ width: 400 }}
+          onChange={(e : any) => setUserFilter(e)}
           showSearch
           allowClear
           mode='multiple'
