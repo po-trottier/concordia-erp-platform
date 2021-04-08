@@ -63,7 +63,6 @@ export class AuditsService {
   }
 
   async findModules(): Promise<string[]> {
-    console.log(Modules);
     return Modules;
   }
 
