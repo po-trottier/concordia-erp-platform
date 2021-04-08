@@ -22,8 +22,8 @@ export class PartLogsService {
   async findAll(locationId: string): Promise<PartLog[]> {
     const parts = await this.partLogModel
       .find({ locationId })
-      .sort('date')
       .sort('partId')
+      .sort('date')
       .populate('partId')
       .exec();
     return addPredictions(parts, 'partId');
