@@ -257,9 +257,25 @@ export const Audit = () => {
             )
           }
         </Select>
-        {/*when the module is selected the option appears*/}
-        {/*<p style={style}>Select the product parts to query:</p>*/}
-        {/*<Checkbox.Group onChange={(e : any) => setPartFilter(e)} options={partsOptions} />*/}
+        <p style={style}>Select the targets to query:</p>
+        <Select
+          style={{ width: 400 }}
+          onChange={(e : any) => setUserFilter(e)}
+          showSearch
+          allowClear
+          mode='multiple'
+          placeholder='Select target(s)'
+          optionFilterProp='children'>
+          {
+            modules.map((module: string) => (
+              <Option
+                key={module}
+                value={module}>
+                {module}
+              </Option>)
+            )
+          }
+        </Select>
       </Card>
       <Popover content={exportOptions} title='Save As' trigger='click'>
         <Button
