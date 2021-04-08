@@ -44,12 +44,14 @@ export const LogList = () => {
           .finally(() => {
             setLoading(false);
             return false;
-          })
+
+          });
+
       },
       title: 'Clear the Logs',
       content: 'Are you sure you want to clear the logs?'
     });
-  }
+  };
 
   const getColumns = () => ({
     module: 'Module',

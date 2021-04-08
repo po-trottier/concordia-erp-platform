@@ -1,11 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { jsPDF } from 'jspdf';
 import { Button, Card, Checkbox, DatePicker, Menu, Popover, Select, Typography } from 'antd';
-import {useDispatch, useSelector} from "react-redux";
-import axios from "../../plugins/Axios";
-import {setUserList} from "../../store/slices/UserListSlice";
-import {RootState} from "../../store/Store";
-import {UserEntry} from "../../interfaces/UserEntry";
+import { useDispatch, useSelector } from 'react-redux';
+import axios from '../../plugins/Axios';
+import { setUserList } from '../../store/slices/UserListSlice';
+import { RootState } from '../../store/Store';
+import { UserEntry } from '../../interfaces/UserEntry';
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
@@ -14,7 +14,7 @@ const { Title } = Typography;
 export const Audit = () => {
   const dispatch = useDispatch();
   const userList = useSelector((state : RootState) => state.userList.list);
-  const emptyModules: string[] = []
+  const emptyModules : string[] = [];
   const [modules, setModules] = useState(emptyModules);
   const [updated, setUpdated] = useState(false);
   const [actionFilter, setActionFilter] = useState([]);
@@ -31,7 +31,7 @@ export const Audit = () => {
       setStartDate(e[0]._d);
       setEndDate(e[1]._d);
     }
-  }
+  };
 
   useEffect(() => {
     setUpdated(true);
@@ -41,7 +41,7 @@ export const Audit = () => {
     axios.get('/audits/modules')
       .then((res) => {
         setModules(res.data);
-      })
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updated]);
 
@@ -67,80 +67,80 @@ export const Audit = () => {
   const dummyData : any[] = [
     {
       date: new Date(),
-      author: "Radley",
-      action: "Create",
-      target: "15 tires"
+      author: 'Radley',
+      action: 'Create',
+      target: '15 tires'
     },
     {
       date: new Date(),
-      author: "John",
-      action: "Deletes",
-      target: "15 tires"
+      author: 'John',
+      action: 'Deletes',
+      target: '15 tires'
     },
     {
       date: new Date(),
-      author: "Radley",
-      action: "Create",
-      target: "15 tires"
+      author: 'Radley',
+      action: 'Create',
+      target: '15 tires'
     },
     {
       date: new Date(),
-      author: "John",
-      action: "Deletes",
-      target: "15 tires"
+      author: 'John',
+      action: 'Deletes',
+      target: '15 tires'
     },
     {
       date: new Date(),
-      author: "Radley",
-      action: "Create",
-      target: "15 tires"
+      author: 'Radley',
+      action: 'Create',
+      target: '15 tires'
     },
     {
       date: new Date(),
-      author: "John",
-      action: "Deletes",
-      target: "15 tires"
+      author: 'John',
+      action: 'Deletes',
+      target: '15 tires'
     },
     {
       date: new Date(),
-      author: "Radley",
-      action: "Create",
-      target: "15 tires"
+      author: 'Radley',
+      action: 'Create',
+      target: '15 tires'
     },
     {
       date: new Date(),
-      author: "John",
-      action: "Deletes",
-      target: "15 tires"
+      author: 'John',
+      action: 'Deletes',
+      target: '15 tires'
     },
     {
       date: new Date(),
-      author: "Radley",
-      action: "Create",
-      target: "15 tires"
+      author: 'Radley',
+      action: 'Create',
+      target: '15 tires'
     },
     {
       date: new Date(),
-      author: "John",
-      action: "Deletes",
-      target: "15 tires"
+      author: 'John',
+      action: 'Deletes',
+      target: '15 tires'
     },
     {
       date: new Date(),
-      author: "Radley",
-      action: "Create",
-      target: "15 tires"
+      author: 'Radley',
+      action: 'Create',
+      target: '15 tires'
     },
     {
       date: new Date(),
-      author: "John",
-      action: "Deletes",
-      target: "15 tires",
+      author: 'John',
+      action: 'Deletes',
+      target: '15 tires',
       something: 'helllloooo',
     },
-  ]
+  ];
 
-  const exportPDF = async() => {
+  const exportPDF = async () => {
     getAudit();
     const date = new Date();
     const fileName = 'Audit-' + (date.toDateString() + ' ' + date.toLocaleTimeString()).replace(/\s/g, '-');
@@ -161,15 +161,15 @@ export const Audit = () => {
         lineNum += 0.2;
       });
       lineNum += 0.3;
-      if (lineNum > 10){
+      if (lineNum > 10) {
         doc.addPage([8.5, 11], 'portrait');
         lineNum = 1;
       }
     });
     doc.save(fileName + '.pdf');
-  }
+  };
 
-  const exportCSV = async() => {
+  const exportCSV = async () => {
     getAudit();
     const date = new Date();
     const fileName = 'Audit-' + (date.toDateString() + ' ' + date.toLocaleTimeString()).replace(/\s/g, '-');
@@ -189,7 +189,7 @@ export const Audit = () => {
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
-  }
+  };
 
   const getAudit = () => {
     console.log(actionFilter);
@@ -200,7 +200,7 @@ export const Audit = () => {
     console.log(materialFilter);
     console.log(partFilter);
     console.log(productFilter);
-  }
+  };
 
   return (
     <div>
@@ -225,7 +225,7 @@ export const Audit = () => {
           placeholder='Select author(s)'
           optionFilterProp='children'>
           {
-            userList.map((user: UserEntry) => (
+            userList.map((user : UserEntry) => (
               <Option
                 key={user._id}
                 value={user.username}>
@@ -244,7 +244,7 @@ export const Audit = () => {
           placeholder='Select module(s)'
           optionFilterProp='children'>
           {
-            modules.map((module: string) => (
+            modules.map((module : string) => (
               <Option
                 key={module}
                 value={module}>
@@ -263,7 +263,7 @@ export const Audit = () => {
           placeholder='Select target(s)'
           optionFilterProp='children'>
           {
-            modules.map((module: string) => (
+            modules.map((module : string) => (
               <Option
                 key={module}
                 value={module}>

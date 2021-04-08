@@ -23,15 +23,15 @@ export class AuditsController {
   }
 
   @Roles(Role.SYSTEM_ADMINISTRATOR)
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.auditsService.findOne(id);
-  }
-
-  @Roles(Role.SYSTEM_ADMINISTRATOR)
   @Get('modules')
   findModules() {
     return this.auditsService.findModules();
+  }
+
+  @Roles(Role.SYSTEM_ADMINISTRATOR)
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.auditsService.findOne(id);
   }
 
   @Roles(Role.SYSTEM_ADMINISTRATOR)

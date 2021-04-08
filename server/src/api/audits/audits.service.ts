@@ -55,7 +55,11 @@ export class AuditsService {
       // andList.push({$lte: query.after})
     }
 
-    return this.auditModel.find().and(andList);
+    if (andList.length > 0) {
+      return this.auditModel.find().and(andList);
+    } else {
+      return this.auditModel.find();
+    }
   }
 
   async findModules(): Promise<string[]> {
