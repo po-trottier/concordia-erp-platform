@@ -7,8 +7,14 @@ import { MaterialStockDocument } from '../../../src/api/materials/materials/sche
 import { Model } from 'mongoose';
 import { LocationDocument } from '../../../src/api/locations/schemas/location.schema';
 import { LocationsService } from '../../../src/api/locations/locations.service';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { PartDocument } from 'src/api/parts/parts/schemas/part.schema';
+import { PartStockDocument } from 'src/api/parts/parts/schemas/part-stock.schema';
+import { ProductStockDocument } from 'src/api/products/products/schemas/product-stock.schema';
+import { ProductLogDocument } from 'src/api/products/products-logs/schemas/product-log.schema';
+import { PartLogDocument } from 'src/api/parts/parts-logs/schemas/part-log.schema';
 
-describe('MaterialsService', () => {
+describe('MaterialLocationStockService', () => {
   let materialService: MaterialsService;
   let materialLogsService: MaterialLogsService;
   let materialStockService: MaterialStockService;
@@ -16,12 +22,33 @@ describe('MaterialsService', () => {
   let locationDocument: Model<LocationDocument>;
   let materialStockDocument: Model<MaterialStockDocument>;
   let materialLogDocument: Model<MaterialLogDocument>;
-  let materialDocumentModel: Model<MaterialDocument>;
+  let materialDocument: Model<MaterialDocument>;
+  let emitter: EventEmitter2;
+  let partDocument: Model<PartDocument>;
+  let partStockDocument: Model<PartStockDocument>;
+  let productStockDocument: Model<ProductStockDocument>;
+  let partLogDocument: Model<PartLogDocument>;
+  let productLogDocument: Model<ProductLogDocument>;
 
   beforeEach(async () => {
     materialLogsService = new MaterialLogsService(materialLogDocument);
-    materialService = new MaterialsService(materialDocumentModel);
-    locationsService = new LocationsService(locationDocument);
+    materialService = new MaterialsService(
+      emitter,
+      partDocument,
+      materialDocument,
+      materialLogDocument,
+      materialStockDocument
+    );
+    locationsService = new LocationsService(
+      emitter,
+      locationDocument,
+      materialStockDocument,
+      partStockDocument,
+      productStockDocument,
+      materialLogDocument,
+      partLogDocument,
+      productLogDocument
+    );
     materialStockService = new MaterialStockService(
       materialStockDocument,
       materialService,
