@@ -27,6 +27,7 @@ COPY ./server/ ./server/
 # Build the projects
 RUN npm run unlock ${ENV_TOKEN} && cd client && npm run build
 RUN cd server && npm run build
+RUN cd client && npm run build
 
 # Run the built image on the lightweight node alpine
 FROM node:alpine
