@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { JwtService } from '@nestjs/jwt';
 import { Model } from 'mongoose';
 import { CreateMaterialDto } from './dto/create-material.dto';
 import { UpdateMaterialDto } from './dto/update-material.dto';
@@ -23,6 +24,7 @@ import {
   MaterialLogDocument,
 } from '../materials-logs/schemas/material-log.schema';
 import { EventMap } from '../../../events/common';
+import { UserToken } from '../../../shared/user-token.interface';
 
 /**
  * Used by the MaterialsController, handles material data storage and retrieval.
@@ -30,6 +32,7 @@ import { EventMap } from '../../../events/common';
 @Injectable()
 export class MaterialsService {
   constructor(
+    private jwtService: JwtService,
     private emitter: EventEmitter2,
     @InjectModel(Part.name)
     private partModel: Model<PartDocument>,
@@ -45,12 +48,19 @@ export class MaterialsService {
    * Creates material using mongoose materialModel
    *
    * @param createMaterialDto dto used to create materials
+   * @param auth
    */
-  async create(createMaterialDto: CreateMaterialDto): Promise<Material> {
+  async create(
+    createMaterialDto: CreateMaterialDto,
+    auth: string,
+  ): Promise<Material> {
     const createdMaterial = new this.materialModel(createMaterialDto);
 
+    const decoded: any = this.jwtService.decode(auth.substr(7));
+    const token: UserToken = decoded;
+
     const material = await createdMaterial.save();
-    this.emitter.emit(EventMap.MATERIAL_CREATED.id, material);
+    this.emitter.emit(EventMap.MATERIAL_CREATED.id, { material, token });
     return material;
   }
 
@@ -76,10 +86,12 @@ export class MaterialsService {
    *
    * @param id string of the material's objectId
    * @param updateMaterialDto dto used to update materials
+   * @param auth
    */
   async update(
     id: string,
     updateMaterialDto: UpdateMaterialDto,
+    auth: string,
   ): Promise<Material> {
     const updatedMaterial = await this.materialModel.findByIdAndUpdate(
       id,
@@ -87,17 +99,21 @@ export class MaterialsService {
       { new: true },
     );
 
-    const result = this.validateMaterialFound(updatedMaterial, id);
-    this.emitter.emit(EventMap.MATERIAL_MODIFIED.id, result);
-    return result;
+    const decoded: any = this.jwtService.decode(auth.substr(7));
+    const token: UserToken = decoded;
+
+    const material = this.validateMaterialFound(updatedMaterial, id);
+    this.emitter.emit(EventMap.MATERIAL_MODIFIED.id, { material, token });
+    return material;
   }
 
   /**
    * Deletes material by id using mongoose materialModel
    *
    * @param id string of the material's objectId
+   * @param auth
    */
-  async remove(id: string): Promise<Material> {
+  async remove(id: string, auth: string): Promise<Material> {
     // Make sure no parts depend on the material
     const dependantParts = await this.partModel.find({
       'materials.materialId': id,
@@ -122,9 +138,12 @@ export class MaterialsService {
     // Remove the material
     const deletedMaterial = await this.materialModel.findByIdAndDelete(id);
 
-    const result = this.validateMaterialFound(deletedMaterial, id);
-    this.emitter.emit(EventMap.MATERIAL_DELETED.id, result);
-    return result;
+    const decoded: any = this.jwtService.decode(auth.substr(7));
+    const token: UserToken = decoded;
+
+    const material = this.validateMaterialFound(deletedMaterial, id);
+    this.emitter.emit(EventMap.MATERIAL_DELETED.id, { material, token });
+    return material;
   }
 
   /**

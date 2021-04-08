@@ -1,11 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { JwtService } from '@nestjs/jwt';
 import { Model } from 'mongoose';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Customer, CustomerDocument } from './schemas/customers.schema';
+import { UserToken } from '../../shared/user-token.interface';
 import { EventMap } from '../../events/common';
 
 /**
@@ -14,6 +16,7 @@ import { EventMap } from '../../events/common';
 @Injectable()
 export class CustomersService {
   constructor(
+    private jwtService: JwtService,
     private emitter: EventEmitter2,
     @InjectModel(Customer.name) private customerModel: Model<CustomerDocument>,
   ) {}
@@ -21,13 +24,20 @@ export class CustomersService {
   /**
    * Creates customer using mongoose customerModel
    *
+   * @param auth
    * @param createCustomerDto dto used to create customers
    */
-  async create(createCustomerDto: CreateCustomerDto): Promise<Customer> {
+  async create(
+    auth: string,
+    createCustomerDto: CreateCustomerDto,
+  ): Promise<Customer> {
     const createdCustomer = new this.customerModel(createCustomerDto);
 
+    const decoded: any = this.jwtService.decode(auth.substr(7));
+    const token: UserToken = decoded;
+
     const customer = await createdCustomer.save();
-    this.emitter.emit(EventMap.CUSTOMER_CREATED.id, customer);
+    this.emitter.emit(EventMap.CUSTOMER_CREATED.id, { customer, token });
     return customer;
   }
 
@@ -51,10 +61,12 @@ export class CustomersService {
   /**
    * Updates customer by id using mongoose customerModel
    *
+   * @param auth
    * @param id string of the customer's objectId
    * @param updateCustomerDto dto used to update customers
    */
   async update(
+    auth: string,
     id: string,
     updateCustomerDto: UpdateCustomerDto,
   ): Promise<Customer> {
@@ -64,22 +76,29 @@ export class CustomersService {
       { new: true },
     );
 
-    const result = this.validateCustomerFound(updatedCustomer, id);
-    this.emitter.emit(EventMap.CUSTOMER_MODIFIED.id, result);
-    return result;
+    const decoded: any = this.jwtService.decode(auth.substr(7));
+    const token: UserToken = decoded;
+
+    const customer = this.validateCustomerFound(updatedCustomer, id);
+    this.emitter.emit(EventMap.CUSTOMER_MODIFIED.id, { customer, token });
+    return customer;
   }
 
   /**
    * Deletes customer by id using mongoose customerModel
    *
+   * @param auth
    * @param id string of the customer's objectId
    */
-  async remove(id: string): Promise<Customer> {
+  async remove(auth: string, id: string): Promise<Customer> {
     const deletedCustomer = await this.customerModel.findByIdAndDelete(id);
 
-    const result = this.validateCustomerFound(deletedCustomer, id);
-    this.emitter.emit(EventMap.CUSTOMER_DELETED.id, result);
-    return result;
+    const decoded: any = this.jwtService.decode(auth.substr(7));
+    const token: UserToken = decoded;
+
+    const customer = this.validateCustomerFound(deletedCustomer, id);
+    this.emitter.emit(EventMap.CUSTOMER_DELETED.id, { customer, token });
+    return customer;
   }
 
   /**

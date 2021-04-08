@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { isAfter, isSameDay } from 'date-fns';
+import { JwtService } from '@nestjs/jwt';
 import { Model } from 'mongoose';
 import {
   MaterialOrder,
@@ -15,10 +16,12 @@ import { MaterialsService } from '../materials/materials/materials.service';
 import { UpdateMaterialStockDto } from '../materials/materials/dto/update-material-stock.dto';
 import { MaterialStockService } from '../materials/materials/material-stock.service';
 import { EventMap } from '../../events/common';
+import { UserToken } from '../../shared/user-token.interface';
 
 @Injectable()
 export class MaterialOrdersService {
   constructor(
+    private jwtService: JwtService,
     private emitter: EventEmitter2,
     @InjectModel(MaterialOrder.name)
     private materialOrderModel: Model<MaterialOrderDocument>,
@@ -48,9 +51,10 @@ export class MaterialOrdersService {
   }
 
   async createMaterialOrder(
+    auth: string,
     createMaterialOrderDto: CreateMaterialOrderDto[],
   ): Promise<MaterialOrder[]> {
-    const createdOrders: MaterialOrder[] = [];
+    const orders: MaterialOrder[] = [];
     const stockUpdateDtoMap = new Map<string, UpdateMaterialStockDto[]>();
 
     for (const materialOrder of createMaterialOrderDto) {
@@ -62,7 +66,7 @@ export class MaterialOrdersService {
         dateOrdered.getDate() + this.getIncrement(dateOrdered.getDay()),
       );
       const createdOrder = new this.materialOrderModel(order);
-      createdOrders.push(await createdOrder.save());
+      orders.push(await createdOrder.save());
 
       const dto: UpdateMaterialStockDto = {
         materialId: materialOrder.materialId,
@@ -78,13 +82,16 @@ export class MaterialOrdersService {
       }
     }
 
+    const decoded: any = this.jwtService.decode(auth.substr(7));
+    const token: UserToken = decoded;
+
     //iterate over location, dto[] map and update stocks
     for (const [location, dtoArray] of stockUpdateDtoMap) {
       await this.materialStockService.update(location, dtoArray);
     }
 
-    this.emitter.emit(EventMap.MATERIAL_ORDERED.id, createdOrders);
-    return createdOrders;
+    this.emitter.emit(EventMap.MATERIAL_ORDERED.id, { orders, token });
+    return orders;
   }
 
   async findAll(): Promise<MaterialOrder[]> {
@@ -112,7 +119,6 @@ export class MaterialOrdersService {
       { $set: { ...updateMaterialOrderDto } },
       { new: true },
     );
-
     return this.checkOrderFound(updatedMaterialOrder, id);
   }
 

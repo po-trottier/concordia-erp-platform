@@ -3,6 +3,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Model } from 'mongoose';
@@ -25,6 +26,7 @@ import {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   PartLogDocument,
 } from '../parts-logs/schemas/part-log.schema';
+import { UserToken } from '../../../shared/user-token.interface';
 import { EventMap } from '../../../events/common';
 
 /**
@@ -33,6 +35,7 @@ import { EventMap } from '../../../events/common';
 @Injectable()
 export class PartsService {
   constructor(
+    private jwtService: JwtService,
     private emitter: EventEmitter2,
     @InjectModel(Product.name)
     private productModel: Model<ProductDocument>,
@@ -48,12 +51,16 @@ export class PartsService {
    * Creates part using mongoose partModel
    *
    * @param createPartDto dto used to create parts
+   * @param auth
    */
-  async create(createPartDto: CreatePartDto): Promise<Part> {
+  async create(createPartDto: CreatePartDto, auth: string): Promise<Part> {
     const createdPart = new this.partModel(createPartDto);
 
+    const decoded: any = this.jwtService.decode(auth.substr(7));
+    const token: UserToken = decoded;
+
     const part = await createdPart.save();
-    this.emitter.emit(EventMap.PART_CREATED.id, part);
+    this.emitter.emit(EventMap.PART_CREATED.id, { part, token });
     return part;
   }
 
@@ -79,25 +86,34 @@ export class PartsService {
    *
    * @param id string of the part's objectId
    * @param updatePartDto dto used to update parts
+   * @param auth
    */
-  async update(id: string, updatePartDto: UpdatePartDto): Promise<Part> {
+  async update(
+    id: string,
+    updatePartDto: UpdatePartDto,
+    auth: string,
+  ): Promise<Part> {
     const updatedPart = await this.partModel.findByIdAndUpdate(
       id,
       { $set: { ...updatePartDto } },
       { new: true },
     );
 
-    const result = this.validatePartFound(updatedPart, id);
-    this.emitter.emit(EventMap.PART_MODIFIED.id, result);
-    return result;
+    const decoded: any = this.jwtService.decode(auth.substr(7));
+    const token: UserToken = decoded;
+
+    const part = this.validatePartFound(updatedPart, id);
+    this.emitter.emit(EventMap.PART_MODIFIED.id, { part, token });
+    return part;
   }
 
   /**
    * Deletes part by id using mongoose partModel
    *
    * @param id string of the part's objectId
+   * @param auth
    */
-  async remove(id: string): Promise<Part> {
+  async remove(id: string, auth: string): Promise<Part> {
     //make sure no product depends on the part
     const dependentProducts = await this.productModel.find({
       'parts.partId': id,
@@ -123,11 +139,14 @@ export class PartsService {
       await log.delete();
     }
 
+    const decoded: any = this.jwtService.decode(auth.substr(7));
+    const token: UserToken = decoded;
+
     //Finally, remove the part
     const deletedPart = await this.partModel.findByIdAndDelete(id);
-    const result = this.validatePartFound(deletedPart, id);
-    this.emitter.emit(EventMap.PART_DELETED.id, result);
-    return result;
+    const part = this.validatePartFound(deletedPart, id);
+    this.emitter.emit(EventMap.PART_DELETED.id, { part, token });
+    return part;
   }
 
   /**

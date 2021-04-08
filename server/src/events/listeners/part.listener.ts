@@ -6,11 +6,15 @@ import { Model } from 'mongoose';
 import { Event, EventDocument } from '../../api/events/schemas/events.schema';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { User, UserDocument } from '../../api/users/schemas/user.schema';
-import { PartDocument } from '../../api/parts/parts/schemas/part.schema';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { Audit, AuditDocument } from '../../api/audits/schemas/audits.schema';
+import { Part, PartDocument } from '../../api/parts/parts/schemas/part.schema';
 import { PartStockDocument } from '../../api/parts/parts/schemas/part-stock.schema';
+import { UserToken } from '../../shared/user-token.interface';
 import { EventMap, getEmails } from '../common';
 import { Mail } from '../../shared/mail';
 import { CONTACT_EMAIL } from '../../shared/constants';
+import { AuditActions } from '../../api/audits/enums/audit-actions.enum';
 
 @Injectable()
 export class PartListener {
@@ -19,6 +23,7 @@ export class PartListener {
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
     @InjectModel(Event.name) private eventModel: Model<EventDocument>,
+    @InjectModel(Audit.name) private auditModel: Model<AuditDocument>,
   ) {}
 
   getEmailHTML(part: PartDocument, action: string) {
@@ -45,7 +50,7 @@ export class PartListener {
   }
 
   @OnEvent(EventMap.PART_CREATED.id)
-  async handlePartCreated(part: PartDocument) {
+  async handlePartCreated(args: { part: PartDocument; token: UserToken }) {
     const emails = await getEmails(
       EventMap.PART_CREATED,
       this.eventModel,
@@ -57,9 +62,12 @@ export class PartListener {
         to: emails,
         from: CONTACT_EMAIL,
         subject: '[EPIC Resource Planner] New Part Created',
-        html: this.getEmailHTML(part, 'created'),
+
+        html: this.getEmailHTML(args.part, 'created'),
       });
     }
+
+    await this.createAudit(AuditActions.CREATE, args.part, args.token);
 
     this.logger.log(
       'A part was created. ' + emails.length + ' user(s) notified.',
@@ -67,7 +75,7 @@ export class PartListener {
   }
 
   @OnEvent(EventMap.PART_DELETED.id)
-  async handlePartDeleted(part: PartDocument) {
+  async handlePartDeleted(args: { part: PartDocument; token: UserToken }) {
     const emails = await getEmails(
       EventMap.PART_DELETED,
       this.eventModel,
@@ -79,9 +87,11 @@ export class PartListener {
         to: emails,
         from: CONTACT_EMAIL,
         subject: '[EPIC Resource Planner] Part Deleted',
-        html: this.getEmailHTML(part, 'deleted'),
+        html: this.getEmailHTML(args.part, 'deleted'),
       });
     }
+
+    await this.createAudit(AuditActions.DELETE, args.part, args.token);
 
     this.logger.log(
       'A part was deleted. ' + emails.length + ' user(s) notified.',
@@ -89,7 +99,7 @@ export class PartListener {
   }
 
   @OnEvent(EventMap.PART_MODIFIED.id)
-  async handlePartModified(part: PartDocument) {
+  async handlePartModified(args: { part: PartDocument; token: UserToken }) {
     const emails = await getEmails(
       EventMap.PART_MODIFIED,
       this.eventModel,
@@ -101,9 +111,11 @@ export class PartListener {
         to: emails,
         from: CONTACT_EMAIL,
         subject: '[EPIC Resource Planner] Part Modified',
-        html: this.getEmailHTML(part, 'modified'),
+        html: this.getEmailHTML(args.part, 'modified'),
       });
     }
+
+    await this.createAudit(AuditActions.UPDATE, args.part, args.token);
 
     this.logger.log(
       'A part was modified. ' + emails.length + ' user(s) notified.',
@@ -111,7 +123,10 @@ export class PartListener {
   }
 
   @OnEvent(EventMap.PART_BUILT.id)
-  async handlePartBuilt(stocks: PartStockDocument[]) {
+  async handlePartBuilt(args: {
+    buildResults: PartStockDocument[];
+    token: UserToken;
+  }) {
     const emails = await getEmails(
       EventMap.PART_BUILT,
       this.eventModel,
@@ -123,12 +138,28 @@ export class PartListener {
         to: emails,
         from: CONTACT_EMAIL,
         subject: '[EPIC Resource Planner] Part Built',
-        html: this.getBuildEmailHTML(stocks),
+        html: this.getBuildEmailHTML(args.buildResults),
       });
     }
 
     this.logger.log(
       'A part was built. ' + emails.length + ' user(s) notified.',
     );
+  }
+
+  async createAudit(
+    action: AuditActions,
+    part: PartDocument,
+    token: UserToken,
+  ) {
+    const audit: Audit = {
+      module: Part.name,
+      action: action,
+      date: new Date(Date.now()),
+      target: part.name,
+      author: token.username,
+    };
+    const auditEntry = new this.auditModel(audit);
+    await auditEntry.save();
   }
 }

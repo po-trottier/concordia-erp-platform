@@ -7,6 +7,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { isSameDay, isAfter } from 'date-fns';
+import { JwtService } from '@nestjs/jwt';
 import { Model } from 'mongoose';
 import {
   ProductOrder,
@@ -21,10 +22,12 @@ import { UpdateProductStockDto } from '../products/products/dto/update-product-s
 import { EventMap } from '../../events/common';
 import { Mail } from '../../shared/mail';
 import { CONTACT_EMAIL } from '../../shared/constants';
+import { UserToken } from '../../shared/user-token.interface';
 
 @Injectable()
 export class ProductOrdersService {
   constructor(
+    private jwtService: JwtService,
     private emitter: EventEmitter2,
     @InjectModel(ProductOrder.name)
     private productOrderModel: Model<ProductOrderDocument>,
@@ -54,9 +57,10 @@ export class ProductOrdersService {
   }
 
   async create(
+    auth: string,
     createProductOrderDto: CreateProductOrderDto[],
   ): Promise<ProductOrder[]> {
-    const createdOrders: ProductOrder[] = [];
+    const orders: ProductOrder[] = [];
     const stockUpdateDtoMap = new Map<string, UpdateProductStockDto[]>();
 
     // verifying that product stocks are enough
@@ -86,7 +90,7 @@ export class ProductOrdersService {
       );
 
       const createdOrder = new this.productOrderModel(order);
-      createdOrders.push(await createdOrder.save());
+      orders.push(await createdOrder.save());
 
       const dto: UpdateProductStockDto = {
         productId: productOrder.productId,
@@ -107,8 +111,11 @@ export class ProductOrdersService {
       await this.productStockService.update(location, dtoArray);
     }
 
-    this.emitter.emit(EventMap.PRODUCT_SOLD.id, createdOrders);
-    return createdOrders;
+    const decoded: any = this.jwtService.decode(auth.substr(7));
+    const token: UserToken = decoded;
+
+    this.emitter.emit(EventMap.PRODUCT_SOLD.id, { orders, token });
+    return orders;
   }
 
   async findAll(): Promise<ProductOrder[]> {

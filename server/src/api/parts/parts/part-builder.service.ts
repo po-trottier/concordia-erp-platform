@@ -1,5 +1,6 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { JwtService } from '@nestjs/jwt';
 import { UpdateMaterialStockDto } from '../../materials/materials/dto/update-material-stock.dto';
 import { UpdatePartStockDto } from './dto/update-part-stock.dto';
 import { BuildPartDto } from './dto/build-part.dto';
@@ -9,6 +10,7 @@ import { PartStockService } from './part-stock.service';
 import { Part } from './schemas/part.schema';
 import { PartStock } from './schemas/part-stock.schema';
 import { EventMap } from '../../../events/common';
+import { UserToken } from '../../../shared/user-token.interface';
 
 /**
  * Used by the PartsController, handles part data storage and retrieval.
@@ -16,6 +18,7 @@ import { EventMap } from '../../../events/common';
 @Injectable()
 export class PartBuilderService {
   constructor(
+    private jwtService: JwtService,
     private emitter: EventEmitter2,
     private readonly partsService: PartsService,
     private readonly materialStockService: MaterialStockService,
@@ -25,10 +28,12 @@ export class PartBuilderService {
   /**
    * builds a part if enough materials are present
    *
+   * @param auth
    * @param locationId of the location
    * @param buildPartOrders
    */
   async build(
+    auth: string,
     locationId: string,
     buildPartOrders: BuildPartDto[],
   ): Promise<PartStock[]> {
@@ -92,7 +97,10 @@ export class PartBuilderService {
       buildResults = buildResults.concat(updatedStock);
     }
 
-    this.emitter.emit(EventMap.PART_BUILT.id, buildResults);
+    const decoded: any = this.jwtService.decode(auth.substr(7));
+    const token: UserToken = decoded;
+
+    this.emitter.emit(EventMap.PART_BUILT.id, { buildResults, token });
     return buildResults;
   }
 }

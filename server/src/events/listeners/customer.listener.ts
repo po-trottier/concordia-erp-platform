@@ -6,10 +6,17 @@ import { Model } from 'mongoose';
 import { Event, EventDocument } from '../../api/events/schemas/events.schema';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { User, UserDocument } from '../../api/users/schemas/user.schema';
-import { CustomerDocument } from '../../api/customers/schemas/customers.schema';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { Audit, AuditDocument } from '../../api/audits/schemas/audits.schema';
+import {
+  Customer,
+  CustomerDocument,
+} from '../../api/customers/schemas/customers.schema';
 import { EventMap, getEmails } from '../common';
 import { Mail } from '../../shared/mail';
 import { CONTACT_EMAIL } from '../../shared/constants';
+import { UserToken } from '../../shared/user-token.interface';
+import { AuditActions } from '../../api/audits/enums/audit-actions.enum';
 
 @Injectable()
 export class CustomerListener {
@@ -18,6 +25,7 @@ export class CustomerListener {
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
     @InjectModel(Event.name) private eventModel: Model<EventDocument>,
+    @InjectModel(Audit.name) private auditModel: Model<AuditDocument>,
   ) {}
 
   getEmailHTML(customer: CustomerDocument, action: string) {
@@ -30,7 +38,10 @@ export class CustomerListener {
   }
 
   @OnEvent(EventMap.CUSTOMER_CREATED.id)
-  async handleCustomerCreated(customer: CustomerDocument) {
+  async handleCustomerCreated(args: {
+    customer: CustomerDocument;
+    token: UserToken;
+  }) {
     const emails = await getEmails(
       EventMap.CUSTOMER_CREATED,
       this.eventModel,
@@ -42,9 +53,11 @@ export class CustomerListener {
         to: emails,
         from: CONTACT_EMAIL,
         subject: '[EPIC Resource Planner] New Customer Created',
-        html: this.getEmailHTML(customer, 'created'),
+        html: this.getEmailHTML(args.customer, 'created'),
       });
     }
+
+    await this.createAudit(AuditActions.CREATE, args.customer, args.token);
 
     this.logger.log(
       'A customer was created. ' + emails.length + ' user(s) notified.',
@@ -52,7 +65,10 @@ export class CustomerListener {
   }
 
   @OnEvent(EventMap.CUSTOMER_DELETED.id)
-  async handleCustomerDeleted(customer: CustomerDocument) {
+  async handleCustomerDeleted(args: {
+    customer: CustomerDocument;
+    token: UserToken;
+  }) {
     const emails = await getEmails(
       EventMap.CUSTOMER_DELETED,
       this.eventModel,
@@ -64,9 +80,11 @@ export class CustomerListener {
         to: emails,
         from: CONTACT_EMAIL,
         subject: '[EPIC Resource Planner] Customer Deleted',
-        html: this.getEmailHTML(customer, 'deleted'),
+        html: this.getEmailHTML(args.customer, 'deleted'),
       });
     }
+
+    await this.createAudit(AuditActions.DELETE, args.customer, args.token);
 
     this.logger.log(
       'A customer was deleted. ' + emails.length + ' user(s) notified.',
@@ -74,7 +92,10 @@ export class CustomerListener {
   }
 
   @OnEvent(EventMap.CUSTOMER_MODIFIED.id)
-  async handleCustomerModified(customer: CustomerDocument) {
+  async handleCustomerModified(args: {
+    customer: CustomerDocument;
+    token: UserToken;
+  }) {
     const emails = await getEmails(
       EventMap.CUSTOMER_MODIFIED,
       this.eventModel,
@@ -86,12 +107,30 @@ export class CustomerListener {
         to: emails,
         from: CONTACT_EMAIL,
         subject: '[EPIC Resource Planner] Customer Modified',
-        html: this.getEmailHTML(customer, 'modified'),
+        html: this.getEmailHTML(args.customer, 'modified'),
       });
     }
+
+    await this.createAudit(AuditActions.UPDATE, args.customer, args.token);
 
     this.logger.log(
       'A customer was modified. ' + emails.length + ' user(s) notified.',
     );
+  }
+
+  async createAudit(
+    action: AuditActions,
+    customer: CustomerDocument,
+    token: UserToken,
+  ) {
+    const audit: Audit = {
+      module: Customer.name,
+      action: action,
+      date: new Date(Date.now()),
+      target: customer.name,
+      author: token.username,
+    };
+    const auditEntry = new this.auditModel(audit);
+    await auditEntry.save();
   }
 }
