@@ -8,7 +8,7 @@ if (!process.argv[2]) {
   env = decrypt(process.argv[2]);
 }
 
-if (env.server && env.client) {
+if (env && env.server && env.client) {
   console.log('Environment variables were unlocked successfully!');
 } else {
   console.log('Something went wrong during the decryption.');

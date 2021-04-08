@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Card, Input } from 'antd';
-import { Line } from '@ant-design/charts';
-import { useSelector } from 'react-redux';
+import axios from '../../plugins/Axios';
+import Chart from 'react-apexcharts';
 import { ResponsiveTable } from '../ResponsiveTable';
 import { PartHistoryEntry } from '../../interfaces/PartHistoryEntry';
 import { RootState } from '../../store/Store';
-import axios from '../../plugins/Axios';
+import { getChartState } from '../../store/slices/ChartSlice';
 
 const { Search } = Input;
 
@@ -18,7 +19,10 @@ const inventoryColumns = {
 };
 
 export const PartInventory = () => {
+  const dispatch = useDispatch();
+
   const location = useSelector((state : RootState) => state.location.selected);
+  const chartData = useSelector((state : RootState) => state.chart.chartState);
 
   const emptyData : PartHistoryEntry[] = [];
   const [partsData, setPartsData] = useState(emptyData);
@@ -27,11 +31,13 @@ export const PartInventory = () => {
   useEffect(() => {
     axios.get('parts/logs/' + location).then(async ({ data }) => {
       for (const row of data) {
-        row.date = new Date(row.date).toLocaleDateString();
-        row.name = row.partId.name;
+        row.date = new Date(row.date).toLocaleDateString('en-US');
+        row.name = row.partId.name + (row.isEstimate ? ' (estimate)' : '');
       }
       setPartsData(data);
+      dispatch(getChartState(data));
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location]);
 
   const getParts = () => {
@@ -43,13 +49,15 @@ export const PartInventory = () => {
       );
     }
 
-    rows.sort((a : any, b : any) => {
-      const dateA = a.date;
-      const dateB = b.date;
-      return dateA < dateB ? -1 : 1;
-    });
-
     return rows;
+  };
+
+  const getChartData = () => {
+    return JSON.parse(JSON.stringify(chartData));
+  };
+
+  const getTableData = () => {
+    return getParts().filter((row : any) => !row.isCopy);
   };
 
   const onSearch = (e : React.ChangeEvent<HTMLInputElement>) => {
@@ -63,20 +71,14 @@ export const PartInventory = () => {
           placeholder='Search for a part transaction'
           onChange={onSearch}
           style={{ marginBottom: 18 }} />
-        {getParts().length > 0 ? (
-          <Line
-            data={getParts()}
-            xField='date'
-            yField='stock'
-            seriesField='name'
-            style={{ marginBottom: '48px' }} />
-        ) : (
+        {getParts().length > 0 ?
+          <Chart {...getChartData()} type='line' height={350} /> :
           <span>No part transactions were found.</span>
-        )}
+        }
       </Card>
       {getParts().length > 0 ? (
         <Card>
-          <ResponsiveTable values={getParts()} columns={inventoryColumns} />
+          <ResponsiveTable values={getTableData()} columns={inventoryColumns} />
         </Card>
       ) : null}
     </div>

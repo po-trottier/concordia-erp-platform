@@ -8,39 +8,48 @@ jobs:
   Build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Build and Push Docker Image
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+    - name: Build and Push the Docker Image
       uses: docker/build-push-action@v1
       with:
-        username: ${{ github.actor }}
+        username: ${{ github.repository_owner }}
         password: ${{ secrets.GITHUB_TOKEN }}
+        build_args: ENV_TOKEN=${{ secrets.ENV_PASSWORD }}
         registry: docker.pkg.github.com
         repository: po-trottier/soen390-team04/epic-erp
-        tag_with_ref: true
+        cache_froms: po-trottier/soen390-team04/epic-erp:main
+        tags: main
 
   Deploy:
     runs-on: ubuntu-latest
     needs: Build
     steps:
       - uses: actions/checkout@v2
-      - name: Unlock ENV File
-        run: |
-          cd server
-          npm ci
-          npm run unlock ${{ secrets.ENV_PASSWORD }}
-      - name: Copy Docker Compose Config + ENV File
+      - name: Unlock the ENV File
+        run: npm run unlock ${{ secrets.ENV_PASSWORD }}
+      - name: Copy the Docker Compose Config
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           overwrite: true
-          source: "./docker-compose.yml, ./server/.env"
+          source: "./docker-compose.yml"
+          target: "/srv/nestjs"
+      - name: Copy the ENV File
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          overwrite: true
+          source: "./server/.env"
           target: "/srv/nestjs"
       - name: Deploy to Digital Ocean
         uses: appleboy/ssh-action@v0.1.4
         env:
-          USER: ${{ github.actor }}
+          USER: ${{ github.repository_owner }}
           TOKEN: ${{ secrets.TOKEN }}
         with:
           HOST: ${{ secrets.HOST }}
@@ -50,6 +59,10 @@ jobs:
           SCRIPT: |
             # Navigate to the server directory
             cd /srv/nestjs
+
+            # Move the ENV file to the right directory
+            mv ./server/.env .env
+            rm -r ./server
 
             # Login to the repository
             docker login docker.pkg.github.com -u $USER -p $TOKEN
@@ -65,3 +78,4 @@ jobs:
 
             # Prune the images
             docker image prune -f
+            docker volume prune -f

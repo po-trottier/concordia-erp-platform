@@ -1,16 +1,16 @@
-import { PartsService } from '../../../src/api/parts/parts/parts.service';
+import { PartLogsService } from '../../../src/api/parts/parts-logs/part-logs.service';
 import { Model } from 'mongoose';
-import { PartDocument } from '../../../src/api/parts/parts/schemas/part.schema';
+import { PartLogDocument } from '../../../src/api/parts/parts-logs/schemas/part-log.schema';
 
-describe('PartsService', () => {
-  let partsService: PartsService;
-  let partsDocumentModel: Model<PartDocument>;
+describe('PartLogsService', () => {
+  let partLogsService: PartLogsService;
+  let partLogDocument: Model<PartLogDocument>;
 
   beforeEach(async () => {
-    partsService = new PartsService(partsDocumentModel);
+    partLogsService = new PartLogsService(partLogDocument);
   });
 
   it('should be defined', () => {
-    expect(partsService).toBeDefined();
+    expect(partLogsService).toBeDefined();
   });
 });

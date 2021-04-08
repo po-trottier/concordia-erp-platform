@@ -15,6 +15,7 @@ import { eventListSlice } from './slices/EventListSlice';
 import { listenerListSlice } from './slices/ListenerListSlice';
 import { materialQuantitiesSlice } from './slices/MaterialQuantitiesSlice';
 import { locationSlice } from './slices/LocationSlice';
+import { chartSlice } from './slices/ChartSlice';
 
 const persistConfig = {
   key: 'root',
@@ -44,6 +45,7 @@ const rootReducer = combineReducers({
   listenerList: listenerListSlice.reducer,
   materialQuantities: materialQuantitiesSlice.reducer,
   location: locationSlice.reducer,
+  chart: chartSlice.reducer,
 });
 
 export default persistReducer(persistConfig, rootReducer);

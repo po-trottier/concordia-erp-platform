@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { addPredictions } from '../../../shared/predictions';
 import { UpdateMaterialLogDto } from './dto/update-material-log.dto';
 import {
   MaterialLog,
@@ -22,10 +23,13 @@ export class MaterialLogsService {
    * Retrieves all materialLog entries using mongoose materialLogModel
    */
   async findAll(locationId: string): Promise<MaterialLog[]> {
-    return await this.materialLogModel
+    const materials = await this.materialLogModel
       .find({ locationId })
+      .sort('date')
+      .sort('materialId')
       .populate('materialId')
       .exec();
+    return addPredictions(materials, 'materialId');
   }
 
   /**
