@@ -8,6 +8,7 @@ import { RootState } from '../../store/Store';
 import { setListenerList } from '../../store/slices/ListenerListSlice';
 import { setEventList } from '../../store/slices/EventListSlice';
 import axios from '../../plugins/Axios';
+import { EditEventModal } from './EditEventModal';
 
 const { Search } = Input;
 
@@ -70,13 +71,7 @@ export const EventsList = () => {
 
       // TODO: Open Edit Modal Here onClick
       l.actions = (
-        <Button
-          size='small'
-          type='ghost'
-          style={{ width: 60 }}
-          onClick={() => console.log(l)}>
-          Edit
-        </Button>
+        <EditEventModal event={l}></EditEventModal>
       );
     });
 
