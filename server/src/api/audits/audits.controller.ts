@@ -35,7 +35,6 @@ export class AuditsController {
   @Roles(Role.ANY)
   @Get(':filter')
   find(@Query() query: QueryAuditDto) {
-    console.log(query)
     return this.auditsService.find(query);
   }
 

@@ -24,8 +24,8 @@ export class CustomersController {
 
   @Roles(Role.SALESPERSON, Role.SYSTEM_ADMINISTRATOR)
   @Post()
-  create(@Body(ValidationPipe) CreateCustomerDto: CreateCustomerDto) {
-    return this.customersService.create(CreateCustomerDto);
+  create(@Headers('authorization') auth: string, @Body(ValidationPipe) CreateCustomerDto: CreateCustomerDto) {
+    return this.customersService.create(auth, CreateCustomerDto);
   }
 
   @Roles(Role.ANY)
@@ -43,15 +43,16 @@ export class CustomersController {
   @Roles(Role.SALESPERSON, Role.SYSTEM_ADMINISTRATOR)
   @Patch(':id')
   update(
+    @Headers('authorization') auth: string,
     @Param('id') id: string,
     @Body(ValidationPipe) UpdateCustomerDto: UpdateCustomerDto,
   ) {
-    return this.customersService.update(id, UpdateCustomerDto);
+    return this.customersService.update(auth, id, UpdateCustomerDto);
   }
 
   @Roles(Role.SALESPERSON, Role.SYSTEM_ADMINISTRATOR)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.customersService.remove(id);
+  remove(@Headers('authorization') auth: string, @Param('id') id: string) {
+    return this.customersService.remove(auth, id);
   }
 }
