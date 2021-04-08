@@ -1772,7 +1772,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"stockBuilt\": 60,\n    \"stockUsed\": 30\n}",
+									"raw": "[\n    {\n        \"productId\": \"606d01eeffadbe4bd09fa6a7\",\n        \"stockBuilt\": 60,\n        \"stockUsed\": 60\n    }\n]",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1780,15 +1780,14 @@
 									}
 								},
 								"url": {
-									"raw": "{{url}}/products/stock/604eaa804be3294198d036d2/604fdd711ae15c1bf0779aed",
+									"raw": "{{url}}/products/stock/606ac40c46c1b47d380405ac",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
 										"products",
 										"stock",
-										"604eaa804be3294198d036d2",
-										"604fdd711ae15c1bf0779aed"
+										"606ac40c46c1b47d380405ac"
 									]
 								}
 							},

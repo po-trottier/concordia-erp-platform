@@ -1,10 +1,9 @@
-import React, {useEffect, useState} from 'react';
-import {Card, message, Statistic, Typography, Row, Col} from 'antd';
-import {Line} from '@ant-design/charts';
-
-import {ResponsiveTable} from '../ResponsiveTable';
-import axios from "../../plugins/Axios";
-import {SummaryEntry} from "../../interfaces/SummaryEntry";
+import React, { useEffect, useState } from 'react';
+import { Card, Col, message, Row, Statistic, Typography } from 'antd';
+import Chart from 'react-apexcharts';
+import axios from '../../plugins/Axios';
+import { ResponsiveTable } from '../ResponsiveTable';
+import { SummaryEntry } from '../../interfaces/SummaryEntry';
 
 const { Title } = Typography;
 
@@ -29,7 +28,7 @@ export const Summary = () => {
             });
             expectedBalance += s.balance;
           });
-          setExpectedBalance(expectedBalance)
+          setExpectedBalance(expectedBalance);
           setSummaryEntryData(data);
         }
       })
@@ -55,6 +54,24 @@ export const Summary = () => {
     balance: 'Daily Profit'
   });
 
+  const getChartData = () => {
+    const dataArray : { x : string, y : number }[] = summaryEntryData.map((row : SummaryEntry) => ({
+      x: row.date,
+      y: row.balance
+    }));
+
+    return {
+      options: {
+        chart: { id: 'basic-bar' },
+        xaxis: { type: 'datetime' },
+      },
+      series: [{
+        name: 'balance',
+        data: dataArray
+      }]
+    };
+  };
+
   return (
     <div>
       <Card style={{ margin: '24px 0' }}>
@@ -71,7 +88,7 @@ export const Summary = () => {
       {summaryEntryData.length > 0 ?
         <div>
           <Card style={{ margin: '24px 0' }}>
-            <Line data={summaryEntryData} xField='date' yField='balance' isStack={true} />
+            <Chart {...getChartData()} type='line' height={350} />
           </Card>
           <Card>
             <Title level={4} style={{ marginBottom: '24px' }}>

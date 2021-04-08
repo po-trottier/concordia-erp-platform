@@ -8,6 +8,7 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { JwtService } from '@nestjs/jwt';
 import { Model } from 'mongoose';
 import { hash } from 'bcryptjs';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -19,12 +20,14 @@ import { User, UserDocument } from './schemas/user.schema';
 import { Mail } from '../../shared/mail';
 import { CONTACT_EMAIL } from '../../shared/constants';
 import { EventMap } from '../../events/common';
+import { UserToken } from '../../shared/user-token.interface';
 
 @Injectable()
 export class UsersService implements OnApplicationBootstrap {
   private readonly logger = new Logger(UsersService.name);
 
   constructor(
+    private jwtService: JwtService,
     private emitter: EventEmitter2,
     @InjectModel(User.name) private userModel: Model<UserDocument>,
   ) {}
@@ -44,14 +47,21 @@ export class UsersService implements OnApplicationBootstrap {
       user.email = 'admin@null.com';
       user.role = Role.SYSTEM_ADMINISTRATOR;
       user.password = await hash(process.env.DEFAULT_PASSWORD, 16);
-      await this.create(user);
+      await this.create(
+        this.jwtService.sign({
+          username: 'SYSTEM',
+          id: '1',
+          role: Role.SYSTEM_ADMINISTRATOR,
+        }),
+        user,
+      );
       this.logger.log('Default user was created successfully');
     } else {
       this.logger.warn('Default user already exits');
     }
   }
 
-  async create(dto: CreateUserDto): Promise<User> | undefined {
+  async create(auth: string, dto: CreateUserDto): Promise<User> | undefined {
     const account = dto;
     account.username = account.username.trim().toLowerCase();
     account.email = account.email.trim().toLowerCase();
@@ -95,9 +105,12 @@ export class UsersService implements OnApplicationBootstrap {
         });
     }
 
+    const decoded: any = this.jwtService.decode(auth.substr(7));
+    const token: UserToken = decoded;
+
     const user = await createdUser.save();
     user.password = undefined;
-    this.emitter.emit(EventMap.USER_CREATED.id, user);
+    this.emitter.emit(EventMap.USER_CREATED.id, { user, token });
     return user;
   }
 
@@ -114,17 +127,21 @@ export class UsersService implements OnApplicationBootstrap {
     return this.validateUserFound(user, username);
   }
 
-  async update(username: string, dto: UpdateUserDto): Promise<User> {
+  async update(
+    auth: string,
+    username: string,
+    dto: UpdateUserDto,
+  ): Promise<User> {
     // Trim & Lowercase to make search not case-sensitive
-    const user = dto;
-    if (user.username) {
-      user.username = user.username.trim().toLowerCase();
+    const newUser = dto;
+    if (newUser.username) {
+      newUser.username = newUser.username.trim().toLowerCase();
     }
-    if (user.email) {
-      user.email = user.email.trim().toLowerCase();
+    if (newUser.email) {
+      newUser.email = newUser.email.trim().toLowerCase();
     }
-    if (user.password) {
-      user.password = await hash(user.password, 16);
+    if (newUser.password) {
+      newUser.password = await hash(newUser.password, 16);
     }
     // Cannot change the default user's username
     const isAdmin = username === DEFAULT_USER;
@@ -138,25 +155,31 @@ export class UsersService implements OnApplicationBootstrap {
     }
     const updatedUser = await this.userModel.findOneAndUpdate(
       { username },
-      { ...user },
+      { ...newUser },
       { new: true },
     );
 
-    const result = this.validateUserFound(updatedUser, user.username);
-    this.emitter.emit(EventMap.USER_MODIFIED.id, result);
-    return result;
+    const decoded: any = this.jwtService.decode(auth.substr(7));
+    const token: UserToken = decoded;
+
+    const user = this.validateUserFound(updatedUser, newUser.username);
+    this.emitter.emit(EventMap.USER_MODIFIED.id, { user, token });
+    return user;
   }
 
-  async remove(username: string): Promise<User> {
+  async remove(auth: string, username: string): Promise<User> {
     // Cannot delete the default user
     if (username === DEFAULT_USER) {
       throw new UnauthorizedException('You cannot delete the default user.');
     }
     const deletedUser = await this.userModel.findOneAndDelete({ username });
 
-    const result = this.validateUserFound(deletedUser, username);
-    this.emitter.emit(EventMap.USER_DELETED.id, result);
-    return result;
+    const decoded: any = this.jwtService.decode(auth.substr(7));
+    const token: UserToken = decoded;
+
+    const user = this.validateUserFound(deletedUser, username);
+    this.emitter.emit(EventMap.USER_DELETED.id, { user, token });
+    return user;
   }
 
   validateUserFound(userResult: any, username: string) {

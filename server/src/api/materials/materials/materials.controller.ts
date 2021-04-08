@@ -1,5 +1,6 @@
 import {
   Body,
+  Headers,
   Controller,
   Delete,
   Get,
@@ -25,8 +26,11 @@ export class MaterialsController {
 
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
   @Post()
-  create(@Body(ValidationPipe) createMaterialDto: CreateMaterialDto) {
-    return this.materialsService.create(createMaterialDto);
+  create(
+    @Headers('authorization') auth: string,
+    @Body(ValidationPipe) createMaterialDto: CreateMaterialDto,
+  ) {
+    return this.materialsService.create(createMaterialDto, auth);
   }
 
   @Roles(Role.ANY)
@@ -44,16 +48,17 @@ export class MaterialsController {
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
   @Patch(':id')
   update(
+    @Headers('authorization') auth: string,
     @Param('id') id: string,
     @Body(ValidationPipe) updateMaterialDto: UpdateMaterialDto,
   ) {
-    return this.materialsService.update(id, updateMaterialDto);
+    return this.materialsService.update(id, updateMaterialDto, auth);
   }
 
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.materialsService.remove(id);
+  remove(@Headers('authorization') auth: string, @Param('id') id: string) {
+    return this.materialsService.remove(id, auth);
   }
 
   // STOCK ENDPOINTS

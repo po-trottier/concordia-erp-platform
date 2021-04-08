@@ -6,9 +6,13 @@ import { Model } from 'mongoose';
 import { Event, EventDocument } from '../../api/events/schemas/events.schema';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { User, UserDocument } from '../../api/users/schemas/user.schema';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { Audit, AuditDocument } from '../../api/audits/schemas/audits.schema';
+import { UserToken } from '../../shared/user-token.interface';
 import { EventMap, getEmails } from '../common';
 import { Mail } from '../../shared/mail';
 import { CONTACT_EMAIL } from '../../shared/constants';
+import { AuditActions } from '../../api/audits/enums/audit-actions.enum';
 
 @Injectable()
 export class EventListener {
@@ -17,6 +21,7 @@ export class EventListener {
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
     @InjectModel(Event.name) private eventModel: Model<EventDocument>,
+    @InjectModel(Audit.name) private auditModel: Model<AuditDocument>,
   ) {}
 
   getEmailHTML(event: EventDocument, action: string) {
@@ -24,22 +29,24 @@ export class EventListener {
       <ul>
         <li><b>ID:</b> ${event.id}</li>
         <li><b>Event ID:</b> ${event.eventId}</li>
-        <li><b>Customer IDs:</b> ${
+        <li><b>Customer:</b> ${
           event.customerId && event.customerId.length > 0
-            ? event.customerId
+            ? event.customerId.map((u: any) => u.name).join(', ')
             : 'None'
         }</li>
-        <li><b>User IDs:</b> ${
-          event.userId && event.userId.length > 0 ? event.userId : 'None'
+        <li><b>Users:</b> ${
+          event.userId && event.userId.length > 0
+            ? event.userId.map((u: any) => u.username).join(', ')
+            : 'None'
         }</li>
         <li><b>Roles:</b> ${
-          event.role && event.role.length > 0 ? event.role : 'None'
+          event.role && event.role.length > 0 ? event.role.join(', ') : 'None'
         }</li>
       </ul>`;
   }
 
   @OnEvent(EventMap.EVENT_CREATED.id)
-  async handleEventCreated(event: EventDocument) {
+  async handleEventCreated(args: { event: EventDocument; token: UserToken }) {
     const emails = await getEmails(
       EventMap.EVENT_CREATED,
       this.eventModel,
@@ -51,9 +58,11 @@ export class EventListener {
         to: emails,
         from: CONTACT_EMAIL,
         subject: '[EPIC Resource Planner] New Event Created',
-        html: this.getEmailHTML(event, 'created'),
+        html: this.getEmailHTML(args.event, 'created'),
       });
     }
+
+    await this.createAudit(AuditActions.CREATE, args.event, args.token);
 
     this.logger.log(
       'An event was created. ' + emails.length + ' user(s) notified.',
@@ -61,7 +70,7 @@ export class EventListener {
   }
 
   @OnEvent(EventMap.EVENT_DELETED.id)
-  async handleEventDeleted(event: EventDocument) {
+  async handleEventDeleted(args: { event: EventDocument; token: UserToken }) {
     const emails = await getEmails(
       EventMap.EVENT_DELETED,
       this.eventModel,
@@ -73,9 +82,11 @@ export class EventListener {
         to: emails,
         from: CONTACT_EMAIL,
         subject: '[EPIC Resource Planner] Event Deleted',
-        html: this.getEmailHTML(event, 'deleted'),
+        html: this.getEmailHTML(args.event, 'deleted'),
       });
     }
+
+    await this.createAudit(AuditActions.DELETE, args.event, args.token);
 
     this.logger.log(
       'An event was deleted. ' + emails.length + ' user(s) notified.',
@@ -83,7 +94,7 @@ export class EventListener {
   }
 
   @OnEvent(EventMap.EVENT_MODIFIED.id)
-  async handleEventModified(event: EventDocument) {
+  async handleEventModified(args: { event: EventDocument; token: UserToken }) {
     const emails = await getEmails(
       EventMap.EVENT_MODIFIED,
       this.eventModel,
@@ -95,12 +106,30 @@ export class EventListener {
         to: emails,
         from: CONTACT_EMAIL,
         subject: '[EPIC Resource Planner] Event Modified',
-        html: this.getEmailHTML(event, 'modified'),
+        html: this.getEmailHTML(args.event, 'modified'),
       });
     }
+
+    await this.createAudit(AuditActions.UPDATE, args.event, args.token);
 
     this.logger.log(
       'An event was modified. ' + emails.length + ' user(s) notified.',
     );
+  }
+
+  async createAudit(
+    action: AuditActions,
+    event: EventDocument,
+    token: UserToken,
+  ) {
+    const audit: Audit = {
+      module: Event.name,
+      action: action,
+      date: new Date(Date.now()),
+      target: event.eventId,
+      author: token.username,
+    };
+    const auditEntry = new this.auditModel(audit);
+    await auditEntry.save();
   }
 }

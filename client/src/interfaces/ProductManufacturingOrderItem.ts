@@ -1,4 +1,4 @@
 export interface ProductManufacturingOrderItem {
-  productId: string;
-  stockBuilt: number;
+  productId : string;
+  stockBuilt : number;
 }

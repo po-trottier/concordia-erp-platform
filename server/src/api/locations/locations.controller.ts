@@ -1,5 +1,6 @@
 import {
   Body,
+  Headers,
   Controller,
   Delete,
   Get,
@@ -20,8 +21,11 @@ export class LocationsController {
 
   @Roles(Role.SYSTEM_ADMINISTRATOR)
   @Post()
-  create(@Body(ValidationPipe) createLocationDto: CreateLocationDto) {
-    return this.locationsService.create(createLocationDto);
+  create(
+    @Headers('authorization') auth: string,
+    @Body(ValidationPipe) createLocationDto: CreateLocationDto,
+  ) {
+    return this.locationsService.create(auth, createLocationDto);
   }
 
   @Roles(Role.ANY)
@@ -39,15 +43,16 @@ export class LocationsController {
   @Roles(Role.SYSTEM_ADMINISTRATOR)
   @Patch(':id')
   update(
+    @Headers('authorization') auth: string,
     @Param('id') id: string,
     @Body(ValidationPipe) updateLocationDto: UpdateLocationDto,
   ) {
-    return this.locationsService.update(id, updateLocationDto);
+    return this.locationsService.update(auth, id, updateLocationDto);
   }
 
   @Roles(Role.SYSTEM_ADMINISTRATOR)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.locationsService.remove(id);
+  remove(@Headers('authorization') auth: string, @Param('id') id: string) {
+    return this.locationsService.remove(auth, id);
   }
 }

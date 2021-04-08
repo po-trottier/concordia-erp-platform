@@ -1,5 +1,6 @@
 import {
   Body,
+  Headers,
   Controller,
   Delete,
   Get,
@@ -28,13 +29,17 @@ export class PartsController {
 
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
   @Post()
-  create(@Body(ValidationPipe) createPartDto: CreatePartDto) {
-    return this.partsService.create(createPartDto);
+  create(
+    @Headers('authorization') auth: string,
+    @Body(ValidationPipe) createPartDto: CreatePartDto,
+  ) {
+    return this.partsService.create(createPartDto, auth);
   }
 
   /**
    * Route for building parts from materials
    *
+   * @param auth
    * @param locationId id of the location
    * @param buildOrders list of build orders for parts
    */
@@ -45,10 +50,11 @@ export class PartsController {
   )
   @Patch('build/:locationId')
   build(
+    @Headers('authorization') auth: string,
     @Param('locationId') locationId: string,
     @Body(ValidationPipe) buildOrders: BuildPartDto[],
   ) {
-    return this.partBuilderService.build(locationId, buildOrders);
+    return this.partBuilderService.build(auth, locationId, buildOrders);
   }
 
   @Roles(Role.ANY)
@@ -66,16 +72,17 @@ export class PartsController {
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
   @Patch(':id')
   update(
+    @Headers('authorization') auth: string,
     @Param('id') id: string,
     @Body(ValidationPipe) updatePartDto: UpdatePartDto,
   ) {
-    return this.partsService.update(id, updatePartDto);
+    return this.partsService.update(id, updatePartDto, auth);
   }
 
   @Roles(Role.INVENTORY_MANAGER, Role.SYSTEM_ADMINISTRATOR)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.partsService.remove(id);
+  remove(@Param('id') id: string, @Headers('authorization') auth: string) {
+    return this.partsService.remove(id, auth);
   }
 
   // STOCK ENDPOINTS
