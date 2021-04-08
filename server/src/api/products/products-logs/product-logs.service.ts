@@ -22,8 +22,8 @@ export class ProductLogsService {
   async findAll(locationId: string): Promise<ProductLog[]> {
     const products = await this.productLogModel
       .find({ locationId })
-      .sort('date')
       .sort('productId')
+      .sort('date')
       .populate('productId')
       .exec();
     return addPredictions(products, 'productId');

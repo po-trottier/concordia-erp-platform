@@ -25,8 +25,8 @@ export class MaterialLogsService {
   async findAll(locationId: string): Promise<MaterialLog[]> {
     const materials = await this.materialLogModel
       .find({ locationId })
-      .sort('date')
       .sort('materialId')
+      .sort('date')
       .populate('materialId')
       .exec();
     return addPredictions(materials, 'materialId');
