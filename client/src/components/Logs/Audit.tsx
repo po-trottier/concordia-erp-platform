@@ -23,6 +23,13 @@ export const Audit = () => {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
 
+  const setDates = (e : any) => {
+    if (e) {
+      setStartDate(e[0]._d);
+      setEndDate(e[1]._d);
+    }
+  }
+
   useEffect(() => {
     setUpdated(true);
     axios.get('users').then(({ data }) => {
@@ -45,7 +52,7 @@ export const Audit = () => {
 
   const exportOptions = (
     <Menu>
-      <Menu.Item onClick={() => getAudit()}>
+      <Menu.Item onClick={() => exportPDF()}>
         PDF
       </Menu.Item>
       <Menu.Item onClick={() => getAudit()}>
@@ -125,7 +132,8 @@ export const Audit = () => {
       date: new Date(),
       author: "John",
       action: "Deletes",
-      target: "15 tires"
+      target: "15 tires",
+      something: 'helllloooo',
     },
   ]
 
@@ -197,6 +205,7 @@ export const Audit = () => {
         <Checkbox.Group onChange={(e : any) => setActionFilter(e)} options={actionOptions} />
         <p style={style}>Select the time range for which to query:</p>
         <RangePicker
+          onChange={(e : any) => setDates(e)}
           style={{ maxWidth: 400 }}
           showTime={{ format: 'HH:mm' }}
           format='YYYY-MM-DD HH:mm' />
