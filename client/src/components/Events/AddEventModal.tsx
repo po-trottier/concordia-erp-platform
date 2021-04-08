@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Modal, Select, Form, Row, Col, Input, InputNumber, Radio, RadioChangeEvent, message } from 'antd';
 import { useDispatch } from 'react-redux';
 
-import { addEventEntry } from '../../store/slices/EventListSlice';
+import { addListenerEntry } from '../../store/slices/ListenerListSlice';
 import { EventDropdownEntry } from '../../interfaces/EventDropdownEntry';
 import { CustomerDropdownEntry } from '../../interfaces/CustomerDropdownEntry';
 import { UserDropdownEntry } from '../../interfaces/UserDropdownEntry';
@@ -28,24 +28,10 @@ export const AddEventModal = () => {
   const emptyUsersData: UserDropdownEntry[] = [];
   const [usersData, setUsersData] = useState(emptyUsersData);
 
-  const emptyRolesData: Role[] = [];
-  const [rolesData, setRolesData] = useState(emptyRolesData);
-
-  const [eventId, setEventId] = useState('');
-
-  const emptyCustomerId: String[] = [];
-  const [customerId, setCustomerId] = useState(emptyCustomerId);
-
-  const emptyUserId: String[] = [];
-  const [userId, setUserId] = useState(emptyUserId);
-
-  const emptyRole: Role[] = [];
-  const [role, setRole] = useState(emptyRole);
-
 
   const [loading, setLoading] = useState(false);
 
-  
+
   useEffect(() => {
     setAllInfoUpdated(true);
 
@@ -107,31 +93,17 @@ export const AddEventModal = () => {
       });
   }, [allInfoUpdated]);
 
-  const addEvent = () => {
-    let newEvent: any;
+  const addEvent = (values: any) => {
 
-    switch (recipientType) {
-      case 'roles':
-        newEvent = { eventId, role };
-        break;
-
-      case 'users':
-        newEvent = { eventId, userId };
-        break;
-
-        case 'customers':
-        default:
-          newEvent = { eventId, customerId };
-          break;
-    }
+    const body = values;
+    delete body.recipient;
 
     setLoading(true);
     axios
-      .post('/events', newEvent)
-      .then(() => {
-        dispatch(addEventEntry(newEvent));
-        setIsModalVisible(false);
-        form.resetFields();
+      .post('/events', body)
+      .then(({data}) => {
+        dispatch(addListenerEntry(data));
+        handleCancel();
         message.success('Event was added successfully.');
       })
       .catch((err) => {
@@ -164,15 +136,14 @@ export const AddEventModal = () => {
             <Col sm={18} span={15}>
               <Form.Item
                 style={{ marginBottom: 0 }}
-                name='users'
+                name='userId'
                 rules={[{ required: true, message: 'Please select users.' }]}>
                 <Select
                   mode='multiple'
                   showSearch
                   style={{ width: '100%', display: 'inline-table' }}
                   placeholder='Select 1 or more users'
-                  optionFilterProp='children'
-                  onChange={(e: any) => updateUserId(e)}>
+                  optionFilterProp='children'>
                   {usersData.map((user) => (
                     <Option key={user.id} value={user.id}>
                       {user.username}
@@ -192,15 +163,14 @@ export const AddEventModal = () => {
             <Col sm={18} span={15}>
               <Form.Item
                 style={{ marginBottom: 0 }}
-                name='roles'
+                name='role'
                 rules={[{ required: true, message: 'Please select roles.' }]}>
                 <Select
                   mode='multiple'
                   showSearch
                   style={{ width: '100%', display: 'inline-table' }}
                   placeholder='Select 1 or more roles'
-                  optionFilterProp='children'
-                  onChange={(e: any) => updateRole(e)}>
+                  optionFilterProp='children'>
                   {
                     Object.keys(Role).map((rkey, rval) => {
                       if (isFinite(Number(rkey))) {
@@ -229,15 +199,14 @@ export const AddEventModal = () => {
             <Col sm={18} span={15}>
               <Form.Item
                 style={{ marginBottom: 0 }}
-                name='customers'
+                name='customerId'
                 rules={[{ required: true, message: 'Please select customers.' }]}>
                 <Select
                   mode='multiple'
                   showSearch
                   style={{ width: '100%', display: 'inline-table' }}
                   placeholder='Select 1 or more customers'
-                  optionFilterProp='children'
-                  onChange={(e: any) => updateCustomerId(e)}>
+                  optionFilterProp='children'>
                   {customersData.map((customer) => (
                     <Option key={customer.id} value={customer.id}>
                       {customer.name}
@@ -248,35 +217,6 @@ export const AddEventModal = () => {
           </Row>);
     }
   }
-
-  const updateEventId = (e: any) => {
-    setEventId(e);
-  }
-
-  const updateCustomerId = (e: any) => {
-    setCustomerId(e);
-  }
-
-  const updateUserId = (e: any) => {
-    setUserId(e);
-  }
-
-  const updateRole = (e: any) => {
-    setRole(e);
-  }
-  const hideActionsError = () => {
-    const actionsError = document.getElementById('display-actions-error');
-    if (actionsError) {
-      actionsError.style.display = 'none';
-    }
-  };
-
-  const displayActionsError = () => {
-    const actionsError = document.getElementById('display-actions-error');
-    if (actionsError) {
-      actionsError.style.display = 'block';
-    }
-  };
 
   let dropdownOffset = 0;
 
@@ -307,14 +247,13 @@ export const AddEventModal = () => {
             <Col sm={18} span={15}>
               <Form.Item
                 style={{ marginBottom: 0 }}
-                name='action'
+                name='eventId'
                 rules={[{ required: true, message: 'Please select an action.' }]}>
                 <Select
                   showSearch
                   style={{ width: '100%', display: 'inline-table' }}
                   placeholder='Select an action'
-                  optionFilterProp='children'
-                  onChange={(e: any) => setEventId(e)}>
+                  optionFilterProp='children'>
                   {eventsData.map((event) => (
                     <Option key={event.name} value={event.id}>
                       {event.name}
@@ -323,10 +262,6 @@ export const AddEventModal = () => {
               </Form.Item>
             </Col>
           </Row>
-          {/*Custom error message*/}
-          <span id='display-actions-error' style={{ color: 'red', display: 'none' }}>
-            You must select an action.
-          </span>
           {/*Group Selector Field*/}
           <Row align='middle' style={{ marginBottom: 16 }}>
             <Col sm={6} span={9}>
