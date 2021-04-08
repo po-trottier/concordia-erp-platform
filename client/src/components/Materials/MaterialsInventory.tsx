@@ -31,7 +31,7 @@ export const MaterialsInventory = () => {
     axios.get('materials/logs/' + location)
       .then(async ({ data }) => {
         for (const row of data) {
-          row.date = row.date.substring(0,10);
+          row.date = new Date(row.date).toLocaleDateString('en-US');
           row.name = row.materialId.name + (row.isEstimate ? ' (estimate)' : '');
         }
         setMaterialsData(data);

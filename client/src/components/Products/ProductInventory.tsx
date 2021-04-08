@@ -31,7 +31,7 @@ export const ProductInventory = () => {
     axios.get('products/logs/' + location)
       .then(async ({ data }) => {
         for (const row of data) {
-          row.date = row.date.substring(0,10);
+          row.date = new Date(row.date).toLocaleDateString('en-US');
           row.name = row.productId.name + (row.isEstimate ? ' (estimate)' : '');
         }
         setProducts(data);
