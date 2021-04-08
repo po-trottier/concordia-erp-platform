@@ -10,9 +10,6 @@ export class QueryAuditDto {
   @IsOptional()
   action: string;
 
-  @IsOptional()
-  date: Date;
-
   @IsString()
   @IsOptional()
   target: string;
@@ -20,4 +17,10 @@ export class QueryAuditDto {
   @IsString()
   @IsOptional()
   author: string;
+
+  @IsOptional()
+  before: Date;
+
+  @IsOptional()
+  after: Date;
 }

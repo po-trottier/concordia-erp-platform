@@ -6,6 +6,7 @@ import {CreateAuditDto} from './dto/create-audit.dto';
 import {Audit, AuditDocument} from './schemas/audits.schema';
 import {AuditActions} from "./audit.actions.enum";
 import {Modules} from "./modules.enum";
+import {QueryAuditDto} from "./dto/query-audit.dto";
 
 /**
  * Used by the AuditsController, handles audit data storage and retrieval.
@@ -29,7 +30,7 @@ export class AuditsService {
   /**
    * Retrieves all audits using mongoose auditModel
    */
-  async find(query): Promise<Audit[]> {
+  async find(query: QueryAuditDto): Promise<Audit[]> {
     let modules = [];
     let actions = [];
     let targets = [];
@@ -50,6 +51,10 @@ export class AuditsService {
     if (query.author){
       query.author.split(',').forEach( (author) => {authors.push({'author': author})})
       andList.push({$or: authors});
+    }
+    if (query.before && query.after){
+      andList.push({'date':{$gte: new Date(query.after), $lte: new Date(query.before)}})
+      // andList.push({$lte: query.after})
     }
 
     return this.auditModel.find().and(andList);
