@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Card, Input } from 'antd';
+import { Card, Input } from 'antd';
 import { EventEntry } from '../../interfaces/EventEntry';
 import { getRoleString } from '../../router/Roles';
 import { ResponsiveTable } from '../ResponsiveTable';
 import { RootState } from '../../store/Store';
 import { setListenerList } from '../../store/slices/ListenerListSlice';
 import { setEventList } from '../../store/slices/EventListSlice';
-import axios from '../../plugins/Axios';
 import { EditEventModal } from './EditEventModal';
+import axios from '../../plugins/Axios';
 
 const { Search } = Input;
 
@@ -69,9 +69,8 @@ export const EventsList = () => {
           break;
       }
 
-      // TODO: Open Edit Modal Here onClick
       l.actions = (
-        <EditEventModal event={l}></EditEventModal>
+        <EditEventModal event={l} />
       );
     });
 

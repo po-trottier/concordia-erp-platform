@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Modal, Select, Form, Row, Col, Input, InputNumber, Radio, RadioChangeEvent, message } from 'antd';
+import { Button, Col, Form, message, Modal, Radio, RadioChangeEvent, Row, Select } from 'antd';
 import { useDispatch } from 'react-redux';
-
 import { addListenerEntry } from '../../store/slices/ListenerListSlice';
 import { EventDropdownEntry } from '../../interfaces/EventDropdownEntry';
 import { CustomerDropdownEntry } from '../../interfaces/CustomerDropdownEntry';
@@ -15,32 +14,27 @@ export const AddEventModal = () => {
   const dispatch = useDispatch();
 
   const [form] = Form.useForm();
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [recipientType, setRecipientType] = useState('customers');
-  const [allInfoUpdated, setAllInfoUpdated] = useState(false);
 
-  const emptyEventsData: EventDropdownEntry[] = [];
-  const [eventsData, setEventsData] = useState(emptyEventsData);
-
-  const emptyCustomersData: CustomerDropdownEntry[] = [];
-  const [customersData, setCustomersData] = useState(emptyCustomersData);
-
-  const emptyUsersData: UserDropdownEntry[] = [];
-  const [usersData, setUsersData] = useState(emptyUsersData);
-
-
+  const [visible, setVisible] = useState(false);
+  const [updated, setUpdated] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const emptyEventsData : EventDropdownEntry[] = [];
+  const emptyCustomersData : CustomerDropdownEntry[] = [];
+  const emptyUsersData : UserDropdownEntry[] = [];
+  const [recipientType, setRecipientType] = useState('customers');
+  const [eventsData, setEventsData] = useState(emptyEventsData);
+  const [customersData, setCustomersData] = useState(emptyCustomersData);
+  const [usersData, setUsersData] = useState(emptyUsersData);
 
   useEffect(() => {
-    setAllInfoUpdated(true);
-
+    setUpdated(true);
     //get the events
     axios.get('/events/all')
       .then((res) => {
         if (res && res.data) {
-          const data: EventDropdownEntry[] = [];
-          res.data.forEach((p: any) => {
+          const data : EventDropdownEntry[] = [];
+          res.data.forEach((p : any) => {
             data.push({
               id: p.id,
               name: p.name
@@ -54,12 +48,12 @@ export const AddEventModal = () => {
         console.error(err);
       });
 
-      //get the customers
-      axios.get('/customers')
+    //get the customers
+    axios.get('/customers')
       .then((res) => {
         if (res && res.data) {
-          const data: CustomerDropdownEntry[] = [];
-          res.data.forEach((p: any) => {
+          const data : CustomerDropdownEntry[] = [];
+          res.data.forEach((p : any) => {
             data.push({
               id: p['_id'],
               name: p.name
@@ -73,12 +67,12 @@ export const AddEventModal = () => {
         console.error(err);
       });
 
-      //get the users
-      axios.get('/users')
+    //get the users
+    axios.get('/users')
       .then((res) => {
         if (res && res.data) {
-          const data: UserDropdownEntry[] = [];
-          res.data.forEach((p: any) => {
+          const data : UserDropdownEntry[] = [];
+          res.data.forEach((p : any) => {
             data.push({
               id: p['_id'],
               username: p.username
@@ -91,23 +85,22 @@ export const AddEventModal = () => {
         message.error('Something went wrong while fetching the list of users.');
         console.error(err);
       });
-  }, [allInfoUpdated]);
+  }, [updated]);
 
-  const addEvent = (values: any) => {
-
+  const addEvent = (values : any) => {
     const body = values;
     delete body.recipient;
 
     setLoading(true);
     axios
       .post('/events', body)
-      .then(({data}) => {
+      .then(({ data }) => {
+        message.success('The event was added successfully.');
         dispatch(addListenerEntry(data));
         handleCancel();
-        message.success('Event was added successfully.');
       })
       .catch((err) => {
-        message.error('Something went wrong while creating the Event.');
+        message.error('Something went wrong while creating the event.');
         console.error(err);
       })
       .finally(() => {
@@ -116,129 +109,103 @@ export const AddEventModal = () => {
   };
 
   const handleCancel = () => {
-    setIsModalVisible(false);
+    setVisible(false);
     form.resetFields();
   };
 
-  const handleRecipientChange = (e: RadioChangeEvent) => {
+  const handleRecipientChange = (e : RadioChangeEvent) => {
     form.resetFields(['customers', 'users', 'roles']);
     setRecipientType(e.target.value);
   };
 
   const renderRecipientField = () => {
+    let dropdownOffset = 0;
+    let text = '';
+    let field = '';
+    let data;
+
     switch (recipientType) {
       case 'users':
-        return (
-          <Row align='middle' style={{ marginBottom: 16 }}>
-            <Col sm={6} span={9}>
-              <span>Users:</span>
-            </Col>
-            <Col sm={18} span={15}>
-              <Form.Item
-                style={{ marginBottom: 0 }}
-                name='userId'
-                rules={[{ required: true, message: 'Please select users.' }]}>
-                <Select
-                  mode='multiple'
-                  showSearch
-                  style={{ width: '100%', display: 'inline-table' }}
-                  placeholder='Select 1 or more users'
-                  optionFilterProp='children'>
-                  {usersData.map((user) => (
-                    <Option key={user.id} value={user.id}>
-                      {user.username}
-                    </Option>))}
-                </Select>
-              </Form.Item>
-            </Col>
-          </Row>
-        );
-
-      case 'roles':
-        return (
-          <Row align='middle' style={{ marginBottom: 16 }}>
-            <Col sm={6} span={9}>
-              <span>Roles:</span>
-            </Col>
-            <Col sm={18} span={15}>
-              <Form.Item
-                style={{ marginBottom: 0 }}
-                name='role'
-                rules={[{ required: true, message: 'Please select roles.' }]}>
-                <Select
-                  mode='multiple'
-                  showSearch
-                  style={{ width: '100%', display: 'inline-table' }}
-                  placeholder='Select 1 or more roles'
-                  optionFilterProp='children'>
-                  {
-                    Object.keys(Role).map((rkey, rval) => {
-                      if (isFinite(Number(rkey))) {
-                        dropdownOffset++;
-                        return null;
-                      }
-                      const role: Role = rval - dropdownOffset;
-                      return (
-                        <Option key={rkey} value={role}>{getRoleString(role)}</Option>
-                      );
-                    })
-                  }
-                </Select>
-              </Form.Item>
-            </Col>
-          </Row>
-        );
+        text = 'Users:';
+        field = 'userId';
+        data = usersData.map((user) => (
+          <Option key={user.id} value={user.id}>
+            {user.username}
+          </Option>
+        ));
+        break;
 
       case 'customers':
-      default:
-        return (
-          <Row align='middle' style={{ marginBottom: 16 }}>
-            <Col sm={6} span={9}>
-              <span>Customers:</span>
-            </Col>
-            <Col sm={18} span={15}>
-              <Form.Item
-                style={{ marginBottom: 0 }}
-                name='customerId'
-                rules={[{ required: true, message: 'Please select customers.' }]}>
-                <Select
-                  mode='multiple'
-                  showSearch
-                  style={{ width: '100%', display: 'inline-table' }}
-                  placeholder='Select 1 or more customers'
-                  optionFilterProp='children'>
-                  {customersData.map((customer) => (
-                    <Option key={customer.id} value={customer.id}>
-                      {customer.name}
-                    </Option>))}
-                </Select>
-              </Form.Item>
-            </Col>
-          </Row>);
-    }
-  }
+        text = 'Customers:'
+        field = 'customerId'
+        data = customersData.map((customer) => (
+          <Option key={customer.id} value={customer.id}>
+            {customer.name}
+          </Option>
+        ));
+        break;
 
-  let dropdownOffset = 0;
+      case 'roles':
+        text = 'Roles:'
+        field = 'role'
+        data = Object.keys(Role).map((key, val) => {
+          if (isFinite(Number(key))) {
+            dropdownOffset++;
+            return null;
+          }
+          const role: Role = val - dropdownOffset;
+          return (
+            <Option key={key} value={role}>{getRoleString(role)}</Option>
+          );
+        });
+        break;
+    }
+
+    return (
+      <Row align='middle' style={{ marginBottom: 16 }}>
+        <Col sm={6} span={9}>
+          <span>{text}</span>
+        </Col>
+        <Col sm={18} span={15}>
+          <Form.Item
+            style={{ marginBottom: 0 }}
+            name={field}
+            rules={[{ required: true, message: 'Please select ' + recipientType + '.' }]}>
+            <Select
+              mode='multiple'
+              showSearch
+              style={{ width: '100%', display: 'inline-table' }}
+              placeholder={'Select 1 or more ' + recipientType}
+              optionFilterProp='children'>
+              { data }
+            </Select>
+          </Form.Item>
+        </Col>
+      </Row>
+    )
+  };
 
   return (
     <div>
       <Button
         type='primary'
         style={{ marginTop: 16 }}
-        onClick={() => setIsModalVisible(true)}>
+        onClick={() => setVisible(true)}>
         Add a new Event
       </Button>
       <Modal
         title='Add New Event'
-        visible={isModalVisible}
+        visible={visible}
         confirmLoading={loading}
         onOk={form.submit}
         onCancel={handleCancel}>
         <Form
           form={form}
           onFinish={addEvent}
-          name='basic'
-          style={{ marginBottom: '-24px', width: '100%', maxWidth: '500px' }}>
+          style={{ marginBottom: '-24px', width: '100%', maxWidth: '500px' }}
+          initialValues={{
+            'recipient': recipientType
+          }}>
           {/*Action/Event Field*/}
           <Row align='middle' style={{ marginBottom: 16 }}>
             <Col sm={6} span={9}>
@@ -272,7 +239,7 @@ export const AddEventModal = () => {
                 style={{ marginBottom: 0 }}
                 name='recipient'
                 rules={[{ required: true, message: 'Please select a group for this event.' }]}>
-                <Radio.Group name="recipient" onChange={handleRecipientChange}>
+                <Radio.Group name='recipient' onChange={handleRecipientChange}>
                   <Radio value={'customers'}>Customers</Radio>
                   <Radio value={'users'}>Users</Radio>
                   <Radio value={'roles'}>Roles</Radio>

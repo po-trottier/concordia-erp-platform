@@ -1,4 +1,4 @@
 export interface ProductSale {
-  id: string,
-  quantity: number
+  id : string,
+  quantity : number
 }
