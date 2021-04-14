@@ -33,3 +33,9 @@
 1) Run the following command to build the stack `docker-compose build`.
 1) Run the following command to start the stack `docker-compose up`.<br>*(The `-d` flag can be added if the stack's console output is not important to you)*
 1) Visit `http://localhost:80` to view the web interface of the ERP System.
+
+## Screenshots
+
+![image](https://user-images.githubusercontent.com/41876093/114652418-d31e7600-9cb3-11eb-8c6e-c796abbea64e.png)
+
+![image](https://user-images.githubusercontent.com/41876093/114652372-c00ba600-9cb3-11eb-96eb-6fd32f1557cb.png)
